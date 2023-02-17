@@ -1,0 +1,25 @@
+﻿using Microsoft.CodeAnalysis;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BE.Data.Models
+{
+    [Table("Paid")]
+
+    public class Paid
+    {
+        [Key]
+        public int Id { get; set; }
+        public int PaidPerson { get; set; }
+     /*   [ForeignKey("PaidPerson")]
+        public Users Users { get; set; }*/
+        public DateTime PaidDate { get; set; }
+        public int ProjectId { get; set; }
+/*        [ForeignKey("ProjectId")]
+        public Project Project { get; set; }*/
+        public string CustomerName { get; set; }
+        public decimal AmountPaid { get; set; }
+        public string PaidReason { get; set; }
+        public bool IsPaid { get; set; } // 1 is paid, 0 is unpaid
+    }
+}

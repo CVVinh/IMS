@@ -1,0 +1,27 @@
+#app {
+    height: 100%;
+    background-color: transparent;
+}
+
+.p-overlaypanel:before {
+    border-bottom-color: var(--cyan-800)!important;
+    border-width: 12px!important;
+}
+
+.p-overlaypanel:after {
+    border-bottom-color: var(--cyan-800)!important;
+}
+.p-overlaypanel .p-overlaypanel-content {
+    padding: 0!important;
+}
+
+.p-overlaypanel {
+    --overlayArrowLeft: 16px!important;
+    top: 50px!important;
+}
+
+input.p-inputtext.p-component.input-overlay {
+    width: 420px;
+    border: none;
+}
+

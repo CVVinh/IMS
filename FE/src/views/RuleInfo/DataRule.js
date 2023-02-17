@@ -1,0 +1,36 @@
+export const groups = [
+    {
+        idRule: 1,
+        title: "Quy dinh 1",
+        applyDay: "20/02/2022",
+        expiredDay: "20/01/2023",
+        userCreated: "Tran Van AB",
+        dateCreated: "20/01/2022",
+        content: "<p>Noi dung quy dinh 1</p>",
+        userUpdated: "",
+        dateUpdated: "",
+    },
+    {
+        idRule: 2,
+        title: "Quy dinh 2",
+        applyDay: "20/02/2022",
+        expiredDay: "20/01/2023",
+        userCreated: "Tran Van AB",
+        dateCreated: "22/01/2022",
+        content: "<p>Noi dung quy dinh 2</p>",
+        userUpdated: "",
+        dateUpdated: "",
+    },
+    {
+        idRule: 3,
+        title: "Quy dinh 3",
+        applyDay: "20/02/2022",
+        expiredDay: "20/01/2023",
+        userCreated: "Tran Van AB",
+        dateCreated: "23/01/2022",
+        content: "<p>Noi dung quy dinh 3</p>",
+        userUpdated: "",
+        dateUpdated: "",
+    },
+
+];

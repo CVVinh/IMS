@@ -1,0 +1,53 @@
+{
+    "code": 0,
+    "msg": "success",
+    "data": [
+            {
+            "id": 0,
+            "name": "Home",
+            "url": "home",
+            "openStyle": 0,
+            "icon": "icon-home"
+            },
+            {
+            "id": 1,
+            "name": "User Management",
+            "url": "user/index",
+            "openStyle": 0,
+            "icon": "icon-user"
+            },
+        
+            {
+            "id": 2,
+            "name": "Role Management",
+            "url": "role/index",
+            "openStyle": 0,
+            "icon": "icon-team"
+            },
+        
+            {
+            "id": 4,
+            "name": "Project Management",
+            "url": "org/index",
+            "openStyle": 0,
+            "icon": "icon-project"
+             },
+
+            {
+            "id": 5,
+            "name": "Task Management",
+            "url": "post/index",
+            "openStyle": 0,
+            "icon": "icon-project-fill"
+            },
+
+            {
+            "id": 6,
+            "name": "OT Management",
+            "url": "ot/index",
+            "openStyle": 0,
+            "icon": "icon-Field-time"   
+            }
+            ]
+}
+    

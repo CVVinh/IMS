@@ -1,0 +1,21 @@
+version: '3.4'
+services:
+  backend:
+    container_name: ims-backend
+    build:
+      context: ./BE/
+      dockerfile: "Dockerfile"
+    restart: always
+    image: ims-backend
+    ports:
+      - "8081:80"
+
+  frontend:
+    container_name: ims-frontend
+    build:
+      context: ./FE/
+      dockerfile: "Dockerfile"
+    restart: always
+    image: ims-frontend
+    ports:
+      - "8082:80"
