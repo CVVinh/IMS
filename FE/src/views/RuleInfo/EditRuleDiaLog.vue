@@ -5,7 +5,7 @@
         :modal="true"
         :maximizable="true"
         :dismissableMask="true"
-        header="EDIT RULE"
+        header="Sửa quy định"
         :show="resetForm()"
     >
         <div>
@@ -26,7 +26,7 @@
                                         autocomplete="nope"
                                     />
                                     <label for="title" :class="{ 'p-error': v$.title.$invalid && submitted }"
-                                        >Title*</label
+                                        >Tiêu đề*</label
                                     >
                                 </div>
                                 <span v-if="v$.title.$error && submitted">
@@ -52,7 +52,7 @@
                                         :class="{ 'p-invalid': v$.applyDay.$invalid && submitted }"
                                     />
                                     <label for="applyDay" :class="{ 'p-error': v$.applyDay.$invalid && submitted }"
-                                        >Apply Day*</label
+                                        >Ngày áp dụng *</label
                                     >
                                 </div>
                                 <small
@@ -71,7 +71,7 @@
                                         :class="{ 'p-invalid': v$.expiredDay.$invalid && submitted }"
                                     />
                                     <label for="expiredDay" :class="{ 'p-error': v$.expiredDay.$invalid && submitted }"
-                                        >Expire Day*</label
+                                        >Ngày hết hạn*</label
                                     >
                                 </div>
                                 <small
@@ -107,7 +107,7 @@
                         <div class="row mb-4">
                             <div class="col col-md-12 col-24">
                                 <div class="p-float-label" :class="{ 'form-group--error': v$.content.$error }">
-                                    <h6>Content</h6>
+                                    <h6>Nội dung</h6>
                                     <Editor
                                         placeholder="Content of rule"
                                         editorStyle="height: 400px"
@@ -124,12 +124,12 @@
 
                                 <div class="d-flex justify-content-end mt-3">
                                     <div>
-                                        <Button type="submit" label="Submit" icon="pi pi-check" />
+                                        <Button type="submit" label="Lưu" icon="pi pi-check" />
                                     </div>
                                     &emsp;
                                     <div>
                                         <Button
-                                            label="Cancel"
+                                            label="Hủy"
                                             class="p-button-secondary"
                                             icon="pi pi-times"
                                             @click="closeEdit()"
@@ -223,8 +223,8 @@
                             this.$emit('reloadpage')
                             this.$toast.add({
                                 severity: 'success',
-                                summary: 'Info Message',
-                                detail: 'Save rule success!',
+                                summary: 'Thành công',
+                                detail: 'Thêm mới thành công!',
                                 life: 3000,
                             })
                             break
@@ -232,7 +232,7 @@
                         case HttpStatus.FORBIDDEN:
                             this.$toast.add({
                                 severity: 'error',
-                                summary: 'Error',
+                                summary: 'Lỗi',
                                 detail: 'Không có quyền thực hiện thao tác này!',
                                 life: 2000,
                             })
@@ -240,8 +240,8 @@
                         default:
                             this.$toast.add({
                                 severity: 'error',
-                                summary: 'error',
-                                detail: 'Save failed',
+                                summary: 'Lỗi',
+                                detail: 'Lưu lỗi ',
                                 life: 3000,
                             })
                     }
@@ -250,15 +250,15 @@
                         case 'ERR_NETWORK':
                             this.$toast.add({
                                 severity: 'error',
-                                summary: 'error',
-                                detail: 'Check your connect !',
+                                summary: 'Lỗi',
+                                detail: 'Kiểm tra kêt nối!',
                                 life: 3000,
                             })
                             break
                         case 'ERR_BAD_REQUEST':
                             this.$toast.add({
                                 severity: 'error',
-                                summary: 'error',
+                                summary: 'Lỗi',
                                 detail: error.response.data,
                                 life: 3000,
                             })

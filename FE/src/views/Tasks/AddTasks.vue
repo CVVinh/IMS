@@ -1,11 +1,11 @@
 <template>
     <LayoutDefaultDynamic>
         <div class="wrap">
-            <h2>Add new task</h2>
+            <h2>Thêm</h2>
             <form class="input-form">
                 <div class="form-group">
                     <div class="form-element">
-                        <label for="taskparent">Task parent</label>
+                        <label for="taskparent">Công việc chính </label>
                         <Dropdown
                             id="taskparent"
                             style="width: 25rem"
@@ -17,18 +17,18 @@
                         />
                     </div>
                     <div class="form-element">
-                        <label for="taskname">Task name</label>
+                        <label for="taskname">Tên công việc</label>
                         <InputText type="text" v-model="taskName" id="taskname" style="width: 25rem" />
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="form-element">
-                        <label for="description">Description</label>
+                        <label for="description">Mô tả</label>
                         <InputText id="description" v-model="description" type="text" style="width: 25rem" />
                     </div>
                     <div class="form-element">
-                        <label for="status">Status</label>
+                        <label for="status">Trạng thái</label>
                         <Dropdown
                             id="status"
                             style="width: 25rem"
@@ -36,24 +36,24 @@
                             :options="status"
                             optionLabel="name"
                             optionValue="code"
-                            placeholder="Status"
+                            placeholder="Trạng thái"
                         />
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="form-element">
-                        <label for="endTaskDate">Date start task</label>
+                        <label for="endTaskDate">Ngày bắt đầu</label>
                         <Calendar id="startTaskDate" v-model="startTaskDate" :showIcon="true" style="width: 25rem" />
                     </div>
                     <div class="form-element">
-                        <label for="endTaskDate">Date end task</label>
+                        <label for="endTaskDate">Ngày kết thúc</label>
                         <Calendar id="endTaskDate" v-model="endTaskDate" :showIcon="true" style="width: 25rem" />
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="button-group">
-                        <Button id="btn-add" label="Add" @click="addTask()" />
-                        <Button id="btn-cancel" label="Cancel" class="p-button-secondary" @click="backToTasksPage()" />
+                        <Button id="btn-add" label="Thêm" @click="addTask()" />
+                        <Button id="btn-cancel" label="Hủy" class="p-button-secondary" @click="backToTasksPage()" />
                     </div>
                 </div>
             </form>
@@ -77,13 +77,13 @@
                 selectedTaskParent: null,
                 selectedStatus: null,
                 status: [
-                    { name: 'Open', code: 1 },
-                    { name: 'Priority', code: 2 },
-                    { name: 'Progress', code: 3 },
-                    { name: 'Done', code: 4 },
-                    { name: 'Error', code: 5 },
-                    { name: 'Deleted', code: 6 },
-                    { name: 'Pending', code: 7 },
+                    { name: 'Đang mở', code: 1 },
+                    { name: 'Ưu tiên', code: 2 },
+                    { name: 'Đang làm', code: 3 },
+                    { name: 'Đã xong', code: 4 },
+                    { name: 'Lỗi', code: 5 },
+                    { name: 'Đã xóa', code: 6 },
+                    { name: 'Chưa giải quyết', code: 7 },
                 ],
                 tasklist: [],
             }
@@ -121,15 +121,15 @@
                         this.$router.push({ name: 'tasks' })
                         this.$toast.add({
                             severity: 'success',
-                            summary: 'Success Message',
-                            detail: 'Add task successfully !',
+                            summary: 'Thành công',
+                            detail: 'Thêm mới thành công!',
                             life: 3000,
                         })
                     })
                     .catch((error) => {
                         this.$toast.add({
                             severity: 'warn',
-                            summary: 'Warning Message',
+                            summary: 'Cảnh báo ',
                             detail: error.response.data._Message,
                             life: 3000,
                         })

@@ -2,9 +2,7 @@
     <LayoutDefaultDynamic>
         <ConfirmDialog></ConfirmDialog>
         <Toast position="top-right" />
-        <div class="mx-4">
-            <Breadcrumb :home="timeSheet" :model="itemsTimeSheet" />
-        </div>
+        <div class="mx-4"></div>
         <div class="mx-3 mt-3">
             <DataTable
                 :value="arr"
@@ -20,13 +18,13 @@
                 responsiveLayout="scroll"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 :rowsPerPageOptions="pageIndex"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                 :globalFilterFields="['#', 'name', 'startDate', 'endDate', 'isDeleted', 'isFinished']"
             >
                 <!-- Header -->
                 <template #header>
                     <div class="flex justify-content-center">
-                        <h5 class="" style="color: white; margin-top: 10px; float: left">PROJECTS LIST</h5>
+                        <h5 class="" style="color: white; margin-top: 10px; float: left">Danh sách dự án</h5>
 
                         <div class="header-container">
                             <Button
@@ -39,11 +37,7 @@
                             <div class="input-text">
                                 <span class="p-input-icon-left">
                                     <i class="pi pi-search"> </i>
-                                    <InputText
-                                        class="p-inputtext-sm"
-                                        v-model="searchtext"
-                                        placeholder="Keyword Search"
-                                    />
+                                    <InputText class="p-inputtext-sm" v-model="searchtext" placeholder="Tìm kiếm" />
                                 </span>
                             </div>
                             <InputText
@@ -55,11 +49,11 @@
                         </div>
                     </div>
                 </template>
-                <template #empty> No project found. </template>
+                <template #empty> Không tìm thấy. </template>
                 <template #loading>
                     <ProgressSpinner />
                 </template>
-                <Column field="name" header="Project Name" sortable style="min-width: 60rem">
+                <Column field="name" header="Tên dự án" sortable style="min-width: 60rem">
                     <template #body="{ data }">
                         {{ data.name }}
                     </template>
@@ -73,7 +67,7 @@
                     :header="col.header"
                     :key="col.field + '_' + index"
                 ></Column>
-                <Column header="&emsp;&emsp;&emsp;Action" style="text-align: center">
+                <Column header="&emsp;&emsp;&emsp;Chi tiết" style="text-align: center">
                     <template #body="{ data }">
                         <View @click="toDetailProject(data.projectCode)" />
                     </template>
@@ -81,24 +75,26 @@
             </DataTable>
         </div>
         <Dialog
-            header="Access is denied!"
+            header="Không có quyền truy cập!"
             :visible="displayBasic"
             :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
             :style="{ width: '30vw' }"
             :modal="true"
             :closable="false"
         >
-            <p>You do not have permission to access this page!</p>
-            You will be redirected to the homepage in <strong>{{ num }}</strong> seconds!
+            <p>Bạn không có quyền truy cập !</p>
+            <medium
+                >Bạn sẽ được điều hướng vào trang chủ <strong>{{ num }}</strong> giây!</medium
+            >
             <template #footer>
-                <Button label="Yes" icon="pi pi-check" @click="submit" autofocus />
+                <Button label="Hoàn tất" icon="pi pi-check" @click="submit" autofocus />
             </template>
         </Dialog>
     </LayoutDefaultDynamic>
 </template>
 
 <script>
-    import { HTTP_LOCAL, GET_GITLAB_PROJECT, GET_GITLAB_PROJECT_BY_DATE } from '@/http-common'
+    import { HTTP, GET_GITLAB_PROJECT, GET_GITLAB_PROJECT_BY_DATE } from '@/http-common'
     import View from '../../components/buttons/View.vue'
 
     export default {
@@ -113,8 +109,6 @@
                 num: 5,
                 isOpenDialog: false,
                 defaultPageSize: 100,
-                timeSheet: { label: 'Report', icon: 'me-1 bx bx-spreadsheet' },
-                itemsTimeSheet: [{ label: 'Time sheet' }],
             }
         },
         mounted() {

@@ -1,7 +1,7 @@
 <template>
     <Dialog :visible="status" :closable="false" modal="true">
         <template #header>
-            <h3>Add menu</h3>
+            <h3>Thêm menu</h3>
         </template>
 
         <div class="Menu__form">
@@ -12,7 +12,7 @@
                             'p-error': v$.Datasend.idModule.required.$invalid && isSubmit,
                             'input-title': true,
                         }"
-                        >Module<span style="color: red">*</span></label
+                        >Chức năng<span style="color: red">*</span></label
                     >
                     <Dropdown
                         class="inputdrop"
@@ -22,7 +22,7 @@
                         :options="optionnew"
                         optionLabel="nameModule"
                         optionValue="id"
-                        placeholder="Select a module"
+                        placeholder="Chọn chức năng"
                     />
                     <small class="p-error" v-if="v$.Datasend.idModule.required.$invalid && isSubmit">{{
                         v$.Datasend.idModule.required.$message.replace('Value', 'Title')
@@ -34,9 +34,9 @@
                             'p-error': v$.Datasend.title.required.$invalid && isSubmit,
                             'input-title': true,
                         }"
-                        >Title<span style="color: red">*</span></label
+                        >Tên<span style="color: red">*</span></label
                     >
-                    <InputText type="text" v-model="v$.Datasend.title.$model" placeholder="Input title" />
+                    <InputText type="text" v-model="v$.Datasend.title.$model" placeholder="Nhập tên " />
                     <small class="p-error" v-if="v$.Datasend.title.required.$invalid && isSubmit">{{
                         v$.Datasend.title.required.$message.replace('Value', 'Title')
                     }}</small>
@@ -49,7 +49,7 @@
                         }"
                         >Icon<span style="color: red">*</span></label
                     >
-                    <InputText type="text" v-model="v$.Datasend.icon.$model" placeholder="Input class Icon" />
+                    <InputText type="text" v-model="v$.Datasend.icon.$model" placeholder="Nhập lớp Icon" />
                     <small class="p-error" v-if="v$.Datasend.icon.required.$invalid && isSubmit">{{
                         v$.Datasend.icon.required.$message.replace('Value', 'icon')
                     }}</small>
@@ -60,9 +60,9 @@
                             'p-error': v$.Datasend.view.required.$invalid && isSubmit,
                             'input-title': true,
                         }"
-                        >View<span style="color: red">*</span></label
+                        >Hiển thị<span style="color: red">*</span></label
                     >
-                    <InputText type="text" v-model="v$.Datasend.view.$model" placeholder="Input View" />
+                    <InputText type="text" v-model="v$.Datasend.view.$model" placeholder="Nhập trang hiển thị" />
                     <small class="p-error" v-if="v$.Datasend.view.required.$invalid && isSubmit">{{
                         v$.Datasend.view.required.$message.replace('Value', 'View')
                     }}</small>
@@ -75,9 +75,13 @@
                             'p-error': v$.Datasend.controller.required.$invalid && isSubmit,
                             'input-title': true,
                         }"
-                        >Controller<span style="color: red">*</span></label
+                        >Điều hướng<span style="color: red">*</span></label
                     >
-                    <InputText type="text" v-model="v$.Datasend.controller.$model" placeholder="Input Controller" />
+                    <InputText
+                        type="text"
+                        v-model="v$.Datasend.controller.$model"
+                        placeholder="Nhập trang điều hướng"
+                    />
                     <small class="p-error" v-if="v$.Datasend.controller.required.$invalid && isSubmit">{{
                         v$.Datasend.controller.required.$message.replace('Value', 'Controller')
                     }}</small>
@@ -88,31 +92,31 @@
                             'p-error': v$.Datasend.action.required.$invalid && isSubmit,
                             'input-title': true,
                         }"
-                        >Action<span style="color: red">*</span></label
+                        >Thực thi<span style="color: red">*</span></label
                     >
-                    <InputText type="text" v-model="v$.Datasend.action.$model" placeholder="Input action" />
+                    <InputText type="text" v-model="v$.Datasend.action.$model" placeholder="Nhập trang thực thi" />
                     <small class="p-error" v-if="v$.Datasend.action.required.$invalid && isSubmit">{{
                         v$.Datasend.action.required.$message.replace('Value', 'Action')
                     }}</small>
                 </div>
 
                 <div class="Menu__form--items-content">
-                    <h5>Parent</h5>
+                    <h5>Nhánh/Lớp cha</h5>
                     <Dropdown
                         class="inputdrop"
                         v-model="Datasend.parent"
                         :options="parentArr"
                         optionLabel="title"
                         optionValue="id"
-                        placeholder="Select a parent"
+                        placeholder="Chọn nhánh/lớp "
                     />
                 </div>
             </div>
         </div>
 
         <template #footer>
-            <Button label="Add" icon="pi pi-check" autofocus @click="AddMenu" />
-            <Button label="Close" icon="pi pi-times" class="p-button-text" @click="closeModal" />
+            <Button label="Thêm" icon="pi pi-check" autofocus @click="AddMenu" />
+            <Button label="Đóng" icon="pi pi-times" class="p-button-text" @click="closeModal" />
         </template>
     </Dialog>
 </template>

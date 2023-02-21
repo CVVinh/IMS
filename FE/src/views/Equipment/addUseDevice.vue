@@ -1,5 +1,4 @@
 <template>
-    
     <div class="form-layout">
         <div class="header-outside">
             <div class="title">
@@ -113,15 +112,18 @@
                     v1$.formUseDevice.userReceive.required.$message.replace('Value', 'User Received')
                 }}</small>
             </div>
-           
-           <AddDevices :isOpenDialog="isOpenDialog" @closeDialog="closeDialog" :deviceSelected="selectedEdit" 
-            @Reloadlist ="getAllDevices"
-           />
-            
+
+            <AddDevices
+                :isOpenDialog="isOpenDialog"
+                @closeDialog="closeDialog"
+                :deviceSelected="selectedEdit"
+                @Reloadlist="getAllDevices"
+            />
+
             <div class="group-button">
                 <div>
                     <Button label="Save" type="submit" icon="pi pi-check" />{{ ' ' }}
-                    <Button label="Cancel" class="p-button-secondary" v-on:click="closeDialog1()" />
+                    <Button label="Hủy" class="p-button-secondary" v-on:click="closeDialog1()" />
                 </div>
             </div>
         </form>
@@ -138,7 +140,7 @@
     export default {
         inject: ['dialogRef'],
         setup: () => ({ v1$: useVuelidate() }),
-       
+
         data() {
             return {
                 formUseDevice: {
@@ -166,12 +168,10 @@
             closeDialog() {
                 this.isOpenDialog = false
             },
-           
+
             submitMultiUseDevice() {
                 this.isSubmit = true
                 if (this.devices) {
-                
-                   
                     this.formUseDevice.idDevice = this.device ? this.device.idDevice : ''
                     this.formUseDevice.userCreated = this.user.Id
                     if (this.checkForm()) {
@@ -179,18 +179,15 @@
                         this.formUseDevice.dateCreated = moment(new Date(this.formUseDevice.dateCreated)).format(
                             'YYYY-MM-DD[T]HH:mm:ss',
                         )
-                       
                     }
-               
+
                     this.devices.forEach((de) => {
-                        this.device = de.device  
+                        this.device = de.device
                         this.formUseDevice.amount = de.amount
                         this.formUseDevice.idDevice = this.device ? this.device.idDevice : ''
-                        if (this.checkForm()){
+                        if (this.checkForm()) {
                             this.submitUseDevice()
-                        } 
-
-                      
+                        }
                     })
                     if (this.checkForm()) {
                         this.resetForm()
@@ -201,10 +198,8 @@
             submitUseDevice() {
                 this.isSubmit = true
 
-               
-
                 if (!this.checkForm()) return
-                
+
                 HTTP.post('Handovers/addHandover', this.formUseDevice).then((res) => {
                     if (res.status == 200) {
                         this.$toast.add({
@@ -216,10 +211,15 @@
                     }
                 })
             },
-            checkForm(){
-                if (this.formUseDevice.amount && this.formUseDevice.dateCreated && this.formUseDevice.idDevice 
-                && this.formUseDevice.userCreated && this.formUseDevice.userReceive) {
-                    return true;
+            checkForm() {
+                if (
+                    this.formUseDevice.amount &&
+                    this.formUseDevice.dateCreated &&
+                    this.formUseDevice.idDevice &&
+                    this.formUseDevice.userCreated &&
+                    this.formUseDevice.userReceive
+                ) {
+                    return true
                 }
             },
             closeDialog1() {
@@ -273,9 +273,6 @@
                 })
             },
         },
-       
-
-        
 
         mouting() {},
         mounted() {
@@ -296,8 +293,6 @@
                 },
             }
         },
-
-        
 
         components: {
             AddDevices,

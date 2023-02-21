@@ -9,7 +9,7 @@
                     <div class="card card-body" style="background-color: #607d8b">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="d-flex justify-content-start">
-                                <h5 style="color: White">LEAVE REGISTRATION LIST</h5>
+                                <h5 style="color: White">Danh sách đăng ký nghỉ phép</h5>
                             </div>
                         </div>
 
@@ -17,7 +17,7 @@
                             <div class="d-flex justify-content-start">
                                 <Button
                                     style="height: 50px"
-                                    label="Leave off list"
+                                    label="Tổng hợp nghỉ phép"
                                     class="p-button-outlined p-button-sm p-button-info py-2 border"
                                     @click="RedirectToAction"
                                     icon="pi pi-arrow-right"
@@ -38,7 +38,7 @@
                                         :options="statusLeave"
                                         optionLabel="title"
                                         optionValue="id"
-                                        placeholder="Select Status"
+                                        placeholder="Chọn trạng thái"
                                         display="chip"
                                     />
                                 </div>
@@ -56,7 +56,7 @@
                                             style="width: 200px"
                                             class="p-inputtext"
                                             v-model="fillterLeaveOff.searchLeaveOff"
-                                            placeholder="Enter name..."
+                                            placeholder="Nhập tên..."
                                         />
                                     </div>
                                 </div>
@@ -64,7 +64,7 @@
                         </div>
                     </div>
                 </template>
-                <template #empty> No data found. </template>
+                <template #empty> Không tìm thấy. </template>
                 <template #content>
                     <DataTable
                         :value="dataLeaveOff"
@@ -76,7 +76,7 @@
                         responsiveLayout="scroll"
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         :rowsPerPageOptions="[5, 10, 15, 30]"
-                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                         :globalFilterFields="[
                             '#',
                             'id',
@@ -89,40 +89,40 @@
                             'name',
                         ]"
                     >
-                        <Column field="#" header="N.o">
+                        <Column field="#" header="No">
                             <template #body="{ index }">
                                 {{ index + 1 }}
                             </template>
                         </Column>
-                        <Column field="name" header="Staff name" :sortable="true">
+                        <Column field="name" header="Tên" :sortable="true">
                             <template #body="{ data }">
                                 {{ data.name }}
                             </template>
                         </Column>
-                        <Column field="startTime" header="Leave day">
+                        <Column field="startTime" header="Ngày nghỉ">
                             <template #body="{ data }">
-                                {{
-                                    formartDate(data.startTime) +
-                                    ' - ' +
-                                    formartDate(data.endTime) +
-                                    ` (${formatHours(mathLeaveOffDate(data.startTime, data.endTime))})`
-                                }}
+                                {{ formartDate(data.startTime) + ' - ' + formartDate(data.endTime) }}
                             </template>
                         </Column>
-                        <Column field="reasons" header="Reason">
+                        <Column field="realTime" header="Real time">
+                            <template #body="{ data }">
+                                {{ data.realTime }}
+                            </template>
+                        </Column>
+                        <Column field="reasons" header="Lý do">
                             <template #body="{ data }">
                                 {{ data.reasons }}
                             </template>
                         </Column>
-                        <Column field="notAcceptUser" header="Reason for not approving">
+                        <Column field="notAcceptUser" header="Lý do không cho phép nghỉ">
                             <template #body="{ data }">
                                 <span v-if="data.status == 3">
                                     {{ data.notAcceptUser }}
                                 </span>
-                                <span v-else> No Content... </span>
+                                <span v-else> Chưa nhập... </span>
                             </template>
                         </Column>
-                        <Column field="status" header="Status">
+                        <Column field="status" header="Trạng thái">
                             <template #body="{ data }">
                                 <span :class="checkStatus(data.status).class">
                                     {{ checkStatus(data.status).title }}
@@ -130,7 +130,7 @@
                             </template>
                         </Column>
                         <Column header="Action" v-if="Action">
-                            <template #body="{ data }" >
+                            <template #body="{ data }">
                                 <div class="d-flex justify-content-center">
                                     <Button
                                         @click="confirmBrowseVacation(data)"
@@ -140,13 +140,13 @@
                                         :class="{
                                             'p-button-success': data.status != 2,
                                             'p-button-secondary': data.status == 2,
-                                        }"     
+                                        }"
                                     />
                                     <Button
                                         @click="showConfirmLeaveOff(data)"
                                         class="p-button-sm p-button-danger mt-1 me-2"
                                         icon="pi pi-times"
-                                        :disabled="data.status == 3 || data.status == 2"  
+                                        :disabled="data.status == 3 || data.status == 2"
                                     />
                                 </div>
                             </template>
@@ -171,46 +171,47 @@
     import { DateHelper } from '@/helper/date.helper'
     import { LocalStorage } from '@/helper/local-storage.helper'
     import { UserRoleHelper } from '@/helper/user-role.helper'
-import router from '@/router'
-
+    import router from '@/router'
     export default {
         async created() {
-            ///leaveoff/acceptregisterlists     
-           try{
-            this.token = LocalStorage.jwtDecodeToken()
-            let indexCut = this.$route.path.lastIndexOf('/')
-            let string = this.$route.path.slice(1,indexCut) 
-            await UserRoleHelper.isAccessModule(string)
-            if(UserRoleHelper.isAccess){
-                // Phân quyền button
-                if(Number(this.token.IdGroup) == 5){
-                     this.Action = true;
+            ///leaveoff/acceptregisterlists
+            try {
+                this.token = LocalStorage.jwtDecodeToken()
+                let indexCut = this.$route.path.lastIndexOf('/')
+                let string = this.$route.path.slice(1, indexCut)
+                await UserRoleHelper.isAccessModule(string)
+                if (UserRoleHelper.isAccess) {
+                    // Phân quyền button
+                    if (Number(this.token.IdGroup) == 5) {
+                        this.Action = true
+                    }
+                    // Check quyền
+                    if (Number(this.token.IdGroup) == 5 || Number(this.token.IdGroup) == 1) {
+                        await this.getAllLeaveOffRegister()
+                    }
+                    if (
+                        Number(this.token.IdGroup) == 4 ||
+                        Number(this.token.IdGroup) == 3 ||
+                        Number(this.token.IdGroup) == 2
+                    ) {
+                        setTimeout(() => {
+                            this.$toast.add({
+                                severity: 'error',
+                                summary: 'Error message',
+                                detail: 'Người dùng không có quyền!',
+                                life: 3000,
+                            })
+                            this.$router.push('/')
+                        }, 800)
+                    }
+                } else {
+                    alert('bạn không có quyền giờ đến trang HOME nhé')
+                    router.push('/')
                 }
-                // Check quyền
-                if (Number(this.token.IdGroup) == 5 || Number(this.token.IdGroup) == 2 || Number(this.token.IdGroup) == 1) {
-                    await this.getAllLeaveOffRegister()
-                }
-                if (Number(this.token.IdGroup) == 4 || Number(this.token.IdGroup) == 3) {
-                    setTimeout(() => {
-                        this.$toast.add({
-                            severity: 'error',
-                            summary: 'Error message',
-                            detail: 'Người dùng không có quyền!',
-                            life: 3000,
-                        })
-                        this.$router.push('/')
-                    }, 800)
-                }
-            }else{
-                alert('bạn không có quyền giờ đến trang HOME nhé')
-                router.push('/')
-            }
-           }catch(err){
+            } catch (err) {
                 alert('Ooopps Có gì đó sai sai rồi chuyển bạn đến trang home nhé')
                 router.push('/')
-           }
-           
-            
+            }
         },
         data() {
             return {
@@ -224,21 +225,21 @@ import router from '@/router'
                     searchLeaveOff: '',
                 },
                 dataLeaveOff: [],
-                Action : false,
+                Action: false,
                 statusLeave: [
                     {
                         id: 1,
-                        title: 'Waiting',
+                        title: 'Đang chờ',
                         class: 'badge bg-warning',
                     },
                     {
                         id: 2,
-                        title: 'Done',
+                        title: 'Đã duyệt',
                         class: 'badge bg-success',
                     },
                     {
                         id: 3,
-                        title: 'Cancel',
+                        title: 'Đã hủy',
                         class: 'badge bg-secondary ',
                     },
                 ],
@@ -264,74 +265,67 @@ import router from '@/router'
             },
             formartDate(date) {
                 const fmDate = new Date(date)
-                return dayjs(fmDate).format('YYYY/MM/DD')
+                return dayjs(fmDate).format('YYYY/MM/DD (HH:mm)')
             },
-            formatHours(numberOfHours) {
-                var Days = Math.floor(numberOfHours / 8)
-                var Remainder = numberOfHours % 8
-                var Hours = Math.floor(Remainder)
-                var Minutes = Math.floor(60 * (Remainder - Hours))
-                return `${Math.abs(Days)}d ${Math.abs(Hours)}h ${Math.abs(Minutes)}m`
-            },
-            mathLeaveOffDate(startDate, endDate) {
-                var result = 0
-                var start = new Date(startDate)
-                var end = new Date(endDate)
-                var st = Number(dayjs(start).format('HH')) * 60 + Number(dayjs(start).format('MM'))
-                var en = Number(dayjs(end).format('HH')) * 60 + Number(dayjs(end).format('MM'))
-                var convertSMonth = Number(dayjs(start).format('MM'))
-                var convertEMonth = Number(dayjs(end).format('MM'))
-                var convertSDay = Number(dayjs(start).format('DD'))
-                var convertEDay = Number(dayjs(end).format('DD'))
-                if (convertSDay == convertEDay) {
-                    result = 8 - (8 * 60 - (en - st)) / 60
-                }
-                if (convertSMonth != convertEMonth) {
-                    var startMonth = dayjs(start).daysInMonth()
-                    var endMonth = dayjs(end).daysInMonth()
-                    var arrMonth = [1, 2, 3, 5, 7, 8, 10, 12]
-                    var arrMonthBt = [4, 6, 9, 11]
-                    var sta = 0
-                    var ent = 0
-                    var kq = 0
-                    arrMonth.forEach((val) => {
-                        if (convertSMonth == 2 || convertEMonth == 2) {
-                            if (
-                                Number(dayjs(start).format('YYYY')) % 4 == 0 ||
-                                Number(dayjs(end).format('YYYY')) % 4 == 0
-                            ) {
-                                sta = convertSDay + convertSMonth * startMonth
-                                ent = convertEDay + convertEMonth * endMonth
-                            } else {
-                                sta = convertSDay + convertSMonth * startMonth
-                                ent = convertEDay + convertEMonth * endMonth
-                            }
-                        } else {
-                            if (convertSMonth == val) {
-                                sta = convertSDay + convertSMonth * 31
-                            }
-                            if (convertEMonth == val) {
-                                ent = convertEDay + convertEMonth * 31
-                            }
-                        }
-                    })
-                    arrMonthBt.forEach((val) => {
-                        if (convertSMonth == val) {
-                            sta = convertSDay + convertSMonth * 30
-                        }
+            // mathLeaveOffDate(startTime, endTime) {
+            //     const start = new Date(startTime)
+            //     const end = new Date(endTime)
+            //     const diff = end - start
+            //     const millisecondsPerMinute = 1000 * 60
+            //     const minutesPerHour = 60
+            //     const hoursPerDay = 24
 
-                        if (convertEMonth == val) {
-                            ent = convertEDay + convertEMonth * 30
-                        }
-                    })
-                    kq = +ent - sta
-                    result = kq * 8 - (8 * 60 - (en - st)) / 60
+            //     const minutes = Math.floor(diff / millisecondsPerMinute)
+            //     const hours = Math.floor(minutes / minutesPerHour) % hoursPerDay
+            //     const days = Math.floor(minutes / (minutesPerHour * hoursPerDay))
+            //     console.log(days)
+            //     // const years = Math.floor(days / 365)
+            //     return `${days}d ${hours}h ${minutes % minutesPerHour}m`
+            // },
+            mathLeaveOffDate(startTime, endTime) {
+                const start = new Date(startTime)
+                const end = new Date(endTime)
+
+                // Kiểm tra xem thời gian bắt đầu và kết thúc có cùng ngày không
+                const isSameDay =
+                    start.getFullYear() === end.getFullYear() &&
+                    start.getMonth() === end.getMonth() &&
+                    start.getDate() === end.getDate()
+
+                let diff = end - start
+
+                // Trừ thời gian nghỉ trưa nếu trong giờ làm việc
+                if (start.getHours() <= 12 && end.getHours() >= 13 && isSameDay) {
+                    const lunchTime = end.getHours() >= 13 && end.getMinutes() >= 30 ? 90 : 60 // 60 phút hoặc 90 phút nghỉ trưa
+                    diff -= lunchTime * 60 * 1000 // Chuyển đổi sang mili giây
                 }
-                if (convertSDay != convertEDay) {
-                    var day = (convertEDay - convertSDay) * 8
-                    result = day - (8 * 60 - (en - st)) / 60
+
+                // Tính ngày, giờ làm việc
+                const millisecondsPerMinute = 1000 * 60
+                const minutesPerHour = 60
+                const hoursPerDay = 24
+                const workingDays = []
+                let totalMinutes = Math.floor(diff / millisecondsPerMinute)
+                let days = Math.floor(totalMinutes / (minutesPerHour * hoursPerDay))
+
+                for (let i = 0; i < days; i++) {
+                    const currDate = new Date(start.getTime() + i * 24 * 60 * 60 * 1000)
+                    if (currDate.getDay() !== 0 && currDate.getDay() !== 6) {
+                        workingDays.push(currDate)
+                    }
                 }
-                return Math.abs(result)
+
+                const remainingMinutes = totalMinutes - days * minutesPerHour * hoursPerDay
+                const hours = Math.floor(remainingMinutes / minutesPerHour)
+                const minutes = remainingMinutes % minutesPerHour
+
+                let result = ''
+                if (days > 0) {
+                    result += `${days}d `
+                }
+                result += `${hours}h ${minutes}m`
+
+                return result
             },
             async handlerBrowseVacation(item) {
                 var idAcceptUser = this.userAccept.Id
@@ -353,7 +347,7 @@ import router from '@/router'
                     .catch((err) => {
                         this.$toast.add({
                             severity: 'error',
-                            summary: 'Error',
+                            summary: 'Lỗi',
                             detail: err.message,
                             life: 2000,
                         })
@@ -361,8 +355,8 @@ import router from '@/router'
             },
             confirmBrowseVacation(item) {
                 this.$confirm.require({
-                    message: `Are you sure you want to review for "${item.name}" to think?`,
-                    header: 'Leave Confirmation',
+                    message: `Bạn có chắc muốn cho "${item.name}" nghỉ phép ?`,
+                    header: 'Xác nhận nghỉ phép',
                     icon: 'pi pi-info-circle',
                     acceptClass: 'p-button-info',
                     accept: () => {
@@ -371,8 +365,8 @@ import router from '@/router'
                     reject: () => {
                         this.$toast.add({
                             severity: 'error',
-                            summary: 'Rejected',
-                            detail: 'You have rejected',
+                            summary: 'Từ chối',
+                            detail: 'Bạn đã từ chối',
                             life: 3000,
                         })
                     },
@@ -418,9 +412,11 @@ import router from '@/router'
                             status: el.status,
                             notAcceptUser: el.reasonNotAccept,
                             user: null,
+                            realTime: this.mathLeaveOffDate(el.startTime, el.endTime),
                         })
                     })
                 })
+                console.log(this.dataLeaveOff)
                 await this.handlerLoadData()
                 this.loading = false
             },
@@ -430,6 +426,8 @@ import router from '@/router'
                     this.fillterLeaveOff.selectedDate != null ||
                     this.fillterLeaveOff.selectedLeaveOff.length > 0
                 ) {
+                    this.loading = true
+                    this.dataLeaveOff = []
                     console.log(this.fillterLeaveOff.selectedDate)
                     var findByNameStatusDateDtos = {
                         fullName: this.fillterLeaveOff.searchLeaveOff,
@@ -454,13 +452,14 @@ import router from '@/router'
                                     status: el.status,
                                     notAcceptUser: el.reasonNotAccept,
                                     user: null,
+                                    realTime: this.mathLeaveOffDate(el.startTime, el.endTime),
                                 })
                             })
                         })
                         .catch((err) => {
                             this.$toast.add({
                                 severity: 'error',
-                                summary: 'Error',
+                                summary: 'Lỗi',
                                 detail: err.message,
                                 life: 2000,
                             })
@@ -468,6 +467,7 @@ import router from '@/router'
                     await this.handlerLoadData()
                     this.loading = false
                 } else {
+                    this.dataLeaveOff = []
                     await this.getAllLeaveOffRegister()
                 }
             },
@@ -480,7 +480,7 @@ import router from '@/router'
                 await this.getAllLeaveOffRegister()
             },
             RedirectToAction() {
-                this.$router.push({ name: 'Leave Off' })
+                this.$router.push({ name: 'Leaveoff' })
             },
         },
         components: {

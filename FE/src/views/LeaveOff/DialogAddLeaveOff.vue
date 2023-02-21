@@ -1,6 +1,6 @@
 <template>
     <Dialog
-        :header="selectedLeaveOff.id ? 'Edit leave off' : 'Add leave off'"
+        :header="selectedLeaveOff.id ? 'Sửa' : 'Thêm'"
         :maximizable="true"
         :closable="false"
         position="center"
@@ -12,6 +12,12 @@
     >
         <div class="container">
             <form class="form-addproject" @submit.prevent="submitRegisterLeaveOff()">
+                <div class="col-md-12 mb-3 mt-3">
+                    <div class="d-flex align-items-center">
+                        <InputSwitch id="onLeaveOff" v-model="onLeaveOff" />
+                        <label class="ms-2" for="onLeaveOff">Nghỉ trong ngày</label>
+                    </div>
+                </div>
                 <div class="row mb-2">
                     <div class="col-md-6">
                         <div class="field">
@@ -20,7 +26,7 @@
                                 for="dateStart"
                                 :class="{ 'p-error': v$.leaveOff.startTime.$invalid && submitted }"
                             >
-                                Start Date
+                                Ngày bắt đầu
                                 <span style="color: red">*</span>
                             </label>
                             <div class="p-float-label" :class="{ 'form-group--error': v$.leaveOff.startTime.$error }">
@@ -28,10 +34,11 @@
                                     id="dateStart"
                                     v-model="v$.leaveOff.startTime.$model"
                                     :showIcon="true"
-                                    :showTime="true"
+                                    :showTime="onLeaveOff"
                                     :showSeconds="true"
                                     autocomplete="off"
                                     inputId="time12"
+                                    dateFormat="yy-mm-dd"
                                     :class="{ 'p-invalid': v$.leaveOff.startTime.$invalid && submitted }"
                                 />
                             </div>
@@ -47,7 +54,7 @@
                                 for="dateEnd"
                                 :class="{ 'p-error': v$.leaveOff.endTime.$invalid && submitted }"
                             >
-                                End Date
+                                Ngày kết thúc
                                 <span style="color: red">*</span>
                             </label>
                             <div class="p-float-label" :class="{ 'form-group--error': v$.leaveOff.endTime.$error }">
@@ -55,28 +62,29 @@
                                     id="dateEnd"
                                     v-model="v$.leaveOff.endTime.$model"
                                     :showIcon="true"
-                                    :showTime="true"
+                                    :showTime="onLeaveOff"
                                     :showSeconds="true"
                                     autocomplete="off"
                                     inputId="time12"
+                                    dateFormat="yy-mm-dd"
                                     :class="{ 'p-invalid': v$.leaveOff.endTime.$invalid && submitted }"
                                 />
                             </div>
                             <small class="p-error" v-if="v$.leaveOff.endTime.required.$invalid && isSubmit">
-                                {{ v$.leaveOff.endTime.required.$message.replace('Value', 'End Time') }}
+                                {{ v$.leaveOff.endTime.required.$message.replace('Value', 'Ngày kết thúc') }}
                             </small>
                         </div>
                     </div>
                 </div>
                 <div class="input-layout w-100">
                     <label class="mb-2" for="Reason" :class="{ 'p-error': v$.leaveOff.reason.$invalid && submitted }">
-                        Reason
+                        Lý do
                         <span style="color: red">*</span>
                     </label>
                     <Textarea
                         id="Reason"
                         v-model="v$.leaveOff.reason.$model"
-                        placeholder="Enter the reason for not approving leave here..."
+                        placeholder="Nhập lý do nghỉ tại đây..."
                         class="input form-control"
                         rows="5"
                     />
@@ -86,8 +94,8 @@
                 </div>
                 <div class="group-button mt-3">
                     <div>
-                        <Button label="Submit" class="p-button-sm me-1" type="submit" icon="pi pi-check" />{{ ' ' }}
-                        <Button label="Cancel" class="p-button-sm p-button-secondary" @click="closeDialog()" />
+                        <Button label="Hoàn tất" class="p-button-sm me-1" type="submit" icon="pi pi-check" />{{ ' ' }}
+                        <Button label="Hủy" class="p-button-sm p-button-secondary" @click="closeDialog()" />
                     </div>
                 </div>
             </form>
@@ -111,22 +119,43 @@
                 isSubmit: false,
                 submited: false,
                 userAccept: jwtDecode(localStorage.getItem('token')),
+                timeFormat: new Date(),
+                onLeaveOff: false,
             }
         },
+        created() {
+            this.timeFormat.setHours(0)
+            this.timeFormat.setMinutes(0)
+            this.timeFormat.setSeconds(0)
+        },
         beforeUpdate() {
+            this.onLeaveOff = false
+            this.leaveOff.startTime = this.timeFormat
+            this.leaveOff.endTime = this.timeFormat
             if (this.selectedLeaveOff.id) {
                 HTTP.get(GET_LEAVE_OFF_BY_ID(this.selectedLeaveOff.id))
                     .then((res) => {
                         if (res.status === HttpStatus.OK) {
+                            var date1 = new Date(res.data._Data.startTime)
+                            var date2 = new Date(res.data._Data.endTime)
+
+                            if (
+                                date1.getHours() != 0 ||
+                                date1.getMinutes() != 0 ||
+                                date2.getHours() != 0 ||
+                                date2.getMinutes() != 0
+                            ) {
+                                this.onLeaveOff = true
+                            }
                             this.leaveOff.reason = res.data._Data.reasons
-                            this.leaveOff.startTime = res.data._Data.startTime
-                            this.leaveOff.endTime = res.data._Data.endTime
+                            this.leaveOff.startTime = new Date(res.data._Data.startTime)
+                            this.leaveOff.endTime = new Date(res.data._Data.endTime)
                         }
                     })
                     .catch((err) => {
                         this.$toast.add({
                             severity: 'error',
-                            summary: 'Error message',
+                            summary: 'Lỗi',
                             detail: err.message,
                             life: 2000,
                         })
@@ -136,7 +165,23 @@
         methods: {
             submitRegisterLeaveOff() {
                 this.isSubmit = true
+                var date1 = new Date(this.leaveOff.startTime)
+                var date2 = new Date(this.leaveOff.endTime)
                 if (!this.v$.$invalid && this.checkDate(this.leaveOff.startTime, this.leaveOff.endTime)) {
+                    return
+                }
+                if (this.onLeaveOff) {
+                    if (
+                        date1.getDate() != date2.getDate() ||
+                        date1.getMonth() != date2.getMonth() ||
+                        date1.getFullYear() != date2.getFullYear()
+                    ) {
+                        this.toastWarn('Chỉ cho phép nghỉ trong ngày, ngày tháng năm phải trùng nhau !')
+                        return
+                    }
+                }
+                if (date1.getDay() == 0 || date1.getDay() == 6 || date2.getDay() == 0 || date2.getDay() == 6) {
+                    this.toastWarn('Không được nhập ngày là thứ 7, chủ nhật !')
                     return
                 }
                 if (!this.v$.$invalid) {
@@ -218,7 +263,7 @@
             toastSuccess(message) {
                 this.$toast.add({
                     severity: 'success',
-                    summary: 'Success message',
+                    summary: 'Thành công',
                     detail: message,
                     life: 3000,
                 })
@@ -226,7 +271,7 @@
             toastWarn(err) {
                 this.$toast.add({
                     severity: 'warn',
-                    summary: 'Warn message',
+                    summary: 'Cảnh báo',
                     detail: err,
                     life: 3000,
                 })
@@ -234,7 +279,7 @@
             toastError(err) {
                 this.$toast.add({
                     severity: 'error',
-                    summary: 'Error message',
+                    summary: 'Lỗi',
                     detail: err,
                     life: 3000,
                 })
@@ -243,8 +288,8 @@
                 if (startDate > endDate) {
                     this.$toast.add({
                         severity: 'error',
-                        summary: 'Error message',
-                        detail: 'End date need to be bigger than start date !',
+                        summary: 'Lỗi',
+                        detail: 'Ngày kết thúc không được nhỏ hơn ngày bắt đầu!',
                         life: 3000,
                     })
                     return true

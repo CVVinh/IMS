@@ -17,7 +17,7 @@
                 responsiveLayout="scroll"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 :rowsPerPageOptions="[2, 10, 25, 50]"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                 :globalFilterFields="[
                     'userCode',
                     'userCreated',
@@ -39,23 +39,23 @@
                 ]"
             >
                 <template #header>
-                    <h5 style="color: white">USERS LIST</h5>
+                    <h5 style="color: white">Danh sách người dùng</h5>
                     <div class="header-container">
                         <div class="button-group">
                             <Add
-                                label="Add User"
+                                label="Thêm"
                                 :disabled="this.disableAddButton"
                                 @click="OpenAdd"
                                 style="margin-right: 5px"
                             />
-                            <Export label="Export" @click="exportCSV($event)" />
+                            <Export label="Xuất Excel" @click="exportCSV($event)" />
                         </div>
                         <div class="input-text">
                             <MultiSelect
                                 v-model="selectedColumns"
                                 :options="columns"
                                 optionLabel="header"
-                                placeholder="Select Columns"
+                                placeholder="Chọn"
                                 style="width: 20em; height: 100%; margin-right: 15px"
                             />
                             <span class="p-input-icon-left">
@@ -63,7 +63,7 @@
                                 <InputText
                                     class="p-inputtext-sm"
                                     v-model="filters['global'].value"
-                                    placeholder="Keyword Search"
+                                    placeholder="Tìm kiếm"
                                     style="width: 20em; height: 100%; font-size: 16px"
                                 />
                             </span>
@@ -75,14 +75,14 @@
                     <div v-if="this.isLoading" style="display: flex; justify-items: flex-end">
                         <ProgressSpinner style="width: 42px" />
                     </div>
-                    <div v-else>No user found.</div>
+                    <div v-else>Không tìm thấy.</div>
                 </template>
                 <Column field="#" header="#" dataType="date">
                     <template #body="{ index }">
                         {{ index + 1 }}
                     </template>
                 </Column>
-                <Column field="lastName" header="Full name" sortable style="min-width: 15rem">
+                <Column field="lastName" header="Họ và tên" sortable style="min-width: 15rem">
                     <template #body="{ data }">
                         {{ data.fullName }}
                     </template>
@@ -92,17 +92,17 @@
                         {{ data.email }}
                     </template>
                 </Column>
-                <Column field="idGroup" header="Group" sortable>
+                <Column field="idGroup" header="Nhóm" sortable>
                     <template #body="{ data }">
                         {{ data.idGroup }}
                     </template>
                 </Column>
-                <Column field="userCode" header="Account" sortable>
+                <Column field="userCode" header="Tài khoản" sortable>
                     <template #body="{ data }">
                         {{ data.userCode }}
                     </template>
                 </Column>
-                <Column field="workStatus" header="Work status" sortable>
+                <Column field="workStatus" header="Trạng thái làm việc" sortable>
                     <template #body="{ data }">
                         {{ data.workStatus }}
                     </template>
@@ -115,7 +115,7 @@
                     :key="index"
                     style="min-width: 14rem"
                 ></Column>
-                <Column field="" header="Actions" style="width: 10rem; text-align: left">
+                <Column field="" header="Thực thi" style="width: 10rem; text-align: left">
                     <template #body="{ data }">
                         <div class="actions-buttons" v-if="data.workStatus !== 'Nghỉ việc'">
                             <Edit @click="OpenEdit(data.id)" />
@@ -128,17 +128,19 @@
         </div>
 
         <Dialog
-            header="Access is denied!"
+            header="Không có quyền truy cập !"
             :visible="displayBasic"
             :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
             :style="{ width: '30vw' }"
             :modal="true"
             :closable="false"
         >
-            <p>You do not have permission to access this page!</p>
-            You will be redirected to the homepage in <strong>{{ num }}</strong> seconds!
+            <p>Bạn không có quyền truy cập !</p>
+            <medium
+                >Bạn sẽ được điều hướng vào trang chủ <strong>{{ num }}</strong> giây!</medium
+            >
             <template #footer>
-                <Button label="Yes" icon="pi pi-check" @click="submit" autofocus />
+                <Button label="Hoàn tất" icon="pi pi-check" @click="submit" autofocus />
             </template>
         </Dialog>
 
@@ -197,21 +199,21 @@
                 },
                 selectedColumns: null,
                 columns: [
-                    { field: 'dOB', header: 'Date of birth' },
-                    { field: 'gender', header: 'gender' },
-                    { field: 'identitycard', header: 'Identity card' },
-                    { field: 'phoneNumber', header: 'Phone number' },
-                    { field: 'address', header: 'Address' },
-                    { field: 'dateStartWork', header: 'Date start work' },
-                    { field: 'university', header: 'University' },
-                    { field: 'yearGraduated', header: 'Year graduated' },
+                    { field: 'dOB', header: 'Ngày sinh' },
+                    { field: 'gender', header: 'Giới tính' },
+                    { field: 'identitycard', header: 'Căn cước công dân' },
+                    { field: 'phoneNumber', header: 'Số điện thoại' },
+                    { field: 'address', header: 'Địa chỉ' },
+                    { field: 'dateStartWork', header: 'Ngày bắt đầu làm việc' },
+                    { field: 'university', header: 'Đại học' },
+                    { field: 'yearGraduated', header: 'Năm tốt nghiệp' },
                     { field: 'skype', header: 'Skype' },
-                    { field: 'maritalStatus', header: 'Marital status' },
-                    { field: 'dateLeave', header: 'Date leave' },
-                    { field: 'userCreated', header: 'User created' },
-                    { field: 'dateCreated', header: 'Date created' },
-                    { field: 'userModified', header: 'User modified' },
-                    { field: 'dateModified', header: 'Date modified' },
+                    { field: 'maritalStatus', header: 'Tình trạng hôn nhân' },
+                    { field: 'dateLeave', header: 'Ngày thôi việc' },
+                    { field: 'userCreated', header: 'Người tạo ' },
+                    { field: 'dateCreated', header: 'Ngày tạo ' },
+                    { field: 'userModified', header: 'Người chỉnh sửa ' },
+                    { field: 'dateModified', header: 'Ngày chỉnh sửa ' },
                 ],
                 Optionrole: [],
                 roleList: [],
@@ -303,9 +305,9 @@
                 this.$router.push({ name: 'home' })
             },
             getGender(index) {
-                if (index == 1) return 'Male'
-                else if (index == 2) return 'Female'
-                else if (index == 3) return 'Other'
+                if (index == 1) return 'Nam'
+                else if (index == 2) return 'Nữ'
+                else if (index == 3) return 'Khác'
             },
             getWorkStatus(index) {
                 if (index == 1) return 'Đang làm việc'
@@ -313,9 +315,9 @@
                 else if (index == 3) return 'Nghỉ thai sản'
             },
             getMaritalStatus(index) {
-                if (index == 1) return 'Married'
-                else if (index == 2) return 'Unmarried'
-                else if (index == 3) return 'Undefined'
+                if (index == 1) return 'Đã kết hôn'
+                else if (index == 2) return 'Chưa kết hôn'
+                else if (index == 3) return 'Chưa xác định'
             },
             toAddUserPage() {
                 this.$router.push({ name: 'adduser' })
@@ -325,8 +327,8 @@
             },
             confirmDelete(id) {
                 this.$confirm.require({
-                    message: 'Do you want to delete this user?',
-                    header: 'Delete Confirmation',
+                    message: 'Bạn có chắc chắn muốn xóa?',
+                    header: 'Xóa',
                     icon: 'pi pi-exclamation-triangle',
                     acceptClass: 'p-button-danger',
                     accept: () => {
@@ -359,14 +361,14 @@
                             this.getData()
                             this.$toast.add({
                                 severity: 'success',
-                                summary: 'Success Message',
-                                detail: 'Delete user success !!!',
+                                summary: 'Thành công',
+                                detail: 'Xóa thành công!',
                                 life: 2000,
                             })
                         }
                     })
                     .catch((error) => {
-                        this.$toast.add({ severity: 'warn', summary: 'Warning Message', detail: error, life: 2000 })
+                        this.$toast.add({ severity: 'warn', summary: 'Cảnh báo ', detail: error, life: 2000 })
                     })
             },
 

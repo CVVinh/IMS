@@ -1,0 +1,18 @@
+diff a/FE/src/router/index.js b/FE/src/router/index.js	(rejected hunks)
+@@ -547,7 +547,15 @@
+             component: () => import('@/views/RuleInfo/Rule.vue'),
+         },
+         
+-
++        {
++            path: '/leaveoff/Register',
++            name: 'LeaveOffRegister',
++            meta: {
++                title: 'IMS - Leave Off Register',
++            },
++            props: true,
++            component: () => import('@/views/LeaveOff/LeaveOffRegister.vue'),
++        },
+         /* #endregion */
+     ],
+ })

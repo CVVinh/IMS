@@ -204,9 +204,13 @@
     import LayoutDefault from '../../layouts/LayoutDefault/LayoutDefault.vue'
     import router from '@/router'
     import axios from 'axios'
+<<<<<<< HEAD
     import { HTTP } from '@/http-common'
+=======
+    import {HTTP} from "@/http-common"
     import { DateHelper } from '@/helper/date.helper'
 
+>>>>>>> develop
     export default {
         setup: () => ({
             v$: useVuelidate(),
@@ -433,19 +437,31 @@
                     var formatDate =  DateHelper.formatDate(new Date());
 
                     res.data.forEach((element) => {
+<<<<<<< HEAD
+                        if (element.isDeleted != true && element.isFinished != true) {
+=======
                         if (element.isDeleted != true && element.isFinished != true && (element.endDate > formatDate || element.endDate == null)) 
                         {
+>>>>>>> develop
                             this.project.push(element)
                         }
                     })
             })
         },
         watch: {
+<<<<<<< HEAD
+            // GET User By ID Project when change Id Data.IDProject
+            'data.idProject': function (newId, oldId) {
+                this.getUserByProject(newId)
+                console.log('object')
+            },
+=======
         // GET User By ID Project when change Id Data.IDProject        
             'data.idProject' : function (newId,oldId){
                 this.getUserByProject(newId);
             }
              
+>>>>>>> develop
         },
 
         components: { LayoutDefault },

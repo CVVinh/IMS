@@ -19,7 +19,7 @@
                 responsiveLayout="scroll"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 :rowsPerPageOptions="pageIndex"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                 :globalFilterFields="[
                     '#',
                     'id',
@@ -39,17 +39,22 @@
                 <!-- Header -->
                 <template #header>
                     <div class="flex justify-content-center">
-                        <h5 class="" style="color: white">PROJECTS LIST</h5>
+                        <h5 class="" style="color: white">Danh sách dự án</h5>
                         <div class="inline">
-                            <Export label="Export" class="me-2" @click="exportToExcel()" />
-                            <Button @click="finishMulti()" label="Finish" class="p-button-sm me-2" icon="pi pi-check" />
-                            <Add @click="openDialogAdd()" label="Add" v-if="canAddProject()" />
+                            <Export label="Xuất Excel" class="me-2" @click="exportToExcel()" />
+                            <Button
+                                @click="finishMulti()"
+                                label="Hoàn tất"
+                                class="p-button-sm me-2"
+                                icon="pi pi-check"
+                            />
+                            <Add @click="openDialogAdd()" label="Thêm" v-if="canAddProject()" />
                             <div class="p-input-icon-left layout-left">
                                 <i class="pi pi-search" />
                                 <InputText
                                     class="p-inputtext-sm"
                                     v-model="filters['global'].value"
-                                    placeholder="Keyword Search"
+                                    placeholder="Tìm kiếm"
                                 />
                             </div>
                             <div class="layout-left">
@@ -58,14 +63,14 @@
                                     :options="columns"
                                     optionLabel="header"
                                     @update:modelValue="onToggle"
-                                    placeholder="Select Columns"
+                                    placeholder="Chọn"
                                     style="width: 20em"
                                 />
                             </div>
                         </div>
                     </div>
                 </template>
-                <template #empty> No project found. </template>
+                <template #empty>Không tìm thấy. </template>
                 <template #loading>
                     <ProgressSpinner />
                 </template>
@@ -75,24 +80,24 @@
                         {{ index + 1 }}
                     </template>
                 </Column>
-                <Column field="projectCode" header="Project Code" sortable>
+                <Column field="projectCode" header="Mã dự án " sortable>
                     <template #body="{ data }">
                         {{ data.projectCode }}
                     </template>
                 </Column>
-                <Column field="name" header="Project Name" sortable style="min-width: 10rem">
+                <Column field="name" header="Tên dự án " sortable style="min-width: 10rem">
                     <template #body="{ data }">
                         {{ data.name }}
                     </template>
                 </Column>
-                <Column field="startDate" header="Start date" sortable style="min-width: 8rem">
+                <Column field="startDate" header="Ngày bắt đầu " sortable style="min-width: 8rem">
                     <template #body="{ data }">
                         {{ data.startDate }}
                     </template>
                 </Column>
-                <Column field="endDate" header="End date" sortable style="min-width: 8rem">
+                <Column field="endDate" header="Ngày kết thúc " sortable style="min-width: 8rem">
                     <template #body="{ data }">
-                        {{ data.endDate == '1970-01-01' ? 'Pending..' : data.endDate }}
+                        {{ data.endDate == '1970-01-01' ? 'Chưa giải quyết..' : data.endDate }}
                     </template>
                 </Column>
                 <Column
@@ -103,7 +108,7 @@
                     :header="col.header"
                     :key="col.field + '_' + index"
                 ></Column>
-                <Column header="&emsp;&emsp;&emsp;Action" style="min-width: 15rem">
+                <Column header="&emsp;&emsp;&emsp;Thực thi" style="min-width: 15rem">
                     <template #body="{ data }">
                         <Member
                             @click="toDetailProject(data.id)"
@@ -144,17 +149,19 @@
             </DataTable>
         </div>
         <Dialog
-            header="Access is denied!"
+            header="Không có quyền truy cập!"
             :visible="displayBasic"
             :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
             :style="{ width: '30vw' }"
             :modal="true"
             :closable="false"
         >
-            <p>You do not have permission to access this page!</p>
-            You will be redirected to the homepage in <strong>{{ num }}</strong> seconds!
+            <p>Bạn không có quyền truy cập !</p>
+            <medium
+                >Bạn sẽ được điều hướng vào trang chủ <strong>{{ num }}</strong> giây!</medium
+            >
             <template #footer>
-                <Button label="Yes" icon="pi pi-check" @click="submit" autofocus />
+                <Button label="Hoàn tất" icon="pi pi-check" @click="submit" autofocus />
             </template>
         </Dialog>
         <DialogAddEdit
@@ -271,7 +278,7 @@
             finishMulti() {
                 let bool = false
                 if (this.selectedProject == null) {
-                    this.showWarn('Please select an Project to Finish!')
+                    this.showWarn('Vui lòng chọn một dự án để kết thúc!')
                     return
                 }
                 this.selectedProject.forEach((element) => {
@@ -283,7 +290,7 @@
                     this.selectedProject.forEach((element) => {
                         this.finishProject(element.id)
                     })
-                } else this.showWarn('Can not finish Project!')
+                } else this.showWarn('Không thể hoàn thành dự án!')
                 this.selectedProject = []
             },
             finishProject(id) {
@@ -296,8 +303,8 @@
                             this.getAllProject()
                             this.$toast.add({
                                 severity: 'success',
-                                summary: 'Success Message',
-                                detail: 'Finish project successfully!',
+                                summary: 'Thành công',
+                                detail: 'Dự án hoàn tất!',
                                 life: 2000,
                             })
                         }
@@ -305,7 +312,7 @@
                     .catch((err) => {
                         this.$toast.add({
                             severity: 'error',
-                            summary: 'Error',
+                            summary: 'Lỗi',
                             detail: 'Không có quyền thực hiện thao tác kết thúc dự án!',
                             life: 2000,
                         })
@@ -380,8 +387,8 @@
                             this.getAllProject()
                             this.$toast.add({
                                 severity: 'success',
-                                summary: 'Success Message',
-                                detail: 'Delete project successfully!',
+                                summary: 'Thành công',
+                                detail: 'Xóa thành công!',
                                 life: 2000,
                             })
                         }
@@ -401,8 +408,8 @@
             },
             confirmDelete(id) {
                 this.$confirm.require({
-                    message: 'Do you want to delete this project?',
-                    header: 'Delete Confirmation',
+                    message: 'Bạn có chắc chắn muốn xóa?',
+                    header: 'Xóa',
                     icon: 'pi pi-exclamation-triangle',
                     acceptClass: 'p-button-danger',
                     accept: () => {
@@ -416,8 +423,8 @@
             showSuccess() {
                 this.$toast.add({
                     severity: 'success',
-                    summary: 'Success Message',
-                    detail: 'Delete project success !!!',
+                    summary: 'Thành công',
+                    detail: 'Xóa thành công!',
                     life: 2000,
                 })
             },
@@ -441,7 +448,7 @@
                         if (res.status == 200) {
                             this.$toast.add({
                                 severity: 'success',
-                                summary: 'Successfully',
+                                summary: 'Thành công',
                                 detail: 'File excel đã được lưu thành công.',
                                 life: 3000,
                             })
@@ -451,7 +458,7 @@
                     .catch(() => {
                         this.$toast.add({
                             severity: 'warn',
-                            summary: 'Warn Message',
+                            summary: 'Cảnh báo ',
                             detail: 'Bạn không có quyền thực hiện thao tác xuất file excel!',
                             life: 3000,
                         })

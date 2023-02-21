@@ -8,24 +8,24 @@
         <div class="animated bounceInDown">
             <div class="container">
                 <form name="form1" class="box" @submit.prevent="checkStuff()">
-                    <h3>Forgot Password</h3>
+                    <h3>Quên mật khẩu</h3>
                     <br />
                     <InputText
                         type="text"
                         name="email"
                         v-model="username"
-                        placeholder="Username"
+                        placeholder="Tên người dùng"
                         autocomplete="off"
                         style="color: #333"
                     />
                     <!-- <input type="text" name="email" v-model="username" placeholder="Usercode" autocomplete="off"> -->
                     <div class="row">
                         <div class="col-6">
-                            <input type="submit" value="Submit" class="btn1" />
+                            <input type="submit" value="Xác nhận" class="btn1" />
                         </div>
 
                         <div class="col-6">
-                            <input type="submit" value="Cancel" class="btn2" @click.prevent="backToLogin()" />
+                            <input type="submit" value="Hủy" class="btn2" @click.prevent="backToLogin()" />
                         </div>
                     </div>
                 </form>
@@ -94,15 +94,15 @@
                             case 'ERR_NETWORK':
                                 this.$toast.add({
                                     severity: ToastSeverity.ERROR,
-                                    summary: 'Error',
-                                    detail: 'Check your connect !',
+                                    summary: 'Lỗi',
+                                    detail: 'Kiểm tra kết nối !',
                                     life: 3000,
                                 })
                                 break
                             case 'ERR_BAD_REQUEST':
                                 this.$toast.add({
                                     severity: ToastSeverity.ERROR,
-                                    summary: 'Error',
+                                    summary: 'Lỗi',
                                     detail: error.response.data,
                                     life: 3000,
                                 })

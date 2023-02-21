@@ -17,7 +17,7 @@
                 dataKey="idRule"
                 :rowsPerPageOptions="[5, 10, 25, 50]"
                 v-model:filters="filters"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 :exportFilename="'List_Rules_Effort Summary Report_' + new Date()"
                 :globalFilterFields="[
@@ -32,13 +32,10 @@
                 ]"
             >
                 <template #header>
-                    <h5 style="color: white">Rule Info</h5>
+                    <h5 style="color: white">Thông tin quy định</h5>
                     <div class="header-container">
                         <div class="button-group">
-                            <Add label="Add Rule" @click="openAdd" style="margin-right: 5px"
-                            v-if="showButton.add"
-                            />
-                            <Export label="Export" @click="exportCSV($event)" />
+                            <Add label="Thêm" @click="openAdd" style="margin-right: 5px" />
                         </div>
                         <div class="input-text">
                             <!-- <MultiSelect
@@ -62,7 +59,7 @@
                                 <InputText
                                     class="p-inputtext-sm"
                                     v-model="keySearch"
-                                    placeholder="Keyword Search"
+                                    placeholder="Tìm kiếm"
                                     style="width: 20em; height: 100%; font-size: 16px"
                                 />
                             </span>
@@ -76,7 +73,7 @@
                     <div v-if="this.isLoading" style="display: flex; justify-items: flex-end">
                         <ProgressSpinner style="width: 42px" />
                     </div>
-                    <div v-else>No rule found.</div>
+                    <div v-else>Không tìm thấy.</div>
                 </template>
 
                 <Column field="#" header="#" dataType="date">
@@ -85,25 +82,25 @@
                     </template>
                 </Column>
 
-                <Column field="title" header="Title" sortable style="min-width: 15rem">
+                <Column field="title" header="Tiêu đề" sortable style="min-width: 15rem">
                     <template #body="{ data }">
                         {{ data.title }}
                     </template>
                 </Column>
 
-                <Column field="dateCreated" header="Date Created" sortable>
+                <Column field="dateCreated" header="Ngày tạo " sortable>
                     <template #body="{ data }">
                         {{ data.dateCreated }}
                     </template>
                 </Column>
 
-                <Column field="applyDay" header="Apply Day" sortable>
+                <Column field="applyDay" header="Ngày áp dụng" sortable>
                     <template #body="{ data }">
                         {{ data.applyDay }}
                     </template>
                 </Column>
 
-                <Column field="expiredDay" header="Expired Day" sortable>
+                <Column field="expiredDay" header="Ngày hết hạn " sortable>
                     <template #body="{ data }">
                         {{ data.expiredDay }}
                     </template>
@@ -118,20 +115,19 @@
                     style="min-width: 14rem"
                 ></Column>
 
-                <Column field="" header="Actions" style="width: 10rem; text-align: left">
+                <Column field="" header="Thực thi" style="width: 10rem; text-align: left">
                     <template #body="{ data }">
                         <div class="actions-buttons">
-
                             <Button
                                 icon="pi pi-eye"
-                                class="p-button p-component p-button-success"
+                                class="p-button p-component p-button-info"
                                 @click="openDetailt(data)"
                                 v-if="showButton.view"
                             ></Button>
                             &nbsp;
                             <Button
                                 icon="pi pi-pencil"
-                                class="p-button p-component p-button-primary"
+                                class="p-button p-component p-button-warning"
                                 @click="openEdit(data)"
                                 v-if="showButton.edit"
                             ></Button>
@@ -146,7 +142,7 @@
                             <Button
                                 v-if="data.pathFile && showButton.download"
                                 icon="pi pi-download"
-                                class="p-button p-component p-button-warning"
+                                class="p-button p-component p-button-secondary"
                                 @click="downloadFile(data.pathFile)"
                             ></Button>
                         </div>
@@ -156,17 +152,19 @@
         </div>
 
         <Dialog
-            header="Access is denied!"
+            header="Không có quyền truy cập !"
             :visible="displayBasic"
             :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
             :style="{ width: '30vw' }"
             :modal="true"
             :closable="false"
         >
-            <p>You do not have permission to access this page!</p>
-            You will be redirected to the homepage in <strong>{{ num }}</strong> seconds!
+            <p>Bạn không có quyền truy cập !</p>
+            <medium
+                >Bạn sẽ được điều hướng vào trang chủ <strong>{{ num }}</strong> giây!</medium
+            >
             <template #footer>
-                <Button label="Yes" icon="pi pi-check" @click="submit" autofocus />
+                <Button label="Hoàn tất" icon="pi pi-check" @click="navigationToHome" autofocus />
             </template>
         </Dialog>
 
@@ -221,16 +219,16 @@
                     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
                 },
                 columns: [
-                    { field: 'userCreated', header: 'User Created' },
-                    { field: 'userUpdated', header: 'User Updated' },
-                    { field: 'dateUpdated', header: 'Date Updated' },
+                    { field: 'userCreated', header: 'Người tạo ' },
+                    { field: 'userUpdated', header: 'Người sửa ' },
+                    { field: 'dateUpdated', header: 'Ngày sửa' },
                 ],
-                showButton : {
-                    view : false,
-                    edit : false,
-                    delete : false,
-                    download : false,
-                    addl:false,
+                showButton: {
+                    view: false,
+                    edit: false,
+                    delete: false,
+                    download: false,
+                    addl: false,
                 },
             }
         },
@@ -284,8 +282,8 @@
 
             confirmDelete(id) {
                 this.$confirm.require({
-                    message: 'Do you want to delete this rule? ',
-                    header: 'Delete Confirmation',
+                    message: 'Bạn có chắc chắn muốn xóa?',
+                    header: 'Xóa',
                     icon: 'pi pi-exclamation-triangle',
                     acceptClass: 'p-button-danger',
                     accept: () => {
@@ -308,14 +306,14 @@
                             this.GetAllRuleList()
                             this.$toast.add({
                                 severity: 'success',
-                                summary: 'Success Message',
-                                detail: 'Delete rule success !!!',
+                                summary: 'Thành công',
+                                detail: 'Xóa thành công!',
                                 life: 2000,
                             })
                         }
                     })
                     .catch((error) => {
-                        this.$toast.add({ severity: 'warn', summary: 'Warning Message', detail: error, life: 2000 })
+                        this.$toast.add({ severity: 'warn', summary: 'Cảnh báo ', detail: error, life: 2000 })
                     })
             },
 
@@ -373,7 +371,7 @@
                         if (error.code == 'ERR_BAD_REQUEST') {
                             this.$toast.add({
                                 severity: 'error',
-                                summary: 'Error',
+                                summary: 'Lỗi',
                                 detail: 'File không tồn tại!',
                                 life: 3000,
                             })
@@ -382,30 +380,30 @@
             },
         },
         async mounted() {
-          
-            try{
+            try {
                 this.token = LocalStorage.jwtDecodeToken()
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
                 if (UserRoleHelper.isAccess) {
-                    if(Number(this.token.IdGroup) === 2 ){
-                        this.showButton.view = true;
-                        this.showButton.edit = true;
+                    if (Number(this.token.IdGroup) === 2) {
+                        this.showButton.view = true
+                        this.showButton.edit = true
                         this.showButton.add = true
-                        this.showButton.delete = true;
-                        this.showButton.download = true;
+                        this.showButton.delete = true
+                        this.showButton.download = true
                     }
                     if(Number(this.token.IdGroup) !== 2){
                         this.showButton.download = true;
+                        this.showButton.view = true;
                     }
-                      this.GetAllRuleList()
-                }else{
+                    this.GetAllRuleList()
+                } else {
                     this.countTime()
                     this.displayBasic = true
                 }
-            }catch(err){
+            } catch (err) {
                 this.countTime()
-                 this.displayBasic = true
-            }          
+                this.displayBasic = true
+            }
         },
 
         components: { Export, Add, Edit, View, Delete, AddRuleDiaLog, EditRuleDiaLog, DetailtRuleDiaLog },

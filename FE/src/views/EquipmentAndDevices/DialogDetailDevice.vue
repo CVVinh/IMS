@@ -61,7 +61,7 @@
                                 "
                                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                                 :rowsPerPageOptions="[5, 10, 15, 30]"
-                                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                                currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                                 :globalFilterFields="['#', 'id', 'DisplayName', 'path']"
                             >
                                 <Column field="#" header="N.o">
@@ -87,7 +87,7 @@
         </div>
         <template #footer>
             <Button
-                label="Cancel"
+                label="Hủy"
                 class="p-button-sm p-button-secondary p-button-outlined"
                 icon="pi pi-times"
                 @click="closeDialog()"

@@ -530,8 +530,8 @@ const router = createRouter({
             component: () => import('@/views/LeaveOff/LeaveRegisterList.vue'),
         },
         {
-            path: '/leaveoff/info',
-            name: 'Leave Off',
+            path: '/leaveoff/summary',
+            name: 'Leaveoff',
             meta: {
                 title: 'IMS - Leave Off',
             },

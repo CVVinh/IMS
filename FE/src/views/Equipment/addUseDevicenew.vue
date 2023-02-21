@@ -1,5 +1,5 @@
 <template>
-    <Dialog :visible="status" modal="true"  :closable="false">
+    <Dialog :visible="status" modal="true" :closable="false">
         <template #header>
             <h3>Add Handovers</h3>
         </template>
@@ -117,20 +117,21 @@
                     v1$.formUseDevice.userReceive.required.$message.replace('Value', 'User Received')
                 }}</small>
             </div>
-           
-           <AddDevices :isOpenDialog="isOpenDialog" @closeDialog="closeDialog" :deviceSelected="selectedEdit" 
-            @Reloadlist ="getAllDevices"
-           />
-            
+
+            <AddDevices
+                :isOpenDialog="isOpenDialog"
+                @closeDialog="closeDialog"
+                :deviceSelected="selectedEdit"
+                @Reloadlist="getAllDevices"
+            />
+
             <div class="group-button">
                 <div>
                     <Button label="Save" type="submit" icon="pi pi-check" />{{ ' ' }}
-                    <Button label="Cancel" class="p-button-secondary" @click="Closeopen" />
+                    <Button label="Hủy" class="p-button-secondary" @click="Closeopen" />
                 </div>
             </div>
         </form>
-        
-        
     </Dialog>
 </template>
 
@@ -143,14 +144,13 @@
     import { required } from '@vuelidate/validators'
     //import { DevicesDto } from '@/views/Devices/Devices.Dto'
 
+    export default {
+        inject: ['dialogRef'],
+        setup: () => ({ v1$: useVuelidate() }),
 
-export default {
-    inject: ['dialogRef'],
-    setup: () => ({ v1$: useVuelidate() }),
-    
-    data(){
-        return{
-            formUseDevice: {
+        data() {
+            return {
+                formUseDevice: {
                     idDevice: null,
                     dateCreated: '',
                     userReceive: null,
@@ -166,28 +166,26 @@ export default {
                 isSubmitAdd: false,
                 isOpenDialog: false,
                 selectedEdit: new DevicesDto(),
-                 statusOpen : true,
-        }
-    },
-    props :{
-        status :false
-    },
-    methods: {
-        Closeopen(){
-            this.$emit('CloseModal')
+                statusOpen: true,
+            }
         },
+        props: {
+            status: false,
+        },
+        methods: {
+            Closeopen() {
+                this.$emit('CloseModal')
+            },
             openDialogAdd() {
-                this.isOpenDialog = true;
+                this.isOpenDialog = true
             },
             closeDialog() {
-                this.isOpenDialog = false;
+                this.isOpenDialog = false
             },
-           
+
             submitMultiUseDevice() {
                 this.isSubmit = true
                 if (this.devices) {
-                
-                   
                     this.formUseDevice.idDevice = this.device ? this.device.idDevice : ''
                     this.formUseDevice.userCreated = this.user.Id
                     if (this.checkForm()) {
@@ -195,19 +193,16 @@ export default {
                         this.formUseDevice.dateCreated = moment(new Date(this.formUseDevice.dateCreated)).format(
                             'YYYY-MM-DD[T]HH:mm:ss',
                         )
-                       
                     }
-               
+
                     this.devices.forEach((de) => {
-                        this.device = de.device  
+                        this.device = de.device
                         this.formUseDevice.amount = de.amount
                         this.formUseDevice.idDevice = this.device ? this.device.idDevice : ''
-                        if (this.checkForm()){            
-                            this.submitUseDevice();
-                            this.$emit('reloadpage');
-                        } 
-
-                      
+                        if (this.checkForm()) {
+                            this.submitUseDevice()
+                            this.$emit('reloadpage')
+                        }
                     })
                     if (this.checkForm()) {
                         this.resetForm()
@@ -219,7 +214,7 @@ export default {
                 this.isSubmit = true
 
                 if (!this.checkForm()) return
-                
+
                 HTTP.post('Handovers/addHandover', this.formUseDevice).then((res) => {
                     if (res.status == 200) {
                         this.$toast.add({
@@ -231,10 +226,15 @@ export default {
                     }
                 })
             },
-            checkForm(){
-                if (this.formUseDevice.amount && this.formUseDevice.dateCreated && this.formUseDevice.idDevice 
-                && this.formUseDevice.userCreated && this.formUseDevice.userReceive) {
-                    return true;
+            checkForm() {
+                if (
+                    this.formUseDevice.amount &&
+                    this.formUseDevice.dateCreated &&
+                    this.formUseDevice.idDevice &&
+                    this.formUseDevice.userCreated &&
+                    this.formUseDevice.userReceive
+                ) {
+                    return true
                 }
             },
             closeDialog1() {
@@ -287,7 +287,6 @@ export default {
                     if (res.status == 200) this.allDevice = res.data
                 })
             },
-            
         },
 
         mouting() {},
@@ -310,17 +309,14 @@ export default {
             }
         },
 
-        
-
         components: {
             AddDevices,
         },
-    
-}
+    }
 </script>
 
 <style scoped>
-     .form-layout {
+    .form-layout {
         width: 60vw;
 
         display: flex;

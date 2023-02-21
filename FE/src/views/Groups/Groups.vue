@@ -13,25 +13,25 @@
                 v-model:filters="filters"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 :rowsPerPageOptions="[2, 10, 25, 50]"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                 responsiveLayout="scroll"
                 ref="dt"
                 :globalFilterFields="['idGroup', 'nameGroup', 'desc']"
             >
                 <template #header>
                     <div>
-                        <h5 class="header-tilte">Groups</h5>
+                        <h5 class="header-tilte">Nhóm người dùng</h5>
                         <div class="d-flex justify-content-between">
                             <div class="header-left">
-                                <Export label="Export" style="margin-right: 10px" @click="exportToExcel()" />
-                                <Add label="Add" style="margin-right: 10px" v-on:click="showAddGroup()" />
+                                <Export label="Xuất Excel" style="margin-right: 10px" @click="exportToExcel()" />
+                                <Add label="Thêm mới" style="margin-right: 10px" v-on:click="showAddGroup()" />
                             </div>
                             <div class="d-flex">
                                 <Button
                                     style="margin-right: 12px"
                                     class="p-button-sm"
                                     icon="bx bx-refresh bx-sm"
-                                    :label="'Refresh'"
+                                    :label="'Tải lại'"
                                     @click="this.getAllGroup()"
                                 >
                                     <ProgressSpinner v-if="!this.groups" style="width: 24px; height: 24px" />
@@ -44,28 +44,28 @@
                         </div>
                     </div>
                 </template>
-                <template #empty> No groups found. </template>
+                <template #empty> Không tìm thấy. </template>
                 <template #loading>
                     <ProgressSpinner />
                 </template>
 
-                <Column field="id" header="Id Group" sortable>
+                <Column field="id" header="Mã " sortable>
                     <template #body="{ data }">
                         {{ data.id }}
                     </template>
                 </Column>
-                <Column field="nameGroup" header="Name Group" sortable>
+                <Column field="nameGroup" header="Tên nhóm" sortable>
                     <template #bodFEy="{ data }">
                         {{ data.nameGroup }}
                     </template>
                 </Column>
-                <Column field="discription" header="Desc" sortable>
+                <Column field="discription" header="Mô tả" sortable>
                     <template #body="{ data }">
                         {{ data.discription }}
                     </template>
                 </Column>
 
-                <Column header="Action" style="min-width: 10rem">
+                <Column header="Thực thi" style="min-width: 10rem">
                     <template #body="{ data }">
                         <!-- <Edit :disabled="data.isDeleted" /> -->
                         <Edit @click="showEditGroup(data)" :disabled="data.isDeleted" />
@@ -135,8 +135,8 @@
                             if (res.status == 200) {
                                 this.$toast.add({
                                     severity: 'success',
-                                    summary: 'Successfully',
-                                    detail: 'Delete group successfully!',
+                                    summary: 'Thành công',
+                                    detail: 'Xóa thành công!',
                                     life: 3000,
                                 })
                                 this.getAllGroup()
@@ -146,8 +146,8 @@
                             if (err.data) {
                                 this.$toast.add({
                                     severity: 'error',
-                                    summary: 'Error',
-                                    details: 'Delete group fails!',
+                                    summary: 'Lỗi',
+                                    details: 'Lỗi khi xóa!',
                                     life: 3000,
                                 })
                             }
@@ -160,8 +160,8 @@
                         if (res.status == 200) {
                             this.$toast.add({
                                 severity: 'success',
-                                summary: 'Successfully',
-                                detail: 'Export to excel successfully!',
+                                summary: 'Thành công',
+                                detail: 'Xuất file excel thành công!',
                                 life: 3000,
                             })
                             window.location = res.data
@@ -171,8 +171,8 @@
                         if (err.data) {
                             this.$toast.add({
                                 severity: 'error',
-                                summary: 'Error',
-                                details: 'Export to excel fails!',
+                                summary: 'Lỗi',
+                                details: 'Lỗi khi xuất excel!',
                                 life: 3000,
                             })
                         }
@@ -182,7 +182,7 @@
                 this.isOpenAdd = true
             },
             closeDialogAdd() {
-                this.isOpenAdd = false;
+                this.isOpenAdd = false
                 if (this.isChange === true) {
                     this.getAllGroup()
                     this.isChange = false
@@ -201,8 +201,8 @@
             },
             confirmDelete(id) {
                 this.$confirm.require({
-                    message: 'Do you want to delete this group?',
-                    header: 'Delete Confirmation',
+                    message: 'Bạn có chắc chắn muốn xóa?',
+                    header: 'Xóa',
                     icon: 'pi pi-exclamation-triangle',
                     acceptClass: 'p-button-danger',
                     accept: async () => {
@@ -211,8 +211,8 @@
                     reject: () => {
                         this.$toast.add({
                             severity: 'error',
-                            summary: 'Rejected',
-                            detail: 'You have rejected',
+                            summary: 'Từ chối',
+                            detail: 'Bạn đã bị từ chối',
                             life: 3000,
                         })
                     },

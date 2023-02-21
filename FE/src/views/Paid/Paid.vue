@@ -16,7 +16,7 @@
                     :loading="loading"
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     :rowsPerPageOptions="[5, 10, 20, 50]"
-                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                     responsiveLayout="scroll"
                     filterDisplay="menu"
                     v-model:filters="filters"
@@ -24,12 +24,12 @@
                     showGridlines="true"
                 >
                     <template #header>
-                        <h5 class="m-0 mb-2">List Paid</h5>
+                        <h5 class="m-0 mb-2">Danh sách thu chi</h5>
                         <div class="d-flex justify-content-between align-items-center">
                             <!--
                             <button class="btn btn-primary" @click="Openmodal()">Add Paid</button>
                             -->
-                            <Add label="Add paid" class="itemsbutton" @click="Openmodal" />
+                            <Add label="Thêm" class="itemsbutton" @click="Openmodal" />
                             <div class="d-flex">
                                 <input type="date" v-model="filterStartDate" class="form-control me-2" />
                                 <input type="date" v-model="filterEndDate" class="form-control me-2" />
@@ -38,7 +38,7 @@
                                     class="btn btn-primary me-2"
                                     @click="filterWithDate(filterStartDate, filterEndDate)"
                                 >
-                                    filter
+                                    Lọc
                                 </button>
                                 -->
                                 <Button
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                     </template>
-                    <template #empty> No data found. </template>
+                    <template #empty> Không tìm thấy. </template>
                     <template #loading>
                         <ProgressSpinner />
                     </template>
@@ -69,7 +69,7 @@
                             {{ index + 1 }}
                         </template>
                     </Column>
-                    <Column field="nameProject" header="Project">
+                    <Column field="nameProject" header="Dự án">
                         <template #body="{ data }">
                             {{ data.nameProject }}
                         </template>
@@ -78,16 +78,16 @@
                                 type="text"
                                 v-model="filterModel.value"
                                 class="p-column-filter"
-                                placeholder="Search by name"
+                                placeholder="Nhập tên"
                             />
                         </template>
                     </Column>
-                    <Column field="paidPersonName" header="Spending authority">
+                    <Column field="paidPersonName" header="Người chi tiêu">
                         <template #body="{ data }">
                             {{ data.paidPersonName }}
                         </template>
                     </Column>
-                    <Column field="customerName" header="Customer">
+                    <Column field="customerName" header="Khách hàng">
                         <template #body="{ data }">
                             {{ data.customerName }}
                         </template>
@@ -96,32 +96,32 @@
                                 type="text"
                                 v-model="filterModel.value"
                                 class="p-column-filter"
-                                placeholder="Search by name"
+                                placeholder="Nhập"
                             />
                         </template>
                     </Column>
-                    <Column field="amountPaid" header="Price">
+                    <Column field="amountPaid" header="Giá tiền">
                         <template #body="{ data }">
                             {{ data.amountPaid.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) }}
                         </template>
                     </Column>
-                    <Column field="paidReason" header="Reason">
+                    <Column field="paidReason" header="Lý do">
                         <template #body="{ data }">
                             {{ data.paidReason }}
                         </template>
                     </Column>
 
-                    <Column sortable field="paidDate" header="Date">
+                    <Column sortable field="paidDate" header="Ngày">
                         <template #body="{ data }">
                             {{ formatDate(data.paidDate) }}
                         </template>
                     </Column>
-                    <Column field="isPaid" header="Status">
+                    <Column field="isPaid" header="Trạng thái">
                         <template #body="{ data }">
                             {{ data.isPaid == true ? 'Đã Thanh Toán' : 'Chưa Thanh Toán' }}
                         </template>
                     </Column>
-                    <Column header="Action">
+                    <Column header="Thực thi">
                         <template #body="{ data }">
                             <!--
                             <button class="btn btn-warning me-2" @click="Openeditmodal(data.id)" :disabled=data.isPaid>Edit</button>
@@ -143,7 +143,7 @@
                     :loading="loading"
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     :rowsPerPageOptions="[5, 10, 20, 50]"
-                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                     responsiveLayout="scroll"
                     filterDisplay="menu"
                     v-model:filters="filters"
@@ -151,12 +151,12 @@
                     showGridlines="true"
                 >
                     <template #header>
-                        <h5 class="m-0 mb-2">List Paid</h5>
+                        <h5 class="m-0 mb-2">Danh sách thu chi</h5>
                         <div class="d-flex justify-content-between align-items-center">
                             <!--
                             <button class="btn btn-primary" @click="Openmodal()">Add Paid</button>
                             -->
-                            <Add label="Add paid" class="itemsbutton" @click="Openmodal" />
+                            <Add label="Thêm" class="itemsbutton" @click="Openmodal" />
                             <div class="d-flex">
                                 <input type="date" v-model="filterStartDate" class="form-control me-2" />
                                 <input type="date" v-model="filterEndDate" class="form-control me-2" />
@@ -165,7 +165,7 @@
                                     class="btn btn-primary me-2"
                                     @click="filterWithDate(filterStartDate, filterEndDate)"
                                 >
-                                    filter
+                                    Lọc
                                 </button>
                                 -->
                                 <Button
@@ -187,7 +187,7 @@
                             </div>
                         </div>
                     </template>
-                    <template #empty> No data found. </template>
+                    <template #empty> Không tìm thấy. </template>
                     <template #loading>
                         <ProgressSpinner />
                     </template>
@@ -196,7 +196,7 @@
                             {{ index + 1 }}
                         </template>
                     </Column>
-                    <Column field="nameProject" header="Project">
+                    <Column field="nameProject" header="Dự án">
                         <template #body="{ data }">
                             {{ data.nameProject }}
                         </template>
@@ -205,16 +205,16 @@
                                 type="text"
                                 v-model="filterModel.value"
                                 class="p-column-filter"
-                                placeholder="Search by name"
+                                placeholder="Nhập"
                             />
                         </template>
                     </Column>
-                    <Column field="paidPersonName" header="Spending authority">
+                    <Column field="paidPersonName" header="Người chi tiêu">
                         <template #body="{ data }">
                             {{ data.paidPersonName }}
                         </template>
                     </Column>
-                    <Column field="customerName" header="Customer">
+                    <Column field="customerName" header="Khách hàng">
                         <template #body="{ data }">
                             {{ data.customerName }}
                         </template>
@@ -223,27 +223,27 @@
                                 type="text"
                                 v-model="filterModel.value"
                                 class="p-column-filter"
-                                placeholder="Search by name"
+                                placeholder="Nhập"
                             />
                         </template>
                     </Column>
-                    <Column field="amountPaid" header="Price">
+                    <Column field="amountPaid" header="Giá tiền">
                         <template #body="{ data }">
                             {{ data.amountPaid.toLocaleString('en-US', { style: 'currency', currency: 'VND' }) }}
                         </template>
                     </Column>
-                    <Column field="paidReason" header="Reason">
+                    <Column field="paidReason" header="Lý do">
                         <template #body="{ data }">
                             {{ data.paidReason }}
                         </template>
                     </Column>
 
-                    <Column sortable field="paidDate" header="Date">
+                    <Column sortable field="paidDate" header="Ngày">
                         <template #body="{ data }">
                             {{ formatDate(data.paidDate) }}
                         </template>
                     </Column>
-                    <Column field="isPaid" header="Status">
+                    <Column field="isPaid" header="Trạng thái">
                         <template #body="{ data }">
                             {{ data.isPaid == true ? 'Đã Thanh Toán' : 'Chưa Thanh Toán' }}
                         </template>
@@ -267,8 +267,9 @@
                 @failed="showError1"
                 @success="showSuccess1"
                 :optionmodule="OptionModule"
-                @reloadpage="GetAllPaid"
-                @getPaid="getPaid()"
+                @reloadpage="getPaidReload"
+                @getPaid="getPaidReload"
+                @reloadpageother = "ReloadgetPaidByIdUser(this.token.Id)"
             />
             <EditPaid
                 :status="openStatusEdit"
@@ -277,7 +278,8 @@
                 @success="showSuccess2"
                 :dataedit="editdata"
                 :optionmodule="OptionModule"
-                @reloadpage="GetAllPaid"
+                @reloadpage="getPaidReload"
+                @reloadpageother = "ReloadgetPaidByIdUser(this.token.Id)"
             />
             <Toast />
         </div>
@@ -293,6 +295,8 @@
     import LayoutDefaultDynamic from '../../layouts/LayoutDefault/LayoutDefaultDynamic.vue'
     import AddPaid from './addPaid.vue'
     import EditPaid from './editPaid.vue'
+import { LocalStorage } from '@/helper/local-storage.helper'
+import { UserRoleHelper } from '@/helper/user-role.helper'
     export default {
         data() {
             return {
@@ -318,13 +322,36 @@
                 filterStartDate: null,
                 filterEndDate: null,
                 filterArr: [],
+                token : null,
                 //timeSheet: { label: 'Report', icon: 'me-1 bx bx-spreadsheet' },
                 //itemsTimeSheet: [{ label: 'Paid', to: '/Paid' }],
             }
         },
-        async created() {
-            await this.getPaid()
-            await this.getAllProject()
+        async mounted() {
+            try
+            {
+                this.token = LocalStorage.jwtDecodeToken();
+                await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
+                if(UserRoleHelper.isAccess){
+                    // getAPI (Sample) || (Admin)
+                    if(Number(this.token.IdGroup) === 2 || Number(this.token.IdGroup) === 1){
+                        this.getPaid()
+                        console.log('sample or admin');
+                    }
+                    // getAPI tất cả role còn lại
+                    if(Number(this.token.IdGroup) !== 2 && Number(this.token.IdGroup) !== 1){
+                        this.getPaidByIdUser(this.token.Id)
+                    }
+                }else{
+                    alert("Bạn không có quyền truy cập module này")
+                }
+                await this.getAllProject()
+            }
+            catch(err)
+            {
+                console.log(err);
+            }
+            
         },
         methods: {
             Openmodal() {
@@ -347,18 +374,17 @@
                     console.log(res)
                     this.$toast.add({
                         severity: 'success',
-                        summary: 'Success',
-                        detail: 'Delete Success',
+                        summary: 'Thành công',
+                        detail: 'Xóa thành công!',
                         life: 3000,
                     })
                     window.location.reload()
                 })
             },
-
             Delete(id) {
                 this.$confirm.require({
-                    message: 'Do you want to delete this paid?',
-                    header: 'Delete Paid',
+                    message: 'Bạn có chắc chắn muốn xóa?',
+                    header: 'Xóa',
                     icon: 'pi pi-info-circle',
                     acceptClass: 'p-button-danger',
                     accept: () => {
@@ -380,8 +406,65 @@
                 })
             },
 
-            async getPaid() {
-                this.loading = true;
+            async ReloadgetPaidByIdUser(iduser){
+                this.paids = [];
+                try {
+                    await HTTP.get(`Paid/GetByUserId?id=${iduser}`).then(res=>{
+                    res.data._Data.forEach(ele=>{
+                        this.paids.push({
+                                id: ele.id,
+                                amountPaid: ele.amountPaid,
+                                customerName: ele.customerName,
+                                isPaid: ele.isPaid,
+                                paidDate: ele.paidDate,
+                                paidPerson: ele.paidPerson,
+                                paidReason: ele.paidReason,
+                                projectId: ele.projectId,
+                                project: null,
+                                user: null,
+                                nameProject: null,
+                                paidPersonName: null,
+                            })
+                        })
+                      
+                    }).catch(err=>console.log(err))
+                    await this.getWithName()
+                    this.loading = false
+                } catch(err){
+                    console.log('something went wrong');
+                }
+            },
+
+            async getPaidByIdUser(iduser){
+                try {
+                    await HTTP.get(`Paid/GetByUserId?id=${iduser}`).then(res=>{
+                    res.data._Data.forEach(ele=>{
+                        this.paids.push({
+                                id: ele.id,
+                                amountPaid: ele.amountPaid,
+                                customerName: ele.customerName,
+                                isPaid: ele.isPaid,
+                                paidDate: ele.paidDate,
+                                paidPerson: ele.paidPerson,
+                                paidReason: ele.paidReason,
+                                projectId: ele.projectId,
+                                project: null,
+                                user: null,
+                                nameProject: null,
+                                paidPersonName: null,
+                            })
+                        })
+                      
+                    }).catch(err=>console.log(err))
+                    await this.getWithName()
+                    this.loading = false
+                } catch(err){
+                    console.log('something went wrong');
+                }
+            },
+            async getPaidReload (){
+                this.paids = [];
+                this.loading = true
                 await HTTP.get(GET_LIST_PAID)
                     .then((respone) => {
                         respone.data._Data.forEach((el) => {
@@ -400,7 +483,67 @@
                                 paidPersonName: null,
                             })
                         })
+                        console.log(res.data._Data);
+                    })         
+                    .catch((error) => {
+                        console.log(error)
                     })
+                await this.getWithName()
+                this.loading = false
+            },
+            async getPaid() {
+                this.loading = true
+                await HTTP.get(GET_LIST_PAID)
+                    .then((respone) => {
+                        respone.data._Data.forEach((el) => {
+                            this.paids.push({
+                                id: el.id,
+                                amountPaid: el.amountPaid,
+                                customerName: el.customerName,
+                                isPaid: el.isPaid,
+                                paidDate: el.paidDate,
+                                paidPerson: el.paidPerson,
+                                paidReason: el.paidReason,
+                                projectId: el.projectId,
+                                project: null,
+                                user: null,
+                                nameProject: null,
+                                paidPersonName: null,
+                            })
+                        })
+                        console.log(res.data._Data);
+                    })         
+                    .catch((error) => {
+                        console.log(error)
+                    })
+                await this.getWithName()
+                this.loading = false
+            },
+
+
+
+            async getPaid() {
+                this.loading = true
+                await HTTP.get(GET_LIST_PAID)
+                    .then((respone) => {
+                        respone.data._Data.forEach((el) => {
+                            this.paids.push({
+                                id: el.id,
+                                amountPaid: el.amountPaid,
+                                customerName: el.customerName,
+                                isPaid: el.isPaid,
+                                paidDate: el.paidDate,
+                                paidPerson: el.paidPerson,
+                                paidReason: el.paidReason,
+                                projectId: el.projectId,
+                                project: null,
+                                user: null,
+                                nameProject: null,
+                                paidPersonName: null,
+                            })
+                        })
+                        console.log(res.data._Data);
+                    })         
                     .catch((error) => {
                         console.log(error)
                     })
@@ -414,7 +557,7 @@
                 return HTTP_LOCAL.get(GET_USER_BY_ID(id)).then((respone) => respone.data)
             },
             async getWithName() {
-                for (let i = 0; i < this.paids.length; i++) {
+                for (let i = 0; i < this.paids.length; i++) {   
                     var project = await this.getProjects(this.paids[i].projectId)
                     var user = await this.getUsers(this.paids[i].paidPerson)
                     this.paids[i].project = project
@@ -422,7 +565,6 @@
                     this.paids[i].nameProject = project.name
                     this.paids[i].paidPersonName = user.fullName
                 }
-                console.log(this.paids)
             },
             formatDate(date) {
                 var dateFormat = new Date(date)
@@ -439,8 +581,8 @@
                     console.log(this.filterArr)
                     this.$toast.add({
                         severity: 'success',
-                        summary: 'Success',
-                        detail: 'Filter Success',
+                        summary: 'Thành công',
+                        detail: 'Lọc thành công',
                         life: 3000,
                     })
                     return this.filterArr
@@ -448,8 +590,8 @@
                     console.log('no record')
                     return this.$toast.add({
                         severity: 'info',
-                        summary: 'Information',
-                        detail: 'No Record Found',
+                        summary: 'Thông tin',
+                        detail: 'Không tìm thấy',
                         life: 3000,
                     })
                 }
@@ -461,25 +603,30 @@
                 this.getPaid()
             },
             showError() {
-                this.$toast.add({ severity: 'error', summary: 'Error Message', detail: 'Failed', life: 3000 })
+                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: 'Lỗi', life: 3000 })
             },
             showSuccess1() {
-                this.$toast.add({ severity: 'success', summary: 'Success Message', detail: 'Add success', life: 3000 })
+                this.$toast.add({
+                    severity: 'success',
+                    summary: 'Thành công',
+                    detail: 'Thêm mới thành công!',
+                    life: 3000,
+                })
             },
             showError1() {
-                this.$toast.add({ severity: 'error', summary: 'Error Message', detail: 'Add Failed', life: 3000 })
+                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: 'Thêm mới lỗi!', life: 3000 })
             },
             showSuccess2() {
-                this.$toast.add({ severity: 'success', summary: 'Success Message', detail: 'Edit success', life: 3000 })
+                this.$toast.add({ severity: 'success', summary: 'Thành công', detail: 'Sửa thành công!', life: 3000 })
             },
             showError2() {
-                this.$toast.add({ severity: 'error', summary: 'Error Message', detail: 'Edit Failed', life: 3000 })
+                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: 'Sửa Lỗi!', life: 3000 })
             },
             showSuccess3() {
                 this.$toast.add({
                     severity: 'success',
-                    summary: 'Success Message',
-                    detail: 'Delete success',
+                    summary: 'Thành công',
+                    detail: 'Xóa thành công!',
                     life: 3000,
                 })
             },

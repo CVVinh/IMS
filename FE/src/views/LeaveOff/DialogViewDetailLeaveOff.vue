@@ -1,6 +1,6 @@
 <template>
     <Dialog
-        header="Detail leave off"
+        header="Chi tiết xin nghỉ"
         :maximizable="true"
         :closable="false"
         position="top"
@@ -15,19 +15,19 @@
                 <div class="row">
                     <div class="col-md-3 border-end">
                         <div class="border-bottom mb-2">
-                            <label> Start date </label>
+                            <label> Ngày bắt đầu</label>
                             <h6>
                                 {{ formartDate(this.detailLeaveoff.startTime) }}
                             </h6>
                         </div>
                         <div class="border-bottom mb-2">
-                            <label> End date </label>
+                            <label> Ngày kết thúc </label>
                             <h6>
                                 {{ formartDate(this.detailLeaveoff.endTime) }}
                             </h6>
                         </div>
                         <div>
-                            <label> Status </label>
+                            <label> Trạng thái </label>
                             <h6 class="d-block" :class="checkStatus(this.detailLeaveoff.status).class">
                                 {{ checkStatus(this.detailLeaveoff.status).title }}
                             </h6>
@@ -36,7 +36,7 @@
                     <div class="col-md-9">
                         <div :class="{ row: this.detailLeaveoff.status == 3 }">
                             <div :class="{ 'col-md-6': this.detailLeaveoff.status == 3 }">
-                                <h6 class="mb-1">Reasons</h6>
+                                <h6 class="mb-1">Lý do</h6>
                                 <ScrollPanel style="width: 100%; height: 200px" class="custombar1">
                                     <p>
                                         {{ this.detailLeaveoff.reasons }}
@@ -44,7 +44,7 @@
                                 </ScrollPanel>
                             </div>
                             <div class="col-md-6" v-if="this.detailLeaveoff.status == 3">
-                                <h6 class="mb-1">Reason for not approving leave</h6>
+                                <h6 class="mb-1">Lý do không cho phép nghỉ</h6>
                                 <ScrollPanel style="width: 100%; height: 200px" class="custombar1">
                                     <p>
                                         {{ this.detailLeaveoff.reasonNotAccept }}
@@ -58,7 +58,7 @@
         </div>
         <template #footer>
             <Button
-                label="Cancel"
+                label="Hủy"
                 class="p-button-sm p-button-secondary p-button-outlined"
                 icon="pi pi-times"
                 @click="closeDialog()"

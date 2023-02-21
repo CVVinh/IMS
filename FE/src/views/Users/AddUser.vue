@@ -9,7 +9,7 @@
                 <div class="card cardrelax">
                     <div class="admin__form--header">
                         <div></div>
-                        <h5 class="text-center">Add new user</h5>
+                        <h5 class="text-center">Thêm</h5>
                         <div class="field-checkbox">
                             <Checkbox inputId="binary" v-model="checked" :binary="true" class="field-checkbox-items" />
                             <label for="binary">Send mail</label>
@@ -490,11 +490,11 @@
 
                         <div class="d-flex justify-content-end">
                             <div class="col-2">
-                                <Button type="submit" label="Submit" />
+                                <Button type="submit" label="Hoàn tất" />
                             </div>
                             &emsp;
                             <div class="col-2">
-                                <Button label="Cancel" class="p-button-secondary" @click.prevent="backToUser()" />
+                                <Button label="Hủy" class="p-button-secondary" @click.prevent="backToUser()" />
                             </div>
                         </div>
                     </form>
@@ -537,25 +537,25 @@
                 IdGroup: '',
                 submitted: false,
                 optionGender: [
-                    { name: 'Male', code: 1 },
-                    { name: 'Female', code: 2 },
-                    { name: 'Other', code: 3 },
+                    { name: 'Nam', code: 1 },
+                    { name: 'Nữ', code: 2 },
+                    { name: 'Khác', code: 3 },
                 ],
                 optionMaritalStatus: [
-                    { name: 'Married', code: 1 },
-                    { name: 'Unmarried', code: 2 },
-                    { name: 'Undefined', code: 3 },
+                    { name: 'Kết hôn', code: 1 },
+                    { name: 'Chưa kết hôn', code: 2 },
+                    { name: 'Khác', code: 3 },
                 ],
                 optionRoles: [
-                    { name: 'Director', code: 1 },
-                    { name: 'Human Resource', code: 2 },
-                    { name: 'Project Manager', code: 3 },
+                    { name: 'Giám đốc', code: 1 },
+                    { name: 'HR', code: 2 },
+                    { name: 'PM', code: 3 },
                     { name: 'Leader', code: 4 },
-                    { name: 'Accountant', code: 5 },
-                    { name: 'User', code: 6 },
-                    { name: 'Admin', code: 7 },
+                    { name: 'Kế toán', code: 5 },
+                    { name: 'Người dùng', code: 6 },
+                    { name: 'Quản trị viên', code: 7 },
                 ],
-                messages: [{ severity: 'info', content: 'Dynamic Info Message' }],
+                messages: [{ severity: 'info', content: 'Thông tin' }],
             }
         },
         validations() {
@@ -651,8 +651,8 @@
                         if (res.status == 200)
                             this.$toast.add({
                                 severity: 'success',
-                                summary: 'Info Message',
-                                detail: 'Add user success!',
+                                summary: 'Thành công',
+                                detail: 'Thêm mới thành công!',
                                 life: 3000,
                             })
                         this.$router.push('/users')
@@ -661,15 +661,15 @@
                             case 'ERR_NETWORK':
                                 this.$toast.add({
                                     severity: 'error',
-                                    summary: 'error',
-                                    detail: 'Check your connect !',
+                                    summary: 'Lỗi',
+                                    detail: 'Kiểm tra kết nối !',
                                     life: 3000,
                                 })
                                 break
                             case 'ERR_BAD_REQUEST':
                                 this.$toast.add({
                                     severity: 'error',
-                                    summary: 'error',
+                                    summary: 'Lỗi',
                                     detail: error.response.data,
                                     life: 3000,
                                 })

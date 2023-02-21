@@ -1,6 +1,6 @@
 <template>
     <Dialog
-        header="Edit Group"
+        header="Sửa nhóm"
         :maximizable="true"
         :closable="false"
         position="center"
@@ -11,7 +11,7 @@
         <div class="form-layout">
             <div class="header-outside">
                 <div class="title">
-                    <h1>Edit Group</h1>
+                    <h1>Sửa nhóm</h1>
                 </div>
             </div>
             <form class="form-addproject" @submit.prevent="submitGroup()">
@@ -20,7 +20,7 @@
                         :class="{
                             'input-title': true,
                         }"
-                        >idGroup: <span>{{ this.group.id }}</span></label
+                        >Mã: <span>{{ this.group.id }}</span></label
                     >
                 </div>
                 <div class="input-layout">
@@ -29,7 +29,7 @@
                             'p-error': v$.group.nameGroup.required.$invalid && isSubmit,
                             'input-title': true,
                         }"
-                        >Name Group<span style="color: red">*</span></label
+                        >Tên nhóm<span style="color: red">*</span></label
                     >
                     <InputText v-model="v$.group.nameGroup.$model" class="input" />
                     <small class="p-error" v-if="v$.group.nameGroup.required.$invalid && isSubmit">{{
@@ -38,13 +38,13 @@
                 </div>
 
                 <div class="input-layout">
-                    <label class="input-title">Desc </label>
+                    <label class="input-title">Mô tả </label>
                     <Textarea v-model="this.group.discription" class="input" rows="5" />
                 </div>
                 <div class="group-button">
                     <div>
-                        <Button label="Save" type="submit" icon="pi pi-check" />{{ ' ' }}
-                        <Button label="Cancel" class="p-button-secondary" v-on:click="closeDialog()" />
+                        <Button label="Lưu" type="submit" icon="pi pi-check" />{{ ' ' }}
+                        <Button label="Hủy" class="p-button-secondary" v-on:click="closeDialog()" />
                     </div>
                 </div>
             </form>
@@ -76,8 +76,8 @@
                             if (res.status == 200) {
                                 this.$toast.add({
                                     severity: 'success',
-                                    summary: 'Successfull',
-                                    detail: 'Edit group successfull!',
+                                    summary: 'Thành công',
+                                    detail: 'Sửa thành công!',
                                     life: 3000,
                                 })
                                 this.$emit('setChange')
@@ -88,12 +88,11 @@
                             if (err.data) {
                                 this.$toast.add({
                                     severity: 'error',
-                                    summary: 'Error',
-                                    detail: 'Edit group fail!',
+                                    summary: 'Lỗi',
+                                    detail: 'Sửa Lỗi!',
                                     life: 3000,
                                 })
                             } else {
-                                
                             }
                         })
                 }

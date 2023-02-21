@@ -108,7 +108,7 @@
                         </li>
                         <li class="list-group-item-action">
                             <router-link :to="{ name: 'users', params: {} }" class="py-2 ripple dropdown-item">
-                                <i class="bx bx-user"></i><span>Nguời dùng</span>
+                                <i class="bx bx-user"></i><span>Người dùng</span>
                             </router-link>
                         </li>
                         <li class="list-group-item-action">
@@ -130,12 +130,16 @@
                     ><i class="bx bxs-component"></i><span>Chức năng</span></router-link
                 >
                 <router-link :to="{ name: 'remotes', params: {} }" class="py-2 ripple list-group-item-action"
-                    ><i class="bx bx-notepad"></i><span>Công tác</span></router-link
+                    ><i class="bx bx-notepad"></i><span>Làm việc Remotes</span></router-link
                 >
                 <router-link :to="{ name: 'otsSub', params: {} }" class="py-2 ripple list-group-item-action"
                     ><i class="bx bx-time-five"></i><span>Tăng ca</span></router-link
                 >
+<<<<<<< HEAD
                 <a class="py-2 ripple list-group-item-action"><i class="bx bx-note"></i><span>Thông tin</span></a>
+                <router-link :to="{ name: 'leaveRegisterList', params: {} }" class="py-2 ripple list-group-item-action">
+=======
+                <a class="py-2 ripple list-group-item-action"><i class="bx bx-note"></i><span>Wikis</span></a>
 
                 <router-link
                     v-if="checkRole(this.token.IdGroup) == 3 || checkRole(this.token.IdGroup) == 4"
@@ -143,30 +147,27 @@
                     class="py-2 ripple list-group-item-action"
                 >
                     <i class="bx bx-log-out-circle"></i>
-                    <span>Nghỉ phép</span>
+                    <span>Leave Off</span>
                 </router-link>
                 <router-link
-                    v-if="checkRole(this.token.IdGroup) == 5 || checkRole(this.token.IdGroup) == 1"
+                    v-if="
+                        checkRole(this.token.IdGroup) == 2 ||
+                        checkRole(this.token.IdGroup) == 5 ||
+                        checkRole(this.token.IdGroup) == 1
+                    "
                     :to="{ name: 'Acceptregisterlists', params: {} }"
                     class="py-2 ripple list-group-item-action"
                 >
+>>>>>>> develop
                     <i class="bx bx-log-out-circle"></i>
-                    <span>Nghỉ phép</span>
-                </router-link>
-                <router-link
-                    v-if="checkRole(this.token.IdGroup) == 2"
-                    :to="{ name: 'Leaveoff', params: {} }"
-                    class="py-2 ripple list-group-item-action"
-                >
-                    <i class="bx bx-log-out-circle"></i>
-                    <span>Nghỉ phép</span>
+                    <span>Xin nghỉ phép</span>
                 </router-link>
                 <router-link :to="{ name: 'ruleinfo', params: {} }" class="py-2 ripple list-group-item-action"
                     ><i class="bx bxs-notepad"></i><span>Quy định</span></router-link
                 >
 
                 <router-link :to="{ name: 'Paid', params: {} }" class="py-2 ripple list-group-item-action"
-                    ><i class="bx bx-wallet"></i><span>Thu chi</span></router-link
+                    ><i class='bx bx-wallet'></i><span>Paid</span></router-link
                 >
                 <a class="py-2 ripple list-group-item-action"
                     ><i class="bx bxs-credit-card"></i>

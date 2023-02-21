@@ -52,7 +52,7 @@
                         responsiveLayout="scroll"
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         :rowsPerPageOptions="[5, 10, 15, 30]"
-                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                         :globalFilterFields="['#', 'id', 'name', 'updateAt']"
                     >
                         <Column field="#" header="N.o">

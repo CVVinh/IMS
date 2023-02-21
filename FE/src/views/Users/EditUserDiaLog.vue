@@ -8,7 +8,7 @@
                 <div class="card cardrelax">
                     <div class="admin__form--header">
                         <div></div>
-                        <h5 class="text-center">EDIT USER</h5>
+                        <h5 class="text-center">Sửa</h5>
                     </div>
                     <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
                         <div class="row">
@@ -27,7 +27,7 @@
                                         <label
                                             for="userCode"
                                             :class="{ 'p-error': v$.form.userCode.$invalid && submitted }"
-                                            >Account*</label
+                                            >Tài khoản*</label
                                         >
                                     </div>
                                     <span v-if="v$.form.userCode.$error && submitted">
@@ -63,7 +63,7 @@
                                         <label
                                             for="phoneNumber"
                                             :class="{ 'p-error': v$.form.phoneNumber.$invalid && submitted }"
-                                            >PhoneNumber</label
+                                            >Số điện thoại</label
                                         >
                                     </div>
                                     <span v-if="v$.form.phoneNumber.$error && submitted">
@@ -81,7 +81,7 @@
                                             v$.form.phoneNumber.$pending.$response
                                         "
                                         class="p-error"
-                                        >Phone number length must be 10
+                                        >Độ dài điện thoại phải là 10
                                     </small>
                                 </div>
                             </div>
@@ -101,7 +101,7 @@
                                         <label
                                             for="firstName"
                                             :class="{ 'p-error': v$.form.firstName.$invalid && submitted }"
-                                            >FirstName*</label
+                                            >Tên*</label
                                         >
                                     </div>
                                     <small
@@ -128,7 +128,7 @@
                                         <label
                                             for="lastName"
                                             :class="{ 'p-error': v$.form.lastName.$invalid && submitted }"
-                                            >LastName*</label
+                                            >Họ*</label
                                         >
                                     </div>
                                     <small
@@ -189,7 +189,7 @@
                                         <label
                                             for="identitycard"
                                             :class="{ 'p-error': v$.form.identitycard.$invalid && submitted }"
-                                            >Identity Card*</label
+                                            >Căn cước công dân*</label
                                         >
                                     </div>
                                     <span
@@ -208,8 +208,8 @@
                                                 v$.form.identitycard.$pending.$response
                                             "
                                             class="p-error"
-                                            >. The number length must be 9 or 12</small
-                                        >
+                                            >. Độ dài phải từ 9 đến 12
+                                        </small>
                                     </span>
                                 </div>
                             </div>
@@ -227,7 +227,7 @@
                                             :disabled="true"
                                         />
                                         <label for="gender" :class="{ 'p-error': v$.form.gender.$invalid && submitted }"
-                                            >Gender*</label
+                                            >Giới tính*</label
                                         >
                                     </div>
                                     <small
@@ -252,7 +252,7 @@
                                         <label
                                             for="idGroup"
                                             :class="{ 'p-error': v$.form.idGroup.$invalid && submitted }"
-                                            >Group*</label
+                                            >Nhóm*</label
                                         >
                                     </div>
                                     <small
@@ -301,7 +301,7 @@
                                         <label
                                             for="dateStartWork"
                                             :class="{ 'p-error': v$.form.dateStartWork.$invalid && submitted }"
-                                            >Date start work*</label
+                                            >Ngày bắt đầu làm*</label
                                         >
                                     </div>
                                     <small
@@ -331,8 +331,8 @@
                                         <label
                                             for="dateLeave"
                                             :class="{ 'p-error': v$.form.dateLeave.$invalid && submitted }"
-                                            >Date leave</label
-                                        >
+                                            >Ngày thôi việc
+                                        </label>
                                     </div>
                                     <small
                                         v-if="
@@ -362,8 +362,8 @@
                                         <label
                                             for="maritalStatus"
                                             :class="{ 'p-error': v$.form.maritalStatus.$invalid && submitted }"
-                                            >Marital Status</label
-                                        >
+                                            >Tình trạng hôn nhân
+                                        </label>
                                     </div>
                                     <small
                                         v-if="
@@ -393,7 +393,7 @@
                                             :class="{
                                                 'p-error': (v$.form.dob.$invalid || !checkDateOfBirth) && submitted,
                                             }"
-                                            >Birthday</label
+                                            >Ngày sinh</label
                                         >
                                     </div>
                                     <small
@@ -402,7 +402,7 @@
                                         >{{ v$.form.dob.required.$message.replace('Value', 'Birthday') }}</small
                                     >
                                     <small v-if="!checkDateOfBirth && submitted" class="p-error">
-                                        User must be over 18 years old and under 60 years old!
+                                        Người dùng phải trên 18 tuổi và dưới 60 tuổi
                                     </small>
                                 </div>
                             </div>
@@ -424,7 +424,7 @@
                                         <label
                                             for="workStatus"
                                             :class="{ 'p-error': v$.form.workStatus.$invalid && submitted }"
-                                            >workStatus*</label
+                                            >Tình trạng làm việc*</label
                                         >
                                     </div>
                                     <small
@@ -451,7 +451,7 @@
                                         <label
                                             for="yearGraduated"
                                             :class="{ 'p-error': v$.form.yearGraduated.$invalid && submitted }"
-                                            >Year graduated</label
+                                            >Năm tốt nghiệp</label
                                         >
                                     </div>
                                     <span
@@ -483,7 +483,7 @@
                                         <label
                                             for="address"
                                             :class="{ 'p-error': v$.form.address.$invalid && submitted }"
-                                            >Address</label
+                                            >Địa chỉ</label
                                         >
                                     </div>
                                     <small
@@ -512,7 +512,7 @@
                                         <label
                                             for="university"
                                             :class="{ 'p-error': v$.form.university.$invalid && submitted }"
-                                            >University</label
+                                            >Đại học</label
                                         >
                                     </div>
                                     <small
@@ -530,11 +530,11 @@
                         </div>
                         <div class="d-flex justify-content-end">
                             <div class="col-2">
-                                <Button type="submit" label="Submit" />
+                                <Button type="submit" label="Hoàn tất" />
                             </div>
                             &emsp;
                             <div class="col-2">
-                                <Button label="Cancel" class="p-button-secondary" @click="closeModal()" />
+                                <Button label="Hủy" class="p-button-secondary" @click="closeModal()" />
                             </div>
                         </div>
                     </form>
@@ -545,383 +545,386 @@
 </template>
 
 <script>
-import { HTTP } from '@/http-common'
-import jwt_decode from 'jwt-decode'
-import moment from 'moment'
-import { email, required, alphaNum, numeric, between, maxLength, minLength } from '@vuelidate/validators'
-import { useVuelidate } from '@vuelidate/core'
-import { ToastSeverity } from 'primevue/api'
-import LayoutDefault from '../../layouts/LayoutDefault/LayoutDefault.vue'
-import { UserRoleHelper } from '@/helper/user-role.helper'
-import { HttpStatus } from "@/config/app.config";
-export default {
-    props: ['statusopen', 'iduser', 'roleoption'],
-    setup: () => ({
-        v$: useVuelidate(),
-    }),
-    name: 'edituser',
-    data() {
-        return {
-            form: {
-                userCode: null,
-                password: null,
-                email: null,
-                userCreate: localStorage.getItem('username'),
-                dateCreate: new Date(),
-                // dateModified: new Date(),
-                passwordEmail: null,
-                firstName: null,
-                lastName: null,
-                phoneNumber: '',
-                dob: '',
-                gender: null,
-                address: null,
-                university: null,
-                yearGraduated: null,
-                skype: null,
-                passwordSkype: null,
-                dateStartWork: '',
-                dateLeave: '',
-                maritalStatus: null,
-                reasonResignation: null,
-                workStatus: null,
-                idGroup: null,
-                dOBValidate: true,
-            },
-            submitted: false,
-            optionGender: [
-                { name: 'Male', code: 1 },
-                { name: 'Female', code: 2 },
-                { name: 'Other', code: 3 },
-            ],
-            optionMaritalStatus: [
-                { name: 'Married', code: 1 },
-                { name: 'Unmarried', code: 2 },
-                { name: 'Undefined', code: 3 },
-            ],
-            optionRoles: [
-                { nameGroup: 'Director', id: 1 },
-                { nameGroup: 'Human Resource', id: 2 },
-                { nameGroup: 'Project Manager', id: 3 },
-                { nameGroup: 'Leader', id: 4 },
-                { nameGroup: 'Accountant', id: 5 },
-                { nameGroup: 'User', id: 6 },
-                { nameGroup: 'Admin', id: 7 },
-            ],
-            optionworkStatus: [
-                { name: 'Working', code: 1 },
-                { name: 'Resignation', code: 2 },
-                { name: 'Maternity Leaving', code: 3 },
-            ],
-        }
-    },
-    validations() {
-        return {
-            form: {
-                userCode: {
-                    required,
-                    alphaNum,
+    import { HTTP } from '@/http-common'
+    import jwt_decode from 'jwt-decode'
+    import moment from 'moment'
+    import { email, required, alphaNum, numeric, between, maxLength, minLength } from '@vuelidate/validators'
+    import { useVuelidate } from '@vuelidate/core'
+    import { ToastSeverity } from 'primevue/api'
+    import LayoutDefault from '../../layouts/LayoutDefault/LayoutDefault.vue'
+    import { UserRoleHelper } from '@/helper/user-role.helper'
+    import { HttpStatus } from '@/config/app.config'
+    export default {
+        props: ['statusopen', 'iduser', 'roleoption'],
+        setup: () => ({
+            v$: useVuelidate(),
+        }),
+        name: 'edituser',
+        data() {
+            return {
+                form: {
+                    userCode: null,
+                    password: null,
+                    email: null,
+                    userCreate: localStorage.getItem('username'),
+                    dateCreate: new Date(),
+                    // dateModified: new Date(),
+                    passwordEmail: null,
+                    firstName: null,
+                    lastName: null,
+                    phoneNumber: '',
+                    dob: '',
+                    gender: null,
+                    address: null,
+                    university: null,
+                    yearGraduated: null,
+                    skype: null,
+                    passwordSkype: null,
+                    dateStartWork: '',
+                    dateLeave: '',
+                    maritalStatus: null,
+                    reasonResignation: null,
+                    workStatus: null,
+                    idGroup: null,
+                    dOBValidate: true,
                 },
-                email: {
-                    required,
-                    email,
-                    maxLength: maxLength(50),
-                },
-                firstName: {
-                    required,
-                },
-                lastName: {
-                    required,
-                },
-                phoneNumber: {
-                    numeric,
-                    checkPhoneNumber(value) {.3
-                        if (!value) return true
-                        if (value.length === 0) return true
-                        if (value.includes('.')) return false
-                        if (value.length === 10) return true
-                        else return false
+                submitted: false,
+                optionGender: [
+                    { name: 'Nam', code: 1 },
+                    { name: 'Nữ', code: 2 },
+                    { name: 'Khác', code: 3 },
+                ],
+                optionMaritalStatus: [
+                    { name: 'Kết hôn', code: 1 },
+                    { name: 'Chưa kết hôn', code: 2 },
+                    { name: 'Khác', code: 3 },
+                ],
+                optionRoles: [
+                    { name: 'Giám đốc', code: 1 },
+                    { name: 'HR', code: 2 },
+                    { name: 'PM', code: 3 },
+                    { name: 'Leader', code: 4 },
+                    { name: 'Kế toán', code: 5 },
+                    { name: 'Người dùng', code: 6 },
+                    { name: 'Quản trị viên', code: 7 },
+                ],
+                optionworkStatus: [
+                    { name: 'Đang làm', code: 1 },
+                    { name: 'Đã từ chức', code: 2 },
+                    { name: 'Nghỉ thai sản', code: 3 },
+                ],
+            }
+        },
+        validations() {
+            return {
+                form: {
+                    userCode: {
+                        required,
+                        alphaNum,
+                    },
+                    email: {
+                        required,
+                        email,
+                        maxLength: maxLength(50),
+                    },
+                    firstName: {
+                        required,
+                    },
+                    lastName: {
+                        required,
+                    },
+                    phoneNumber: {
+                        numeric,
+                        checkPhoneNumber(value) {
+                            0.3
+                            if (!value) return true
+                            if (value.length === 0) return true
+                            if (value.includes('.')) return false
+                            if (value.length === 10) return true
+                            else return false
+                        },
+                    },
+                    dob: {},
+                    identitycard: {
+                        numeric,
+                        required,
+                        valueNineOrTwelve(value) {
+                            if (value.includes('.')) return false
+                            if (value.length === 9 || value.length === 12) return true
+                            else return false
+                        },
+                    },
+                    workStatus: {
+                        required,
+                    },
+                    gender: {},
+                    address: {},
+                    university: {},
+                    yearGraduated: {
+                        numeric,
+                        between: between(1980, 2100),
+                    },
+                    skype: {
+                        maxLength: maxLength(100),
+                    },
+                    reasonResignation: {},
+                    dateStartWork: {
+                        required,
+                    },
+                    dateLeave: {},
+                    maritalStatus: {
+                        between: between(1, 3),
+                    },
+                    idGroup: {
+                        required,
                     },
                 },
-                dob: {},
-                identitycard: {
-                    numeric,
-                    required,
-                    valueNineOrTwelve(value) {
-                        if (value.includes('.')) return false
-                        if (value.length === 9 || value.length === 12) return true
-                        else return false
-                    },
-                },
-                workStatus: {
-                    required,
-                },
-                gender: { },
-                address: {},
-                university: {},
-                yearGraduated: {
-                    numeric,
-                    between: between(1980, 2100),
-                },
-                skype: {
-                    maxLength: maxLength(100),
-                },
-                reasonResignation: {},
-                dateStartWork: {
-                    required,
-                },
-                dateLeave: {},
-                maritalStatus: {
-                    between: between(1, 3),
-                },
-                idGroup: {
-                    required,
-                },
+            }
+        },
+
+        beforeUpdate() {},
+        computed: {
+            async ispermission() {
+                if ((await UserRoleHelper.isHr()) || (await UserRoleHelper.isDirector())) return false
+                return true
             },
-        }
-    },
-
-    beforeUpdate() {},
-    computed: {
-        async ispermission() {
-            if ((await UserRoleHelper.isHr()) || (await UserRoleHelper.isDirector())) return false
-            return true
-        },
-        checkDateLeave() {
-            if (this.v$.form.workStatus.$model === 2) return false
-            else {
-                this.v$.form.dateLeave.$model = null
-                return true
-            }
-        },
-        checkDateOfBirth() {
-            const dOB = this.v$.form.dob.$model
-            if (dOB == '') {
-                this.dOBValidate = false
-                return true
-            }
-            var today = new Date()
-            var thisYear = new Date(today).getFullYear()
-            var birthYear = new Date(dOB).getFullYear()
-            if (thisYear - birthYear >= 18 && thisYear - birthYear <= 60) {
-                this.dOBValidate = false
-                return true
-            } else {
-                this.dOBValidate = true
-                return false
-            }
-        },
-    },
-    mounted() {
-        this.getAllGroup()
-    },
-    methods: {
-        getAllGroup() {
-            HTTP.get('Group/getListGroup/')
-                .then((res) => {
-                    if (res.status === 200) {
-                        this.optionRoles = res.data
-                    }
-                })
-                .catch((er) => {
-                    this.$toast.add({
-                        severity: ToastSeverity.ERROR,
-                        summary: 'Error ',
-                        detail: "Can't get information of user create !",
-                        life: 3000,
-                    })
-                })
-        },
-        closeModal() {
-            this.$emit('closeModal')
-            this.submitted = false
-        },
-        handleSubmit(isFormValid) {
-            this.submitted = true
-
-            if (!isFormValid) {
-                return
-            }
-            this.Submit()
-        },
-        async Submit() {
-            if (this.iduser) {
-                const token = localStorage.getItem('token')
-                const decode = jwt_decode(token)
-                if (!this.checkDateOfBirth) return
-                const dataPost = {
-                    userModified: parseInt(decode.Id),
-                    dateModified: new Date(),
-                    firstName: this.form.firstName,
-                    lastName: this.form.lastName,
-                    phoneNumber: this.form.phoneNumber,
-                    dOB: this.form.dob == null ? '' : this.form.dob,
-                    identitycard: this.form.identitycard,
-                    gender: this.form.gender,
-                    address: this.form.address,
-                    university: this.form.university,
-                    yearGraduated: this.form.yearGraduated,
-                    email: this.form.email,
-                    skype: this.form.skype,
-                    workStatus: this.form.workStatus,
-                    dateStartWork: this.form.dateStartWork,
-                    dateLeave: this.form.dateLeave,
-                    maritalStatus: this.form.maritalStatus,
-                    reasonResignation: this.form.reasonResignation,
-                    idGroup: this.form.idGroup,
+            checkDateLeave() {
+                if (this.v$.form.workStatus.$model === 2) return false
+                else {
+                    this.v$.form.dateLeave.$model = null
+                    return true
                 }
-                try {
-                    const res = await HTTP.put('Users/updateUser/' + this.iduser, dataPost)
-                    switch (res.status) {
-                        case HttpStatus.OK:
-                            this.closeModal();
-                            this.$emit('reloadpage');
-                            this.$toast.add({
-                                severity: 'success',
-                                summary: 'Info Message',
-                                detail: 'Save user success!',
-                                life: 3000,
-                            });
-                            break;
-                        case HttpStatus.UNAUTHORIZED:
-                        case HttpStatus.FORBIDDEN:
-                            this.$toast.add({
-                                severity: 'error',
-                                summary: 'Error',
-                                detail: 'Không có quyền thực hiện thao tác thêm dự án!',
-                                life: 2000,
-                            });
-                            break;
-                        default:
-                            this.$toast.add({
-                                severity: 'error',
-                                summary: 'error',
-                                detail: 'Save failed',
-                                life: 3000,
-                            });
-                    }
-                } catch (error) {
-                    switch (error.code) {
-                        case 'ERR_NETWORK':
-                            this.$toast.add({
-                                severity: ToastSeverity.ERROR,
-                                summary: 'Error',
-                                detail: 'Check your connect !',
-                                life: 3000,
-                            })
-                            break
-                        case 'ERR_BAD_REQUEST':
-                            this.$toast.add({
-                                severity: ToastSeverity.ERROR,
-                                summary: 'Error',
-                                detail: error.response.data,
-                                life: 3000,
-                            })
-                            break
-                    }
+            },
+            checkDateOfBirth() {
+                const dOB = this.v$.form.dob.$model
+                if (dOB == '') {
+                    this.dOBValidate = false
+                    return true
                 }
-            }
+                var today = new Date()
+                var thisYear = new Date(today).getFullYear()
+                var birthYear = new Date(dOB).getFullYear()
+                if (thisYear - birthYear >= 18 && thisYear - birthYear <= 60) {
+                    this.dOBValidate = false
+                    return true
+                } else {
+                    this.dOBValidate = true
+                    return false
+                }
+            },
         },
-        backToUser() {
-            this.$router.push('/users')
+        mounted() {
+            this.getAllGroup()
         },
-        closeDialog() {
-            this.submitted = false
-        },
-        onShow() {
-            if (this.iduser) {
-                HTTP.get('Users/getUserById/' + this.iduser)
+        methods: {
+            getAllGroup() {
+                HTTP.get('Group/getListGroup/')
                     .then((res) => {
-                        if (res.status == 200) {
-                            this.form = res.data
-                            // this.userCode = res.data.userCode
-                            this.form.dateStartWork =
-                                res.data.dateStartWork == null
-                                    ? null
-                                    : new Date(
-                                          res.data.dateStartWork,
-                                      ) /*moment(res.data.dateStartWork).format('DD/MM/YYYY')*/
-                            this.form.dateLeave =
-                                res.data.dateLeave == null
-                                    ? null
-                                    : new Date(res.data.dateLeave) /*moment(res.data.dateLeave).format('DD/MM/YYYY')*/
-                            this.form.dob =
-                                res.data.dOB == null
-                                    ? null
-                                    : new Date(res.data.dOB) /*moment(res.data.dOB).format('DD/MM/YYYY')*/
-                            this.optionworkStatus = [
-                                { name: 'Working', code: 1 },
-                                { name: 'Resignation', code: 2 },
-                                { name: 'Maternity Leaving', code: 3 },
-                            ]
-                            if (this.form.gender != 2) {
-                                this.optionworkStatus = [
-                                    { name: 'Working', code: 1 },
-                                    { name: 'Resignation', code: 2 },
-                                ]
-                            }
+                        if (res.status === 200) {
+                            this.optionRoles = res.data
                         }
                     })
                     .catch((er) => {
                         this.$toast.add({
                             severity: ToastSeverity.ERROR,
-                            summary: 'Error ',
-                            detail: "Can't get information of user create !",
+                            summary: 'Lỗi ',
+                            detail: 'Không thể lấy thông tin của người dùng !',
                             life: 3000,
                         })
                     })
-            }
+            },
+            closeModal() {
+                this.$emit('closeModal')
+                this.submitted = false
+            },
+            handleSubmit(isFormValid) {
+                this.submitted = true
+
+                if (!isFormValid) {
+                    return
+                }
+                this.Submit()
+            },
+            async Submit() {
+                if (this.iduser) {
+                    const token = localStorage.getItem('token')
+                    const decode = jwt_decode(token)
+                    if (!this.checkDateOfBirth) return
+                    const dataPost = {
+                        userModified: parseInt(decode.Id),
+                        dateModified: new Date(),
+                        firstName: this.form.firstName,
+                        lastName: this.form.lastName,
+                        phoneNumber: this.form.phoneNumber,
+                        dOB: this.form.dob == null ? '' : this.form.dob,
+                        identitycard: this.form.identitycard,
+                        gender: this.form.gender,
+                        address: this.form.address,
+                        university: this.form.university,
+                        yearGraduated: this.form.yearGraduated,
+                        email: this.form.email,
+                        skype: this.form.skype,
+                        workStatus: this.form.workStatus,
+                        dateStartWork: this.form.dateStartWork,
+                        dateLeave: this.form.dateLeave,
+                        maritalStatus: this.form.maritalStatus,
+                        reasonResignation: this.form.reasonResignation,
+                        idGroup: this.form.idGroup,
+                    }
+                    try {
+                        const res = await HTTP.put('Users/updateUser/' + this.iduser, dataPost)
+                        switch (res.status) {
+                            case HttpStatus.OK:
+                                this.closeModal()
+                                this.$emit('reloadpage')
+                                this.$toast.add({
+                                    severity: 'success',
+                                    summary: 'Thành công',
+                                    detail: 'Thêm mới thành công!',
+                                    life: 3000,
+                                })
+                                break
+                            case HttpStatus.UNAUTHORIZED:
+                            case HttpStatus.FORBIDDEN:
+                                this.$toast.add({
+                                    severity: 'error',
+                                    summary: 'Lỗi',
+                                    detail: 'Không có quyền thực hiện thao tác thêm dự án!',
+                                    life: 2000,
+                                })
+                                break
+                            default:
+                                this.$toast.add({
+                                    severity: 'error',
+                                    summary: 'Lỗi',
+                                    detail: 'Lỗi ',
+                                    life: 3000,
+                                })
+                        }
+                    } catch (error) {
+                        switch (error.code) {
+                            case 'ERR_NETWORK':
+                                this.$toast.add({
+                                    severity: ToastSeverity.ERROR,
+                                    summary: 'Lỗi',
+                                    detail: 'Kiểm tra kết nối !',
+                                    life: 3000,
+                                })
+                                break
+                            case 'ERR_BAD_REQUEST':
+                                this.$toast.add({
+                                    severity: ToastSeverity.ERROR,
+                                    summary: 'Lỗi',
+                                    detail: error.response.data,
+                                    life: 3000,
+                                })
+                                break
+                        }
+                    }
+                }
+            },
+            backToUser() {
+                this.$router.push('/users')
+            },
+            closeDialog() {
+                this.submitted = false
+            },
+            onShow() {
+                if (this.iduser) {
+                    HTTP.get('Users/getUserById/' + this.iduser)
+                        .then((res) => {
+                            if (res.status == 200) {
+                                this.form = res.data
+                                // this.userCode = res.data.userCode
+                                this.form.dateStartWork =
+                                    res.data.dateStartWork == null
+                                        ? null
+                                        : new Date(
+                                              res.data.dateStartWork,
+                                          ) /*moment(res.data.dateStartWork).format('DD/MM/YYYY')*/
+                                this.form.dateLeave =
+                                    res.data.dateLeave == null
+                                        ? null
+                                        : new Date(
+                                              res.data.dateLeave,
+                                          ) /*moment(res.data.dateLeave).format('DD/MM/YYYY')*/
+                                this.form.dob =
+                                    res.data.dOB == null
+                                        ? null
+                                        : new Date(res.data.dOB) /*moment(res.data.dOB).format('DD/MM/YYYY')*/
+                                this.optionworkStatus = [
+                                    { name: 'Đang làm', code: 1 },
+                                    { name: 'Đã từ chức', code: 2 },
+                                    { name: 'Nghỉ thai sản', code: 3 },
+                                ]
+                                if (this.form.gender != 2) {
+                                    this.optionworkStatus = [
+                                        { name: 'Đang làm', code: 1 },
+                                        { name: 'Đã từ chức', code: 2 },
+                                    ]
+                                }
+                            }
+                        })
+                        .catch((er) => {
+                            this.$toast.add({
+                                severity: ToastSeverity.ERROR,
+                                summary: 'Lỗi ',
+                                detail: 'Không thể lấy thông tin của người dùng !',
+                                life: 3000,
+                            })
+                        })
+                }
+            },
         },
-    },
-    components: { LayoutDefault },
-}
+        components: { LayoutDefault },
+    }
 </script>
 
 <style lang="scss" scoped>
-.form-demo {
-    .card {
-        min-width: 450px;
+    .form-demo {
+        .card {
+            min-width: 450px;
 
-        border: none;
-        form {
-            margin-top: 2rem;
+            border: none;
+            form {
+                margin-top: 2rem;
+            }
+
+            .text-center {
+                font-size: 30px;
+                width: 64%;
+                display: flex;
+                justify-content: flex-end;
+            }
+            .field-checkbox {
+                width: 36%;
+                display: flex;
+                justify-content: flex-end;
+            }
+            .field {
+                margin-bottom: 1.5rem;
+                font-size: small;
+            }
         }
-
-        .text-center {
-            font-size: 30px;
-            width: 64%;
+        .admin__form--header {
             display: flex;
-            justify-content: flex-end;
         }
-        .field-checkbox {
-            width: 36%;
+        .checkbox__admin {
+            width: 100%;
+            height: 50px;
             display: flex;
-            justify-content: flex-end;
+            align-items: center;
+            justify-content: center;
         }
-        .field {
-            margin-bottom: 1.5rem;
-            font-size: small;
+        .field-checkbox-items {
+            margin-right: 5px;
+        }
+
+        .cardrelax {
+            width: 850px;
+        }
+
+        @media screen and (max-width: 960px) {
         }
     }
-    .admin__form--header {
-        display: flex;
-    }
-    .checkbox__admin {
-        width: 100%;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .field-checkbox-items {
-        margin-right: 5px;
-    }
-
-    .cardrelax {
-        width: 850px;
-    }
-
-    @media screen and (max-width: 960px) {
-    }
-}
 </style>

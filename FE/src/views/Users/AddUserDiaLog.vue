@@ -8,10 +8,10 @@
                 <div class="card cardrelax">
                     <div class="admin__form--header">
                         <div></div>
-                        <h5 class="text-center">ADD NEW USER</h5>
+                        <h5 class="text-center">Thêm</h5>
                         <div class="field-checkbox">
                             <Checkbox inputId="binary" :binary="true" class="field-checkbox-items" />
-                            <label for="binary">Send mail</label>
+                            <label for="binary">Gửi Email</label>
                         </div>
                     </div>
 
@@ -27,7 +27,7 @@
                                             autocomplete="nope"
                                         />
                                         <label for="userCode" :class="{ 'p-error': v$.userCode.$invalid && submitted }"
-                                            >Account*</label
+                                            >Tài khoản*</label
                                         >
                                     </div>
                                     <span v-if="v$.userCode.$error && submitted">
@@ -66,7 +66,7 @@
                                             </template>
                                         </Password>
                                         <label for="password" :class="{ 'p-error': v$.password.$invalid && submitted }"
-                                            >Password*</label
+                                            >Mật khẩu*</label
                                         >
                                     </div>
                                     <span v-if="v$.password.$error && submitted">
@@ -100,7 +100,7 @@
                                         <label
                                             for="firstName"
                                             :class="{ 'p-error': v$.firstName.$invalid && submitted }"
-                                            >FirstName*</label
+                                            >Họ*</label
                                         >
                                     </div>
                                     <small
@@ -119,7 +119,7 @@
                                             :class="{ 'p-invalid': v$.lastName.$invalid && submitted }"
                                         />
                                         <label for="lastName" :class="{ 'p-error': v$.lastName.$invalid && submitted }"
-                                            >LastName*</label
+                                            >Tên*</label
                                         >
                                     </div>
                                     <small
@@ -168,7 +168,7 @@
                                         <label
                                             for="identitycard"
                                             :class="{ 'p-error': v$.identitycard.$invalid && submitted }"
-                                            >Identity Card*</label
+                                            >Căn cước công dân*</label
                                         >
                                     </div>
                                     <small
@@ -195,7 +195,7 @@
                                             :class="{ 'p-invalid': v$.gender.$invalid && submitted }"
                                         />
                                         <label for="gender" :class="{ 'p-error': v$.gender.$invalid && submitted }"
-                                            >Gender*</label
+                                            >Giới tính*</label
                                         >
                                     </div>
                                     <small
@@ -216,7 +216,7 @@
                                             :class="{ 'p-invalid': v$.idGroup.$invalid && submitted }"
                                         />
                                         <label for="idRole" :class="{ 'p-error': v$.idGroup.$invalid && submitted }"
-                                            >Role*</label
+                                            >Chức vụ*</label
                                         >
                                     </div>
                                     <small
@@ -237,7 +237,7 @@
                                         <label
                                             for="phoneNumber"
                                             :class="{ 'p-error': v$.phoneNumber.$invalid && submitted }"
-                                            >PhoneNumber</label
+                                            >Số điện thoại</label
                                         >
                                     </div>
                                     <span v-if="v$.phoneNumber.$error && submitted">
@@ -276,7 +276,7 @@
                                         <label
                                             for="dateStartWork"
                                             :class="{ 'p-error': v$.dateStartWork.$invalid && submitted }"
-                                            >Date start work*</label
+                                            >Ngày bắt đầu làm*</label
                                         >
                                     </div>
                                     <small
@@ -303,7 +303,7 @@
                                         <label
                                             for="dob"
                                             :class="{ 'p-error': (v$.dob.$invalid || dOBValidate) && submitted }"
-                                            >Birthday</label
+                                            >Ngày sinh</label
                                         >
                                     </div>
                                     <small
@@ -312,7 +312,7 @@
                                         >{{ v$.dob.required.$message.replace('Value', 'Birthday') }}</small
                                     >
                                     <small v-if="!this.checkDateOfBirth(v$.dob.$model) && submitted" class="p-error">
-                                        User must be at least 18 years old
+                                        Người dùng phải trên 18 tuổi và dưới 60 tuổi
                                     </small>
                                 </div>
                             </div>
@@ -331,7 +331,7 @@
                                         <label
                                             for="maritalStatus"
                                             :class="{ 'p-error': v$.maritalStatus.$invalid && submitted }"
-                                            >Marital Status</label
+                                            >Tình trạng hôn nhân</label
                                         >
                                     </div>
                                     <small
@@ -361,7 +361,7 @@
                                         />
 
                                         <label for="address" :class="{ 'p-error': v$.address.$invalid && submitted }"
-                                            >Address</label
+                                            >Địa chỉ</label
                                         >
                                     </div>
                                     <small
@@ -384,7 +384,7 @@
                                         <label
                                             for="university"
                                             :class="{ 'p-error': v$.university.$invalid && submitted }"
-                                            >University</label
+                                            >Đại học</label
                                         >
                                     </div>
                                     <small
@@ -408,7 +408,7 @@
                                         <label
                                             for="yearGraduated"
                                             :class="{ 'p-error': v$.yearGraduated.$invalid && submitted }"
-                                            >Year graduated</label
+                                            >Năm tốt nghiệp</label
                                         >
                                     </div>
                                     <span v-if="v$.yearGraduated.$error && submitted">
@@ -458,11 +458,11 @@
 
                         <div class="d-flex justify-content-end">
                             <div class="col-2">
-                                <Button @click="handleSubmit" label="Submit" />
+                                <Button @click="handleSubmit" label="Hoàn tất" />
                             </div>
                             &emsp;
                             <div class="col-2">
-                                <Button label="Cancel" class="p-button-secondary" @click="closeAdd()" />
+                                <Button label="Hủy" class="p-button-secondary" @click="closeAdd()" />
                             </div>
                         </div>
                     </div>
@@ -640,23 +640,22 @@
                                     case 'ERR_NETWORK':
                                         this.$toast.add({
                                             severity: 'error',
-                                            summary: 'error',
-                                            detail: 'Check your connect !',
+                                            summary: 'Lỗi',
+                                            detail: 'Kiểm tra kết nối !',
                                             life: 3000,
                                         })
                                         break
                                     case 'ERR_BAD_REQUEST':
                                         this.$toast.add({
                                             severity: 'error',
-                                            summary: 'error',
+                                            summary: 'Lỗi',
                                             detail: error.response.data,
                                             life: 3000,
                                         })
                                         break
                                 }
                             })
-                    } catch (error) {
-                    }
+                    } catch (error) {}
                 }
                 CallApi()
             },
@@ -704,7 +703,7 @@
                             case HttpStatus.FORBIDDEN:
                                 this.$toast.add({
                                     severity: 'error',
-                                    summary: 'Error',
+                                    summary: 'Lỗi',
                                     detail: 'Không có quyền thực hiện thao tác thêm dự án!',
                                     life: 2000,
                                 })
@@ -712,7 +711,7 @@
                             default:
                                 this.$toast.add({
                                     severity: 'error',
-                                    summary: 'error',
+                                    summary: 'Lỗi',
                                     detail: 'Save failed',
                                     life: 3000,
                                 })
@@ -722,15 +721,15 @@
                             case 'ERR_NETWORK':
                                 this.$toast.add({
                                     severity: 'error',
-                                    summary: 'error',
-                                    detail: 'Check your connect !',
+                                    summary: 'Lỗi',
+                                    detail: 'Kiểm tra kết nối !',
                                     life: 3000,
                                 })
                                 break
                             case 'ERR_BAD_REQUEST':
                                 this.$toast.add({
                                     severity: 'error',
-                                    summary: 'error',
+                                    summary: 'Lỗi',
                                     detail: error.response.data,
                                     life: 3000,
                                 })

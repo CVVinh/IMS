@@ -1,7 +1,7 @@
 <template>
     <div>
         <Dialog
-            :header="projectSelected.id ? 'Edit Project' : 'Add Project'"
+            :header="projectSelected.id ? 'Sửa dự án' : 'Thêm dự án'"
             :visible="isOpenDialog"
             :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
             :style="{ width: '50vw' }"
@@ -14,7 +14,7 @@
                     <div class="col-md-12 mb-3">
                         <div class="d-flex align-items-center">
                             <InputSwitch id="OnGitlab" v-model="isOnGitlab" />
-                            <label class="ms-2" for="OnGitlab">On GitLab</label>
+                            <label class="ms-2" for="OnGitlab">GitLab</label>
                         </div>
                     </div>
                     <div class="col-12 row">
@@ -24,7 +24,7 @@
                                     class="mb-2"
                                     :class="{ 'p-error': v$.dataProject.projectCode.$invalid && submitted }"
                                 >
-                                    Project GitLab
+                                    Dự án trên GitLab
                                     <span style="color: red">*</span>
                                 </label>
                                 <div
@@ -36,7 +36,7 @@
                                         :options="projectGit"
                                         optionLabel="name"
                                         optionValue="id"
-                                        placeholder="Select a Project"
+                                        placeholder="Nhập dự án"
                                         :filter="true"
                                         :showClear="true"
                                         :class="{ 'p-invalid': v$.dataProject.projectCode.$invalid && submitted }"
@@ -59,7 +59,7 @@
                                     for="name"
                                     :class="{ 'p-error': v$.dataProject.name.$invalid && submitted }"
                                 >
-                                    Project name
+                                    Tên dự án
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="p-float-label" :class="{ 'form-group--error': v$.dataProject.name.$error }">
@@ -102,7 +102,7 @@
                                     for="projectCode"
                                     :class="{ 'p-error': v$.dataProject.projectCode.$invalid && submitted }"
                                 >
-                                    Project code
+                                    Mã dự án
                                     <span style="color: red">*</span>
                                 </label>
                                 <div
@@ -148,7 +148,7 @@
                             class="mb-2"
                             for="description"
                             :class="{ 'p-error': v$.dataProject.description.$invalid && submitted }"
-                            >Description</label
+                            >Mô tả</label
                         >
                         <div class="p-float-label" :class="{ 'form-group--error': v$.dataProject.description.$error }">
                             <Textarea
@@ -181,7 +181,7 @@
                                             (v$.dataProject.startDate.$invalid || !checkStartDate()) && submitted,
                                     }"
                                 >
-                                    Start date
+                                    Ngày bắt đầu
                                     <span style="color: red">*</span>
                                 </label>
                                 <div
@@ -214,7 +214,7 @@
                                     v-if="!v$.dataProject.startDate.$invalid && !checkStartDate() && submitted"
                                     class="p-error"
                                 >
-                                    Start date must be bigger than today!
+                                    Ngày bắt đầu phải lớn hơn hôm nay!
                                 </small>
                             </div>
                         </div>
@@ -228,7 +228,7 @@
                                         'p-error': (v$.dataProject.endDate.$invalid || !checkEndDate()) && submitted,
                                     }"
                                 >
-                                    End date
+                                    Ngày kết thúc
                                     <span style="color: red">*</span>
                                 </label>
                                 <div
@@ -259,7 +259,7 @@
                                     v-if="!v$.dataProject.endDate.$invalid && !checkEndDate() && submitted"
                                     class="p-error"
                                 >
-                                    End date must be bigger than Start date!
+                                    Ngày kết thúc phải lớn hơn ngày bắt đầu!
                                 </small>
                             </div>
                         </div>
@@ -292,8 +292,8 @@
                         >
                     </div>
                     <div class="">
-                        <button type="submit" class="btn btn-primary">Save</button>&nbsp;
-                        <button type="button" class="btn btn-secondary" v-on:click="onClickCancel()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>&nbsp;
+                        <button type="button" class="btn btn-secondary" v-on:click="onClickCancel()">Hủy</button>
                     </div>
                 </form>
             </div>
@@ -471,7 +471,7 @@
                                 case HttpStatus.UNAUTHORIZED:
                                     this.$toast.add({
                                         severity: 'error',
-                                        summary: 'Error',
+                                        summary: 'Lỗi',
                                         detail: 'Không có quyền thực hiện thao tác thêm dự án.',
                                         life: 2000,
                                     })
@@ -483,7 +483,7 @@
                         .catch((er) => {
                             this.$toast.add({
                                 severity: 'warn',
-                                summary: 'Warn Message',
+                                summary: 'Cảnh báo',
                                 detail: 'Không có quyền thực hiện thao tác sửa dự án.',
                                 life: 2000,
                             })
@@ -499,15 +499,15 @@
             showSuccess() {
                 this.$toast.add({
                     severity: 'success',
-                    summary: 'Success Message',
-                    detail: 'Save project success !!!',
+                    summary: 'Thành công',
+                    detail: 'Thêm mới thành công!',
                     life: 3000,
                 })
             },
             showWarn(err) {
                 this.$toast.add({
                     severity: 'warn',
-                    summary: 'Warn Message',
+                    summary: 'Cảnh báo',
                     detail: err,
                     life: 3000,
                 })

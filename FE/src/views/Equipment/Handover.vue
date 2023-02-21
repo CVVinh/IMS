@@ -14,7 +14,7 @@
                 filterDisplay="menu"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 :rowsPerPageOptions="[2, 10, 25, 50]"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                 :globalFilterFields="['userSend']"
                 responsiveLayout="scroll"
                 ref="dt"
@@ -107,12 +107,8 @@
                     </template>
                 </Column>
             </DataTable>
-          
         </div>
-      <AddUseDevicenew :status="statusOpen" @reloadpage="getAllHandover" 
-        @CloseModal = "closeModaladd"
-      />
-
+        <AddUseDevicenew :status="statusOpen" @reloadpage="getAllHandover" @CloseModal="closeModaladd" />
     </LayoutDefaultDynamic>
 </template>
 
@@ -193,7 +189,7 @@
                         type: 1,
                     },
                 ],
-                Opendialog : false,
+                Opendialog: false,
             }
         },
         computed: {
@@ -262,17 +258,15 @@
             this.getAllDevices()
         },
         methods: {
-
             openModaladd() {
-                this.statusOpen = true;
+                this.statusOpen = true
             },
 
-            closeModaladd(){
-                this.statusOpen = false;
+            closeModaladd() {
+                this.statusOpen = false
             },
 
             showAddUseDevice() {
-              
                 this.$dialog.open(addUseDeviceVue, {
                     props: {
                         header: 'Add Handovers',
@@ -280,10 +274,8 @@
                         closable: true,
                         position: 'center',
                         dismissableMask: true,
-                        modal:true
+                        modal: true,
                     },
-              
-                    
                 })
             },
             showYourDevice() {
@@ -309,7 +301,6 @@
                     data: {
                         idHandover: id,
                     },
-                    
                 })
             },
             getAllHandover() {
@@ -327,7 +318,7 @@
                         this.handover = array
                         this.loading = false
                     })
-                    .catch((err) )
+                    .catch(err)
             },
             getAllOrders() {
                 HTTP.get('Orders/getAllOrder')
@@ -342,7 +333,7 @@
                         })
                         this.orders = array
                     })
-                    .catch((err) )
+                    .catch(err)
             },
             getAllDevices() {
                 HTTP.get('Devices/getListDevices')
@@ -350,7 +341,7 @@
                     .then((res) => {
                         this.devices = res
                     })
-                    .catch((err) )
+                    .catch(err)
             },
             getAllBranchs() {
                 HTTP.get('Branchs/getListBranch')
@@ -358,7 +349,7 @@
                     .then((res) => {
                         this.branchs = res
                     })
-                    .catch((err) )
+                    .catch(err)
             },
             renderStatusClass(status) {
                 if (status === 1) {
@@ -421,9 +412,8 @@
                                 .then((res) => {
                                     this.getAllHandover()
                                 })
-                                .catch((err))
-                        } catch (error) {
-                        }
+                                .catch(err)
+                        } catch (error) {}
                     },
                     reject: () => {
                         this.$toast.add({
@@ -468,18 +458,17 @@
             },
         },
         components: {
-    Add,
-    Edit,
-    Delete,
-    Member,
-    Export,
-    Confirm,
-    addUseDeviceVue,
-    EditUseDeviceVue,
-    AddUseDevice,
-    AddUseDevicenew,
-
-},
+            Add,
+            Edit,
+            Delete,
+            Member,
+            Export,
+            Confirm,
+            addUseDeviceVue,
+            EditUseDeviceVue,
+            AddUseDevice,
+            AddUseDevicenew,
+        },
     }
 </script>
 

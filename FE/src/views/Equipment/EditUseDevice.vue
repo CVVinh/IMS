@@ -87,7 +87,7 @@
             <div class="group-button">
                 <div>
                     <Button label="Save" type="submit" icon="pi pi-check" />{{ ' ' }}
-                    <Button label="Cancel" class="p-button-secondary" v-on:click="closeDialog()" />
+                    <Button label="Hủy" class="p-button-secondary" v-on:click="closeDialog()" />
                 </div>
             </div>
         </form>

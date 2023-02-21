@@ -17,7 +17,7 @@
                                 for="device"
                                 class="mb-2"
                                 :class="{ 'p-error': v$.dataDevices.deviceName.$invalid && submitted }"
-                                >Device Name<span style="color: red">*</span></label
+                                >Tên thiết bị<span style="color: red">*</span></label
                             >
                             <InputText
                                 :class="{ 'p-invalid': v$.dataDevices.deviceName.$invalid && submitted }"
@@ -42,7 +42,7 @@
                                 for="amount"
                                 class="mb-2"
                                 :class="{ 'p-error': v$.dataDevices.info.$invalid && submitted }"
-                                >Info<span style="color: red">*</span></label
+                                >Thông tin<span style="color: red">*</span></label
                             >
                             <Textarea
                                 :class="{ 'p-invalid': v$.dataDevices.info.$invalid && submitted }"
@@ -66,7 +66,7 @@
                                 for="device"
                                 class="mb-2"
                                 :class="{ 'p-error': v$.dataDevices.note.$invalid && submitted }"
-                                >Note<span style="color: red">*</span></label
+                                >Ghi chú<span style="color: red">*</span></label
                             >
                             <Textarea
                                 :class="{ 'p-invalid': v$.dataDevices.note.$invalid && submitted }"
@@ -84,8 +84,8 @@
                         </div>
                     </div>
                     <div class="">
-                        <button type="submit" class="btn btn-primary">Save</button>&nbsp;
-                        <button type="button" class="btn btn-secondary" @click="closeDialog">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>&nbsp;
+                        <button type="button" class="btn btn-secondary" @click="closeDialog">Hủy</button>
                     </div>
                 </form>
             </div>
@@ -131,7 +131,6 @@
             }
         },
         methods: {
-
             closeDialog() {
                 this.resetForm()
                 this.$emit('closeDialog')
@@ -161,14 +160,13 @@
                                 this.showSuccess()
                                 this.closeDialog()
                                 this.getAllDevices()
-                                this.$emit('Reloadlist');
+                                this.$emit('Reloadlist')
                             }
                         })
                         .catch((er) => {
                             this.showWarn()
                         })
                 }
-                
             },
             editData() {
                 let userLogin = LocalStorage.jwtDecodeToken()

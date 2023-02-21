@@ -8,8 +8,15 @@
                 :loading="loading"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 :rowsPerPageOptions="[10, 25, 50]"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                :globalFilterFields="['nameModule', 'menu1.title', 'menu1.view', 'menu1.controller', 'menu1.icon', 'menu1.parent']"
+                currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
+                :globalFilterFields="[
+                    'nameModule',
+                    'menu1.title',
+                    'menu1.view',
+                    'menu1.controller',
+                    'menu1.icon',
+                    'menu1.parent',
+                ]"
                 responsiveLayout="scroll"
                 :rowHover="true"
                 :rows="10"
@@ -18,11 +25,11 @@
             >
                 <template #header>
                     <div class="Menu-table-header">
-                        <h4 class="Menu-table-header-title">Menu List</h4>
+                        <h4 class="Menu-table-header-title">Danh sách Menu</h4>
                         <div class="Menu-table-header-Groupinput">
                             <div class="Menu-table-header-Groupinput-items">
-                                <Export label="Export" />
-                                <Add label="Add menu" class="itemsbutton" @click="Openmodal" />
+                                <Export label="Xuất Excel" />
+                                <Add label="Thêm" class="itemsbutton" @click="Openmodal" />
                             </div>
                             <div class="Menu-table-header-Groupinput-items">
                                 <Dropdown
@@ -31,28 +38,26 @@
                                     :options="OptionModule"
                                     optionLabel="nameModule"
                                     optionValue="id"
-                                    placeholder="Select a module"
+                                    placeholder="Chọn chức năng"
                                 />
                                 <span class="p-input-icon-left">
                                     <i class="pi pi-search" />
                                     <InputText
                                         class="p-inputtext-sm"
                                         v-model="filters['global'].value"
-                                        placeholder="Keyword Search"
+                                        placeholder="Tìm kiếm"
                                     />
                                 </span>
                             </div>
                         </div>
                     </div>
                 </template>
-                <template #empty>
-                    No menu found.
-                </template>
+                <template #empty> Không tìm thấy. </template>
 
-                <Column field="nameModule" header="nameModule" sortable></Column>
-                <Column field="menu1.title" header="title" sortable></Column>
-                <Column field="menu1.view" header="view" sortable></Column>
-                <Column field="menu1.controller" header="controller" sortable></Column>
+                <Column field="nameModule" header="Tên chức năng" sortable></Column>
+                <Column field="menu1.title" header="Tên" sortable></Column>
+                <Column field="menu1.view" header="Trang hiển thị" sortable></Column>
+                <Column field="menu1.controller" header="Trang điều hướng" sortable></Column>
                 <Column field="menu1.icon" header="Icon" sortable>
                     <!--                 
                 <template #body="{data}">
@@ -62,7 +67,7 @@
 
                 </template> -->
                 </Column>
-                <Column field="menu1.parent" header="parent" sortable></Column>
+                <Column field="menu1.parent" header="Nhánh/lớp cha" sortable></Column>
                 <Column header="&emsp;&emsp;action" style="min-width: 9rem">
                     <template #body="{ data }">
                         <Edit @click="Openeditmodal(data.menu1.id)" :disabled="checkAction(data.menu1.isDeleted)" />
@@ -190,8 +195,8 @@
 
             Delete(id) {
                 this.$confirm.require({
-                    message: 'Do you want to delete this menu?',
-                    header: 'Delete Menu',
+                    message: 'Bạn có chắc chắn muốn xóa?',
+                    header: 'Xóa',
                     icon: 'pi pi-info-circle',
                     acceptClass: 'p-button-danger',
                     accept: () => {
@@ -205,25 +210,30 @@
             showSuccess() {
                 this.$toast.add({
                     severity: 'success',
-                    summary: 'Success Message',
-                    detail: 'Message Content',
+                    summary: 'Thành công',
+                    detail: 'Thêm mới thành công!',
                     life: 3000,
                 })
             },
             showError() {
-                this.$toast.add({ severity: 'error', summary: 'Error Message', detail: 'Failed', life: 3000 })
+                this.$toast.add({ severity: 'error', summary: 'Lỗi ', detail: 'Lỗi', life: 3000 })
             },
             showSuccess1() {
-                this.$toast.add({ severity: 'success', summary: 'Success Message', detail: 'Add success', life: 3000 })
+                this.$toast.add({
+                    severity: 'success',
+                    summary: 'Thành công ',
+                    detail: 'Thêm mới thành công',
+                    life: 3000,
+                })
             },
             showError1() {
-                this.$toast.add({ severity: 'error', summary: 'Error Message', detail: 'Add Failed', life: 3000 })
+                this.$toast.add({ severity: 'error', summary: 'Lỗi ', detail: 'Thêm Lỗi', life: 3000 })
             },
             showSuccess2() {
-                this.$toast.add({ severity: 'success', summary: 'Success Message', detail: 'Edit success', life: 3000 })
+                this.$toast.add({ severity: 'success', summary: 'Thành công ', detail: 'Sửa thành công!', life: 3000 })
             },
             showError2() {
-                this.$toast.add({ severity: 'error', summary: 'Error Message', detail: 'Edit Failed', life: 3000 })
+                this.$toast.add({ severity: 'error', summary: 'Lỗi ', detail: 'Sửa Lỗi', life: 3000 })
             },
         },
 
@@ -235,17 +245,16 @@
 
         computed: {
             dataTable() {
-
                 let array = this.ListMenu
 
-                if(this.selectModule) {
-                    array = array.filter(ele => {
-                        return ele.menu1.idModule === this.selectModule;
+                if (this.selectModule) {
+                    array = array.filter((ele) => {
+                        return ele.menu1.idModule === this.selectModule
                     })
                 }
 
-                return array;
-            }
+                return array
+            },
         },
         components: { LayoutDefaultDynamic, Export, Add, Delete, Edit, AddmenuList, EditmenuList },
     }

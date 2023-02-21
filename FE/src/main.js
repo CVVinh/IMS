@@ -10,7 +10,7 @@ import Checkbox from 'primevue/checkbox'
 import PrimeVue from 'primevue/config'
 import DataTable from 'primevue/datatable'
 import InputText from 'primevue/inputtext'
-import InputNumber from 'primevue/inputnumber';
+import InputNumber from 'primevue/inputnumber'
 import Column from 'primevue/column'
 import ColumnGroup from 'primevue/columngroup'
 import Row from 'primevue/row'
@@ -38,19 +38,20 @@ import Panel from 'primevue/panel'
 import Avatar from 'primevue/avatar'
 import Card from 'primevue/card'
 import Breadcrumb from 'primevue/breadcrumb'
-import InputSwitch from 'primevue/inputswitch';
-import Toolbar from 'primevue/toolbar';
-import ScrollPanel from 'primevue/scrollpanel';
-import Editor from 'primevue/editor';
-import FileUpload from 'primevue/fileupload';
-import Message from 'primevue/message';
-import Divider from 'primevue/divider';
+import InputSwitch from 'primevue/inputswitch'
+import Toolbar from 'primevue/toolbar'
+import ScrollPanel from 'primevue/scrollpanel'
+import Editor from 'primevue/editor'
+import FileUpload from 'primevue/fileupload'
+import Message from 'primevue/message'
+import Divider from 'primevue/divider'
+import DatePicker from 'vue-datepicker-next'
 const app = createApp(App)
 
 app.use(PrimeVue)
 app.use(ConfirmationService)
 app.use(ToastService)
-app.use('Divider',Divider)
+app.use('Divider', Divider)
 app.component('Checkbox', Checkbox)
 app.use(DialogService)
 app.component('DynamicDialog', DynamicDialog)
@@ -80,9 +81,9 @@ app.component('InputSwitch', InputSwitch)
 app.component('Toolbar', Toolbar)
 app.component('ScrollPanel', ScrollPanel)
 app.component('Editor', Editor)
-app.component('FileUpload', FileUpload);
-app.component('Message', Message);
-
+app.component('FileUpload', FileUpload)
+app.component('Message', Message)
+app.component('DatePicker', DatePicker)
 
 app.use(createPinia())
 app.use(router)

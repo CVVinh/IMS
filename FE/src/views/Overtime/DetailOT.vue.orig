@@ -63,12 +63,45 @@
                 </div>
 
                 <div class="detail__content-box-items top">
+<<<<<<< HEAD
                     <div class="detail__content-box-items-text">
                         <b>User Update:</b> {{ this.OTS ? this.OTS.nameUserUpdate : null }}
                     </div>
                 </div>
 
                 <div class="detail__content-box-items top">
+                    <div
+                        class="detail__content-box-items-text"
+                        :style="{
+                            color:
+                                this.OTS.x.status === 0
+                                    ? 'blue'
+                                    : this.OTS.x.status === 1
+                                    ? 'greend'
+                                    : this.OTS.x.status === 2
+                                    ? 'gray'
+                                    : this.OTS.x.status === 3
+                                    ? 'red'
+                                    : '',
+                        }"
+                    >
+                        <b>Status:</b>
+                        {{
+                            this.OTS
+                                ? this.OTS.x.status === 0
+                                    ? 'Waiting'
+                                    : this.OTS.x.status === 1
+                                    ? 'Accepted'
+                                    : this.OTS.x.status === 2
+                                    ? 'Denied'
+                                    : this.OTS.x.status === 3
+                                    ? 'Deleted'
+                                    : ''
+                                : ''
+                        }}
+                    </div>
+                </div>
+=======
                     <div class="detail__content-box-items-text"
                     :style="{color : this.OTS.x.status === 0 ? 'blue' :
                                      this.OTS.x.status === 1 ? 'green' :
@@ -81,9 +114,25 @@
                                      : this.OTS.x.status === 3 ? 'Deleted' : "" : ""
                                     }}</div> 
                     </div>
+>>>>>>> develop
             </div>
         </div>
         <template #footer>
+<<<<<<< HEAD
+            <Button
+                label="Duyệt"
+                icon="pi pi-check"
+                class="p-button-raised p-button-success p-button-text"
+                v-if="this.isPm"
+                @click="accept(true, this.OTS.x.id, this.OTS.x.leadCreate)"
+            />
+            <Button
+                label="Hủy duyệt"
+                icon="pi pi-times"
+                class="p-button-raised p-button-danger p-button-text"
+                v-if="this.isPm"
+                @click="accept(false, this.OTS.x.id, this.OTS.x.leadCreate)"
+=======
             <Button label="Duyệt" icon="pi pi-check" class="p-button-raised p-button-success p-button-text"
             v-if="this.isPm && this.OTS.x.status === 0 "
             @click="accept(true, this.OTS.x.id, this.OTS.x.leadCreate)"
@@ -91,6 +140,7 @@
             <Button label="Hủy duyệt" icon="pi pi-times" class="p-button-raised p-button-danger p-button-text"
             v-if="this.isPm && this.OTS.x.status === 0"
             @click="accept(false, this.OTS.x.id, this.OTS.x.leadCreate)"
+>>>>>>> develop
             />
             <Button
                 label="Quay lại"

@@ -1,6 +1,6 @@
 <template>
     <Dialog
-        header="Reason for not approving leave ?"
+        header="Lý do không cho phép nghỉ ?"
         :maximizable="true"
         :closable="false"
         position="center"
@@ -14,12 +14,12 @@
             <form class="form-addproject" @submit.prevent="submitLeaveOff()">
                 <div class="input-layout w-100">
                     <label class="mb-2" for="name" :class="{ 'p-error': v$.leaveOff.reason.$invalid && submitted }">
-                        Reason
+                        Lý do
                         <span style="color: red">*</span>
                     </label>
                     <Textarea
                         v-model="v$.leaveOff.reason.$model"
-                        placeholder="Enter the reason for not approving leave here..."
+                        placeholder="Nhập lý do tại đây..."
                         class="input form-control"
                         rows="5"
                     />
@@ -29,8 +29,8 @@
                 </div>
                 <div class="group-button mt-3">
                     <div>
-                        <Button label="Submit" class="p-button-sm me-1" type="submit" icon="pi pi-check" />{{ ' ' }}
-                        <Button label="Cancel" class="p-button-sm p-button-secondary" @click="closeDialog()" />
+                        <Button label="Hoàn tất" class="p-button-sm me-1" type="submit" icon="pi pi-check" />{{ ' ' }}
+                        <Button label="Hủy" class="p-button-sm p-button-secondary" @click="closeDialog()" />
                     </div>
                 </div>
             </form>
@@ -84,7 +84,7 @@
                         .catch((err) => {
                             this.$toast.add({
                                 severity: 'error',
-                                summary: 'Error',
+                                summary: 'Lỗi',
                                 detail: err.message,
                                 life: 2000,
                             })

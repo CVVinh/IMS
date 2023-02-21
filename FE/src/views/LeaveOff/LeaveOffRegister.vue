@@ -8,7 +8,7 @@
                     <div class="card card-body" style="background-color: #607d8b">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="d-flex justify-content-start">
-                                <h5 style="color: White">LEAVE REGISTRATION LIST</h5>
+                                <h5 style="color: White">Đăng ký nghỉ phép</h5>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -16,7 +16,7 @@
                                 class="p-button-sm mt-1 me-2 p-button-info"
                                 @click="handlerAddLeaveOff"
                                 icon="pi pi-plus"
-                                label="Add Leave Off"
+                                label="Thêm nghỉ phép"
                             />
                         </div>
                     </div>
@@ -32,7 +32,7 @@
                         responsiveLayout="scroll"
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         :rowsPerPageOptions="[5, 10, 15, 30]"
-                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                         :globalFilterFields="[
                             '#',
                             'id',
@@ -44,43 +44,45 @@
                             'status',
                         ]"
                     >
-                        <Column field="#" header="N.o">
+                        <Column field="#" header="No.">
                             <template #body="{ index }">
                                 {{ index + 1 }}
                             </template>
                         </Column>
-                        <Column field="startTime" header="Start time">
+                        <Column field="startTime" header="Ngày bắt đầu">
                             <template #body="{ data }">
                                 {{ formartDate(data.startTime) }}
                             </template>
                         </Column>
-                        <Column field="endTime" header="End time">
+                        <Column field="endTime" header="Ngày kết thúc ">
                             <template #body="{ data }">
                                 {{ formartDate(data.endTime) }}
                             </template>
                         </Column>
-                        <Column field="status" header="status">
+                        <Column field="status" header="Trạng thái">
                             <template #body="{ data }">
                                 <span :class="checkStatus(data.status).class">
                                     {{ checkStatus(data.status).title }}
                                 </span>
                             </template>
                         </Column>
-                        <Column header="Action">
+                        <Column header="Thực thi" style="width: 13%">
                             <template #body="{ data }">
-                                <div class="d-flex justify-content-center">
+                                <div class="d-flex justify-content-start">
                                     <Button
                                         class="p-button-sm p-button-info mt-1 me-2"
                                         @click="handlerDetailsLeaveOff(data)"
                                         icon="pi pi-eye"
                                     />
                                     <Button
+                                        v-if="data.status == 1 || data.status == 2"
                                         class="p-button-sm mt-1 me-2 p-button-warning"
                                         @click="handlerEditLeaveOff(data)"
                                         icon="pi pi-pencil"
                                         :disabled="data.status == 2"
                                     />
                                     <Button
+                                        v-if="data.status == 1 || data.status == 2"
                                         class="p-button-sm p-button-danger mt-1 me-2"
                                         @click="confirmDeleteLeaveOff(data)"
                                         icon="pi pi-trash"
@@ -118,41 +120,44 @@
     import DialogViewDetailLeaveOff from './DialogViewDetailLeaveOff.vue'
     import { LocalStorage } from '@/helper/local-storage.helper'
     import { UserRoleHelper } from '@/helper/user-role.helper'
-import router from '../../router'
+    import router from '../../router'
     export default {
         async created() {
             ///leaveoff/Registerlists
 
-            try{
-            this.token = LocalStorage.jwtDecodeToken()
-            let indexCut = this.$route.path.lastIndexOf('/')
-            let string = this.$route.path.slice(1,indexCut) 
-            await UserRoleHelper.isAccessModule(string)
-            if(UserRoleHelper.isAccess){
-                // Check quyền
-                if (Number(this.token.IdGroup) == 4 || Number(this.token.IdGroup) == 3 || Number(this.token.IdGroup) == 1) {
-                await this.getAllLeaveOffRegister()
-            }
-            if (Number(this.token.IdGroup) == 5 || Number(this.token.IdGroup) == 2) {
-                setTimeout(() => {
-                    this.$toast.add({
-                        severity: 'error',
-                        summary: 'Error message',
-                        detail: 'Người dùng không có quyền!',
-                        life: 3000,
-                    })
-                    this.$router.push('/')
-                }, 800)
-            }
-            }else{
-                alert('bạn không có quyền giờ đến trang HOME nhé')
-                router.push('/')
-            }
-           }catch(err){
+            try {
+                this.token = LocalStorage.jwtDecodeToken()
+                let indexCut = this.$route.path.lastIndexOf('/')
+                let string = this.$route.path.slice(1, indexCut)
+                await UserRoleHelper.isAccessModule(string)
+                if (UserRoleHelper.isAccess) {
+                    // Check quyền
+                    if (
+                        Number(this.token.IdGroup) == 4 ||
+                        Number(this.token.IdGroup) == 3 ||
+                        Number(this.token.IdGroup) == 1
+                    ) {
+                        await this.getAllLeaveOffRegister()
+                    }
+                    if (Number(this.token.IdGroup) == 5 || Number(this.token.IdGroup) == 2) {
+                        setTimeout(() => {
+                            this.$toast.add({
+                                severity: 'error',
+                                summary: 'Error message',
+                                detail: 'Người dùng không có quyền!',
+                                life: 3000,
+                            })
+                            this.$router.push('/')
+                        }, 800)
+                    }
+                } else {
+                    alert('bạn không có quyền giờ đến trang HOME nhé')
+                    router.push('/')
+                }
+            } catch (err) {
                 alert('Ooopps Có gì đó sai sai rồi chuyển bạn đến trang home nhé')
                 router.push('/')
-           }
-   
+            }
         },
         data() {
             return {
@@ -167,17 +172,17 @@ import router from '../../router'
                 statusLeave: [
                     {
                         id: 1,
-                        title: 'Waiting',
+                        title: 'Chờ duyệt',
                         class: 'badge bg-warning',
                     },
                     {
                         id: 2,
-                        title: 'Done',
+                        title: 'Đã duyệt',
                         class: 'badge bg-success',
                     },
                     {
                         id: 3,
-                        title: 'Cancel',
+                        title: 'Đã hủy',
                         class: 'badge bg-secondary ',
                     },
                 ],
@@ -223,8 +228,8 @@ import router from '../../router'
             },
             confirmDeleteLeaveOff(data) {
                 this.$confirm.require({
-                    message: 'Are you sure you want to delete this leave card ?',
-                    header: 'Delete Confirmation',
+                    message: 'Bạn có chắc chắn muốn xóa?',
+                    header: 'Xóa',
                     icon: 'pi pi-exclamation-triangle',
                     acceptClass: 'p-button-danger',
                     accept: () => {
@@ -242,7 +247,7 @@ import router from '../../router'
                             if (res.status === HttpStatus.OK) {
                                 this.$toast.add({
                                     severity: 'success',
-                                    summary: 'Success message',
+                                    summary: 'Thành công',
                                     detail: res.data._Message,
                                     life: 3000,
                                 })
@@ -250,7 +255,7 @@ import router from '../../router'
                             } else {
                                 this.$toast.add({
                                     severity: 'warn',
-                                    summary: 'Warning message',
+                                    summary: 'Cảnh báo',
                                     detail: res.data._Message,
                                     life: 3000,
                                 })
@@ -259,7 +264,7 @@ import router from '../../router'
                         .catch((err) => {
                             this.$toast.add({
                                 severity: 'error',
-                                summary: 'Error message',
+                                summary: 'Lỗi',
                                 detail: err.message,
                                 life: 3000,
                             })

@@ -1,9 +1,12 @@
 <template>
-    <Dialog :visible="status" :closable="false" modal="true">
-        <template #header>
-            <h3>Add paid</h3>
-        </template>
-
+    <Dialog
+        header="Thêm thu chi"
+        :visible="status"
+        :closable="false"
+        modal="true"
+        :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
+        :style="{ width: '50vw' }"
+    >
         <div class="Menu__form">
             <div class="Menu__form--items items-left">
                 <div class="Menu__form--items-content">
@@ -12,12 +15,12 @@
                             'p-error': v$.Datasend.customerName.required.$invalid && isSubmit,
                             'input-title': true,
                         }"
-                        >Customer Name<span style="color: red">*</span></label
+                        >Tên khách hàng<span style="color: red">*</span></label
                     >
                     <InputText
                         type="text"
                         v-model="v$.Datasend.customerName.$model"
-                        placeholder="Input Customer Name"
+                        placeholder="Nhập tên khách hàng"
                     />
                     <small class="p-error" v-if="v$.Datasend.customerName.required.$invalid && isSubmit">{{
                         v$.Datasend.customerName.required.$message.replace('Value', 'Customer Name')
@@ -29,22 +32,22 @@
                             'p-error': v$.Datasend.amountPaid.required.$invalid && isSubmit,
                             'input-title': true,
                         }"
-                        >Amount Paid<span style="color: red">*</span></label
+                        >Mức chi<span style="color: red">*</span></label
                     >
-                    <InputNumber v-model="v$.Datasend.amountPaid.$model" placeholder="Input Amount Paid" min="0" />
+                    <InputNumber v-model="v$.Datasend.amountPaid.$model" placeholder="Nhập mức chi" min="0" />
                     <small class="p-error" v-if="v$.Datasend.amountPaid.required.$invalid && isSubmit">{{
                         v$.Datasend.amountPaid.required.$message.replace('Value', 'Amount Paid')
                     }}</small>
                 </div>
                 <div class="Menu__form--items-content">
-                    <h5>Status</h5>
+                    <label>Trạng thái<span style="color: red">*</span></label>
                     <Dropdown
                         class="inputdrop"
                         v-model="Datasend.isPaid"
                         :options="isPaidArr"
                         optionLabel="name"
                         optionValue="isPaid"
-                        placeholder="Select a Status"
+                        placeholder="Chọn trạng thái"
                     />
                 </div>
             </div>
@@ -55,9 +58,9 @@
                             'p-error': v$.Datasend.paidReason.required.$invalid && isSubmit,
                             'input-title': true,
                         }"
-                        >Paid Reason<span style="color: red">*</span></label
+                        >Lý do chi trả<span style="color: red">*</span></label
                     >
-                    <InputText type="text" v-model="v$.Datasend.paidReason.$model" placeholder="Input Paid Reason" />
+                    <InputText type="text" v-model="v$.Datasend.paidReason.$model" placeholder="Nhập lý do " />
                     <small class="p-error" v-if="v$.Datasend.paidReason.required.$invalid && isSubmit">{{
                         v$.Datasend.paidReason.required.$message.replace('Value', 'Paid Reason')
                     }}</small>
@@ -68,27 +71,29 @@
                             'p-error': v$.Datasend.paidDate.required.$invalid && isSubmit,
                             'input-title': true,
                         }"
-                        >Paid Date<span style="color: red">*</span></label
+                        >Ngày chi<span style="color: red">*</span></label
                     >
-                    <Calendar v-model="Datasend.paidDate" placeholder="Input Paid Date" />
+                    >
+
+                    <Calendar v-model="Datasend.paidDate" placeholder="Input Paid Date" :showIcon="true" />
                 </div>
                 <div class="Menu__form--items-content">
-                    <h5>Project</h5>
+                    <label>Dự án<span style="color: red">*</span></label>
                     <Dropdown
                         class="inputdrop"
                         v-model="Datasend.projectId"
                         :options="projectArr"
                         optionLabel="name"
                         optionValue="id"
-                        placeholder="Select a project"
+                        placeholder="Chọn dự án"
                     />
                 </div>
             </div>
         </div>
 
         <template #footer>
-            <Button label="Add" icon="pi pi-check" autofocus @click="AddPaid" />
-            <Button label="Close" icon="pi pi-times" class="p-button-text" @click="closeModal" />
+            <Button label="Thêm" icon="pi pi-check" autofocus @click="AddPaid" />
+            <Button label="Hủy" icon="pi pi-times" class="p-button-text" @click="closeModal" />
         </template>
     </Dialog>
 </template>
@@ -98,7 +103,8 @@
     import { GET_LIST_PAID, HTTP, HTTP_LOCAL } from '@/http-common'
     import { useVuelidate } from '@vuelidate/core'
     import { required } from '@vuelidate/validators'
-import { components } from '@/layouts/components'
+    import { components } from '@/layouts/components'
+import { LocalStorage } from '@/helper/local-storage.helper'
     export default {
         setup: () => ({ v$: useVuelidate() }),
         data() {
@@ -111,6 +117,7 @@ import { components } from '@/layouts/components'
                     paidPerson: 0,
                     isPaid: false,
                     paidDate: null,
+                  
                 },
                 projectArr: [],
                 isPaidArr: [
@@ -118,6 +125,7 @@ import { components } from '@/layouts/components'
                     { isPaid: true, name: 'Đã Thanh Toán' },
                 ],
                 isSubmit: false,
+                token : null,
             }
         },
         validations() {
@@ -131,7 +139,7 @@ import { components } from '@/layouts/components'
                 },
             }
         },
-    
+
         props: ['status', 'optionmodule'],
         methods: {
             closeModal() {
@@ -146,32 +154,63 @@ import { components } from '@/layouts/components'
                 this.isSubmit = false
             },
             AddPaid() {
-                //this.isSubmit = true
-                var token = localStorage.getItem('token')
-                var decode = jwt_decode(token)
-                this.Datasend.paidPerson = decode.Id
-                if (!this.v$.$invalid) {
-                    HTTP.post('Paid', this.Datasend)
-                        .then((res) => {
-                            console.log(res)
-                            //window.location.reload()
-                            this.$emit("getPaid");
-                            this.clearform();
-                            this.closeModal();
-                        })
-                        .then((error) => {
-                            console.log(error)
-                            this.showError1
-                        })
-                } else {
-                    this.showError1()
+
+                // Kế toán và admin submit
+                this.token = LocalStorage.jwtDecodeToken();
+                if(Number(this.token.IdGroup) === 1 || Number(this.token.IdGroup) === 2){
+                    this.Datasend.paidPerson = this.token.Id
+                    if (!this.v$.$invalid) {
+                        HTTP.post('Paid', this.Datasend)
+                            .then((res) => {
+                                console.log(res)
+                                //window.location.reload()
+                                this.$emit('getPaid')
+                                this.clearform()
+                                this.closeModal()
+                            })
+                            .then((error) => {
+                                console.log(error)
+                                this.showError1
+                            })
+                    } else {
+                        this.showError1()
+                    }
                 }
+                // role khác submit
+                if(Number(this.token.IdGroup !== 1) || Number(this.token.IdGroup !== 2)){
+                    this.Datasend.paidPerson = this.token.Id
+                    if (!this.v$.$invalid) {
+                        HTTP.post('Paid', this.Datasend)
+                            .then((res) => {
+                                console.log(res)
+                                //window.location.reload()
+                                this.$emit('reloadpageother')
+                                this.clearform()
+                                this.closeModal()
+                            })
+                            .then((error) => {
+                                console.log(error)
+                                this.showError1
+                            })
+                    } else {
+                        this.showError1()
+                    }
+                }
+
+                
+                //this.isSubmit = true
+                
             },
             showSuccess1() {
-                this.$toast.add({ severity: 'success', summary: 'Success Message', detail: 'Add success', life: 3000 })
+                this.$toast.add({
+                    severity: 'success',
+                    summary: 'Thành công',
+                    detail: 'Thêm mới thành công!',
+                    life: 3000,
+                })
             },
             showError1() {
-                this.$toast.add({ severity: 'error', summary: 'Error Message', detail: 'Add Failed', life: 3000 })
+                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: 'Thêm mới lỗi!', life: 3000 })
             },
         },
 
@@ -183,16 +222,13 @@ import { components } from '@/layouts/components'
     }
 </script>
 
-<style scoped>
+<style>
     .Menu__form {
-        width: 800px;
-        height: 400px;
         display: flex;
     }
     .Menu__form--items {
         width: 50%;
         height: 100%;
-
         padding: 10px;
         display: flex;
         flex-direction: column;
@@ -212,5 +248,8 @@ import { components } from '@/layouts/components'
     .country-item-value {
         display: flex;
         height: 30px;
+    }
+    .p-dialog-footer {
+        display: flex;
     }
 </style>

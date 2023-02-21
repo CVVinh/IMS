@@ -1,6 +1,6 @@
 <template>
     <Dialog
-        header="Add Group"
+        header="Thêm nhóm"
         :maximizable="true"
         :closable="false"
         position="center"
@@ -11,7 +11,7 @@
         <div class="form-layout">
             <div class="header-outside">
                 <div class="title">
-                    <h1>Add Group</h1>
+                    <h1>Thêm nhóm</h1>
                 </div>
             </div>
             <form class="form-addproject" @submit.prevent="submitGroup()">
@@ -21,7 +21,7 @@
                             'p-error': v$.formGroup.nameGroup.required.$invalid && isSubmit,
                             'input-title': true,
                         }"
-                        >Name Group<span style="color: red">*</span></label
+                        >Tên nhóm<span style="color: red">*</span></label
                     >
                     <InputText v-model="v$.formGroup.nameGroup.$model" class="input" />
                     <small class="p-error" v-if="v$.formGroup.nameGroup.required.$invalid && isSubmit">{{
@@ -30,13 +30,13 @@
                 </div>
 
                 <div class="input-layout">
-                    <label class="input-title">Desc </label>
+                    <label class="input-title">Mô tả </label>
                     <Textarea v-model="this.formGroup.discription" class="input" rows="5" />
                 </div>
                 <div class="group-button">
                     <div>
-                        <Button label="Save" type="submit" icon="pi pi-check" />{{ ' ' }}
-                        <Button label="Cancel" class="p-button-secondary" v-on:click="closeDialog()" />
+                        <Button label="Lưu" type="submit" icon="pi pi-check" />{{ ' ' }}
+                        <Button label="Hủy" class="p-button-secondary" v-on:click="closeDialog()" />
                     </div>
                 </div>
             </form>
@@ -71,8 +71,8 @@
                             if (res.status == 200) {
                                 this.$toast.add({
                                     severity: 'success',
-                                    summary: 'Successfull',
-                                    detail: 'Add group successfull!',
+                                    summary: 'Thành công',
+                                    detail: 'Thêm mới thành công!',
                                     life: 3000,
                                 })
                                 this.submited = true
@@ -84,9 +84,9 @@
                             if (err.response) {
                                 this.$toast.add({
                                     severity: 'error',
-                                    summary: 'Error',
+                                    summary: 'Lỗi',
                                     detail: (err.response.data = 'Ten nhom da ton tai'
-                                        ? 'This group is exist!'
+                                        ? 'Tên nhóm đã tồn tại!'
                                         : err.response.data),
                                     life: 3000,
                                 })

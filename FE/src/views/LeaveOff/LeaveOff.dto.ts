@@ -1,7 +1,7 @@
 export class LeaveOffDto {
     id: number
-    createTime: any
-    startTime: any
+    createTime: any = new Date()
+    startTime: any = new Date()
     endTime: string
     reasonNotAccept: string
     reason: string

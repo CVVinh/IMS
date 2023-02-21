@@ -25,7 +25,7 @@
                                     :ref="(e) => (objChange.dropdown.Project.Target = e)"
                                     @click="HandleDropdown('Project')"
                                 >
-                                    Projects
+                                    Dự án
                                 </a>
                                 <div
                                     :if="objChange.dropdown.Project.open"
@@ -41,18 +41,18 @@
                                                             class="fa-solid fa-house-user me-3"
                                                             style="font-size: 20px"
                                                         ></i>
-                                                        Projects
+                                                        Dự án
                                                         <span>(IMS)</span>
                                                     </a>
                                                     <div class="mt-1 project-options-task">
                                                         <div>
-                                                            <a class="btn"> Add task </a>
+                                                            <a class="btn"> Thêm dự án </a>
                                                         </div>
                                                         <div>
-                                                            <a class="btn"> Tasks</a>
+                                                            <a class="btn"> Dự án</a>
                                                         </div>
                                                         <div>
-                                                            <a class="btn"> Board</a>
+                                                            <a class="btn"> Bảng dự án</a>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -70,7 +70,7 @@
                                     :ref="(e) => (objChange.dropdown.Options.Target = e)"
                                     @click="HandleDropdown('Options')"
                                 >
-                                    Options
+                                    Tùy chọn
                                 </a>
                                 <div
                                     :if="objChange.dropdown.Options.open"
@@ -82,17 +82,17 @@
                                             <ul>
                                                 <li class="cursor-pointer">
                                                     <a class="qa-your-projects-link" @click="openDialogProject()"
-                                                        >Add project
+                                                        >Thêm dự án
                                                     </a>
                                                 </li>
                                                 <li class="cursor-pointer">
                                                     <a class="qa-your-projects-link" @click="openDialogUser()"
-                                                        >Add user
+                                                        >Thêm người dùng
                                                     </a>
                                                 </li>
                                                 <li class="cursor-pointer">
                                                     <a @click="clickAddTask()" class="qa-your-projects-link"
-                                                        >Add Task</a
+                                                        >Thêm công việc</a
                                                     >
                                                 </li>
                                             </ul>
@@ -108,7 +108,7 @@
                                     :ref="(e) => (objChange.dropdown.Wikis.Target = e)"
                                     @click="HandleDropdown('Wikis')"
                                 >
-                                    Wikis
+                                    Thông tin
                                 </a>
                             </li>
                         </ul>
@@ -336,7 +336,7 @@
                                     </li>
                                     <li class="divider"></li>
                                     <li class="cursor-pointer">
-                                        <a class="sign-out-link" @click="() => HandlerLogout()">Sign out</a>
+                                        <a class="sign-out-link" @click="() => HandlerLogout()">Đăng xuất</a>
                                     </li>
                                 </ul>
                             </div>
@@ -431,11 +431,11 @@
 
     const moreMenuItemsUser = ref([
         {
-            label: 'Update Profile',
+            label: 'Cập nhật tài khoản',
             path: '/profile',
         },
         {
-            label: 'Change Password',
+            label: 'Thay đổi mật khẩu',
             path: '/changepass',
         },
     ])

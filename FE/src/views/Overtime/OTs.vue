@@ -18,12 +18,12 @@
                 filterDisplay="menu"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 :rowsPerPageOptions="[5, 10, 25, 50]"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                 :globalFilterFields="[
                     'x.id',
                     'x.date',
                     'x.start',
-                    'x.end',  
+                    'x.end',
                     'x.realTime',
                     'x.status',
                     'x.description',
@@ -43,21 +43,33 @@
             >
                 <!-- Header -->
                 <template #header>
-                    <h5 style="color: white">OVERTIME LIST</h5>
+                    <h5 style="color: white">Danh sách tăng ca</h5>
                     <div class="flex align-items-center">
                         <div class="header-left">
-                            <Button @click="exportToExcel()" label="Export" icon="pi pi-file-excel" class="size__Button"
-                            v-if="showButton.ExportButton"
+                            <Button
+                                @click="exportToExcel()"
+                                label="Xuất Excel"
+                                icon="pi pi-file-excel"
+                                class="size__Button"
+                                v-if="showButton.ExportButton"
                             />
-                            <Button label="Add OT" icon="pi pi-plus" @click="add()" class="size__Button left" 
-                            v-if="showButton.addButton"
+                            <Button
+                                label="Thêm"
+                                icon="pi pi-plus"
+                                @click="add()"
+                                class="size__Button left"
+                                v-if="showButton.addButton"
                             />
-                            <Button label="Accept" icon="pi pi-check-square" @click="acceptMulti()" class="size__Button left"
-                            v-if="showButton.confirmButton"
+                            <Button
+                                label="Phê duyệt"
+                                icon="pi pi-check-square"
+                                @click="acceptMulti()"
+                                class="size__Button left"
+                                v-if="showButton.confirmButton"
                             />
                             <div class="p-input-icon-left left" style="display: inline">
                                 <i class="pi pi-search" />
-                                <InputText v-model="filters['global'].value" placeholder="Keyword Search"  />
+                                <InputText v-model="filters['global'].value" placeholder="Tìm kiếm" />
                             </div>
                         </div>
                         <div class="filter-pro">
@@ -75,9 +87,9 @@
                                     v-model="selectedMonth"
                                     :options="selectMonth"
                                     optionLabel="label"
-                                    placeholder="Select Month"
+                                    placeholder="Chọn tháng"
                                     :filter="true"
-                                    filterPlaceholder="Find Month"
+                                    filterPlaceholder="Tìm tháng"
                                     @change="filterByMonthAndProject()"
                                 />
                                 <Dropdown
@@ -85,9 +97,9 @@
                                     v-model="selectedProject"
                                     :options="selectProject"
                                     optionLabel="name"
-                                    placeholder="Select Project"
+                                    placeholder="Chọn dự án"
                                     :filter="true"
-                                    filterPlaceholder="Find Project"
+                                    filterPlaceholder="Tìm dự án"
                                     @change="filterByMonthAndProject()"
                                 />
                                 <MultiSelect
@@ -96,13 +108,13 @@
                                     :options="columns"
                                     optionLabel="header"
                                     @update:modelValue="onToggle"
-                                    placeholder="Select Columns"
+                                    placeholder="Chọn "
                                 />
                             </div>
                         </div>
                     </div>
                 </template>
-                <template #empty> No OT found. </template>
+                <template #empty> Không tìm thấy. </template>
 
                 <!-- Body -->
                 <Column selectionMode="multiple" headerStyle="width: 2rem"></Column>
@@ -111,41 +123,41 @@
                         {{ index + 1 }}
                     </template>
                 </Column>
-                <Column field="x.date" header="OT Date" sortable dataType="date" style="min-width: 7.5rem">
+                <Column field="x.date" header="Ngày tăng ca" sortable dataType="date" style="min-width: 7.5rem">
                     <template #body="{ data }">
-                        {{  getFormattedDate(new Date(data.x.date)) }}
+                        {{ getFormattedDate(new Date(data.x.date)) }}
                     </template>
                 </Column>
-                <Column field="x.user" header="OT User" sortable style="min-width: 4rem">
+                <Column field="x.user" header="Nhân viên tăng ca" sortable style="min-width: 4rem">
                     <template #body="{ data }">
                         {{ data.nameUser }}
                     </template>
                 </Column>
-                <Column field="x.leadCreate" header="Lead" sortable style="min-width: 6rem">
+                <Column field="x.leadCreate" header="Leader" sortable style="min-width: 6rem">
                     <template #body="{ data }">
                         {{ data.nameLead }}
                     </template>
                 </Column>
-               
-                <Column field="x.realTime" header="OT Time" sortable style="min-width: 8rem">
+
+                <Column field="x.realTime" header="Thời gian tăng ca" sortable style="min-width: 8rem">
                     <template #body="{ data }">
                         {{ data.x.realTime }}
                     </template>
                 </Column>
-                <Column field="x.start" header="Start Time" sortable style="min-width: 8rem">
+                <Column field="x.start" header="Thời gian bắt đầu" sortable style="min-width: 8rem">
                     <template #body="{ data }">
                         {{ data.x.start }}
                     </template>
                 </Column>
-                <Column field="x.end" header="End Time" sortable style="min-width: 8rem">
+                <Column field="x.end" header="Ngày kết thúc" sortable style="min-width: 8rem">
                     <template #body="{ data }">
                         {{ data.x.end }}
                     </template>
                 </Column>
-                
-                 <Column
+
+                <Column
                     field="x.description"
-                    header="Description"
+                    header="Mô tả"
                     sortable
                     :filterMenuStyle="{ width: '14rem' }"
                     style="min-width: 10rem; width: 10rem"
@@ -153,7 +165,7 @@
                     <template #body="{ data }">
                         {{ data.x.description }}
                     </template>
-                </Column> 
+                </Column>
                 <!-- <Column field="updateUser" header="Approved by" sortable style="min-width: 10rem">
                     <template #body="{ data }">
                         {{ data.x.updateUser }}
@@ -166,45 +178,62 @@
                     :header="col.header"
                     :key="col.field + '_' + index"
                 ></Column>
-                <Column field="x.idProject" header="Project" sortable style="min-width: 5rem">
+                <Column field="x.idProject" header="Dự án" sortable style="min-width: 5rem">
                     <template #body="{ data }">
                         {{ data.name }}
                     </template>
                 </Column>
-                <Column field="x.dateCreate" header="Create Date" sortable dataType="date" style="min-width: 9.5rem">
+                <Column field="x.dateCreate" header="Ngày tạo" sortable dataType="date" style="min-width: 9.5rem">
                     <template #body="{ data }">
                         {{ getFormattedDate(new Date(data.x.dateCreate)) }}
                     </template>
                 </Column>
-                <Column field="" header="Action" style="max-width: 12rem">
+                <Column field="" header="Thực thi" style="max-width: 12rem">
                     <template #body="{ data }">
-                        <div v-if="data.x.status == 0"> 
-                            <!-- confirm  -->
-                            <Edit icon="pi pi-check" @click="accept(true, data.x.id, data.x.leadCreate)" class="right" 
-                            v-if="showButton.confirmButton"
-                            /> 
-                            <!--  VIEW  -->
-                            <Button icon="pi pi-eye" @click="OpenDetailOT(data)" class="right top p-button-sm" 
-                            v-if="showButton.viewButton"
+                        <div v-if="data.x.status == 0 || this.token.IdGroup == 5">
+                            <!-- confirm -->
+                            <Edit
+                                icon="pi pi-check"
+                                @click="accept(true, data.x.id, data.x.leadCreate)"
+                                class="right p-button-success"
+                                v-if="showButton.confirmButton && data.x.status == 0"
                             />
-                            <!-- Edit  -->
-                            <Edit @click="EditData(data.x.id)" class="right top" 
-                            v-if="showButton.editButton"
-                            > </Edit>   
+                            <!--  VIEW  -->
+                            <Button
+                                icon="pi pi-eye"
+                                @click="OpenDetailOT(data)"
+                                class="right top p-button-sm"
+                                v-if="showButton.viewButton"
+                            />
+                            <!-- Edit -->
+                            <Edit
+                                @click="EditData(data.x.id)"
+                                class="right top p-button-warning"
+                                v-if="showButton.editButton"
+                            >
+                            </Edit>
                             <!-- Refuse   -->
-                            <Delete icon="pi pi-times" @click="accept(false, data.x.id, data.x.leadCreate)" :class=" showButton.refuseButton === true ? 'right top' : 'right'"
-                            v-if="showButton.refuseButton"
-                            /> 
+                            <Delete
+                                icon="pi pi-times"
+                                @click="accept(false, data.x.id, data.x.leadCreate)"
+                                :class="showButton.refuseButton === true ? 'right top' : 'right'"
+                                v-if="showButton.refuseButton && data.x.status == 0"
+                            />
                             <!--  Delete -->
-                            <Delete @click="confirmDelete(data.x.id, token)" class="right top"
-                            v-if="showButton.deleteButton"
+                            <Delete
+                                @click="confirmDelete(data.x.id, token)"
+                                class="right top"
+                                v-if="
+                                    (showButton.deleteButton && this.token.IdGroup == 5 && data.x.status == 1) ||
+                                    (showButton.deleteButton && this.token.IdGroup == 3 && data.x.status == 0)
+                                "
                             ></Delete>
                         </div>
                     </template>
                 </Column>
                 <Column
                     field="x.status"
-                    header="Status"
+                    header="Trạng thái"
                     sortable
                     :filterMenuStyle="{ width: '14rem' }"
                     style="min-width: 6rem"
@@ -216,17 +245,19 @@
             </DataTable>
         </div>
         <Dialog
-            header="Access is denied!"
+            header="Không có quyền truy cập !"
             :visible="displayDialog1"
             :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
             :style="{ width: '30vw' }"
             :modal="true"
             :closable="false"
         >
-            <p>You do not have permission to access this page!</p>
-            You will be redirected to the homepage in <strong>{{ num }}</strong> seconds!
+            <p>Bạn không có quyền truy cập !</p>
+            <medium
+                >Bạn sẽ được điều hướng vào trang chủ <strong>{{ num }}</strong> giây!</medium
+            >
             <template #footer>
-                <Button label="Yes" icon="pi pi-check" @click="submit" autofocus />
+                <Button label="Hoàn tất" icon="pi pi-check" @click="submit" autofocus />
             </template>
         </Dialog>
         <Dialog
@@ -237,16 +268,25 @@
             :modal="true"
         >
             <Textarea v-model="reason" style="margin: auto; width: 100%; height: 100%"></Textarea>
-            <p v-if="entered" class="p-error">Reason is required!</p>
+            <p v-if="entered" class="p-error">Lý do bắt buộc nhập!</p>
             <template #footer>
                 <Button label="No" icon="pi pi-times" @click="closeBasic" class="p-button-text" />
-                <Button label="Yes" icon="pi pi-check" @click="onSubmit(data.leadCreate)" autofocus />
+                <Button label="Hoàn tất" icon="pi pi-check" @click="onSubmit(data.leadCreate)" autofocus />
             </template>
         </Dialog>
-        <DetailOT :show="DetailOT" @open="OpenDetailOT" @close="CloseDetailOT" :OTS="ots"  :isPm="isPM" @reloadAPI="getAllOT"
-            @alert="showSuccess" :displayDialog2="displayDialog2" :id="id" :lead="lead" @OpenFormRefuse="OpenFormRefuse"
+        <DetailOT
+            :show="DetailOT"
+            @open="OpenDetailOT"
+            @close="CloseDetailOT"
+            :OTS="ots"
+            :isPm="isPM"
+            @reloadAPI="getAllOT"
+            @alert="showSuccess"
+            :displayDialog2="displayDialog2"
+            :id="id"
+            :lead="lead"
+            @OpenFormRefuse="OpenFormRefuse"
         />
-        
     </LayoutDefaultDynamic>
 </template>
 
@@ -254,7 +294,6 @@
     import Edit from '@/components/buttons/Edit.vue'
     import Export from '@/components/buttons/Export.vue'
     import router from '@/router/index'
-    import axios from 'axios'
     import { LocalStorage } from '@/helper/local-storage.helper'
     import { HTTP } from '@/http-common.js'
     import { FilterMatchMode } from 'primevue/api'
@@ -263,8 +302,8 @@
     import { UserRoleHelper } from '@/helper/user-role.helper'
     import { HttpStatus } from '@/config/app.config'
     import DetailOT from './DetailOT.vue'
-import { cloneVNode } from '@vue/runtime-core'
-import storeRole from '@/stores/role'
+    import { cloneVNode } from '@vue/runtime-core'
+    import storeRole from '@/stores/role'
     export default {
         name: 'ots',
         data() {
@@ -295,10 +334,10 @@ import storeRole from '@/stores/role'
                 id: '',
                 lead: '',
                 statuses: [
-                    { num: 0, text: 'Waiting' },
-                    { num: 1, text: 'Accepted' },
-                    { num: 2, text: 'Denied' },
-                    { num: 3, text: 'Deleted' },
+                    { num: 0, text: 'Đang chờ' },
+                    { num: 1, text: 'Đã duyệt' },
+                    { num: 2, text: 'Đã từ chối' },
+                    { num: 3, text: 'Đã xóa' },
                 ],
                 userInfo: [],
                 selectMonth: [],
@@ -307,42 +346,41 @@ import storeRole from '@/stores/role'
                 selectedProject: null,
                 //axios: 'http://api.imsdemo.tk/api/',
                 axios: import.meta.env.VITE_VUE_API_URL,
-                DetailOT : false,
-                ots : 0,
-                isPM : false,
-                showButton : {
-                    confirmButton : false,
-                    viewButton : false,
-                    editButton : false,
-                    refuseButton : false,
-                    deleteButton : false,
-                    addButton : false,
-                    allAcceptButton : false,
-                    ExportButton : false,
+                DetailOT: false,
+                ots: 0,
+                isPM: false,
+                showButton: {
+                    confirmButton: false,
+                    viewButton: false,
+                    editButton: false,
+                    refuseButton: false,
+                    deleteButton: false,
+                    addButton: false,
+                    allAcceptButton: false,
+                    ExportButton: false,
                 },
-                loading : true,
-                
+                loading: true,
             }
-
         },
         async mounted() {
             try {
                 this.token = LocalStorage.jwtDecodeToken()
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
                 if (await UserRoleHelper.isAccess) {
-                    
-                    HTTP.get("Project/getAllProject").then(res => {                    
-                            if (res.status === HttpStatus.OK){
-                                res.data.forEach((element) => {          
+                    HTTP.get('Project/getAllProject')
+                        .then((res) => {
+                            if (res.status === HttpStatus.OK) {
+                                res.data.forEach((element) => {
                                     this.proName[element.id] = element.name
                                     if (!element.isDeleted && !element.isFinished) {
                                         this.project.push(element)
                                         this.proPM[element.name] = element.userId
                                     }
                                 })
-                            }           
-                        }).catch(err=>{
-                            console.log(err);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
                         })
                     setTimeout(() => {
                         this.getAllOT()
@@ -352,65 +390,69 @@ import storeRole from '@/stores/role'
                     this.displayDialog1 = true
                 }
                 this.columns = [
-                    { field: 'dateUpdate', header: 'Approve Date' },
-                    { field: 'note', header: 'Note' },
+                    { field: 'dateUpdate', header: 'Ngày phê duyệt' },
+                    { field: 'note', header: 'Ghi chú' },
                 ]
                 this.getMonthFrom()
                 this.getProject()
             } catch (error) {
                 this.countTime()
                 this.displayDialog1 = true
-            }      
-            
+            }
         },
         methods: {
             // GET OTS BY ROLE PM
-            getOTsByPM(idPM){
+            getOTsByPM(idPM) {
+                console.log('pm')
                 HTTP.get(`OTs/getOTsByidPM/${idPM}`)
-                .then(res=>{
-                    this.data = res.data;
-                })
-                .catch(err=>console.log(err))
+                    .then((res) => {
+                        this.data = res.data
+                    })
+                    .catch((err) => console.log(err))
             },
             // GET OTS BY ROLE LEAD
-            getOTsByLead(idLEAD){
+            getOTsByLead(idLEAD) {
+                console.log('lead')
                 HTTP.get(`OTs/GetAllOTsByLead/${idLEAD}`)
-                .then(res=>{
-                    this.data = res.data;
-                })
-                .catch(err=>console.log(err))
+                    .then((res) => {
+                        this.data = res.data
+                    })
+                    .catch((err) => console.log(err))
             },
             // GET OTS BY ROLE STAFF
-            getOTsByStaff(idSTAFF){
+            getOTsByStaff(idSTAFF) {
+                console.log('staff')
                 HTTP.get(`OTs/GetAllOTsByStaff/${idSTAFF}`)
-                .then(res=>{
-                    this.data = res.data;
-                })
-                .catch(err=>console.log(err))
+                    .then((res) => {
+                        this.data = res.data
+                    })
+                    .catch((err) => console.log(err))
             },
             // GET OTS BY ROLE SAMPLE
-            getOTsBySample(){
-                HTTP.get("OTs/GetAllOTs")
-                .then(res=>{
-                    this.data = res.data;
-                }).catch(err=>console.log(err))
+            getOTsBySample() {
+                console.log('sample')
+                HTTP.get('OTs/GetAllOTs')
+                    .then((res) => {
+                        this.data = res.data
+                    })
+                    .catch((err) => console.log(err))
             },
 
             getFormattedDate(date) {
-                var year = date.getFullYear();
+                var year = date.getFullYear()
 
-                var month = (1 + date.getMonth()).toString();
-                month = month.length > 1 ? month : '0' + month;
+                var month = (1 + date.getMonth()).toString()
+                month = month.length > 1 ? month : '0' + month
 
-                var day = date.getDate().toString();
-                day = day.length > 1 ? day : '0' + day;
+                var day = date.getDate().toString()
+                day = day.length > 1 ? day : '0' + day
 
-                return day + '-' + month + '-' + year;
+                return day + '-' + month + '-' + year
             },
             acceptMulti() {
                 let bool = true
                 if (this.selectedOT == null) {
-                    this.showWarn('Please select an OT to Accept!')
+                    this.showWarn('Chọn một mục để phê duyệt!')
                     return
                 }
                 this.selectedOT.forEach((element) => {
@@ -422,7 +464,7 @@ import storeRole from '@/stores/role'
                     this.selectedOT.forEach((element) => {
                         this.accept(true, element.x.id, element.x.leadCreate)
                     })
-                } else this.showWarn("Can not accept OTs that don't have Waiting status!")
+                } else this.showWarn('Không thể phê duyệt mục không có trạng thái đang chờ!')
                 this.selectedOT = []
             },
             countTime() {
@@ -448,101 +490,56 @@ import storeRole from '@/stores/role'
                 })
             },
             async getAllOT() {
-                let Role = 0;
-                if(this.token){
-                    Role=  this.token.IdGroup;
-                }
-
-                if(storeRole.getters.getKey() === null){
-                    if(Role == 1) {
-                        storeRole.state.key === 'admin'
-                        this.showButton.ExportButton = true;
-                        this.showButton.confirmButton = true;
-                        this.showButton.editButton = true;
-                        this.showButton.addButton = true;
-                        this.showButton.allAcceptButton = true;
-                        this.showButton.deleteButton = true;
-                        this.showButton.viewButton = true;  
-                        this.showButton.refuseButton = true;
-                        this.getOTsByPM(this.token.Id)
-                    }
-                    if(Role == 2) {
-                        storeRole.state.key === 'sample'
-                        this.showButton.ExportButton = true;
-                        this.getOTsBySample()
-                    }
-                    if(Role == 3) {
-                        storeRole.state.key === 'lead'
-                        this.showButton.ExportButton = true;
-                        this.showButton.editButton = true;
-                        this.showButton.addButton = true;
-                        this.showButton.deleteButton = true;
-                        this.showButton.viewButton = true;  
-                        this.getOTsByLead(this.token.Id)
-                    }
-                    if(Role == 4) {
-                        storeRole.state.key === 'staff'
-                        this.showButton.viewButton = true;  
-                        this.getOTsByStaff(this.token.Id)
-                    }
-                    if(Role == 5) {
-                        storeRole.state.key === 'pm'
-                        this.showButton.ExportButton = true;
-                        this.showButton.confirmButton = true;
-                        this.showButton.allAcceptButton = true;
-                        this.showButton.viewButton = true;  
-                        this.showButton.refuseButton = true;
-                        this.isPM = true;
-                        this.getOTsByPM(this.token.Id)
-                    }
-                }else{
-                    if(storeRole.getters.getKey() == 'pm') {    
-                        this.getOTsByPM(this.token.Id)
-                        this.showButton.ExportButton = true;
-                        this.showButton.confirmButton = true;
-                        this.showButton.allAcceptButton = true;
-                        this.showButton.viewButton = true;  
-                        this.showButton.refuseButton = true;
-                        this.isPM = true;
-                        //console.log("pm");
-                    }
-                    if(storeRole.getters.getKey() == 'lead') {
-                        this.getOTsByLead(this.token.Id)
-                        this.showButton.ExportButton = true;
-                        this.showButton.editButton = true;
-                        this.showButton.addButton = true;
-                        this.showButton.deleteButton = true;
-                        this.showButton.viewButton = true; 
-                        //console.log("lead");
-                    }
-                    if(storeRole.getters.getKey() =='staff') {
-                        this.getOTsByStaff(this.token.Id)
-                        this.showButton.viewButton = true;  
-                        //console.log("staff");
-                    }
-                    if(storeRole.getters.getKey() =='sample') {
-                        //console.log("sample");
-                        this.showButton.ExportButton = true;
-
-                        this.getOTsBySample()
-                    }  
-                    if(storeRole.getters.getKey() =='admin') {
-                        this.showButton.ExportButton = true;
-                        this.showButton.confirmButton = true;
-                        this.showButton.editButton = true;
-                        this.showButton.addButton = true;
-                        this.showButton.allAcceptButton = true;
-                        this.showButton.deleteButton = true;
-                        this.showButton.viewButton = true;  
-                        this.showButton.refuseButton = true;
-                        this.getOTsBySample()
-                    } 
-                    
+                if (this.token) {
+                    this.CheckButtonGroup(this.token.IdGroup)
                 }
                 this.loading = false
-                this.CheckButtonFlowGroup(Role);
-
-               
+            },
+            CheckButtonGroup(value) {
+                console.log(value)
+                // 1 admin
+                if (value == 1) {
+                    this.showButton.ExportButton = true
+                    this.showButton.confirmButton = true
+                    this.showButton.editButton = true
+                    this.showButton.addButton = true
+                    this.showButton.allAcceptButton = true
+                    this.showButton.deleteButton = true
+                    this.showButton.viewButton = true
+                    this.showButton.refuseButton = true
+                    this.getOTsByPM(this.token.Id)
+                }
+                // 2 sample
+                if (value == 2) {
+                    this.showButton.ExportButton = true
+                    this.getOTsBySample()
+                }
+                // 3 lead
+                if (value == 3) {
+                    this.showButton.ExportButton = true
+                    this.showButton.editButton = true
+                    this.showButton.addButton = true
+                    this.showButton.deleteButton = true
+                    this.showButton.viewButton = true
+                    this.getOTsByLead(this.token.Id)
+                }
+                // 4 staff
+                if (value == 4) {
+                    this.getOTsByStaff(this.token.Id)
+                }
+                // 5 pm
+                if (value == 5) {
+                    this.showButton.ExportButton = true
+                    this.showButton.confirmButton = true
+                    this.showButton.allAcceptButton = true
+                    this.showButton.viewButton = true
+                    this.showButton.refuseButton = true
+                    this.showButton.editButton = true
+                    this.showButton.addButton = true
+                    this.showButton.deleteButton = true
+                    this.isPM = true
+                    this.getOTsByPM(this.token.Id)
+                }
             },
             getUsername(userId) {
                 if (userId && userId !== 0) {
@@ -559,7 +556,11 @@ import storeRole from '@/stores/role'
                 }
             },
             async getUserInfo() {
-                HTTP.get('Users/getInfo').then(res=>{this.userInfo = res.data}).catch(err=>console.log(err))
+                HTTP.get('Users/getInfo')
+                    .then((res) => {
+                        this.userInfo = res.data
+                    })
+                    .catch((err) => console.log(err))
             },
             async canEdit(status, token, lead) {
                 let user = this.getUsername(token.Id)
@@ -567,57 +568,17 @@ import storeRole from '@/stores/role'
                 if (lead != user || !(await UserRoleHelper.isLeader())) return true
                 return false
             },
-            CheckButtonFlowGroup(value){
-                if(value == 1) {       
-                        this.showButton.ExportButton = true;
-                        this.showButton.confirmButton = true;
-                        this.showButton.editButton = true;
-                        this.showButton.addButton = true;
-                        this.showButton.allAcceptButton = true;
-                        this.showButton.deleteButton = true;
-                        this.showButton.viewButton = true;  
-                        this.showButton.refuseButton = true;
-                        this.getOTsByPM(this.token.Id)
-                    }
-                    if(value == 2) {
-                      
-                        this.showButton.ExportButton = true;
-                        this.getOTsBySample()
-                    }
-                    if(value == 3) {
-                    
-                        this.showButton.ExportButton = true;
-                        this.showButton.editButton = true;
-                        this.showButton.addButton = true;
-                        this.showButton.deleteButton = true;
-                        this.showButton.viewButton = true;  
-                        this.getOTsByLead(this.token.Id)
-                    }
-                    if(value == 4) {
-                      
-                        this.showButton.viewButton = true;  
-                        this.getOTsByStaff(this.token.Id)
-                    }
-                    if(value == 5) {
-                        
-                        this.showButton.ExportButton = true;
-                        this.showButton.confirmButton = true;
-                        this.showButton.allAcceptButton = true;
-                        this.showButton.viewButton = true;  
-                        this.showButton.refuseButton = true;
-                        this.getOTsByPM(this.token.Id)
-                    }
-            },
+
             deleteData(id, token) {
                 HTTP.put('OTs/deleteOT?' + 'idOT=' + id + '&PM=' + token)
-                .then ((res) => {
-                    if (res.status == 200) {
-                        this.showSuccess("Xóa thẻ OTs thành công.");
-                    }
-                })
-                .catch((err) => {
-                    this.showWarn("Bạn không có quyền thực hiện thao tác xóa OT.")
-                })
+                    .then((res) => {
+                        if (res.status == 200) {
+                            this.showSuccess('Xóa thẻ OTs thành công.')
+                        }
+                    })
+                    .catch((err) => {
+                        this.showWarn('Bạn không có quyền thực hiện thao tác xóa OT.')
+                    })
             },
             EditData: (id) => {
                 router.push({ name: 'editOT', params: { id: id } })
@@ -633,8 +594,8 @@ import storeRole from '@/stores/role'
             },
             confirmDelete(id, token) {
                 this.$confirm.require({
-                    message: 'Do you want to delete this OT?',
-                    header: 'Delete Confirmation',
+                    message: 'Bạn có chắc chắn muốn xóa?',
+                    header: 'Xóa',
                     icon: 'pi pi-question-circle',
                     acceptClass: 'p-button-danger',
                     accept: () => {
@@ -649,37 +610,31 @@ import storeRole from '@/stores/role'
                 })
             },
             showSuccess(err) {
-                this.$toast.add({ severity: 'success', summary: 'Success Message', detail: err, life: 3000 })
+                this.$toast.add({ severity: 'success', summary: 'Thành công', detail: err, life: 3000 })
             },
             exportToExcel() {
-                var month = 0;
-                var year = 0;
-                var idProject = 0;
+                var month = 0
+                var year = 0
+                var idProject = 0
                 if (this.selectedMonth != null) {
-                    month = this.selectedMonth.month;
-                    year = this.selectedMonth.year;
+                    month = this.selectedMonth.month
+                    year = this.selectedMonth.year
                 }
-                if (this.selectedProject != null)
-                    idProject = this.selectedProject.code;
-                HTTP.get('OTs/exportExcel/month=' +
-                                month +
-                                '&year=' +
-                                year +
-                                '&idProject=' +
-                                idProject)
+                if (this.selectedProject != null) idProject = this.selectedProject.code
+                HTTP.get('OTs/exportExcel/month=' + month + '&year=' + year + '&idProject=' + idProject)
                     .then((res) => {
                         if (res.status == 200) {
                             this.$toast.add({
                                 severity: 'success',
-                                summary: 'Successfully',
-                                detail: 'File excel đã được lưu thành công.',
+                                summary: 'Thành công',
+                                detail: 'Xuất file excel thành công!',
                                 life: 3000,
                             })
                             window.location = res.data
                         }
                     })
                     .catch((err) => {
-                        this.showWarn('Bạn không có quyền thực hiện thao tác xuất file excel!'); 
+                        this.showWarn('Bạn không có quyền thực hiện thao tác xuất file excel!')
                     })
             },
             accept(accepted, id, lead) {
@@ -687,12 +642,14 @@ import storeRole from '@/stores/role'
                 this.PM = user.Id
                 if (accepted) {
                     this.status = 1
-                    HTTP.put('OTs/acceptOT', { id: id, status: this.status, pm: this.PM }).then(res=>{
-                        this.showSuccess()
-                    }).catch(err=>{
-                        console.log(err);
-                    })
-                   
+                    HTTP.put('OTs/acceptOT', { id: id, status: this.status, pm: this.PM })
+                        .then((res) => {
+                            this.showSuccess()
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+
                     setTimeout(() => {
                         this.getAllOT()
                     }, 500)
@@ -729,7 +686,7 @@ import storeRole from '@/stores/role'
                 this.selectedProject = null
             },
             showWarn(message) {
-                this.$toast.add({ severity: 'warn', summary: 'Warn Message', detail: message, life: 5000 })
+                this.$toast.add({ severity: 'warn', summary: 'Cảnh báo ', detail: message, life: 5000 })
             },
             getMonthFrom() {
                 const now = new Date()
@@ -746,33 +703,60 @@ import storeRole from '@/stores/role'
             },
             FilterbyMonth() {
                 this.selectedProject = null
-                HTTP.get('OTs/getOTByMonth/month=' +
-                            this.selectedMonth.month +
-                            '&year=' +
-                            this.selectedMonth.year)    .then((res) => {
-                        if (res.data) {
-                            this.data = res.data
-                            this.data.forEach((element) => {
-                                element.date = this.formatDate(element.date)
-                                element.dateCreate = this.formatDate(element.dateCreate)
-                                element.dateUpdate = this.formatDate(element.dateUpdate)
-                                setTimeout(() => {
-                                    element.user = this.getUsername(element.user)
-                                    element.leadCreate = this.getUsername(element.leadCreate)
-                                    element.updateUser = this.getUsername(element.updateUser)
-                                }, 100)
-                                element.idProject = this.proName.at(element.idProject)
-                            })
-                        }
-                    })
+                HTTP.get(
+                    'OTs/getOTByMonth/month=' + this.selectedMonth.month + '&year=' + this.selectedMonth.year,
+                ).then((res) => {
+                    if (res.data) {
+                        this.data = res.data
+                        this.data.forEach((element) => {
+                            element.date = this.formatDate(element.date)
+                            element.dateCreate = this.formatDate(element.dateCreate)
+                            element.dateUpdate = this.formatDate(element.dateUpdate)
+                            setTimeout(() => {
+                                element.user = this.getUsername(element.user)
+                                element.leadCreate = this.getUsername(element.leadCreate)
+                                element.updateUser = this.getUsername(element.updateUser)
+                            }, 100)
+                            element.idProject = this.proName.at(element.idProject)
+                        })
+                    }
+                })
             },
             FilterbyProject() {
                 this.selectedMonth = null
                 HTTP.get('OTs/getOTByProject/' + this.selectedProject.code).then((res) => {
+                    if (res.data) {
+                        this.data = res.data
+                        this.data.forEach((element) => {
+                            element.date = this.formatDate(element.x.date)
+                            element.x.dateCreate = this.formatDate(element.x.dateCreate)
+                            element.x.dateUpdate = this.formatDate(element.x.dateUpdate)
+                            setTimeout(() => {
+                                element.x.user = this.getUsername(element.x.user)
+                                element.x.leadCreate = this.getUsername(element.x.leadCreate)
+                                element.x.updateUser = this.getUsername(element.x.updateUser)
+                            }, 100)
+                            element.x.idProject = this.proName.at(element.x.idProject)
+                        })
+                    }
+                })
+            },
+            filterByMonthAndProject() {
+                if (this.selectedMonth == null) this.FilterbyProject()
+                else if (this.selectedProject == null) this.FilterbyMonth()
+                else {
+                    HTTP.get(
+                        'OTs/GetByMonthAndProject/month=' +
+                            this.selectedMonth.month +
+                            '&year=' +
+                            this.selectedMonth.year +
+                            '&idProject=' +
+                            this.selectedProject.code,
+                    ).then((res) => {
                         if (res.data) {
                             this.data = res.data
                             this.data.forEach((element) => {
-                                element.date = this.formatDate(element.x.date)
+                                element.x.date = this.formatDate(element.x.date)
                                 element.x.dateCreate = this.formatDate(element.x.dateCreate)
                                 element.x.dateUpdate = this.formatDate(element.x.dateUpdate)
                                 setTimeout(() => {
@@ -784,58 +768,34 @@ import storeRole from '@/stores/role'
                             })
                         }
                     })
-            },
-            filterByMonthAndProject() {
-                if (this.selectedMonth == null) this.FilterbyProject()
-                else if (this.selectedProject == null) this.FilterbyMonth()
-                else {
-                    HTTP.get('OTs/GetByMonthAndProject/month=' +
-                                this.selectedMonth.month +
-                                '&year=' +
-                                this.selectedMonth.year +
-                                '&idProject=' +
-                                this.selectedProject.code).then((res) => {
-                            if (res.data) {
-                                this.data = res.data
-                                this.data.forEach((element) => {
-                                    element.x.date = this.formatDate(element.x.date)
-                                    element.x.dateCreate = this.formatDate(element.x.dateCreate)
-                                    element.x.dateUpdate = this.formatDate(element.x.dateUpdate)
-                                    setTimeout(() => {
-                                        element.x.user = this.getUsername(element.x.user)
-                                        element.x.leadCreate = this.getUsername(element.x.leadCreate)
-                                        element.x.updateUser = this.getUsername(element.x.updateUser)
-                                    }, 100)
-                                    element.x.idProject = this.proName.at(element.x.idProject)
-                                })
-                            }
-                        })           
                 }
             },
             getProject() {
-                HTTP.get("Project/getAllProject").then(res=>{
-                if (res.data) {
+                HTTP.get('Project/getAllProject')
+                    .then((res) => {
+                        if (res.data) {
                             res.data.forEach((element) => {
                                 this.selectProject.push({ code: element.id, name: element.name })
                             })
                         }
-            }).catch(err=>{
-                console.log(err)
-            })
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
             },
             OpenDetailOT(id) {
-                this.DetailOT = true;
+                this.DetailOT = true
                 this.ots = id
             },
-            CloseDetailOT () {
-                this.DetailOT = false;
+            CloseDetailOT() {
+                this.DetailOT = false
             },
-            OpenFormRefuse(){
-                this.displayDialog2 = true;
-            }
-
-
-            
+            OpenFormRefuse() {
+                this.displayDialog2 = true
+            },
+            OpenFormRefuse() {
+                this.displayDialog2 = true
+            },
         },
         components: { Edit, Delete, Export, DetailOT },
     }
@@ -948,7 +908,7 @@ import storeRole from '@/stores/role'
         height: 40px;
         position: static;
     }
-    ::v-deep(.p-inputtext.p-component){
+    ::v-deep(.p-inputtext.p-component) {
         height: 38px;
     }
     .p-button-outlined {
@@ -980,18 +940,18 @@ import storeRole from '@/stores/role'
         width: max-content;
     }
 
-    .right{
+    .right {
         margin-right: 10px;
     }
     .left {
         margin-left: 10px;
     }
 
-    .size__Button{
+    .size__Button {
         padding: 0.4rem;
         font-size: 14px;
     }
-    .top{
-        margin-top:6.5px;
+    .top {
+        margin-top: 6.5px;
     }
 </style>

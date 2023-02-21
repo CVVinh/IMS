@@ -2,9 +2,6 @@
     <LayoutDefaultDynamic>
         <ConfirmDialog></ConfirmDialog>
         <Toast position="top-right" />
-        <div class="mx-4">
-            <Breadcrumb :home="timeSheet" :model="itemsTimeSheet" />
-        </div>
         <div class="mx-4 mt-3">
             <div v-if="filteredArr.length > 0">
                 <Card style="width: 100%; margin-bottom: 2em; background-color: #d3d3d382">
@@ -18,7 +15,7 @@
                             responsiveLayout="scroll"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                             :rowsPerPageOptions="[5, 10, 15, 30]"
-                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                            currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                         >
                             <template #header>
                                 <div class="d-flex justify-content-between">
@@ -28,7 +25,7 @@
                                             :options="arr"
                                             optionLabel="name"
                                             :filter="true"
-                                            placeholder="Select a Project"
+                                            placeholder="Nhập dự án"
                                             :showClear="true"
                                         >
                                         </Dropdown>
@@ -40,11 +37,11 @@
                                         ></Button>
                                     </div>
                                     <div class="d-flex align-items-center">
-                                        <span class="me-1">Start Date</span>
+                                        <span class="me-1">Ngày bắt đầu</span>
                                         <div class="me-3">
                                             <InputText type="date" v-model="startDate" />
                                         </div>
-                                        <span class="me-1">End Date</span>
+                                        <span class="me-1">Ngày kết thúc</span>
                                         <div class="me-2">
                                             <InputText type="date" v-model="endDate" />
                                         </div>
@@ -58,28 +55,28 @@
                                     </div>
                                 </div>
                             </template>
-                            <template #empty> No project found. </template>
+                            <template #empty> Không tìm thấy. </template>
                             <template #loading>
                                 <ProgressSpinner />
                             </template>
                             <div>
-                                <Column field="taskName" header="Task">
+                                <Column field="taskName" header="Công việc">
                                     <template #body="{ data }">
                                         {{ data.title }}
                                     </template>
                                 </Column>
-                                <Column field="status" header="Status">
+                                <Column field="status" header="Trạng thái">
                                     <template #body="{ data }"> {{ data.state }} </template>
                                 </Column>
-                                <Column field="estimate" header="Time Estimate">
+                                <Column field="estimate" header="Thời gian dự kiến">
                                     <template #body="{ data }"> {{ data.time_stats.time_estimate / 3600 }}h </template>
                                 </Column>
-                                <Column field="spent" header="Time Spent">
+                                <Column field="spent" header="Thời gian hoàn thành">
                                     <template #body="{ data }">
                                         {{ data.time_stats.total_time_spent / 3600 }}h
                                     </template>
                                 </Column>
-                                <Column field="dueDate" header="Due Date">
+                                <Column field="dueDate" header="Ngày hết hạn ">
                                     <template #body="{ data }"> {{ data.due_date }}</template>
                                 </Column>
                             </div>
@@ -99,7 +96,7 @@
                             responsiveLayout="scroll"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                             :rowsPerPageOptions="[5, 10, 15, 30]"
-                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                            currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                         >
                             <template #header>
                                 <div class="d-flex justify-content-between">
@@ -109,7 +106,7 @@
                                             :options="arr"
                                             optionLabel="name"
                                             :filter="true"
-                                            placeholder="Select a Project"
+                                            placeholder="Nhập dự án"
                                             :showClear="true"
                                         >
                                         </Dropdown>
@@ -121,11 +118,11 @@
                                         ></Button>
                                     </div>
                                     <div class="d-flex align-items-center">
-                                        <span class="me-1">Start Date</span>
+                                        <span class="me-1">Ngày bắt đầu</span>
                                         <div class="me-3">
                                             <InputText type="date" v-model="startDate" />
                                         </div>
-                                        <span class="me-1">End Date</span>
+                                        <span class="me-1">Ngày kết thúc</span>
                                         <div class="me-2">
                                             <InputText type="date" v-model="endDate" />
                                         </div>
@@ -139,28 +136,28 @@
                                     </div>
                                 </div>
                             </template>
-                            <template #empty> No project found. </template>
+                            <template #empty> Không tìm thấy. </template>
                             <template #loading>
                                 <ProgressSpinner />
                             </template>
                             <div>
-                                <Column field="taskName" header="Task">
+                                <Column field="taskName" header="Công việc">
                                     <template #body="{ data }">
                                         {{ data.title }}
                                     </template>
                                 </Column>
-                                <Column field="status" header="Status">
+                                <Column field="status" header="Trạng thái">
                                     <template #body="{ data }"> {{ data.state }} </template>
                                 </Column>
-                                <Column field="estimate" header="Time Estimate">
+                                <Column field="estimate" header="Thời gian dự kiến">
                                     <template #body="{ data }"> {{ data.time_stats.time_estimate / 3600 }}h </template>
                                 </Column>
-                                <Column field="spent" header="Time Spent">
+                                <Column field="spent" header="Thời gian hoàn thành">
                                     <template #body="{ data }">
                                         {{ data.time_stats.total_time_spent / 3600 }}h
                                     </template>
                                 </Column>
-                                <Column field="dueDate" header="Due Date">
+                                <Column field="dueDate" header="Ngày hết hạn">
                                     <template #body="{ data }"> {{ data.due_date }}</template>
                                 </Column>
                             </div>
@@ -170,17 +167,19 @@
             </div>
         </div>
         <Dialog
-            header="Access is denied!"
+            header="Không có quyền truy cập !"
             :visible="displayBasic"
             :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
             :style="{ width: '30vw' }"
             :modal="true"
             :closable="false"
         >
-            <p>You do not have permission to access this page!</p>
-            You will be redirected to the homepage in <strong>{{ num }}</strong> seconds!
+            <p>Bạn không có quyền truy cập !</p>
+            <medium
+                >Bạn sẽ được điều hướng vào trang chủ <strong>{{ num }}</strong> giây!</medium
+            >
             <template #footer>
-                <Button label="Yes" icon="pi pi-check" @click="submit" autofocus />
+                <Button label="Hoàn tất" icon="pi pi-check" @click="submit" autofocus />
             </template>
         </Dialog>
         <DialogAddEdit
@@ -239,8 +238,8 @@
                 if (startDate > endDate) {
                     this.$toast.add({
                         severity: 'error',
-                        summary: 'error',
-                        detail: 'End date need to be bigger than start date !',
+                        summary: 'Lỗi',
+                        detail: 'Ngày kết thúc phải lớn hơn ngày bắt đầu !',
                         life: 3000,
                     })
                     return true
