@@ -57,7 +57,7 @@
                 </div>
                 <div class="form-group">
                     <div class="button-group">
-                        <Button id="btn-add" label="Hoàn tất" @click="editTask()" />
+                        <Button id="btn-add" label="Lưu" @click="editTask()" />
                         <Button id="btn-cancel" label="Hủy" class="p-button-secondary" @click="backToTasksPage()" />
                     </div>
                 </div>

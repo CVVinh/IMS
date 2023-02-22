@@ -55,14 +55,13 @@
                     </template>
                 </Column>
                 <Column field="note" header="Ghi chú">
-                    <template #body="{ data }">
-                        {{ data.note }}
-                    </template>
+                    <template #body="{ data }"> {{ data.note }}</template>
                 </Column>
                 <Column header="Thực thi" style="min-width: 10rem">
                     <template #body="{ data }">
                         <!-- <Edit :disabled="data.isDeleted" /> -->
                         <UpdateModuleVue
+                            class="update-module"
                             :checkEdit="checkEdit(data.isDeleted)"
                             :module="data"
                             @render="getAllModules"
@@ -85,6 +84,7 @@
     import jwtDecode from 'jwt-decode'
     import AddModulesVue from './AddModule.vue'
     import UpdateModuleVue from './UpdateModule.vue'
+    import { warn } from 'vue'
     export default {
         data() {
             return {
@@ -169,6 +169,15 @@
         },
     }
 </script>
+
+<style>
+    .update-module > button {
+        background: red;
+        color: #ffffff;
+        background: #f59e0b;
+        border: 1px solid #f59e0b;
+    }
+</style>
 
 <style lang="scss" scoped>
     .header-left {

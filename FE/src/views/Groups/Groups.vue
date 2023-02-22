@@ -68,7 +68,7 @@
                 <Column header="Thực thi" style="min-width: 10rem">
                     <template #body="{ data }">
                         <!-- <Edit :disabled="data.isDeleted" /> -->
-                        <Edit @click="showEditGroup(data)" :disabled="data.isDeleted" />
+                        <Edit class="p-button-warning" @click="showEditGroup(data)" :disabled="data.isDeleted" />
                         &nbsp;
                         <Delete @click="confirmDelete(data.id)" :disabled="data.isDeleted" />
                     </template>

@@ -121,13 +121,22 @@
                             {{ data.isPaid == true ? 'Đã Thanh Toán' : 'Chưa Thanh Toán' }}
                         </template>
                     </Column>
+                    <Column field="image" header="Hình ảnh">
+                        <template #body="{ data }">
+                            <Button
+                                class="p-button-raised p-button-info p-button-text"
+                                @click="openDetails(data.paidImages)"
+                                label="Chi Tiết"
+                            />
+                        </template>
+                    </Column>
                     <Column header="Thực thi">
                         <template #body="{ data }">
                             <!--
                             <button class="btn btn-warning me-2" @click="Openeditmodal(data.id)" :disabled=data.isPaid>Edit</button>
                             <button class="btn btn-danger" @click="Delete(data.id)">Delete</button>
                             -->
-                            <Edit @click="Openeditmodal(data.id)" :disabled="data.isPaid" class="me-2" />
+                            <Edit @click="Openeditmodal(data)" :disabled="data.isPaid" class="me-2" />
 
                             <Delete @click="Delete(data.id)" :disabled="data.isPaid" />
                         </template>
@@ -181,9 +190,6 @@
                                 >
                                     <span class="pi pi-sync p-button-icon" style="font-size: 23px"></span
                                 ></Button>
-                                <!--
-                                <button type="button" class="btn btn-dark" @click="Reload()">Reload</button>
-                                -->
                             </div>
                         </div>
                     </template>
@@ -248,12 +254,17 @@
                             {{ data.isPaid == true ? 'Đã Thanh Toán' : 'Chưa Thanh Toán' }}
                         </template>
                     </Column>
+                    <Column field="image" header="Hình ảnh">
+                        <template #body="{ data }">
+                            <Button
+                                label="Chi tiết"
+                                class="p-button-raised p-button-info p-button-text"
+                                @click="openDetails(data.paidImages)"
+                            />
+                        </template>
+                    </Column>
                     <Column header="Action">
                         <template #body="{ data }">
-                            <!--
-                            <button class="btn btn-warning me-2" @click="Openeditmodal(data.id)" :disabled=data.isPaid>Edit</button>
-                            <button class="btn btn-danger" @click="Delete(data.id)">Delete</button>
-                            -->
                             <Edit @click="Openeditmodal(data.id)" :disabled="data.isPaid" class="me-2" />
 
                             <Delete @click="Delete(data.id)" />
@@ -261,26 +272,43 @@
                     </Column>
                 </DataTable>
             </div>
+
             <AddPaid
                 :status="openStatus"
                 @closemodal="Closemodal"
-                @failed="showError1"
-                @success="showSuccess1"
                 :optionmodule="OptionModule"
-                @reloadpage="getPaidReload"
-                @getPaid="getPaidReload"
-                @reloadpageother = "ReloadgetPaidByIdUser(this.token.Id)"
+                @reloadpage="getData"
             />
+
             <EditPaid
                 :status="openStatusEdit"
                 @closemodal="closeeditmodal"
-                @failed="showError2"
-                @success="showSuccess2"
                 :dataedit="editdata"
                 :optionmodule="OptionModule"
-                @reloadpage="getPaidReload"
-                @reloadpageother = "ReloadgetPaidByIdUser(this.token.Id)"
+                @reloadpage="getData"
             />
+
+            <Dialog
+                header="Hình ảnh hóa đơn"
+                v-model:visible="displayImage"
+                :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
+                :style="{ width: '50vw' }"
+                :maximizable="true"
+                :modal="true"
+            >
+                <!-- <img v-bind:src="paidImage" width="100%" /> -->
+                <div v-if="paidImage.length > 0">
+                    <div v-for="(item, index) in paidImage" :key="index" class="mb-2">
+                        <Image v-bind:src="item.imagePath" alt="Image" width="100" preview />
+                    </div>
+                </div>
+                <div v-else>
+                    <h3>Không có hình ảnh để hiển thị</h3>
+                </div>
+                <template #footer>
+                    <button class="btn btn-secondary" @click="closeDetails()">Huỷ</button>
+                </template>
+            </Dialog>
             <Toast />
         </div>
     </LayoutDefaultDynamic>
@@ -295,8 +323,10 @@
     import LayoutDefaultDynamic from '../../layouts/LayoutDefault/LayoutDefaultDynamic.vue'
     import AddPaid from './addPaid.vue'
     import EditPaid from './editPaid.vue'
-import { LocalStorage } from '@/helper/local-storage.helper'
-import { UserRoleHelper } from '@/helper/user-role.helper'
+    import { LocalStorage } from '@/helper/local-storage.helper'
+    import { UserRoleHelper } from '@/helper/user-role.helper'
+    import router from '@/router'
+    
     export default {
         data() {
             return {
@@ -322,38 +352,44 @@ import { UserRoleHelper } from '@/helper/user-role.helper'
                 filterStartDate: null,
                 filterEndDate: null,
                 filterArr: [],
-                token : null,
-                //timeSheet: { label: 'Report', icon: 'me-1 bx bx-spreadsheet' },
-                //itemsTimeSheet: [{ label: 'Paid', to: '/Paid' }],
+                token: null,
+                displayImage: false,
+                paidImage: null,
             }
         },
+
         async mounted() {
-            try
-            {
-                this.token = LocalStorage.jwtDecodeToken();
-                await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
-                if(UserRoleHelper.isAccess){
-                    // getAPI (Sample) || (Admin)
-                    if(Number(this.token.IdGroup) === 2 || Number(this.token.IdGroup) === 1){
-                        this.getPaid()
-                        console.log('sample or admin');
-                    }
-                    // getAPI tất cả role còn lại
-                    if(Number(this.token.IdGroup) !== 2 && Number(this.token.IdGroup) !== 1){
-                        this.getPaidByIdUser(this.token.Id)
-                    }
-                }else{
-                    alert("Bạn không có quyền truy cập module này")
-                }
-                await this.getAllProject()
-            }
-            catch(err)
-            {
-                console.log(err);
-            }
-            
+            await this.getData();
         },
+
         methods: {
+            async getData() {
+                try {
+                    this.token = LocalStorage.jwtDecodeToken()
+                    await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
+                    this.paids = [];
+                    if (UserRoleHelper.isAccess) {
+                        // getAPI (Sample) || (Admin)
+                        if (Number(this.token.IdGroup) === 2 || Number(this.token.IdGroup) === 1) {
+                            this.getPaid()
+                        }
+                        // getAPI tất cả role còn lại
+                        if (Number(this.token.IdGroup) !== 2 && Number(this.token.IdGroup) !== 1) {
+                            this.getPaidByIdUser(this.token.Id)
+                        }
+                        await this.getAllProject()
+                    }else{
+                        alert("Bạn không có quyền truy cập module này")
+                        router.push('/')
+                    }
+                }
+                catch(err)
+                {
+                    router.push('/')
+                    console.log(err);
+                }
+            },
+
             Openmodal() {
                 this.openStatus = true
             },
@@ -361,29 +397,26 @@ import { UserRoleHelper } from '@/helper/user-role.helper'
             Closemodal() {
                 this.openStatus = false
             },
+
             Openeditmodal(id) {
                 this.openStatusEdit = true
                 this.editdata = id
             },
 
             closeeditmodal() {
-                this.openStatusEdit = false
+                this.openStatusEdit = false               
             },
+
             DeletePaid(id) {
-                HTTP.delete('Paid?id=' + id).then((res) => {
-                    console.log(res)
-                    this.$toast.add({
-                        severity: 'success',
-                        summary: 'Thành công',
-                        detail: 'Xóa thành công!',
-                        life: 3000,
-                    })
-                    window.location.reload()
+                HTTP.delete('Paid?id=' + id).then((res) => {                    
+                    this.getData();
+                    this.showSuccess('Xóa thành công!');
                 })
             },
+
             Delete(id) {
                 this.$confirm.require({
-                    message: 'Bạn có chắc chắn muốn xóa?',
+                    message: 'Bạn có chắc chắn muốn xóa? ' + id,
                     header: 'Xóa',
                     icon: 'pi pi-info-circle',
                     acceptClass: 'p-button-danger',
@@ -397,159 +430,44 @@ import { UserRoleHelper } from '@/helper/user-role.helper'
             },
 
             async getAllProject() {
-                HTTP.get('Project/getProjectOnGitlab').then((res) => {
-                    if (res.data) {
-                        const result = res.data
+                HTTP.get('Project/getAllProject')
+                    .then((res) => {
                         this.OptionModule = res.data
-                    }
-                    this.loading = false
-                })
-            },
-
-            async ReloadgetPaidByIdUser(iduser){
-                this.paids = [];
-                try {
-                    await HTTP.get(`Paid/GetByUserId?id=${iduser}`).then(res=>{
-                    res.data._Data.forEach(ele=>{
-                        this.paids.push({
-                                id: ele.id,
-                                amountPaid: ele.amountPaid,
-                                customerName: ele.customerName,
-                                isPaid: ele.isPaid,
-                                paidDate: ele.paidDate,
-                                paidPerson: ele.paidPerson,
-                                paidReason: ele.paidReason,
-                                projectId: ele.projectId,
-                                project: null,
-                                user: null,
-                                nameProject: null,
-                                paidPersonName: null,
-                            })
-                        })
-                      
-                    }).catch(err=>console.log(err))
-                    await this.getWithName()
-                    this.loading = false
-                } catch(err){
-                    console.log('something went wrong');
-                }
-            },
-
-            async getPaidByIdUser(iduser){
-                try {
-                    await HTTP.get(`Paid/GetByUserId?id=${iduser}`).then(res=>{
-                    res.data._Data.forEach(ele=>{
-                        this.paids.push({
-                                id: ele.id,
-                                amountPaid: ele.amountPaid,
-                                customerName: ele.customerName,
-                                isPaid: ele.isPaid,
-                                paidDate: ele.paidDate,
-                                paidPerson: ele.paidPerson,
-                                paidReason: ele.paidReason,
-                                projectId: ele.projectId,
-                                project: null,
-                                user: null,
-                                nameProject: null,
-                                paidPersonName: null,
-                            })
-                        })
-                      
-                    }).catch(err=>console.log(err))
-                    await this.getWithName()
-                    this.loading = false
-                } catch(err){
-                    console.log('something went wrong');
-                }
-            },
-            async getPaidReload (){
-                this.paids = [];
-                this.loading = true
-                await HTTP.get(GET_LIST_PAID)
-                    .then((respone) => {
-                        respone.data._Data.forEach((el) => {
-                            this.paids.push({
-                                id: el.id,
-                                amountPaid: el.amountPaid,
-                                customerName: el.customerName,
-                                isPaid: el.isPaid,
-                                paidDate: el.paidDate,
-                                paidPerson: el.paidPerson,
-                                paidReason: el.paidReason,
-                                projectId: el.projectId,
-                                project: null,
-                                user: null,
-                                nameProject: null,
-                                paidPersonName: null,
-                            })
-                        })
-                        console.log(res.data._Data);
-                    })         
+                    })
                     .catch((error) => {
                         console.log(error)
                     })
-                await this.getWithName()
-                this.loading = false
             },
-            async getPaid() {
-                this.loading = true
-                await HTTP.get(GET_LIST_PAID)
-                    .then((respone) => {
-                        respone.data._Data.forEach((el) => {
-                            this.paids.push({
-                                id: el.id,
-                                amountPaid: el.amountPaid,
-                                customerName: el.customerName,
-                                isPaid: el.isPaid,
-                                paidDate: el.paidDate,
-                                paidPerson: el.paidPerson,
-                                paidReason: el.paidReason,
-                                projectId: el.projectId,
-                                project: null,
-                                user: null,
-                                nameProject: null,
-                                paidPersonName: null,
+
+            async getPaidByIdUser(iduser) {
+                try {
+                    await HTTP.get(`Paid/GetByUserId?id=${iduser}`)
+                        .then((res) => {
+                            res.data._Data.forEach((ele) => {
+                                this.paids = res.data._Data;
                             })
                         })
-                        console.log(res.data._Data);
-                    })         
-                    .catch((error) => {
-                        console.log(error)
-                    })
-                await this.getWithName()
-                this.loading = false
+                        .catch((err) => console.log(err))
+                    await this.getWithName()
+                    this.loading = false
+                } catch (err) {
+                    console.log('something went wrong')
+                }
             },
-
-
 
             async getPaid() {
                 this.loading = true
                 await HTTP.get(GET_LIST_PAID)
                     .then((respone) => {
-                        respone.data._Data.forEach((el) => {
-                            this.paids.push({
-                                id: el.id,
-                                amountPaid: el.amountPaid,
-                                customerName: el.customerName,
-                                isPaid: el.isPaid,
-                                paidDate: el.paidDate,
-                                paidPerson: el.paidPerson,
-                                paidReason: el.paidReason,
-                                projectId: el.projectId,
-                                project: null,
-                                user: null,
-                                nameProject: null,
-                                paidPersonName: null,
-                            })
-                        })
-                        console.log(res.data._Data);
-                    })         
+                        this.paids = respone.data._Data;
+                    })
                     .catch((error) => {
                         console.log(error)
                     })
                 await this.getWithName()
                 this.loading = false
             },
+            
             getProjects(id) {
                 return HTTP_LOCAL.get(GET_PROJECT_BY_ID(id)).then((respone) => respone.data)
             },
@@ -557,7 +475,7 @@ import { UserRoleHelper } from '@/helper/user-role.helper'
                 return HTTP_LOCAL.get(GET_USER_BY_ID(id)).then((respone) => respone.data)
             },
             async getWithName() {
-                for (let i = 0; i < this.paids.length; i++) {   
+                for (let i = 0; i < this.paids.length; i++) {
                     var project = await this.getProjects(this.paids[i].projectId)
                     var user = await this.getUsers(this.paids[i].paidPerson)
                     this.paids[i].project = project
@@ -566,10 +484,12 @@ import { UserRoleHelper } from '@/helper/user-role.helper'
                     this.paids[i].paidPersonName = user.fullName
                 }
             },
+
             formatDate(date) {
                 var dateFormat = new Date(date)
                 return dayjs(dateFormat).format('DD/MM/YYYY')
             },
+
             async filterWithDate(startDate, endDate) {
                 this.filterArr = await this.paids.filter((el) => {
                     return (
@@ -578,76 +498,45 @@ import { UserRoleHelper } from '@/helper/user-role.helper'
                     )
                 })
                 if (this.filterArr.length > 0) {
-                    console.log(this.filterArr)
-                    this.$toast.add({
-                        severity: 'success',
-                        summary: 'Thành công',
-                        detail: 'Lọc thành công',
-                        life: 3000,
-                    })
+                    this.showSuccess("Lọc thành công");
                     return this.filterArr
-                } else {
-                    console.log('no record')
-                    return this.$toast.add({
-                        severity: 'info',
-                        summary: 'Thông tin',
-                        detail: 'Không tìm thấy',
-                        life: 3000,
-                    })
+                } 
+                else {
+                    return this.showInfo("Không tìm thấy dữ liệu");
                 }
             },
+
             reload() {
-                this.loading = true
                 this.paids = []
                 this.filterArr = []
                 this.getPaid()
             },
-            showError() {
-                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: 'Lỗi', life: 3000 })
-            },
-            showSuccess1() {
-                this.$toast.add({
-                    severity: 'success',
-                    summary: 'Thành công',
-                    detail: 'Thêm mới thành công!',
-                    life: 3000,
-                })
-            },
-            showError1() {
-                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: 'Thêm mới lỗi!', life: 3000 })
-            },
-            showSuccess2() {
-                this.$toast.add({ severity: 'success', summary: 'Thành công', detail: 'Sửa thành công!', life: 3000 })
-            },
-            showError2() {
-                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: 'Sửa Lỗi!', life: 3000 })
-            },
-            showSuccess3() {
-                this.$toast.add({
-                    severity: 'success',
-                    summary: 'Thành công',
-                    detail: 'Xóa thành công!',
-                    life: 3000,
-                })
+            
+            showError(message) {
+                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: message, life: 3000 })
             },
 
-            async handlerReload() {
-                alert()
-                this.loading = true
-                this.paids = []
-                //this.fillterLeaveOff.searchLeaveOff = ''
-                filterModel.value = ''
-                //this.fillterLeaveOff.selectedDate = null
-                //this.fillterLeaveOff.selectedLeaveOff = []
-                //await this.getAllLeaveOffRegister()
-                await this.getPaid()
+            showSuccess(message) {
+                this.$toast.add({ severity: 'success', summary: 'Thành công', detail: message, life: 3000 })
             },
+
+            showInfo(message) {
+                this.$toast.add({ severity: 'info', summary: 'Thông báo', detail: message, life: 3000 })
+            },
+
             dateToYMD(end_date) {
                 var ed = new Date(end_date)
                 var d = ed.getDate()
                 var m = ed.getMonth() + 1
                 var y = ed.getFullYear()
                 return '' + y + '-' + (m <= 9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d)
+            },
+            openDetails(images) {
+                this.displayImage = true
+                this.paidImage = images
+            },
+            closeDetails() {
+                this.displayImage = false
             },
         },
 
@@ -658,5 +547,8 @@ import { UserRoleHelper } from '@/helper/user-role.helper'
     .p-datatable.p-datatable-gridlines .p-datatable-header {
         background-color: #607d8b;
         color: white;
+    }
+    .p-dialog-content img {
+        width: 100%;
     }
 </style>

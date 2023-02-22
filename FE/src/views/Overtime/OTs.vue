@@ -47,7 +47,7 @@
                     <div class="flex align-items-center">
                         <div class="header-left">
                             <Button
-                                @click="exportToExcel()"
+                                @click="exportToExcelFollowRole()"
                                 label="Xuất Excel"
                                 icon="pi pi-file-excel"
                                 class="size__Button"
@@ -90,7 +90,7 @@
                                     placeholder="Chọn tháng"
                                     :filter="true"
                                     filterPlaceholder="Tìm tháng"
-                                    @change="filterByMonthAndProject()"
+                                    @change="Fillter()"
                                 />
                                 <Dropdown
                                     class="p-column-filter filter-pro-item right"
@@ -100,7 +100,7 @@
                                     placeholder="Chọn dự án"
                                     :filter="true"
                                     filterPlaceholder="Tìm dự án"
-                                    @change="filterByMonthAndProject()"
+                                    @change="Fillter()"
                                 />
                                 <MultiSelect
                                     class="filter-pro-item"
@@ -243,6 +243,7 @@
                     </template>
                 </Column>
             </DataTable>
+           
         </div>
         <Dialog
             header="Không có quyền truy cập !"
@@ -257,7 +258,7 @@
                 >Bạn sẽ được điều hướng vào trang chủ <strong>{{ num }}</strong> giây!</medium
             >
             <template #footer>
-                <Button label="Hoàn tất" icon="pi pi-check" @click="submit" autofocus />
+                <Button label="Lưu" icon="pi pi-check" @click="submit" autofocus />
             </template>
         </Dialog>
         <Dialog
@@ -271,7 +272,7 @@
             <p v-if="entered" class="p-error">Lý do bắt buộc nhập!</p>
             <template #footer>
                 <Button label="No" icon="pi pi-times" @click="closeBasic" class="p-button-text" />
-                <Button label="Hoàn tất" icon="pi pi-check" @click="onSubmit(data.leadCreate)" autofocus />
+                <Button label="Lưu" icon="pi pi-check" @click="onSubmit(data.leadCreate)" autofocus />
             </template>
         </Dialog>
         <DetailOT
@@ -287,6 +288,7 @@
             :lead="lead"
             @OpenFormRefuse="OpenFormRefuse"
         />
+
     </LayoutDefaultDynamic>
 </template>
 
@@ -382,9 +384,7 @@
                         .catch((err) => {
                             console.log(err)
                         })
-                    setTimeout(() => {
-                        this.getAllOT()
-                    }, 2000)
+                        this.getAllOT()   
                 } else {
                     this.countTime()
                     this.displayDialog1 = true
@@ -413,9 +413,11 @@
             // GET OTS BY ROLE LEAD
             getOTsByLead(idLEAD) {
                 console.log('lead')
+                console.log(this.token.Id);
                 HTTP.get(`OTs/GetAllOTsByLead/${idLEAD}`)
                     .then((res) => {
                         this.data = res.data
+                        console.log(res.data);
                     })
                     .catch((err) => console.log(err))
             },
@@ -490,6 +492,7 @@
                 })
             },
             async getAllOT() {
+                
                 if (this.token) {
                     this.CheckButtonGroup(this.token.IdGroup)
                 }
@@ -535,7 +538,6 @@
                     this.showButton.viewButton = true
                     this.showButton.refuseButton = true
                     this.showButton.editButton = true
-                    this.showButton.addButton = true
                     this.showButton.deleteButton = true
                     this.isPM = true
                     this.getOTsByPM(this.token.Id)
@@ -612,6 +614,33 @@
             showSuccess(err) {
                 this.$toast.add({ severity: 'success', summary: 'Thành công', detail: err, life: 3000 })
             },
+
+            exportToExcelFollowRole(){
+                var month = 0
+                var year = 0
+                var idProject = 0
+                if (this.selectedMonth != null) {
+                    month = this.selectedMonth.month
+                    year = this.selectedMonth.year
+                }
+                if (this.selectedProject != null) idProject = this.selectedProject.code
+                HTTP.get(`OTs/exportExcelFollowRole/${month}/${year}/${idProject}/${this.token.IdGroup}/${this.token.Id}`)
+                .then(res=>{
+                    if(res.status === 200){
+                        this.$toast.add({
+                                severity: 'success',
+                                summary: 'Thành công',
+                                detail: 'Xuất file excel thành công!',
+                                life: 3000,
+                            })
+                        window.location = res.data
+                    }
+                }).catch(err=>{
+                    console.log(err);
+                    this.showWarn('Bạn không có quyền thực hiện thao tác xuất file excel!')
+                })
+            },
+
             exportToExcel() {
                 var month = 0
                 var year = 0
@@ -701,74 +730,24 @@
                     }
                 }
             },
-            FilterbyMonth() {
-                this.selectedProject = null
-                HTTP.get(
-                    'OTs/getOTByMonth/month=' + this.selectedMonth.month + '&year=' + this.selectedMonth.year,
-                ).then((res) => {
-                    if (res.data) {
-                        this.data = res.data
-                        this.data.forEach((element) => {
-                            element.date = this.formatDate(element.date)
-                            element.dateCreate = this.formatDate(element.dateCreate)
-                            element.dateUpdate = this.formatDate(element.dateUpdate)
-                            setTimeout(() => {
-                                element.user = this.getUsername(element.user)
-                                element.leadCreate = this.getUsername(element.leadCreate)
-                                element.updateUser = this.getUsername(element.updateUser)
-                            }, 100)
-                            element.idProject = this.proName.at(element.idProject)
-                        })
-                    }
-                })
-            },
-            FilterbyProject() {
-                this.selectedMonth = null
-                HTTP.get('OTs/getOTByProject/' + this.selectedProject.code).then((res) => {
-                    if (res.data) {
-                        this.data = res.data
-                        this.data.forEach((element) => {
-                            element.date = this.formatDate(element.x.date)
-                            element.x.dateCreate = this.formatDate(element.x.dateCreate)
-                            element.x.dateUpdate = this.formatDate(element.x.dateUpdate)
-                            setTimeout(() => {
-                                element.x.user = this.getUsername(element.x.user)
-                                element.x.leadCreate = this.getUsername(element.x.leadCreate)
-                                element.x.updateUser = this.getUsername(element.x.updateUser)
-                            }, 100)
-                            element.x.idProject = this.proName.at(element.x.idProject)
-                        })
-                    }
-                })
-            },
-            filterByMonthAndProject() {
-                if (this.selectedMonth == null) this.FilterbyProject()
-                else if (this.selectedProject == null) this.FilterbyMonth()
-                else {
-                    HTTP.get(
-                        'OTs/GetByMonthAndProject/month=' +
-                            this.selectedMonth.month +
-                            '&year=' +
-                            this.selectedMonth.year +
-                            '&idProject=' +
-                            this.selectedProject.code,
-                    ).then((res) => {
-                        if (res.data) {
-                            this.data = res.data
-                            this.data.forEach((element) => {
-                                element.x.date = this.formatDate(element.x.date)
-                                element.x.dateCreate = this.formatDate(element.x.dateCreate)
-                                element.x.dateUpdate = this.formatDate(element.x.dateUpdate)
-                                setTimeout(() => {
-                                    element.x.user = this.getUsername(element.x.user)
-                                    element.x.leadCreate = this.getUsername(element.x.leadCreate)
-                                    element.x.updateUser = this.getUsername(element.x.updateUser)
-                                }, 100)
-                                element.x.idProject = this.proName.at(element.x.idProject)
-                            })
-                        }
-                    })
+
+            Fillter(){
+                var month = 0
+                var year = 0
+                var idProject = 0
+                if(this.selectedMonth !== null){
+                    month = this.selectedMonth.month
+                    year = this.selectedMonth.year
                 }
+                if(this.selectedProject !== null) {
+                    idProject = this.selectedProject.code
+                }
+                var stringGetAPI = `OTs/filterByRole/${month}/${year}/${idProject}/${this.token.IdGroup}/?iduser=${this.token.Id}`
+                HTTP.get(stringGetAPI).then(res=>{
+                    this.data  =res.data
+                }).catch(err=>{
+                    console.log(err);
+                })
             },
             getProject() {
                 HTTP.get('Project/getAllProject')

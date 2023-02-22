@@ -215,8 +215,8 @@
                 </div>
                 <div class="row">
                     <div class="bottom-button">
-                        <Button class="p-button-outlined" @click="handleReset">Đặt lại</Button>
-                        <Button style="margin-left: 10px" type="submit">Lưu</Button>
+                        <Button style="margin-right: 10px" type="submit">Lưu</Button>
+                        <Button class="p-button-secondary" @click="handleReset">Đặt lại</Button>
                     </div>
                 </div>
             </div>

@@ -129,8 +129,9 @@
                                         <div>
                                             <Button
                                                 class="p-button-outlined p-button-info"
+                                                style="background-color: antiquewhite"
+                                                icon="pi pi-filter-slash"
                                                 @click="filterItems"
-                                                icon="pi pi-filter-fill"
                                             />
                                         </div>
                                     </div>
@@ -179,7 +180,7 @@
                 >Bạn sẽ được điều hướng vào trang chủ <strong>{{ num }}</strong> giây!</medium
             >
             <template #footer>
-                <Button label="Hoàn tất" icon="pi pi-check" @click="submit" autofocus />
+                <Button label="Lưu" icon="pi pi-check" @click="submit" autofocus />
             </template>
         </Dialog>
         <DialogAddEdit

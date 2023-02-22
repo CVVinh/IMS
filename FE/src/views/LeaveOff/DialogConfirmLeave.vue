@@ -29,7 +29,7 @@
                 </div>
                 <div class="group-button mt-3">
                     <div>
-                        <Button label="Hoàn tất" class="p-button-sm me-1" type="submit" icon="pi pi-check" />{{ ' ' }}
+                        <Button label="Lưu" class="p-button-sm me-1" type="submit" icon="pi pi-check" />{{ ' ' }}
                         <Button label="Hủy" class="p-button-sm p-button-secondary" @click="closeDialog()" />
                     </div>
                 </div>

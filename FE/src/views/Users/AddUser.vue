@@ -490,7 +490,7 @@
 
                         <div class="d-flex justify-content-end">
                             <div class="col-2">
-                                <Button type="submit" label="Hoàn tất" />
+                                <Button type="submit" label="Lưu" />
                             </div>
                             &emsp;
                             <div class="col-2">
@@ -547,13 +547,13 @@
                     { name: 'Khác', code: 3 },
                 ],
                 optionRoles: [
-                    { name: 'Giám đốc', code: 1 },
+                    { name: 'President', code: 1 },
                     { name: 'HR', code: 2 },
                     { name: 'PM', code: 3 },
                     { name: 'Leader', code: 4 },
-                    { name: 'Kế toán', code: 5 },
-                    { name: 'Người dùng', code: 6 },
-                    { name: 'Quản trị viên', code: 7 },
+                    { name: 'Accountant', code: 5 },
+                    { name: 'Staff', code: 6 },
+                    { name: 'Admin', code: 7 },
                 ],
                 messages: [{ severity: 'info', content: 'Thông tin' }],
             }

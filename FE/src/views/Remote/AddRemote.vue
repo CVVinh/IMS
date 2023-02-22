@@ -3,8 +3,8 @@
         <div class="container mt-4">
             <div class="flex justify-content-center container">
                 <div class="card">
-                    <h2 v-if="!edit">Thêm</h2>
-                    <h2 v-else>Sửa</h2>
+                    <h2 class="text-center" v-if="!edit">Thêm</h2>
+                    <h2 class="text-center" v-else>Sửa</h2>
                     <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
                         <div class="field">
                             <div :class="{ 'form-group--error': v$.data.date.$error }">
@@ -181,7 +181,7 @@
                                 >{{ v$.data.idProject.required.$message.replace('Value', 'Project') }}</small
                             >
                         </div>
-                        <div class="button-div">
+                        <div class="btn-right">
                             <button type="submit" class="btn btn-primary">Lưu</button>&nbsp;
                             <button type="button" class="btn btn-secondary" v-on:click="backToRemote()">Hủy</button>
                         </div>
@@ -426,7 +426,7 @@
     }
 
     h2 {
-        margin: auto;
+        margin-left: 61.5px;
         margin-bottom: 20px;
     }
 
@@ -448,5 +448,15 @@
     .label {
         font-size: 12px;
         margin-left: 0.75rem;
+    }
+    .btn-right {
+        float: right;
+        width: 110px;
+        display: inline-flex;
+    }
+    .text-center {
+        font-size: 30px;
+        width: 64%;
+        display: flex;
     }
 </style>

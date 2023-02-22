@@ -61,7 +61,7 @@
                                 placeholder="Chọn thành viên"
                             />
                             <template #footer>
-                                <Button label="Hoàn tất" icon="pi pi-times" @click="closeBasic" class="p-button-text" />
+                                <Button label="Lưu" icon="pi pi-times" @click="closeBasic" class="p-button-text" />
                                 <Button label="Lưu" icon="pi pi-check" @click="submit" autofocus />
                             </template>
                         </Dialog>

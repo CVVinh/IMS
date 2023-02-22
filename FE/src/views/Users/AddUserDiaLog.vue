@@ -1,468 +1,505 @@
 <template>
-    <Dialog :visible="statusopen" :closable="false" :modal="true">
+    <Dialog :visible="statusopen" :maximizable="true" :closable="false" :modal="true" header="Thêm">
         <div>
             <Toast position="top-right" />
         </div>
-        <div class="form-demo">
-            <div class="flex justify-content-center container">
-                <div class="card cardrelax">
-                    <div class="admin__form--header">
-                        <div></div>
-                        <h5 class="text-center">Thêm</h5>
-                        <div class="field-checkbox">
-                            <Checkbox inputId="binary" :binary="true" class="field-checkbox-items" />
-                            <label for="binary">Gửi Email</label>
+        <div class="container">
+            <div class="form-demo">
+                <div class="flex justify-content-center container">
+                    <div class="card cardrelax">
+                        <div class="admin__form--header">
+                            <div></div>
+                            <h5 class="text-center"></h5>
+                            <div class="field-checkbox">
+                                <Checkbox inputId="binary" :binary="true" class="field-checkbox-items" />
+                                <label for="binary">Gửi Email</label>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="p-fluid">
-                        <div class="row">
-                            <div class="col col-md-6 col-12">
-                                <div class="field">
-                                    <div class="p-float-label" :class="{ 'form-group--error': v$.userCode.$error }">
-                                        <InputText
-                                            id=" userCode"
-                                            v-model="v$.userCode.$model"
-                                            :class="{ 'p-invalid': v$.userCode.$invalid && submitted }"
-                                            autocomplete="nope"
-                                        />
-                                        <label for="userCode" :class="{ 'p-error': v$.userCode.$invalid && submitted }"
-                                            >Tài khoản*</label
-                                        >
-                                    </div>
-                                    <span v-if="v$.userCode.$error && submitted">
-                                        <span
-                                            id="userCode-error"
-                                            v-for="(error, index) of v$.userCode.$errors"
-                                            :key="index"
-                                        >
-                                            <small class="p-error">{{ error.$message }}</small>
+                        <div class="p-fluid">
+                            <div class="row">
+                                <div class="col col-md-6 col-12">
+                                    <div class="field">
+                                        <div class="p-float-label" :class="{ 'form-group--error': v$.userCode.$error }">
+                                            <InputText
+                                                id=" userCode"
+                                                v-model="v$.userCode.$model"
+                                                :class="{ 'p-invalid': v$.userCode.$invalid && submitted }"
+                                                autocomplete="nope"
+                                            />
+                                            <label
+                                                for="userCode"
+                                                :class="{ 'p-error': v$.userCode.$invalid && submitted }"
+                                                >Tài khoản*</label
+                                            >
+                                        </div>
+                                        <span v-if="v$.userCode.$error && submitted">
+                                            <span
+                                                id="userCode-error"
+                                                v-for="(error, index) of v$.userCode.$errors"
+                                                :key="index"
+                                            >
+                                                <small class="p-error">{{ error.$message }}</small>
+                                            </span>
                                         </span>
-                                    </span>
-                                    <small
-                                        v-else-if="
-                                            (v$.userCode.$invalid && submitted) || v$.userCode.$pending.$response
-                                        "
-                                        class="p-error"
-                                        >{{ v$.userCode.required.$message.replace('Value', 'Account') }}</small
-                                    >
-                                </div>
-                            </div>
-                            <div class="col col-md-6 col-12">
-                                <div class="field">
-                                    <div class="p-float-label">
-                                        <Password
-                                            id="password"
-                                            v-model="v$.password.$model"
-                                            autocomplete="new-password"
-                                            :class="{ 'p-invalid': v$.password.$invalid && submitted }"
-                                            toggleMask
-                                        >
-                                            <template #header>
-                                                <h6>Pick a password</h6>
-                                            </template>
-                                            <template #footer="sp">
-                                                {{ sp.level }}
-                                            </template>
-                                        </Password>
-                                        <label for="password" :class="{ 'p-error': v$.password.$invalid && submitted }"
-                                            >Mật khẩu*</label
+                                        <small
+                                            v-else-if="
+                                                (v$.userCode.$invalid && submitted) || v$.userCode.$pending.$response
+                                            "
+                                            class="p-error"
+                                            >{{ v$.userCode.required.$message.replace('Value', 'Account') }}</small
                                         >
                                     </div>
-                                    <span v-if="v$.password.$error && submitted">
-                                        <span
-                                            id="password-error"
-                                            v-for="(error, index) of v$.password.$errors"
-                                            :key="index"
-                                        >
-                                            <small class="p-error">{{ error.$message }}</small>
+                                </div>
+                                <div class="col col-md-6 col-12">
+                                    <div class="field">
+                                        <div class="p-float-label">
+                                            <Password
+                                                id="password"
+                                                v-model="v$.password.$model"
+                                                autocomplete="new-password"
+                                                :class="{ 'p-invalid': v$.password.$invalid && submitted }"
+                                                toggleMask
+                                            >
+                                                <template #header>
+                                                    <h6>Pick a password</h6>
+                                                </template>
+                                                <template #footer="sp">
+                                                    {{ sp.level }}
+                                                </template>
+                                            </Password>
+                                            <label
+                                                for="password"
+                                                :class="{ 'p-error': v$.password.$invalid && submitted }"
+                                                >Mật khẩu*</label
+                                            >
+                                        </div>
+                                        <span v-if="v$.password.$error && submitted">
+                                            <span
+                                                id="password-error"
+                                                v-for="(error, index) of v$.password.$errors"
+                                                :key="index"
+                                            >
+                                                <small class="p-error">{{ error.$message }}</small>
+                                            </span>
                                         </span>
-                                    </span>
-                                    <small
-                                        v-else-if="
-                                            (v$.password.$invalid && submitted) || v$.password.$pending.$response
-                                        "
-                                        class="p-error"
-                                        >{{ v$.password.required.$message.replace('Value', 'Password') }}</small
-                                    >
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col col-md-6 col-12">
-                                <div class="field">
-                                    <div class="p-float-label" :class="{ 'form-group--error': v$.firstName.$error }">
-                                        <InputText
-                                            id=" firstName"
-                                            v-model="v$.firstName.$model"
-                                            :class="{ 'p-invalid': v$.firstName.$invalid && submitted }"
-                                        />
-                                        <label
-                                            for="firstName"
-                                            :class="{ 'p-error': v$.firstName.$invalid && submitted }"
-                                            >Họ*</label
+                                        <small
+                                            v-else-if="
+                                                (v$.password.$invalid && submitted) || v$.password.$pending.$response
+                                            "
+                                            class="p-error"
+                                            >{{ v$.password.required.$message.replace('Value', 'Password') }}</small
                                         >
                                     </div>
-                                    <small
-                                        v-if="(v$.firstName.$invalid && submitted) || v$.firstName.$pending.$response"
-                                        class="p-error"
-                                        >{{ v$.firstName.required.$message.replace('Value', 'First name') }}</small
-                                    >
                                 </div>
                             </div>
-                            <div class="col col-md-6 col-12">
-                                <div class="field">
-                                    <div class="p-float-label" :class="{ 'form-group--error': v$.lastName.$error }">
-                                        <InputText
-                                            id=" lastName"
-                                            v-model="v$.lastName.$model"
-                                            :class="{ 'p-invalid': v$.lastName.$invalid && submitted }"
-                                        />
-                                        <label for="lastName" :class="{ 'p-error': v$.lastName.$invalid && submitted }"
-                                            >Tên*</label
+                            <div class="row">
+                                <div class="col col-md-6 col-12">
+                                    <div class="field">
+                                        <div
+                                            class="p-float-label"
+                                            :class="{ 'form-group--error': v$.firstName.$error }"
+                                        >
+                                            <InputText
+                                                id=" firstName"
+                                                v-model="v$.firstName.$model"
+                                                :class="{ 'p-invalid': v$.firstName.$invalid && submitted }"
+                                            />
+                                            <label
+                                                for="firstName"
+                                                :class="{ 'p-error': v$.firstName.$invalid && submitted }"
+                                                >Họ*</label
+                                            >
+                                        </div>
+                                        <small
+                                            v-if="
+                                                (v$.firstName.$invalid && submitted) || v$.firstName.$pending.$response
+                                            "
+                                            class="p-error"
+                                            >{{ v$.firstName.required.$message.replace('Value', 'First name') }}</small
                                         >
                                     </div>
-                                    <small
-                                        v-if="(v$.lastName.$invalid && submitted) || v$.lastName.$pending.$response"
-                                        class="p-error"
-                                        >{{ v$.lastName.required.$message.replace('Value', 'Last name') }}</small
-                                    >
+                                </div>
+                                <div class="col col-md-6 col-12">
+                                    <div class="field">
+                                        <div class="p-float-label" :class="{ 'form-group--error': v$.lastName.$error }">
+                                            <InputText
+                                                id=" lastName"
+                                                v-model="v$.lastName.$model"
+                                                :class="{ 'p-invalid': v$.lastName.$invalid && submitted }"
+                                            />
+                                            <label
+                                                for="lastName"
+                                                :class="{ 'p-error': v$.lastName.$invalid && submitted }"
+                                                >Tên*</label
+                                            >
+                                        </div>
+                                        <small
+                                            v-if="(v$.lastName.$invalid && submitted) || v$.lastName.$pending.$response"
+                                            class="p-error"
+                                            >{{ v$.lastName.required.$message.replace('Value', 'Last name') }}</small
+                                        >
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col col-md-6 col-12">
-                                <div class="field">
-                                    <div class="p-float-label p-input-icon-right">
-                                        <!-- <i class="pi pi-envelope" /> -->
-                                        <InputText
-                                            id="email"
-                                            v-model="v$.email.$model"
-                                            :class="{ 'p-invalid': v$.email.$invalid && submitted }"
-                                            aria-describedby="email-error"
-                                        />
-                                        <label for="email" :class="{ 'p-error': v$.email.$invalid && submitted }"
-                                            >Email*</label
-                                        >
-                                    </div>
-                                    <span v-if="v$.email.$error && submitted">
-                                        <span id="email-error" v-for="(error, index) of v$.email.$errors" :key="index">
-                                            <small class="p-error">{{ error.$message }}</small>
+                            <div class="row">
+                                <div class="col col-md-6 col-12">
+                                    <div class="field">
+                                        <div class="p-float-label p-input-icon-right">
+                                            <!-- <i class="pi pi-envelope" /> -->
+                                            <InputText
+                                                id="email"
+                                                v-model="v$.email.$model"
+                                                :class="{ 'p-invalid': v$.email.$invalid && submitted }"
+                                                aria-describedby="email-error"
+                                            />
+                                            <label for="email" :class="{ 'p-error': v$.email.$invalid && submitted }"
+                                                >Email*</label
+                                            >
+                                        </div>
+                                        <span v-if="v$.email.$error && submitted">
+                                            <span
+                                                id="email-error"
+                                                v-for="(error, index) of v$.email.$errors"
+                                                :key="index"
+                                            >
+                                                <small class="p-error">{{ error.$message }}</small>
+                                            </span>
                                         </span>
-                                    </span>
-                                    <small
-                                        v-else-if="(v$.email.$invalid && submitted) || v$.email.$pending.$response"
-                                        class="p-error"
-                                        >{{ v$.email.required.$message.replace('Value', 'Email') }}</small
-                                    >
-                                </div>
-                            </div>
-                            <div class="col col-md-6 col-12">
-                                <div class="field">
-                                    <div class="p-float-label" :class="{ 'form-group--error': v$.identitycard.$error }">
-                                        <InputText
-                                            id=" identitycard"
-                                            v-model="v$.identitycard.$model"
-                                            :class="{ 'p-invalid': v$.identitycard.$invalid && submitted }"
-                                        />
-                                        <label
-                                            for="identitycard"
-                                            :class="{ 'p-error': v$.identitycard.$invalid && submitted }"
-                                            >Căn cước công dân*</label
+                                        <small
+                                            v-else-if="(v$.email.$invalid && submitted) || v$.email.$pending.$response"
+                                            class="p-error"
+                                            >{{ v$.email.required.$message.replace('Value', 'Email') }}</small
                                         >
                                     </div>
-                                    <small
-                                        v-if="
-                                            (v$.identitycard.$invalid && submitted) ||
-                                            v$.identitycard.$pending.$response
-                                        "
-                                        class="p-error"
-                                        >{{
-                                            v$.identitycard.required.$message.replace('Value', 'Identity card')
-                                        }}</small
-                                    >
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col col-sm-3 col-12">
-                                <div class="field">
-                                    <div class="p-float-label" :class="{ 'form-group--error': v$.gender.$error }">
-                                        <Dropdown
-                                            v-model="v$.gender.$model"
-                                            :options="optionGender"
-                                            optionLabel="name"
-                                            :class="{ 'p-invalid': v$.gender.$invalid && submitted }"
-                                        />
-                                        <label for="gender" :class="{ 'p-error': v$.gender.$invalid && submitted }"
-                                            >Giới tính*</label
+                                <div class="col col-md-6 col-12">
+                                    <div class="field">
+                                        <div
+                                            class="p-float-label"
+                                            :class="{ 'form-group--error': v$.identitycard.$error }"
+                                        >
+                                            <InputText
+                                                id=" identitycard"
+                                                v-model="v$.identitycard.$model"
+                                                :class="{ 'p-invalid': v$.identitycard.$invalid && submitted }"
+                                            />
+                                            <label
+                                                for="identitycard"
+                                                :class="{ 'p-error': v$.identitycard.$invalid && submitted }"
+                                                >Căn cước công dân*</label
+                                            >
+                                        </div>
+                                        <small
+                                            v-if="
+                                                (v$.identitycard.$invalid && submitted) ||
+                                                v$.identitycard.$pending.$response
+                                            "
+                                            class="p-error"
+                                            >{{
+                                                v$.identitycard.required.$message.replace('Value', 'Identity card')
+                                            }}</small
                                         >
                                     </div>
-                                    <small
-                                        v-if="(v$.gender.$invalid && submitted) || v$.gender.$pending.$response"
-                                        class="p-error"
-                                        >{{ v$.gender.required.$message.replace('Value', 'Gender') }}</small
-                                    >
                                 </div>
                             </div>
-                            <div class="col col-sm-3 col-12">
-                                <div class="field">
-                                    <div class="p-float-label" :class="{ 'form-group--error': v$.idGroup.$error }">
-                                        <Dropdown
-                                            v-model="v$.idGroup.$model"
-                                            :options="roleoption"
-                                            optionLabel="nameGroup"
-                                            optionValue="id"
-                                            :class="{ 'p-invalid': v$.idGroup.$invalid && submitted }"
-                                        />
-                                        <label for="idRole" :class="{ 'p-error': v$.idGroup.$invalid && submitted }"
-                                            >Chức vụ*</label
+                            <div class="row">
+                                <div class="col col-sm-3 col-12">
+                                    <div class="field">
+                                        <div class="p-float-label" :class="{ 'form-group--error': v$.gender.$error }">
+                                            <Dropdown
+                                                v-model="v$.gender.$model"
+                                                :options="optionGender"
+                                                optionLabel="name"
+                                                :class="{ 'p-invalid': v$.gender.$invalid && submitted }"
+                                            />
+                                            <label for="gender" :class="{ 'p-error': v$.gender.$invalid && submitted }"
+                                                >Giới tính*</label
+                                            >
+                                        </div>
+                                        <small
+                                            v-if="(v$.gender.$invalid && submitted) || v$.gender.$pending.$response"
+                                            class="p-error"
+                                            >{{ v$.gender.required.$message.replace('Value', 'Gender') }}</small
                                         >
                                     </div>
-                                    <small
-                                        v-if="(v$.idGroup.$invalid && submitted) || v$.idGroup.$pending.$response"
-                                        class="p-error"
-                                        >{{ v$.idGroup.required.$message.replace('Value', 'Role') }}</small
-                                    >
                                 </div>
-                            </div>
-                            <div class="col col-sm-6 col-12">
-                                <div class="field">
-                                    <div class="p-float-label" :class="{ 'form-group--error': v$.phoneNumber.$error }">
-                                        <InputText
-                                            id=" phoneNumber"
-                                            v-model="v$.phoneNumber.$model"
-                                            :class="{ 'p-invalid': v$.phoneNumber.$invalid && submitted }"
-                                        />
-                                        <label
-                                            for="phoneNumber"
-                                            :class="{ 'p-error': v$.phoneNumber.$invalid && submitted }"
-                                            >Số điện thoại</label
+                                <div class="col col-sm-3 col-12">
+                                    <div class="field">
+                                        <div class="p-float-label" :class="{ 'form-group--error': v$.idGroup.$error }">
+                                            <Dropdown
+                                                v-model="v$.idGroup.$model"
+                                                :options="roleoption"
+                                                optionLabel="nameGroup"
+                                                optionValue="id"
+                                                :class="{ 'p-invalid': v$.idGroup.$invalid && submitted }"
+                                            />
+                                            <label for="idRole" :class="{ 'p-error': v$.idGroup.$invalid && submitted }"
+                                                >Chức vụ*</label
+                                            >
+                                        </div>
+                                        <small
+                                            v-if="(v$.idGroup.$invalid && submitted) || v$.idGroup.$pending.$response"
+                                            class="p-error"
+                                            >{{ v$.idGroup.required.$message.replace('Value', 'Role') }}</small
                                         >
                                     </div>
-                                    <span v-if="v$.phoneNumber.$error && submitted">
-                                        <span
-                                            id="phoneNumber-error"
-                                            v-for="(error, index) of v$.phoneNumber.$errors"
-                                            :key="index"
+                                </div>
+                                <div class="col col-sm-6 col-12">
+                                    <div class="field">
+                                        <div
+                                            class="p-float-label"
+                                            :class="{ 'form-group--error': v$.phoneNumber.$error }"
                                         >
-                                            <small class="p-error">{{ error.$message }}</small>
+                                            <InputText
+                                                id=" phoneNumber"
+                                                v-model="v$.phoneNumber.$model"
+                                                :class="{ 'p-invalid': v$.phoneNumber.$invalid && submitted }"
+                                            />
+                                            <label
+                                                for="phoneNumber"
+                                                :class="{ 'p-error': v$.phoneNumber.$invalid && submitted }"
+                                                >Số điện thoại</label
+                                            >
+                                        </div>
+                                        <span v-if="v$.phoneNumber.$error && submitted">
+                                            <span
+                                                id="phoneNumber-error"
+                                                v-for="(error, index) of v$.phoneNumber.$errors"
+                                                :key="index"
+                                            >
+                                                <small class="p-error">{{ error.$message }}</small>
+                                            </span>
                                         </span>
-                                    </span>
-                                    <small
-                                        v-else-if="
-                                            (v$.phoneNumber.$invalid && submitted) || v$.phoneNumber.$pending.$response
-                                        "
-                                        class="p-error"
-                                        >{{ v$.phoneNumber.required.$message.replace('Value', 'PhoneNumber') }}</small
-                                    >
+                                        <small
+                                            v-else-if="
+                                                (v$.phoneNumber.$invalid && submitted) ||
+                                                v$.phoneNumber.$pending.$response
+                                            "
+                                            class="p-error"
+                                            >{{
+                                                v$.phoneNumber.required.$message.replace('Value', 'PhoneNumber')
+                                            }}</small
+                                        >
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col col-md-3 col-12">
-                                <div class="field">
-                                    <div
-                                        class="p-float-label"
-                                        :class="{ 'form-group--error': v$.dateStartWork.$error }"
-                                    >
-                                        <Calendar
-                                            id="dateStartWork"
-                                            v-model="v$.dateStartWork.$model"
-                                            :showIcon="true"
-                                            :class="{ 'p-invalid': v$.dateStartWork.$invalid && submitted }"
-                                        />
-                                        <label
-                                            for="dateStartWork"
-                                            :class="{ 'p-error': v$.dateStartWork.$invalid && submitted }"
-                                            >Ngày bắt đầu làm*</label
+                            <div class="row">
+                                <div class="col col-md-3 col-12">
+                                    <div class="field">
+                                        <div
+                                            class="p-float-label"
+                                            :class="{ 'form-group--error': v$.dateStartWork.$error }"
+                                        >
+                                            <Calendar
+                                                id="dateStartWork"
+                                                v-model="v$.dateStartWork.$model"
+                                                :showIcon="true"
+                                                :class="{ 'p-invalid': v$.dateStartWork.$invalid && submitted }"
+                                            />
+                                            <label
+                                                for="dateStartWork"
+                                                :class="{ 'p-error': v$.dateStartWork.$invalid && submitted }"
+                                                >Ngày bắt đầu làm*</label
+                                            >
+                                        </div>
+                                        <small
+                                            v-if="
+                                                (v$.dateStartWork.$invalid && submitted) ||
+                                                v$.dateStartWork.$pending.$response
+                                            "
+                                            class="p-error"
+                                            >{{
+                                                v$.dateStartWork.required.$message.replace('Value', 'Date start work')
+                                            }}</small
                                         >
                                     </div>
-                                    <small
-                                        v-if="
-                                            (v$.dateStartWork.$invalid && submitted) ||
-                                            v$.dateStartWork.$pending.$response
-                                        "
-                                        class="p-error"
-                                        >{{
-                                            v$.dateStartWork.required.$message.replace('Value', 'Date start work')
-                                        }}</small
-                                    >
                                 </div>
-                            </div>
-                            <div class="col col-md-3 col-12">
-                                <div class="field">
-                                    <div class="p-float-label" :class="{ 'form-group--error': v$.dob.$error }">
-                                        <Calendar
-                                            id="dob"
-                                            v-model="v$.dob.$model"
-                                            :showIcon="true"
-                                            :class="{ 'p-invalid': (v$.dob.$invalid || dOBValidate) && submitted }"
-                                        />
-                                        <label
-                                            for="dob"
-                                            :class="{ 'p-error': (v$.dob.$invalid || dOBValidate) && submitted }"
-                                            >Ngày sinh</label
+                                <div class="col col-md-3 col-12">
+                                    <div class="field">
+                                        <div class="p-float-label" :class="{ 'form-group--error': v$.dob.$error }">
+                                            <Calendar
+                                                id="dob"
+                                                v-model="v$.dob.$model"
+                                                :showIcon="true"
+                                                :class="{ 'p-invalid': (v$.dob.$invalid || dOBValidate) && submitted }"
+                                            />
+                                            <label
+                                                for="dob"
+                                                :class="{ 'p-error': (v$.dob.$invalid || dOBValidate) && submitted }"
+                                                >Ngày sinh</label
+                                            >
+                                        </div>
+                                        <small
+                                            v-if="(v$.dob.$invalid && submitted) || v$.dob.$pending.$response"
+                                            class="p-error"
+                                            >{{ v$.dob.required.$message.replace('Value', 'Birthday') }}</small
+                                        >
+                                        <small
+                                            v-if="!this.checkDateOfBirth(v$.dob.$model) && submitted"
+                                            class="p-error"
+                                        >
+                                            Người dùng phải trên 18 tuổi và dưới 60 tuổi
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="col col-md-6 col-12">
+                                    <div class="field">
+                                        <div
+                                            class="p-float-label"
+                                            :class="{ 'form-group--error': v$.maritalStatus.$error }"
+                                        >
+                                            <Dropdown
+                                                v-model="v$.maritalStatus.$model"
+                                                :options="optionMaritalStatus"
+                                                optionLabel="name"
+                                                :class="{ 'p-invalid': v$.maritalStatus.$invalid && submitted }"
+                                            />
+                                            <label
+                                                for="maritalStatus"
+                                                :class="{ 'p-error': v$.maritalStatus.$invalid && submitted }"
+                                                >Tình trạng hôn nhân</label
+                                            >
+                                        </div>
+                                        <small
+                                            v-if="
+                                                (v$.maritalStatus.$invalid && submitted) ||
+                                                v$.maritalStatus.$pending.$response
+                                            "
+                                            class="p-error"
+                                            >{{
+                                                v$.maritalStatus.required.$message.replace('Value', 'Marital Status')
+                                            }}</small
                                         >
                                     </div>
-                                    <small
-                                        v-if="(v$.dob.$invalid && submitted) || v$.dob.$pending.$response"
-                                        class="p-error"
-                                        >{{ v$.dob.required.$message.replace('Value', 'Birthday') }}</small
-                                    >
-                                    <small v-if="!this.checkDateOfBirth(v$.dob.$model) && submitted" class="p-error">
-                                        Người dùng phải trên 18 tuổi và dưới 60 tuổi
-                                    </small>
                                 </div>
                             </div>
-                            <div class="col col-md-6 col-12">
-                                <div class="field">
-                                    <div
-                                        class="p-float-label"
-                                        :class="{ 'form-group--error': v$.maritalStatus.$error }"
-                                    >
-                                        <Dropdown
-                                            v-model="v$.maritalStatus.$model"
-                                            :options="optionMaritalStatus"
-                                            optionLabel="name"
-                                            :class="{ 'p-invalid': v$.maritalStatus.$invalid && submitted }"
-                                        />
-                                        <label
-                                            for="maritalStatus"
-                                            :class="{ 'p-error': v$.maritalStatus.$invalid && submitted }"
-                                            >Tình trạng hôn nhân</label
-                                        >
-                                    </div>
-                                    <small
-                                        v-if="
-                                            (v$.maritalStatus.$invalid && submitted) ||
-                                            v$.maritalStatus.$pending.$response
-                                        "
-                                        class="p-error"
-                                        >{{
-                                            v$.maritalStatus.required.$message.replace('Value', 'Marital Status')
-                                        }}</small
-                                    >
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col col-md-12 col-12">
-                                <div class="field">
-                                    <div class="p-float-label" :class="{ 'form-group--error': v$.address.$error }">
-                                        <Textarea
-                                            rows="3"
-                                            cols="30"
-                                            id=" address"
-                                            v-model="v$.address.$model"
-                                            :class="{ 'p-invalid': v$.address.$invalid && submitted }"
-                                        />
+                            <div class="row">
+                                <div class="col col-md-12 col-12">
+                                    <div class="field">
+                                        <div class="p-float-label" :class="{ 'form-group--error': v$.address.$error }">
+                                            <Textarea
+                                                rows="3"
+                                                cols="30"
+                                                id=" address"
+                                                v-model="v$.address.$model"
+                                                :class="{ 'p-invalid': v$.address.$invalid && submitted }"
+                                            />
 
-                                        <label for="address" :class="{ 'p-error': v$.address.$invalid && submitted }"
-                                            >Địa chỉ</label
+                                            <label
+                                                for="address"
+                                                :class="{ 'p-error': v$.address.$invalid && submitted }"
+                                                >Địa chỉ</label
+                                            >
+                                        </div>
+                                        <small
+                                            v-if="(v$.address.$invalid && submitted) || v$.address.$pending.$response"
+                                            class="p-error"
+                                            >{{ v$.address.required.$message.replace('Value', 'Address') }}</small
                                         >
                                     </div>
-                                    <small
-                                        v-if="(v$.address.$invalid && submitted) || v$.address.$pending.$response"
-                                        class="p-error"
-                                        >{{ v$.address.required.$message.replace('Value', 'Address') }}</small
-                                    >
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col col-md-6 col-12">
-                                <div class="field">
-                                    <div class="p-float-label" :class="{ 'form-group--error': v$.university.$error }">
-                                        <InputText
-                                            id=" university"
-                                            v-model="v$.university.$model"
-                                            :class="{ 'p-invalid': v$.university.$invalid && submitted }"
-                                        />
-                                        <label
-                                            for="university"
-                                            :class="{ 'p-error': v$.university.$invalid && submitted }"
-                                            >Đại học</label
+                            <div class="row">
+                                <div class="col col-md-6 col-12">
+                                    <div class="field">
+                                        <div
+                                            class="p-float-label"
+                                            :class="{ 'form-group--error': v$.university.$error }"
+                                        >
+                                            <InputText
+                                                id=" university"
+                                                v-model="v$.university.$model"
+                                                :class="{ 'p-invalid': v$.university.$invalid && submitted }"
+                                            />
+                                            <label
+                                                for="university"
+                                                :class="{ 'p-error': v$.university.$invalid && submitted }"
+                                                >Đại học</label
+                                            >
+                                        </div>
+                                        <small
+                                            v-if="
+                                                (v$.university.$invalid && submitted) ||
+                                                v$.university.$pending.$response
+                                            "
+                                            class="p-error"
+                                            >{{ v$.university.required.$message.replace('Value', 'University') }}</small
                                         >
                                     </div>
-                                    <small
-                                        v-if="(v$.university.$invalid && submitted) || v$.university.$pending.$response"
-                                        class="p-error"
-                                        >{{ v$.university.required.$message.replace('Value', 'University') }}</small
-                                    >
                                 </div>
-                            </div>
-                            <div class="col col-md-6 col-12">
-                                <div class="field">
-                                    <div
-                                        class="p-float-label"
-                                        :class="{ 'form-group--error': v$.yearGraduated.$error }"
-                                    >
-                                        <InputText
-                                            id=" yearGraduated"
-                                            v-model="v$.yearGraduated.$model"
-                                            :class="{ 'p-invalid': v$.yearGraduated.$invalid && submitted }"
-                                        />
-                                        <label
-                                            for="yearGraduated"
-                                            :class="{ 'p-error': v$.yearGraduated.$invalid && submitted }"
-                                            >Năm tốt nghiệp</label
+                                <div class="col col-md-6 col-12">
+                                    <div class="field">
+                                        <div
+                                            class="p-float-label"
+                                            :class="{ 'form-group--error': v$.yearGraduated.$error }"
                                         >
-                                    </div>
-                                    <span v-if="v$.yearGraduated.$error && submitted">
-                                        <span
-                                            id="yearGraduated-error"
-                                            v-for="(error, index) of v$.yearGraduated.$errors"
-                                            :key="index"
-                                        >
-                                            <small class="p-error">{{ error.$message }}</small>
+                                            <InputText
+                                                id=" yearGraduated"
+                                                v-model="v$.yearGraduated.$model"
+                                                :class="{ 'p-invalid': v$.yearGraduated.$invalid && submitted }"
+                                            />
+                                            <label
+                                                for="yearGraduated"
+                                                :class="{ 'p-error': v$.yearGraduated.$invalid && submitted }"
+                                                >Năm tốt nghiệp</label
+                                            >
+                                        </div>
+                                        <span v-if="v$.yearGraduated.$error && submitted">
+                                            <span
+                                                id="yearGraduated-error"
+                                                v-for="(error, index) of v$.yearGraduated.$errors"
+                                                :key="index"
+                                            >
+                                                <small class="p-error">{{ error.$message }}</small>
+                                            </span>
                                         </span>
-                                    </span>
-                                    <small
-                                        v-else-if="
-                                            (v$.yearGraduated.$invalid && submitted) ||
-                                            v$.yearGraduated.$pending.$response
-                                        "
-                                        class="p-error"
-                                        >{{
-                                            v$.yearGraduated.required.$message.replace('Value', 'yearGraduated')
-                                        }}</small
-                                    >
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col col-md-6 col-12">
-                                <div class="field">
-                                    <div class="p-float-label" :class="{ 'form-group--error': v$.skype.$error }">
-                                        <InputText
-                                            id=" skype"
-                                            v-model="v$.skype.$model"
-                                            :class="{ 'p-invalid': v$.skype.$invalid && submitted }"
-                                        />
-                                        <label for="skype" :class="{ 'p-error': v$.skype.$invalid && submitted }"
-                                            >Skype</label
+                                        <small
+                                            v-else-if="
+                                                (v$.yearGraduated.$invalid && submitted) ||
+                                                v$.yearGraduated.$pending.$response
+                                            "
+                                            class="p-error"
+                                            >{{
+                                                v$.yearGraduated.required.$message.replace('Value', 'yearGraduated')
+                                            }}</small
                                         >
                                     </div>
-                                    <small
-                                        v-if="(v$.skype.$invalid && submitted) || v$.skype.$pending.$response"
-                                        class="p-error"
-                                        >{{ v$.skype.required.$message.replace('Value', 'Skype') }}</small
-                                    >
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="d-flex justify-content-end">
-                            <div class="col-2">
-                                <Button @click="handleSubmit" label="Hoàn tất" />
+                            <div class="row">
+                                <div class="col col-md-6 col-12">
+                                    <div class="field">
+                                        <div class="p-float-label" :class="{ 'form-group--error': v$.skype.$error }">
+                                            <InputText
+                                                id=" skype"
+                                                v-model="v$.skype.$model"
+                                                :class="{ 'p-invalid': v$.skype.$invalid && submitted }"
+                                            />
+                                            <label for="skype" :class="{ 'p-error': v$.skype.$invalid && submitted }"
+                                                >Skype</label
+                                            >
+                                        </div>
+                                        <small
+                                            v-if="(v$.skype.$invalid && submitted) || v$.skype.$pending.$response"
+                                            class="p-error"
+                                            >{{ v$.skype.required.$message.replace('Value', 'Skype') }}</small
+                                        >
+                                    </div>
+                                </div>
                             </div>
-                            &emsp;
-                            <div class="col-2">
-                                <Button label="Hủy" class="p-button-secondary" @click="closeAdd()" />
+
+                            <div class="d-flex justify-content-end">
+                                <div class="col-2">
+                                    <Button @click="handleSubmit" label="Lưu" />
+                                </div>
+                                &emsp;
+                                <div class="col-2">
+                                    <Button label="Hủy" class="p-button-secondary" @click="closeAdd()" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -785,7 +822,16 @@
     }
 </script>
 
+<style></style>
+
 <style lang="scss" scoped>
+    .p-dialog-header {
+        display: flex;
+        align-items: center;
+        justify-content: right !important;
+        flex-shrink: 0;
+        float: right;
+    }
     .form-demo {
         .card {
             min-width: 450px;
@@ -799,12 +845,12 @@
                 font-size: 30px;
                 width: 64%;
                 display: flex;
-                justify-content: flex-end;
             }
             .field-checkbox {
                 width: 36%;
                 display: flex;
                 justify-content: flex-end;
+                margin-bottom: 25px;
             }
             .field {
                 margin-bottom: 1.5rem;
@@ -830,7 +876,6 @@
         }
 
         .cardrelax {
-            width: 850px;
         }
 
         @media screen and (max-width: 960px) {

@@ -42,13 +42,8 @@
                     <h5 style="color: white">Danh sách người dùng</h5>
                     <div class="header-container">
                         <div class="button-group">
-                            <Add
-                                label="Thêm"
-                                :disabled="this.disableAddButton"
-                                @click="OpenAdd"
-                                style="margin-right: 5px"
-                            />
-                            <Export label="Xuất Excel" @click="exportCSV($event)" />
+                            <Export style="margin-right: 5px" label="Xuất Excel" @click="exportCSV($event)" />
+                            <Add label="Thêm" :disabled="this.disableAddButton" @click="OpenAdd" />
                         </div>
                         <div class="input-text">
                             <MultiSelect
@@ -118,7 +113,7 @@
                 <Column field="" header="Thực thi" style="width: 10rem; text-align: left">
                     <template #body="{ data }">
                         <div class="actions-buttons" v-if="data.workStatus !== 'Nghỉ việc'">
-                            <Edit @click="OpenEdit(data.id)" />
+                            <Edit class="p-button-warning" @click="OpenEdit(data.id)" />
                             &nbsp;
                             <Delete @click="confirmDelete(data.id, data.workStatus)" />
                         </div>
@@ -140,7 +135,7 @@
                 >Bạn sẽ được điều hướng vào trang chủ <strong>{{ num }}</strong> giây!</medium
             >
             <template #footer>
-                <Button label="Hoàn tất" icon="pi pi-check" @click="submit" autofocus />
+                <Button label="Lưu" icon="pi pi-check" @click="submit" autofocus />
             </template>
         </Dialog>
 

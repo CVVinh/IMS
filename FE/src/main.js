@@ -11,6 +11,7 @@ import PrimeVue from 'primevue/config'
 import DataTable from 'primevue/datatable'
 import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
+import Image from 'primevue/image';
 import Column from 'primevue/column'
 import ColumnGroup from 'primevue/columngroup'
 import Row from 'primevue/row'
@@ -38,6 +39,8 @@ import Panel from 'primevue/panel'
 import Avatar from 'primevue/avatar'
 import Card from 'primevue/card'
 import Breadcrumb from 'primevue/breadcrumb'
+
+
 import InputSwitch from 'primevue/inputswitch'
 import Toolbar from 'primevue/toolbar'
 import ScrollPanel from 'primevue/scrollpanel'
@@ -51,6 +54,7 @@ const app = createApp(App)
 app.use(PrimeVue)
 app.use(ConfirmationService)
 app.use(ToastService)
+
 app.use('Divider', Divider)
 app.component('Checkbox', Checkbox)
 app.use(DialogService)
@@ -59,6 +63,7 @@ app.component('DataTable', DataTable)
 app.component('OrderList', OrderList)
 app.component('InputText', InputText)
 app.component('InputNumber', InputNumber)
+app.component('Image', Image)
 app.component('Column', Column)
 app.component('ColumnGroup', ColumnGroup)
 app.component('Row', Row)

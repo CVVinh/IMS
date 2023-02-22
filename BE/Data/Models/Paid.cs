@@ -21,5 +21,6 @@ namespace BE.Data.Models
         public decimal AmountPaid { get; set; }
         public string PaidReason { get; set; }
         public bool IsPaid { get; set; } // 1 is paid, 0 is unpaid
+        public ICollection<PaidImage>? paidImages { get; set; }
     }
 }

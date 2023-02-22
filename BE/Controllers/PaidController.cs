@@ -1,12 +1,9 @@
-﻿using BE.Data.Dtos.LeaveOffDtos;
-using BE.Data.Dtos.PaidDtos;
+﻿using BE.Data.Dtos.PaidDtos;
 using BE.Data.Enum;
 using BE.Data.Models;
-using BE.Services.LeaveOffServices;
 using BE.Services.PaginationServices;
 using BE.Services.PaidServices;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BE.Controllers
@@ -17,11 +14,13 @@ namespace BE.Controllers
     {
         private readonly IPaidServices _paidServices;
         private readonly IPaginationServices<Paid> _paginationServices;
+        private readonly IWebHostEnvironment _host;
 
-        public PaidController(IPaidServices paidServices, IPaginationServices<Paid> paginationServices)
+        public PaidController(IPaidServices paidServices, IPaginationServices<Paid> paginationServices, IWebHostEnvironment host)
         {
             _paidServices = paidServices;
             _paginationServices = paginationServices;
+            _host = host;
         }
 
         [HttpGet]
@@ -52,29 +51,29 @@ namespace BE.Controllers
             return BadRequest(response);
         }
         [HttpPost]
-        public async Task<IActionResult> CreatePaid(CreatePaidDtos createPaidDtos)
+        public async Task<IActionResult> CreatePaid([FromForm] CreatePaidDtos createPaidDtos)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            var response = await _paidServices.CreatePaid(createPaidDtos);
+            var pathServer = $"{Request.Scheme}://{Request.Host}";
+            var response = await _paidServices.CreatePaid(createPaidDtos,_host.WebRootPath, pathServer);
             if (response._success)
             {
                 return Ok(response);
             }
             return BadRequest(response);
         }
-        [HttpPut]
-        public async Task<IActionResult> EditPaid(int id, CreatePaidDtos createPaidDtos)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditPaid(int id,[FromForm] CreatePaidDtos createPaidDtos)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            var paid = await _paidServices.EditPaid(id, createPaidDtos);
+            var pathServer = $"{Request.Scheme}://{Request.Host}";
+            var paid = await _paidServices.EditPaid(id, createPaidDtos, _host.WebRootPath, pathServer);
             if (paid._success)
             {
                 return Ok(paid);
@@ -82,7 +81,7 @@ namespace BE.Controllers
 
             return BadRequest(paid);
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePaid(int id)
         {
             var response = await _paidServices.DeletePaid(id);

@@ -476,7 +476,20 @@ namespace BE.Controllers
 			
 		}
 
+		[HttpGet("GetProjectByIdLead/{idlead}")]
+		public IActionResult GetProjectByIdLead(int idlead)
+		{
+			try
+			{
+                var list = _context.Projects.Where(x => x.IsFinished == false && x.IsDeleted == false && x.Leader == idlead).ToList();
 
+                return Ok(list);
+            }
+            catch(Exception ex)
+			{
+				return BadRequest(ex);
+			}		
+		}
     }
 
 }

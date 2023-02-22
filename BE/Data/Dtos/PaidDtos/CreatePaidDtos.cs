@@ -8,6 +8,7 @@
         public string CustomerName { get; set; }
         public decimal AmountPaid { get; set; }
         public string PaidReason { get; set; }
-        public bool IsPaid { get; set; } // 1 is paid, 0 is unpaid
+        public bool IsPaid { get; set; } = false; // 1 is paid, 0 is unpaid
+        public ICollection<IFormFile>? paidImage { get; set; }
     }
 }

@@ -142,7 +142,7 @@
                             <Button
                                 v-if="data.pathFile && showButton.download"
                                 icon="pi pi-download"
-                                class="p-button p-component p-button-secondary"
+                                class="p-button p-component p-button-help"
                                 @click="downloadFile(data.pathFile)"
                             ></Button>
                         </div>
@@ -391,9 +391,9 @@
                         this.showButton.delete = true
                         this.showButton.download = true
                     }
-                    if(Number(this.token.IdGroup) !== 2){
-                        this.showButton.download = true;
-                        this.showButton.view = true;
+                    if (Number(this.token.IdGroup) !== 2) {
+                        this.showButton.download = true
+                        this.showButton.view = true
                     }
                     this.GetAllRuleList()
                 } else {
@@ -405,7 +405,6 @@
                 this.displayBasic = true
             }
         },
-
         components: { Export, Add, Edit, View, Delete, AddRuleDiaLog, EditRuleDiaLog, DetailtRuleDiaLog },
     }
 </script>

@@ -7,7 +7,7 @@
             <div class="detail__content-box box-left">
                 <div class="detail__content-box-items">
                     <div class="detail__content-box-items-text">
-                        <b>OT User:</b> {{ this.OTS ? this.OTS.nameUser : null }}.
+                        <b>Nhân viên tăng ca:</b> {{ this.OTS ? this.OTS.nameUser : null }}.
                     </div>
                 </div>
 
@@ -19,26 +19,26 @@
 
                 <div class="detail__content-box-items top">
                     <div class="detail__content-box-items-text">
-                        <b>Project:</b> {{ this.OTS ? this.OTS.name : null }}
+                        <b>Dự án:</b> {{ this.OTS ? this.OTS.name : null }}
                     </div>
                 </div>
 
                 <div class="detail__content-box-items top">
                     <div class="detail__content-box-items-text">
-                        <b>Create Date:</b> {{ this.OTS ? getFormattedDate(new Date(this.OTS.x.dateCreate)) : null }}
+                        <b>Ngày tạo :</b> {{ this.OTS ? getFormattedDate(new Date(this.OTS.x.dateCreate)) : null }}
                     </div>
                 </div>
 
                 <div class="detail__content-box-items top">
                     <div class="detail__content-box-items-text">
-                        <b>Description:</b> {{ this.OTS ? this.OTS.x.description : null }}
+                        <b>Mô tả:</b> {{ this.OTS ? this.OTS.x.description : null }}
                     </div>
                 </div>
             </div>
             <div class="detail__content-box box-center">
                 <div class="detail__content-box-items">
                     <div class="detail__content-box-items-text">
-                        <b>OT Date:</b> {{ this.OTS ? getFormattedDate(new Date(this.OTS.x.date)) : null }}
+                        <b>Ngày tăng ca:</b> {{ this.OTS ? getFormattedDate(new Date(this.OTS.x.date)) : null }}
                     </div>
                 </div>
 
@@ -50,7 +50,8 @@
 
                 <div class="detail__content-box-items top">
                     <div class="detail__content-box-items-text">
-                        <b>Type:</b> {{ this.OTS ? this.OTS.x.type : null }}
+                        <b>Type:</b> {{ this.OTS ? this.OTS.x.type === 0 ? "OT" : 
+                                        this.OTS ? this.OTS.x.type === 1 ? "Remote" : null : null : null }}
                     </div>
                 </div>
             </div>
@@ -58,39 +59,64 @@
             <div class="detail__content-box box-right">
                 <div class="detail__content-box-items">
                     <div class="detail__content-box-items-text">
-                        <b>OT Time:</b> {{ this.OTS ? this.OTS.x.realTime + ' giờ' : '' }}
+                        <b>Thời gian tăng ca:</b> {{ this.OTS ? this.OTS.x.realTime + ' giờ' : '' }}
                     </div>
                 </div>
 
                 <div class="detail__content-box-items top">
                     <div class="detail__content-box-items-text">
-                        <b>User Update:</b> {{ this.OTS ? this.OTS.nameUserUpdate : null }}
+                        <b>Người sửa :</b> {{ this.OTS ? this.OTS.nameUserUpdate : null }}
                     </div>
                 </div>
 
                 <div class="detail__content-box-items top">
-                    <div class="detail__content-box-items-text"
-                    :style="{color : this.OTS.x.status === 0 ? 'blue' :
-                                     this.OTS.x.status === 1 ? 'green' :
-                                     this.OTS.x.status === 2 ? 'gray' :
-                                     this.OTS.x.status === 3 ? 'red' :
-                    ''}"
-                    ><b>Status:</b> {{ this.OTS ? this.OTS.x.status === 0 ? "Waiting" 
-                                     : this.OTS.x.status === 1 ? "Accepted"  
-                                     : this.OTS.x.status === 2 ? "Denied"
-                                     : this.OTS.x.status === 3 ? 'Deleted' : "" : ""
-                                    }}</div> 
+                    <div
+                        class="detail__content-box-items-text"
+                        :style="{
+                            color:
+                                this.OTS.x.status === 0
+                                    ? 'blue'
+                                    : this.OTS.x.status === 1
+                                    ? 'green'
+                                    : this.OTS.x.status === 2
+                                    ? 'gray'
+                                    : this.OTS.x.status === 3
+                                    ? 'red'
+                                    : '',
+                        }"
+                    >
+                        <b>Trạng thái:</b>
+                        {{
+                            this.OTS
+                                ? this.OTS.x.status === 0
+                                    ? 'Waiting'
+                                    : this.OTS.x.status === 1
+                                    ? 'Accepted'
+                                    : this.OTS.x.status === 2
+                                    ? 'Denied'
+                                    : this.OTS.x.status === 3
+                                    ? 'Deleted'
+                                    : ''
+                                : ''
+                        }}
                     </div>
+                </div>
             </div>
         </div>
-        <template #footer>
-            <Button label="Duyệt" icon="pi pi-check" class="p-button-raised p-button-success p-button-text"
-            v-if="this.isPm && this.OTS.x.status === 0 "
-            @click="accept(true, this.OTS.x.id, this.OTS.x.leadCreate)"
+        <template #footer style="display: flex; align-items: flex-end; justify-content: flex-end">
+            <Button
+                label="Duyệt"
+                icon="pi pi-check"
+                class="p-button-raised p-button-success p-button-text"
+                v-if="this.isPm && this.OTS.x.status === 0"
+                @click="accept(true, this.OTS.x.id, this.OTS.x.leadCreate)"
             />
-            <Button label="Hủy duyệt" icon="pi pi-times" class="p-button-raised p-button-danger p-button-text"
-            v-if="this.isPm && this.OTS.x.status === 0"
-            @click="accept(false, this.OTS.x.id, this.OTS.x.leadCreate)"
+            <Button
+                label="Hủy duyệt"
+                icon="pi pi-times"
+                class="p-button-raised p-button-danger p-button-text"
+                v-if="this.isPm && this.OTS.x.status === 0"
+                @click="accept(false, this.OTS.x.id, this.OTS.x.leadCreate)"
             />
             <Button
                 label="Quay lại"
@@ -100,17 +126,17 @@
             />
         </template>
         <Dialog
-            header="Please enter reason!"
+            header="Vui lòng nhập lý do!"
             :visible="displayDialog2"
             :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
             :style="{ width: '30vw' }"
             :modal="true"
         >
             <Textarea v-model="reason" style="margin: auto; width: 100%; height: 100%"></Textarea>
-            <p v-if="entered" class="p-error">Reason is required!</p>
+            <p v-if="entered" class="p-error">Lý do bắt buộc nhập!</p>
             <template #footer>
-                <Button label="No" icon="pi pi-times" @click="this.displayDialog2 = false" class="p-button-text" />
-                <Button label="Hoàn tất" icon="pi pi-check" @click="onSubmit(this.OTS.x.leadCreate)" autofocus />
+                <Button label="Hủy" icon="pi pi-times" @click="this.displayDialog2 = false" class="p-button-text" />
+                <Button label="Lưu" icon="pi pi-check" @click="onSubmit(this.OTS.x.leadCreate)" autofocus />
             </template>
         </Dialog>
     </Dialog>

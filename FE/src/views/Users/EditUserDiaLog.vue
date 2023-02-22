@@ -1,5 +1,5 @@
 <template>
-    <Dialog :visible="statusopen" :closable="false" :modal="true" :show="onShow()">
+    <Dialog :visible="statusopen" :closable="false" :maximizable="true" header="Sửa" :modal="true" :show="onShow()">
         <div>
             <Toast position="top-right" />
         </div>
@@ -8,7 +8,7 @@
                 <div class="card cardrelax">
                     <div class="admin__form--header">
                         <div></div>
-                        <h5 class="text-center">Sửa</h5>
+                        <h5 class="text-center"></h5>
                     </div>
                     <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
                         <div class="row">
@@ -530,7 +530,7 @@
                         </div>
                         <div class="d-flex justify-content-end">
                             <div class="col-2">
-                                <Button type="submit" label="Hoàn tất" />
+                                <Button type="submit" label="Lưu" />
                             </div>
                             &emsp;
                             <div class="col-2">
@@ -600,13 +600,13 @@
                     { name: 'Khác', code: 3 },
                 ],
                 optionRoles: [
-                    { name: 'Giám đốc', code: 1 },
+                    { name: 'President', code: 1 },
                     { name: 'HR', code: 2 },
                     { name: 'PM', code: 3 },
                     { name: 'Leader', code: 4 },
-                    { name: 'Kế toán', code: 5 },
-                    { name: 'Người dùng', code: 6 },
-                    { name: 'Quản trị viên', code: 7 },
+                    { name: 'Accountant', code: 5 },
+                    { name: 'Staff', code: 6 },
+                    { name: 'Admin', code: 7 },
                 ],
                 optionworkStatus: [
                     { name: 'Đang làm', code: 1 },
@@ -894,7 +894,6 @@
                 font-size: 30px;
                 width: 64%;
                 display: flex;
-                justify-content: flex-end;
             }
             .field-checkbox {
                 width: 36%;
@@ -921,7 +920,6 @@
         }
 
         .cardrelax {
-            width: 850px;
         }
 
         @media screen and (max-width: 960px) {

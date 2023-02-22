@@ -53,11 +53,12 @@
                         </div>
                         <div class="field" style="margin-bottom: 0">
                             <div class="p-float-label" :class="{ 'form-group--error': v$.data.user.$error }">
-                                <Dropdown
-                                    v-model="v$.data.user.$model"
+                                <MultiSelect
+                                    v-model="v$.data.user.$model" 
                                     :options="userDropdown"
-                                    optionLabel="name"
+                                    optionLabel="name" 
                                     optionValue="x.id"
+                                    placeholder="Người OTs" 
                                     :class="{ 'p-invalid': v$.data.user.$invalid && submitted }"
                                 />
                                 <label for="user" :class="{ 'p-error': v$.data.user.$invalid && submitted }"
@@ -69,6 +70,7 @@
                                 class="p-error"
                                 >Bạn chưa chọn người OT</small
                             >
+                        
                         </div>
                         <div class="field" style="margin-bottom: 0">
                             <div :class="{ 'form-group--error': v$.data.start.$error }">
@@ -162,6 +164,7 @@
                                 >
                             </div>
                         </div>
+                        
                         <div class="field">
                             <div class="p-float-label" :class="{ 'form-group--error': v$.data.description.$error }">
                                 <Textarea
@@ -185,7 +188,7 @@
                                 >Bạn chưa nhập mô tả</small
                             >
                         </div>
-                        <div class="button-div">
+                        <div class="btn-right">
                             <button type="submit" class="btn btn-primary">Lưu</button>&nbsp;
                             <button type="button" class="btn btn-secondary" v-on:click="backToOT()">Hủy</button>
                         </div>
@@ -206,6 +209,7 @@
     import axios from 'axios'
     import { HTTP } from '@/http-common'
     import { DateHelper } from '@/helper/date.helper'
+import { LocalStorage } from '@/helper/local-storage.helper'
 
     export default {
         setup: () => ({
@@ -230,6 +234,7 @@
                     user: null,
                     idProject: null,
                 },
+                token:null,
                 userDropdown: [],
                 project: [],
                 edit: false,
@@ -351,8 +356,6 @@
             addData() {
                 this.data.date = moment(new Date(this.data.date)).format('YYYY-MM-DD')
                 this.data.dateUpdate = new Date()
-                let userlogin = jwtDecode(localStorage.getItem('token'))
-                this.data.updateUser = userlogin.Id
                 if (this.edit) {
                     HTTP.put('OTs/updateOT/' + this.$route.params.id, this.data)
                         .then((res) => {
@@ -365,8 +368,9 @@
                             this.showWarn('Bạn không có quyền thực hiện thao tác sửa OT.')
                         })
                 } else if (this.data) {
+                    /*
                     this.data.dateCreate = new Date()
-                    this.data.leadCreate = userlogin.Id
+                    this.data.leadCreate = this.token.Id
                     HTTP.post('OTs/createOT', this.data)
                         .then((res) => {
                             if (res.status == 200) {
@@ -377,6 +381,25 @@
                         .catch(() => {
                             this.showWarn('Bạn không có quyền thực hiện thao tác thêm OT')
                         })
+                    */
+
+                    this.data.dateCreate = new Date()
+                    this.data.leadCreate = this.token.Id
+                    HTTP.post('OTs/AddOTs', this.data)
+                        .then((res) => {
+                            if (res.status == 200) {
+                                this.showSuccess()
+                                this.$router.push('/ots')
+                                console.log(res.data);
+                            }
+                        })
+                        .catch(() => {
+                            this.showWarn('Bạn không có quyền thực hiện thao tác thêm OT')
+                        })
+
+
+
+
                 }
             },
             check_status(status) {
@@ -408,10 +431,15 @@
                     })
                     .catch((err) => console.log(err))
             },
+        
         },
         mounted() {
+            this.token = LocalStorage.jwtDecodeToken()
+            console.log(this.token.IdGroup);
             // Nếu người dùng không phải là leader hay admin sẽ chuyển đến ots
-            if (!UserRoleHelper.isLeader() && !UserRoleHelper.isAdmin()) router.push('/ots')
+            if(Number(this.token.IdGroup) !== 3 && Number(this.token.IdGroup) !== 1){
+                  router.push('/ots')
+            } 
             // Kiểm tra cái này phải là edit hay không
             if (this.$route.params.id) {
                 this.edit = true
@@ -427,11 +455,9 @@
                 this.data.end = '00:00'
             }
 
-            HTTP.get('Project/getAllProject').then((res) => {
+            HTTP.get('Project/GetProjectByIdLead/'+this.token.Id).then((res) => {
                 if (res.status == 200)
-
                     var formatDate =  DateHelper.formatDate(new Date());
-
                     res.data.forEach((element) => {
                         if (element.isDeleted != true && element.isFinished != true && (element.endDate > formatDate || element.endDate == null)) 
                         {
@@ -441,11 +467,10 @@
             })
         },
         watch: {
-        // GET User By ID Project when change Id Data.IDProject        
-            'data.idProject' : function (newId,oldId){
-                this.getUserByProject(newId);
-            }
-             
+            // GET User By ID Project when change Id Data.IDProject
+            'data.idProject': function (newId, oldId) {
+                this.getUserByProject(newId)
+            },
         },
 
         components: { LayoutDefault },
@@ -476,7 +501,7 @@
     }
 
     h2 {
-        margin: auto;
+        margin-left: 61.5px;
         margin-bottom: 20px;
     }
 
@@ -498,5 +523,10 @@
     .label {
         font-size: 12px;
         margin-left: 0.75rem;
+    }
+    .btn-right {
+        float: right;
+        width: 110px;
+        display: inline-flex;
     }
 </style>

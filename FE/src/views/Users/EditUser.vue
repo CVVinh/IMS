@@ -474,7 +474,7 @@
                     </div>
                     <div class="d-flex justify-content-end">
                         <div class="col-2">
-                            <Button type="submit" label="Hoàn tất" />
+                            <Button type="submit" label="Lưu" />
                         </div>
                         &emsp;
                         <div class="col-2">

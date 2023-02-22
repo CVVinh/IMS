@@ -112,26 +112,26 @@
                     <template #body="{ data }">
                         <Member
                             @click="toDetailProject(data.id)"
-                            class="mazin"
+                            class="p-button-info mazin"
                             :disabled="canEdit(data.isDeleted, data.isFinished, data.userCreated)"
                         />
 
                         <Edit
                             v-if="data.isOnGitlab == false"
-                            class="mazin"
+                            class="p-button-warning mazin"
                             @click="openDialogEdit(data)"
                             :disabled="canEdit(data.isDeleted, data.isFinished, data.userCreated)"
                         />
 
                         <Delete
-                            class="mazin"
+                            class="p-button-danger mazin"
                             @click="confirmDelete(data.id)"
                             :disabled="canEdit(data.isDeleted, data.isFinished, data.userCreated)"
                         />
 
                         <Button
                             @click="finishProject(data.id)"
-                            class="p-button-sm mt-1 mazin"
+                            class="p-button-sm mt-1 p-button-success"
                             icon="pi pi-check"
                             :hidden="canFinished(data.isFinished, data.isDeleted)"
                             :disabled="
@@ -141,7 +141,7 @@
                         />
                     </template>
                 </Column>
-                <Column field="isFinished" header="Finished" sortable>
+                <Column field="isFinished" header="Trạng thái" sortable>
                     <template #body="{ data }">
                         <span :class="'badge ' + colorFinished(data.isFinished)">{{ text(data.isFinished) }}</span>
                     </template>
@@ -246,13 +246,13 @@
                     this.displayBasic = true
                 }
                 this.columns = [
-                    { field: 'description', header: 'Description' },
-                    { field: 'userId', header: 'Project manager' },
+                    { field: 'description', header: 'Mô tả' },
+                    { field: 'userId', header: 'PM' },
                     { field: 'leader', header: 'Leader' },
-                    { field: 'userCreated', header: 'User created' },
-                    { field: 'dateCreated', header: 'Date created' },
-                    { field: 'userUpdate', header: 'User update' },
-                    { field: 'dateUpdate', header: 'Date update' },
+                    { field: 'userCreated', header: 'Người tạo' },
+                    { field: 'dateCreated', header: 'Ngày tạo' },
+                    { field: 'userUpdate', header: 'Người chỉnh sửa' },
+                    { field: 'dateUpdate', header: 'Ngày chỉnh sửa' },
                 ]
             } catch (error) {
                 this.countTime()
@@ -369,6 +369,7 @@
                         })
                         this.arr = temp
                     }
+                    console.log('as', this.arr)
                     this.loading = false
                 })
             },
@@ -468,8 +469,8 @@
                 location.reload()
             },
             text(value) {
-                if (value == true) return 'close'
-                return 'open'
+                if (value == true) return 'Đã đóng'
+                return 'Đang chạy'
             },
             countTime() {
                 if (this.num == 0) {

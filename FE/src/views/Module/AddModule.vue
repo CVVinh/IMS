@@ -7,6 +7,8 @@
             :breakpoints="{ '1500px': '45vw', '960px': '75vw', '640px': '90vw' }"
             :style="{ width: '30vw', maxWidth: '400px' }"
             :modal="true"
+            :maximizable="true"
+            :closable="false"
             @hide="handleHide"
         >
             <div>
@@ -40,8 +42,8 @@
                 </div>
             </div>
             <template #footer>
-                <Button label="Đóng" icon="pi pi-times" @click="closeModal" class="p-button-text" />
                 <Button label="Lưu" icon="pi pi-check" autofocus @click="handleSave(v$.$invalid)" />
+                <Button label="Đóng" icon="pi pi-times" @click="closeModal" class="p-button-secondary" />
             </template>
         </Dialog>
     </div>

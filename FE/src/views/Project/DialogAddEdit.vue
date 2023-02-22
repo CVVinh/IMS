@@ -14,7 +14,7 @@
                     <div class="col-md-12 mb-3">
                         <div class="d-flex align-items-center">
                             <InputSwitch id="OnGitlab" v-model="isOnGitlab" />
-                            <label class="ms-2" for="OnGitlab">GitLab</label>
+                            <label class="ms-2" for="OnGitlab">Dự án trên GitLab</label>
                         </div>
                     </div>
                     <div class="col-12 row">
@@ -291,9 +291,15 @@
                             >{{ v$.dataProject.leader.required.$message.replace('Value', 'Leader') }}</small
                         >
                     </div>
-                    <div class="">
-                        <button type="submit" class="btn btn-primary">Lưu</button>&nbsp;
-                        <button type="button" class="btn btn-secondary" v-on:click="onClickCancel()">Hủy</button>
+                    <div class="btn-right">
+                        <Button
+                            label="Lưu"
+                            type="submit"
+                            icon="pi pi-check"
+                            style="margin-right: 10px"
+                            v-on:click="handleSubmit()"
+                        />
+                        <Button label="Hủy" class="p-button-secondary" v-on:click="onClickCancel()" />
                     </div>
                 </form>
             </div>
@@ -541,5 +547,11 @@
     }
     .input_disabled {
         background: #ececec !important;
+    }
+    .btn-right {
+        float: right;
+        width: 240px;
+        display: inline-flex;
+        height: 40px;
     }
 </style>

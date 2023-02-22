@@ -275,7 +275,6 @@
             },
             async getRole() {
                 HTTP.get(GET_GROUP_BY_ID(Number(this.token.IdGroup))).then((res) => {
-                    console.log(res.data)
                     this.dataGrounp = res.data
                 })
             },

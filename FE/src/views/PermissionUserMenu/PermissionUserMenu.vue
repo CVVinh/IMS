@@ -1,6 +1,30 @@
 <template>
     <LayoutDefaultDynamic>
         <ConfirmDialog></ConfirmDialog>
+        <template #header>
+            <div class="flex justify-content-center">
+                <h5 class="" style="color: white">Danh sách dự án</h5>
+                <div class="inline">
+                    <Export label="Xuất Excel" class="me-2" @click="exportToExcel()" />
+                    <Button @click="finishMulti()" label="Lưu" class="p-button-sm me-2" icon="pi pi-check" />
+                    <Add @click="openDialogAdd()" label="Thêm" v-if="canAddProject()" />
+                    <div class="p-input-icon-left layout-left">
+                        <i class="pi pi-search" />
+                        <InputText class="p-inputtext-sm" v-model="filters['global'].value" placeholder="Tìm kiếm" />
+                    </div>
+                    <div class="layout-left">
+                        <MultiSelect
+                            :modelValue="selectedColumns"
+                            :options="columns"
+                            optionLabel="header"
+                            @update:modelValue="onToggle"
+                            placeholder="Chọn"
+                            style="width: 20em"
+                        />
+                    </div>
+                </div>
+            </div>
+        </template>
         <div class="permission-user-menu col-12 row p-4">
             <div class="col-sm-3 card p-2">
                 <Dropdown
@@ -35,11 +59,17 @@
                         </template>
                     </OrderList>
                     <div class="col-12 d-flex p-lg-3 justify-content-end position-absolute bottom-0">
-                        <button label="Hủy" class="btn btn-secondary" @click="cancel">Quay về</button>
-                        &nbsp;
-                        <button label="Lưu" class="btn btn-primary" @click="confirmSave()" :disabled="!selectedUser">
-                            Save
+                        <button
+                            label="Lưu"
+                            icon="pi pi-check"
+                            class="btn btn-primary"
+                            @click="confirmSave()"
+                            :disabled="!selectedUser"
+                        >
+                            Lưu
                         </button>
+                        &nbsp;
+                        <button label="Hủy" class="btn btn-secondary" @click="cancel">Quay về</button>
                     </div>
                 </div>
             </div>
@@ -138,7 +168,7 @@
                 >Bạn sẽ được điều hướng vào trang chủ <strong>{{ num }}</strong> giây!</medium
             >
             <template #footer>
-                <Button label="Hoàn tất" icon="pi pi-check" @click="submit" autofocus />
+                <Button label="Lưu" icon="pi pi-check" @click="submit" autofocus />
             </template>
         </Dialog>
     </LayoutDefaultDynamic>
@@ -365,7 +395,7 @@
                     this.$toast.add({
                         severity: 'error',
                         summary: 'Lỗi',
-                        detail: 'Cập nhật lỗi. Vui lòng liên hệ quản trị viên.',
+                        detail: 'Cập nhật lỗi. Vui lòng liên hệ Admin.',
                         life: 3000,
                     })
                     this.selectedAUser(this.selectedUser)

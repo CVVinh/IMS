@@ -5,21 +5,21 @@
         :closable="false"
         position="center"
         :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
-        :style="{ width: '50vw' }"
+        :style="{ width: '55vw' }"
         :dismissableMask="true"
         :modal="true"
         :visible="isOpen"
     >
         <div class="container">
             <form class="form-addproject" @submit.prevent="submitRegisterLeaveOff()">
-                <div class="col-md-12 mb-3 mt-3">
+                <div class="col-md-12 mb-3 mt-3 d-flex">
                     <div class="d-flex align-items-center">
                         <InputSwitch id="onLeaveOff" v-model="onLeaveOff" />
                         <label class="ms-2" for="onLeaveOff">Nghỉ trong ngày</label>
                     </div>
                 </div>
                 <div class="row mb-2">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="field">
                             <label
                                 class="mb-2"
@@ -47,7 +47,7 @@
                             </small>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="field">
                             <label
                                 class="mb-2"
@@ -75,6 +75,26 @@
                             </small>
                         </div>
                     </div>
+                    <div class="col-md-4 p-float-labe">
+                        <label
+                            class="mb-2"
+                            for="dateEnd"
+                            :class="{ 'p-error': v$.leaveOff.idCompanyBranh.$invalid && submitted }"
+                        >
+                            Chọn chi nhánh
+                            <span style="color: red">*</span>
+                        </label>
+                        <Dropdown
+                            id="idCompanyBranh"
+                            v-model="v$.leaveOff.idCompanyBranh.$model"
+                            :options="arrCompany"
+                            optionLabel="name"
+                            optionValue="id"
+                        />
+                        <small class="p-error" v-if="v$.leaveOff.idCompanyBranh.required.$invalid && isSubmit">
+                            {{ v$.leaveOff.idCompanyBranh.required.$message.replace('Value', 'Chi nhánh công ty') }}
+                        </small>
+                    </div>
                 </div>
                 <div class="input-layout w-100">
                     <label class="mb-2" for="Reason" :class="{ 'p-error': v$.leaveOff.reason.$invalid && submitted }">
@@ -94,7 +114,7 @@
                 </div>
                 <div class="group-button mt-3">
                     <div>
-                        <Button label="Hoàn tất" class="p-button-sm me-1" type="submit" icon="pi pi-check" />{{ ' ' }}
+                        <Button label="Lưu" class="p-button-sm me-1" type="submit" icon="pi pi-check" />{{ ' ' }}
                         <Button label="Hủy" class="p-button-sm p-button-secondary" @click="closeDialog()" />
                     </div>
                 </div>
@@ -110,6 +130,7 @@
     import { HttpStatus } from '@/config/app.config'
     import { DateHelper } from '@/helper/date.helper'
     import jwtDecode from 'jwt-decode'
+    import { Company } from './Company'
     export default {
         props: ['isOpen', 'selectedLeaveOff'],
         setup: () => ({ v$: useVuelidate() }),
@@ -121,6 +142,8 @@
                 userAccept: jwtDecode(localStorage.getItem('token')),
                 timeFormat: new Date(),
                 onLeaveOff: false,
+                idCompanyBranh: 1,
+                arrCompany: Company,
             }
         },
         created() {
@@ -150,6 +173,7 @@
                             this.leaveOff.reason = res.data._Data.reasons
                             this.leaveOff.startTime = new Date(res.data._Data.startTime)
                             this.leaveOff.endTime = new Date(res.data._Data.endTime)
+                            this.leaveOff.idCompanyBranh = res.data._Data.idCompanyBranh
                         }
                     })
                     .catch((err) => {
@@ -180,10 +204,6 @@
                         return
                     }
                 }
-                if (date1.getDay() == 0 || date1.getDay() == 6 || date2.getDay() == 0 || date2.getDay() == 6) {
-                    this.toastWarn('Không được nhập ngày là thứ 7, chủ nhật !')
-                    return
-                }
                 if (!this.v$.$invalid) {
                     if (this.selectedLeaveOff.id) {
                         this.handlerEditLeaveOff()
@@ -198,6 +218,7 @@
                     startTime: DateHelper.formatDateTime(this.leaveOff.startTime),
                     endTime: DateHelper.formatDateTime(this.leaveOff.endTime),
                     reasons: this.leaveOff.reason,
+                    idCompanyBranh: this.leaveOff.idCompanyBranh,
                 }
                 if (addNewLeaveOffDto) {
                     HTTP.post(ENDPIONTS.ADD_NEW_LEAVE_OFF, addNewLeaveOffDto)
@@ -221,6 +242,7 @@
                     startTime: DateHelper.formatDateTime(this.leaveOff.startTime),
                     endTime: DateHelper.formatDateTime(this.leaveOff.endTime),
                     reasons: this.leaveOff.reason,
+                    idCompanyBranh: this.leaveOff.idCompanyBranh,
                 }
                 if (editRegisterLeaveOffDtos) {
                     HTTP.put(UPDATE_LEAVE_OFF(this.selectedLeaveOff.id), editRegisterLeaveOffDtos)
@@ -258,6 +280,7 @@
                     startTime: null,
                     endTime: null,
                     reason: null,
+                    idCompanyBranh: 1,
                 }
             },
             toastSuccess(message) {
@@ -303,6 +326,7 @@
                     endTime: { required },
                     startTime: { required },
                     reason: { required },
+                    idCompanyBranh: { required },
                 },
             }
         },

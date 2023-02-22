@@ -70,7 +70,11 @@
                 <Column field="menu1.parent" header="Nhánh/lớp cha" sortable></Column>
                 <Column header="&emsp;&emsp;action" style="min-width: 9rem">
                     <template #body="{ data }">
-                        <Edit @click="Openeditmodal(data.menu1.id)" :disabled="checkAction(data.menu1.isDeleted)" />
+                        <Edit
+                            class="p-button-warning"
+                            @click="Openeditmodal(data.menu1.id)"
+                            :disabled="checkAction(data.menu1.isDeleted)"
+                        />
 
                         <Delete
                             class="itemsbutton"

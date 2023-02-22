@@ -1,8 +1,6 @@
 <template>
-    <Dialog :visible="status" :closable="false" modal="true">
-        <template #header>
-            <h3>Sửa menu</h3>
-        </template>
+    <Dialog :visible="status" :maximizable="true" :closable="false" header="Sửa" modal="true">
+        <template #header> </template>
 
         <div class="Menu__form">
             <div class="Menu__form--items items-left">
@@ -101,7 +99,7 @@
                 </div>
 
                 <div class="Menu__form--items-content">
-                    <h5>Nhánh/Lớp cha</h5>
+                    <label>Nhánh/Lớp cha</label>
                     <Dropdown
                         class="inputdrop"
                         v-model="Datasend.parent"
@@ -115,8 +113,8 @@
         </div>
 
         <template #footer>
-            <Button label="Sửas" icon="pi pi-check" autofocus @click="updateMenu" />
-            <Button label="Đóng" icon="pi pi-times" class="p-button-text" @click="closeModal" />
+            <Button label="Lưu" icon="pi pi-check" autofocus @click="updateMenu" />
+            <Button label="Đóng" icon="pi pi-times" class="p-button-secondary" @click="closeModal" />
         </template>
     </Dialog>
 </template>

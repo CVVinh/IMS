@@ -131,7 +131,7 @@
                 >Bạn sẽ được điều hướng vào trang chủ <strong>{{ num }}</strong> giây!</medium
             >
             <template #footer>
-                <Button label="Hoàn tất" icon="pi pi-check" @click="submit" autofocus />
+                <Button label="Lưu" icon="pi pi-check" @click="submit" autofocus />
             </template>
         </Dialog>
         <AddDevicesOther

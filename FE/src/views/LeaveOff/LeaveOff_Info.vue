@@ -256,7 +256,8 @@
                             user: null,
                             name: null,
                             acceptBy: null,
-                            realTime: this.mathLeaveOffDate(el.startTime, el.endTime),
+                            realTime: this.mathLeaveOffDate(el.startTime, el.endTime, el.idCompanyBranh),
+                            idCompanyBranh: el.idCompanyBranh,
                             userCode: null,
                         })
                     })
@@ -264,15 +265,9 @@
                 await this.handlerIdUser()
                 this.loading = false
             },
-
-            formatDate(value) {
-                if (value == null) return null
-                else
-                    return new Date(value).toLocaleDateString('en-CA', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                    })
+            formatDate(date) {
+                const fmDate = new Date(date)
+                return dayjs(fmDate).format('YYYY/MM/DD (HH:mm)')
             },
             async handlerFillterLeaveOff() {
                 this.loading = true
@@ -306,7 +301,8 @@
                                 user: null,
                                 name: null,
                                 acceptBy: null,
-                                realTime: this.mathLeaveOffDate(el.startTime, el.endTime),
+                                realTime: this.mathLeaveOffDate(el.startTime, el.endTime, el.idCompanyBranh),
+                                idCompanyBranh: el.idCompanyBranh,
                                 userCode: null,
                             })
                         })
@@ -353,22 +349,7 @@
                     }),
                 )
             },
-            // mathLeaveOffDate(startTime, endTime) {
-            //     const start = new Date(startTime)
-            //     const end = new Date(endTime)
-            //     const diff = end - start
-
-            //     const millisecondsPerMinute = 1000 * 60
-            //     const minutesPerHour = 60
-            //     const hoursPerDay = 24
-
-            //     const minutes = Math.floor(diff / millisecondsPerMinute)
-            //     const hours = Math.floor(minutes / minutesPerHour) % hoursPerDay
-            //     const days = Math.floor(minutes / (minutesPerHour * hoursPerDay))
-            //     // const years = Math.floor(days / 365)
-            //     return `${days}d ${hours}h ${minutes % minutesPerHour}m`
-            // },
-            mathLeaveOffDate(startTime, endTime) {
+            mathLeaveOffDate(startTime, endTime, idCompanyBranh) {
                 const start = new Date(startTime)
                 const end = new Date(endTime)
 
@@ -382,36 +363,61 @@
 
                 // Trừ thời gian nghỉ trưa nếu trong giờ làm việc
                 if (start.getHours() <= 12 && end.getHours() >= 13 && isSameDay) {
-                    const lunchTime = end.getHours() >= 13 && end.getMinutes() >= 30 ? 90 : 60 // 60 phút hoặc 90 phút nghỉ trưa
-                    diff -= lunchTime * 60 * 1000 // Chuyển đổi sang mili giây
-                }
-
-                // Tính ngày, giờ làm việc
-                const millisecondsPerMinute = 1000 * 60
-                const minutesPerHour = 60
-                const hoursPerDay = 24
-                const workingDays = []
-                let totalMinutes = Math.floor(diff / millisecondsPerMinute)
-                let days = Math.floor(totalMinutes / (minutesPerHour * hoursPerDay))
-
-                for (let i = 0; i < days; i++) {
-                    const currDate = new Date(start.getTime() + i * 24 * 60 * 60 * 1000)
-                    if (currDate.getDay() !== 0 && currDate.getDay() !== 6) {
-                        workingDays.push(currDate)
+                    let lunchTime
+                    if (idCompanyBranh == 1) {
+                        lunchTime = 90
                     }
+                    if (idCompanyBranh == 2) {
+                        lunchTime = 60
+                    }
+                    diff -= lunchTime * 60 * 1000
                 }
 
-                const remainingMinutes = totalMinutes - days * minutesPerHour * hoursPerDay
-                const hours = Math.floor(remainingMinutes / minutesPerHour)
-                const minutes = remainingMinutes % minutesPerHour
+                const millisecondsPerDay = 24 * 60 * 60 * 1000
+                let count = 0
+                let currentDate = new Date(start)
+                let countT7CN = 0
+                while (currentDate <= end) {
+                    if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) {
+                        // Bỏ qua ngày thứ 7 và chủ nhật
+                        let workHours = 8.5 // Số giờ làm việc trong ngày
+                        if (currentDate.getHours() >= 12 && currentDate.getHours() < 13) {
+                            workHours -= 1 // Nếu là giờ nghỉ trưa, trừ đi 1 giờ
+                        } else if (currentDate.getHours() >= 13 && currentDate.getHours() < 17) {
+                            workHours -= 0.5 // Nếu là giờ chiều, trừ đi 0.5 giờ
+                        }
+                        count += workHours // Cộng số giờ làm việc của ngày đó vào tổng số giờ làm việc
+                    } else {
+                        countT7CN += 1
+                    }
+                    currentDate.setDate(currentDate.getDate() + 1)
+                }
 
+                const totalWorkingHours = count
+                console.log(totalWorkingHours)
+
+                let days = Math.floor(diff / millisecondsPerDay)
+                diff -= days * millisecondsPerDay
+                days -= countT7CN
+
+                const hours = Math.floor(diff / (1000 * 60 * 60))
+                diff -= hours * (1000 * 60 * 60)
+
+                const minutes = Math.floor(diff / (1000 * 60))
+
+                // Định dạng chuỗi kết quả
                 let result = ''
                 if (days > 0) {
-                    result += `${days}d `
+                    result += days + 'd '
                 }
-                result += `${hours}h ${minutes}m`
+                if (hours > 0) {
+                    result += hours + 'h '
+                }
+                if (minutes > 0) {
+                    result += minutes + 'm'
+                }
 
-                return result
+                return result.trim()
             },
         },
         components: {

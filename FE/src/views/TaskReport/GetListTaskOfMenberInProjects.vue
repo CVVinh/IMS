@@ -58,7 +58,8 @@
                                             <Button
                                                 class="p-button-outlined p-button-info"
                                                 @click="handlerFillterProject"
-                                                icon="pi pi-filter-fill"
+                                                style="background-color: antiquewhite"
+                                                icon="pi pi-filter-slash"
                                             />
                                         </div>
                                     </div>

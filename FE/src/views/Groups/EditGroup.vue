@@ -41,11 +41,9 @@
                     <label class="input-title">Mô tả </label>
                     <Textarea v-model="this.group.discription" class="input" rows="5" />
                 </div>
-                <div class="group-button">
-                    <div>
-                        <Button label="Lưu" type="submit" icon="pi pi-check" />{{ ' ' }}
-                        <Button label="Hủy" class="p-button-secondary" v-on:click="closeDialog()" />
-                    </div>
+                <div class="btn-right">
+                    <Button label="Lưu" type="submit" icon="pi pi-check" />{{ ' ' }}
+                    <Button label="Hủy" class="p-button-secondary" v-on:click="closeDialog()" />
                 </div>
             </form>
         </div>
@@ -186,6 +184,10 @@
         width: 100%;
         display: flex;
         justify-content: center;
+    }
+    .btn-right {
+        float: right;
+        margin-top: 10px;
     }
 </style>
 <style>

@@ -37,6 +37,7 @@ using BE.Mapper;
 using BE.Services.PaidServices;
 using BE.shared.Interface;
 using BE.Services.RulesServices;
+using BE.Services.InfoDeviceServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,7 +71,7 @@ builder.Services.AddScoped<IPaidServices, PaidService>();
 builder.Services.AddScoped<IPaginationServices<Paid>, PaginationServices<Paid>>();
 builder.Services.AddScoped<IRulesService, RulesService>();
 builder.Services.AddScoped<IPaginationServices<Rules>, PaginationServices<Rules>>();
-
+builder.Services.AddScoped<IInfoDeviceService,InfoDeviceService>();
 #endregion
 
 #region Registering Validator

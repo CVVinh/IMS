@@ -70,7 +70,7 @@
                 <medium v-if="entered" class="p-error"> Reason is requied! </medium>
                 <template #footer>
                     <Button label="No" icon="pi pi-times" @click="closeBasic" class="p-button-text" />
-                    <Button label="Hoàn tất" icon="pi pi-check" @click="submit" autofocus />
+                    <Button label="Lưu" icon="pi pi-check" @click="submit" autofocus />
                 </template>
             </Dialog>
         </div>

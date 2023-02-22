@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BE.Data.Dtos.InfoDeviceDtos;
 using BE.Data.Dtos.PaidDtos;
 using BE.Data.Dtos.ProjectDtos;
 using BE.Data.Dtos.RulesDTOs;
@@ -13,8 +14,9 @@ namespace BE.Mapper
             CreateMap<Projects, AddNewProjectDto>().ReverseMap();
             CreateMap<Projects, EditProjectDto>().ReverseMap();
             CreateMap<Paid, CreatePaidDtos>().ReverseMap();
-
             CreateMap<Rules, AddOrUpdateRulesDTO>().ReverseMap();
+            CreateMap<InfoDevices,CreateInfoDeviceDto>().ReverseMap();
+
         }
     }
 }

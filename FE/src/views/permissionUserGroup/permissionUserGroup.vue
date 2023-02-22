@@ -30,7 +30,6 @@
                         v-if="userGroup.length > 0"
                         class="col-12 d-flex p-lg-3 justify-content-end position-absolute bottom-0"
                     >
-                        <button label="Hủy" class="btn btn-secondary me-2" @click="cancel">Quay về</button>
                         <button
                             label="SAVE"
                             class="btn btn-primary"
@@ -39,6 +38,8 @@
                         >
                             Lưu
                         </button>
+                        &nbsp;
+                        <button label="Hủy" class="btn btn-secondary me-2" @click="cancel">Quay về</button>
                     </div>
                 </div>
             </div>
@@ -86,7 +87,7 @@
                 >Bạn sẽ được điều hướng vào trang chủ <strong>{{ num }}</strong> giây!</medium
             >
             <template #footer>
-                <Button label="Hoàn tất" icon="pi pi-check" @click="submit" autofocus />
+                <Button label="Lưu" icon="pi pi-check" @click="submit" autofocus />
             </template>
         </Dialog>
     </LayoutDefaultDynamic>
@@ -299,7 +300,7 @@
                     this.$toast.add({
                         severity: 'error',
                         summary: 'Lỗi',
-                        detail: 'Cập nhật lỗi. Vui lòng liên hệ quản trị viên.',
+                        detail: 'Cập nhật lỗi. Vui lòng liên hệ Admin.',
                         life: 3000,
                     })
                     this.getUserGroup()

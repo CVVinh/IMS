@@ -209,7 +209,7 @@
                 >Bạn sẽ được điều hướng vào trang chủ <strong>{{ num }}</strong> giây!</medium
             >
             <template #footer>
-                <Button label="Hoàn tất" icon="pi pi-check" @click="submit" autofocus />
+                <Button label="Lưu" icon="pi pi-check" @click="submit" autofocus />
             </template>
         </Dialog>
         <Dialog
@@ -223,7 +223,7 @@
             <medium v-if="entered" class="p-error"> Lý do bắt buộc nhập ! </medium>
             <template #footer>
                 <Button label="No" icon="pi pi-times" @click="closeBasic" class="p-button-text" />
-                <Button label="Hoàn tất" icon="pi pi-check" @click="onSubmit(data.leadCreate)" autofocus />
+                <Button label="Lưu" icon="pi pi-check" @click="onSubmit(data.leadCreate)" autofocus />
             </template>
         </Dialog>
     </LayoutDefaultDynamic>
