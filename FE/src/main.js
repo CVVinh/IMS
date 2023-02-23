@@ -39,7 +39,7 @@ import Panel from 'primevue/panel'
 import Avatar from 'primevue/avatar'
 import Card from 'primevue/card'
 import Breadcrumb from 'primevue/breadcrumb'
-
+import Galleria from 'primevue/galleria';
 
 import InputSwitch from 'primevue/inputswitch'
 import Toolbar from 'primevue/toolbar'
@@ -89,6 +89,7 @@ app.component('Editor', Editor)
 app.component('FileUpload', FileUpload)
 app.component('Message', Message)
 app.component('DatePicker', DatePicker)
+app.component('Galleria', Galleria)
 
 app.use(createPinia())
 app.use(router)
