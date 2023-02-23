@@ -53,7 +53,7 @@ namespace BE.Services.PaidServices
             var data = new List<Paid>();
             try
             {
-                var paids = await _appContext.Paids.Where(x => x.PaidPerson == userId).ToListAsync();
+                var paids = await _appContext.Paids.Where(x => x.PaidPerson == userId).Include(x => x.paidImages).ToListAsync();
                 success = true;
                 message = "Get all data successfully";
                 data.AddRange(paids);

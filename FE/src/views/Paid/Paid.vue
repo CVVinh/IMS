@@ -296,19 +296,29 @@
                 :maximizable="true"
                 :modal="true"
             >
-                <!-- <img v-bind:src="paidImage" width="100%" /> -->
                 <div v-if="paidImage.length > 0">
-                    <div v-for="(item, index) in paidImage" :key="index" class="mb-2">
-                        <Image v-bind:src="item.imagePath" alt="Image" width="100" preview />
-                    </div>
+                    <!-- <div v-for="(item, index) in paidImage" :key="index" class="mb-2">
+                        <Image v-bind:src="item.imagePath" alt="Image" width="100%" preview />
+                    </div> -->
+                    
+                    <Galleria :value="dataImgDetail" >
+                        <template #item="slotProps">
+                            <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" />
+                        </template>
+                        <template #thumbnail="slotProps">
+                            <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" />
+                        </template>
+                    </Galleria>
                 </div>
                 <div v-else>
                     <h3>Không có hình ảnh để hiển thị</h3>
                 </div>
+
                 <template #footer>
-                    <button class="btn btn-secondary" @click="closeDetails()">Huỷ</button>
+                    <button class="btn btn-secondary" @click="closeDetails()">Trở Về</button>
                 </template>
             </Dialog>
+
             <Toast />
         </div>
     </LayoutDefaultDynamic>
@@ -354,7 +364,22 @@
                 filterArr: [],
                 token: null,
                 displayImage: false,
-                paidImage: null,
+                paidImage: [],
+                dataImgDetail: [],
+                responsiveOptions: [
+                    {
+                        breakpoint: '1024px',
+                        numVisible: 5
+                    },
+                    {
+                        breakpoint: '768px',
+                        numVisible: 3
+                    },
+                    {
+                        breakpoint: '560px',
+                        numVisible: 1
+                    }
+                ]
             }
         },
 
@@ -377,7 +402,7 @@
                         if (Number(this.token.IdGroup) !== 2 && Number(this.token.IdGroup) !== 1) {
                             this.getPaidByIdUser(this.token.Id)
                         }
-                        await this.getAllProject()
+                        await this.getAllProject()                        
                     }else{
                         alert("Bạn không có quyền truy cập module này")
                         router.push('/')
@@ -387,7 +412,7 @@
                 {
                     router.push('/')
                     console.log(err);
-                }
+                }               
             },
 
             Openmodal() {
@@ -408,7 +433,7 @@
             },
 
             DeletePaid(id) {
-                HTTP.delete('Paid?id=' + id).then((res) => {                    
+                HTTP.delete(`Paid/${id}`).then((res) => {                    
                     this.getData();
                     this.showSuccess('Xóa thành công!');
                 })
@@ -445,6 +470,7 @@
                         .then((res) => {
                             res.data._Data.forEach((ele) => {
                                 this.paids = res.data._Data;
+                                console.log("this.paids user: "+ JSON.stringify(this.paids))
                             })
                         })
                         .catch((err) => console.log(err))
@@ -459,9 +485,11 @@
                 this.loading = true
                 await HTTP.get(GET_LIST_PAID)
                     .then((respone) => {
-                        this.paids = respone.data._Data;
+                        this.paids = respone.data._Data;    
+                        console.log("this.paids: "+ JSON.stringify(this.paids))                   
                     })
                     .catch((error) => {
+                        this.showError(error.response.data);
                         console.log(error)
                     })
                 await this.getWithName()
@@ -531,13 +559,27 @@
                 var y = ed.getFullYear()
                 return '' + y + '-' + (m <= 9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d)
             },
+
             openDetails(images) {
                 this.displayImage = true
-                this.paidImage = images
+                this.paidImage = images ?? [];
+
+                if(this.paidImage!=null){
+                    this.paidImage.forEach(item => {
+                        var imgObj = {
+                            "itemImageSrc": item.imagePath,
+                            "thumbnailImageSrc": item.imagePath,
+                            "alt": "Image "+item.imageId,
+                        }
+                        this.dataImgDetail.push(imgObj);
+                    });
+                }
             },
+
             closeDetails() {
                 this.displayImage = false
             },
+
         },
 
         components: { LayoutDefaultDynamic, Add, Edit, Delete, AddPaid, EditPaid },

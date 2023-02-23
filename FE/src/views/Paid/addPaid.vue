@@ -8,8 +8,8 @@
         :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
         :style="{ width: '50vw' }"
     >
-        <form enctype="multipart/form-data">
-            <div class="Menu__form">
+        <form enctype="multipart/form-data" class="container">
+            <div class="Menu__form ">
                 <div class="Menu__form--items items-left">
                     <div class="Menu__form--items-content">
                         <label
@@ -94,6 +94,7 @@
                         />
                     </div>
                 </div>
+                
             </div>
             <!-- <FileUpload
                 accept="image/*"
@@ -107,13 +108,16 @@
                     <p>Drag and drop files to here to upload.</p>
                 </template>
             </FileUpload> -->
-            <div class="container">
-                <input type="file" multiple @change="onFileChange" ref="fileupload" accept="image/*"/><br /><br />
 
-                <div class="jumbotron">
+            <div class="flex justify-content-center container">
+                <div class="input_file">
+                    <input type="file" multiple @change="onFileChange($event)" ref="fileupload" accept="image/*"/>
+                </div>
+
+                <div class="jumbotron p-fluid" v-if="isHaveImg">
                     <div class="row">
                         <div v-for="(item, index) in images" :key="index">
-                            <div class="col-md-4" :id="index">
+                            <div class="col-3" :id="index">
                                 <button type="button" @click="removeImage(index)">&times;</button>
                                 <img class="preview img-thumbnail" v-bind:ref="'image' + parseInt(index)" />
                                 {{ item.name }}
@@ -122,7 +126,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <input type="file" ref="files" multiple="multiple" /> -->
         </form>
 
         <template #footer>
@@ -164,7 +167,7 @@
                 token: null,
                 currentUser: null,
                 images: [],
-                files: [],
+                isHaveImg: false,
             }
         },
         validations() {
@@ -183,7 +186,8 @@
 
         methods: {
             closeModal() {
-                this.$emit('closemodal')
+                this.isHaveImg = false;
+                this.$emit('closemodal');
             },
 
             clearform() {
@@ -194,14 +198,15 @@
                 this.isSubmit = false
             },
 
-            onFileChange(e) {
+            onFileChange(event) {
                 this.images = [];
-                console.log("cos qua");
-                let selectedFiles = e.target.files
+                this.isHaveImg = true;
+                const selectedFiles = event.target.files
 
                 for (var i = 0; i < selectedFiles.length; i++) {
                     this.images.push(selectedFiles[i])
                 }
+
                 for (let i = 0; i < this.images.length; i++) {
                     let reader = new FileReader()
                     reader.addEventListener(
@@ -219,47 +224,21 @@
             // removeImage(index) {
             //     this.images.splice(index, 1)
             //     let imagesRefs = this.$refs
-                
             //     Object.keys(imagesRefs).forEach((key) => {
             //         let refIndex = key.slice(-1) // 1; index: 0
-
-            //         console.log("index: "+ index + " ;refIndex: "+ refIndex)
-                    
             //         if (refIndex > index) {
-            //             console.log("key: "+ key)
             //             imagesRefs[key][0].src = imagesRefs['image' + (refIndex - 1)][0].src
             //         }
             //     })
-
-            //     console.log("imagesRefs: "+ JSON.stringify(imagesRefs) )
             // },
 
             removeImage(index) {
-
                 this.images.splice(index, 1)
                 if(this.images.length == 0){
                     this.$refs.fileupload.value = null;
+                    this.isHaveImg = false;
                 }
-                var imagesRefs = this.$refs
-
-                // Object.keys(imagesRefs).forEach((key) => {
-                //     console.log("key: "+ key )
-
-                //     let refIndex = key.slice(-1) // 1; index: 0
-
-                //     console.log("index: "+ index + " ;refIndex: "+ refIndex)
-                    
-                //     if (refIndex >= index) {
-                //         console.log("key: "+ key)
-                //         console.log('image' + (refIndex - 1))
-                //         imagesRefs[key][0].src = imagesRefs['image' + (refIndex - 1)][0].src
-                //     }
-                // })
-
-                console.log("this.images: "+ JSON.stringify(this.images) )
-                console.log("imagesRefs: "+ JSON.stringify(imagesRefs) )
             },
-
 
             async CallApi(fromData) {
                 try {
@@ -304,13 +283,11 @@
                 formData.append('AmountPaid', this.Datasend.amountPaid)
                 formData.append('PaidReason', this.Datasend.paidReason)
                 formData.append('IsPaid', this.Datasend.isPaid)
+                //formData.append('paidImage', this.Datasend.paidImage)
                 
-                
-                // this.images.forEach((item) => {
-                //     formData.append('paidImage', item)
-                // })
-
-                //console.log(this.Datasend.paidImage)
+                this.images.forEach((item) => {
+                    formData.append('paidImage', item)
+                })
                 await this.CallApi(formData)
                 
             },
@@ -390,4 +367,29 @@
         height: 100px;
         width: 100px;
     }
+
+    .input_file {
+        border: 1px solid #e5e5e5;
+        border-radius: 10px;
+        margin: 10px;
+    }
+
+    input[type='file']::file-selector-button {
+        background-color: #7128fa;
+        color: #fff;
+        border: 0px;
+        border-right: 1px solid #e5e5e5;
+        padding: 10px 15px;
+        margin-right: 20px;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        cursor: pointer;
+    }
+
+    input[type='file']::file-selector-button:hover {
+        background-color: #591bcc;
+        border: 0px;
+        border-right: 1px solid #591bcc;
+    }
+
 </style>
