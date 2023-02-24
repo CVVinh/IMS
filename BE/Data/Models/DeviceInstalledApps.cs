@@ -8,6 +8,7 @@ namespace BE.Data.Models
     {
         [Key]
         public int ApplicationId { get; set; }
+        public int DeviceId { get; set; }
         public string? ApplicationName { get; set; }
         public string? ApplicationLocation { get; set; }
         public DateTime? UpdateAt { get; set; }

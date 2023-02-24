@@ -151,6 +151,21 @@
             this.timeFormat.setMinutes(0)
             this.timeFormat.setSeconds(0)
         },
+        watch: {
+            onLeaveOff: {
+                handler: function Change(status) {
+                    console.log(status)
+                    if (status == false) {
+                        this.timeFormat.setHours(0)
+                        this.timeFormat.setMinutes(0)
+                        this.timeFormat.setSeconds(0)
+                        this.leaveOff.startTime = this.timeFormat
+                        this.leaveOff.endTime = this.timeFormat
+                    }
+                },
+                deep: true,
+            },
+        },
         beforeUpdate() {
             this.onLeaveOff = false
             this.leaveOff.startTime = this.timeFormat
@@ -203,6 +218,22 @@
                         this.toastWarn('Chỉ cho phép nghỉ trong ngày, ngày tháng năm phải trùng nhau !')
                         return
                     }
+                    if (date1.getDay() == 0 || date1.getDay() == 6 || date2.getDay() == 0 || date2.getDay() == 6) {
+                        this.toastWarn('Không được phép nghỉ thứ 7, CN !')
+                        return
+                    }
+                }
+                console.log(date1.getDay())
+                console.log(date2.getDay())
+                if (date1.getDay() == 0 || date1.getDay() == 6) {
+                    this.toastWarn('Không được phép nghỉ thứ 7, CN !')
+                    return
+                } else if (
+                    (date1.getDay() == 5 && date2.getDay() == 6) ||
+                    (date1.getDay() == 5 && date2.getDay() == 0)
+                ) {
+                    this.toastWarn('Không được phép nghỉ thứ 7, CN !')
+                    return
                 }
                 if (!this.v$.$invalid) {
                     if (this.selectedLeaveOff.id) {

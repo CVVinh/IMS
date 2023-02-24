@@ -1,99 +1,23 @@
 <template>
     <Toast />
-    <!-- <div ref="sidenav" class="sidenav">
-        <nav ref="sidebar" class="sidebar close">
-            <header>
-                <i ref="toggle" class="bx bx-chevron-right toggle" style="background-color: #333"></i>
-            </header>
-            <div class="menu-bar">
-                <div class="menu">
-                    <ul class="menu-links">
-                        <li v-if="this.isLoading"><ProgressSpinner style="height: 32px" /></li>
-                        <li v-if="menus.length === 0 && !this.isLoading" class="nav-link">
-                            <router-link to="/">
-                                <i class="bx bx-home-alt icon"></i>
-                                <span class="text nav-text">Dashboard</span>
-                            </router-link>
-                        </li>
-
-                        <li v-if="menus.length === 0 && !this.isLoading" class="nav-link">
-                            <router-link to="/project">
-                                <i class="bx bx-notepad icon"></i>
-                                <span class="text nav-text">Projects </span>
-                            </router-link>
-                        </li>
-
-                        <li v-if="menus.length === 0 && !this.isLoading" class="nav-link">
-                            <router-link to="/remotes">
-                                <i class="bx bx-podcast icon"></i>
-                                <span class="text nav-text">Remotes </span>
-                            </router-link>
-                        </li>
-
-                        <li v-if="menus.length === 0 && !this.isLoading" class="nav-link">
-                            <router-link to="/ots">
-                                <i class="bx bx-time-five icon"></i>
-                                <span class="text nav-text">OTs </span>
-                            </router-link>
-                        </li>
-
-                        <li v-if="menus.length === 0 && !this.isLoading" class="nav-link">
-                            <router-link to="/users">
-                                <i class="bx bx-user icon"></i>
-                                <span class="text nav-text">Users </span>
-                            </router-link>
-                        </li>
-
-                        <li v-if="menus.length === 0 && !this.isLoading" class="nav-link">
-                            <router-link to="/devices">
-                                <i class="bx bx-laptop icon"></i>
-                                <span class="text nav-text">Equipment </span>
-                            </router-link>
-                        </li>
-
-                        <li v-if="menus.length === 0 && !this.isLoading" class="nav-link">
-                            <router-link to="/roles">
-                                <i class="bx bxs-user-pin icon"></i>
-                                <span class="text">Roles </span>
-                            </router-link>
-                        </li>
-
-                        <li
-                            class="nav-link"
-                            v-for="menu in this.menus"
-                            v-if="menus.length !== 0 && !this.isLoading"
-                        >
-                            <router-link :to="`/${this.moduleCurrent}/${menu.controller}`">
-                                <i :class="`${menu.icon} icon`"></i>
-                                <span class="text nav-text">{{ menu.title }}</span>
-                            </router-link>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <section class="home">
-            <div class="text">
-                <slot> </slot>
-            </div>
-        </section>
-    </div> -->
     <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
         <div class="position-sticky">
-            <div class="list-group list-group-flush mx-3 mt-4">
-                <!-- <li style="list-style-type: none; cursor: pointer"> -->
-                <a
-                    class="py-2 ripple list-group-item-action"
+            <div class="list-group list-group-flush mx-3 m-t--4" id="NavItems">
+                <!-- Tổng quan -->
+                <div
+                    class="py-2 ripple sidebar_after list-group-item-action d-flex"
                     data-bs-toggle="collapse"
                     data-bs-target="#overview-collapse"
                     aria-expanded="false"
-                    :class="{ 'sidebar-top-level-items': isActive }"
-                    @click="onActive"
+                    :class="{ 'sidebar-top-level-items': isActive1 }"
+                    @click="onActive(1)"
                     style="cursor: pointer"
                 >
-                    <i class="bx bx-notepad"></i>
-                    <span>Tổng quan</span>
-                </a>
+                    <a style="width: 80%">
+                        <i class="bx bx-notepad"></i>
+                        <span>Tổng quan</span>
+                    </a>
+                </div>
                 <div class="collapse" id="overview-collapse">
                     <ul class="dropdownList btn-toggle-nav list-unstyled">
                         <li class="list-group-item-action mt-1">
@@ -101,46 +25,55 @@
                                 :to="{ name: 'project', params: {} }"
                                 class="py-2 ripple dropdown-item"
                                 aria-current="true"
+                                @click="activeTag = 'tag1'"
+                                :class="{ 'active-nav-item': activeTag === 'tag1' }"
                             >
                                 <i class="bx bx-notepad"></i>
                                 <span>Dự án</span>
                             </router-link>
                         </li>
                         <li class="list-group-item-action">
-                            <router-link :to="{ name: 'users', params: {} }" class="py-2 ripple dropdown-item">
+                            <router-link
+                                :to="{ name: 'users', params: {} }"
+                                class="py-2 ripple dropdown-item"
+                                @click="activeTag = 'tag2'"
+                                :class="{ 'active-nav-item': activeTag === 'tag2' }"
+                            >
                                 <i class="bx bx-user"></i><span>Nguời dùng</span>
                             </router-link>
                         </li>
                         <li class="list-group-item-action">
-                            <router-link :to="{ name: 'groupsSubs', params: {} }" class="py-2 ripple dropdown-item"
-                                ><i class="bx bxs-group"></i><span>Nhóm</span></router-link
+                            <router-link
+                                :to="{ name: 'groupsSubs', params: {} }"
+                                class="py-2 ripple dropdown-item"
+                                @click="activeTag = 'tag3'"
+                                :class="{ 'active-nav-item': activeTag === 'tag3' }"
                             >
+                                <i class="bx bxs-group"></i>
+                                <span>Nhóm quyền</span>
+                            </router-link>
                         </li>
                     </ul>
                 </div>
-                <!-- </li> -->
-
-                <router-link :to="{ name: 'equipments', params: {} }" class="py-2 ripple list-group-item-action"
-                    ><i class="bx bx-devices"></i><span>Thiết bị</span></router-link
+                <!-- /Tổng quan -->
+                <!-- Thiết bị -->
+                <router-link
+                    :to="{ name: 'Equipment-Device', params: {} }"
+                    class="py-2 ripple list-group-item-action"
+                    @click="activeTag = 'tag4'"
+                    :class="{ 'active-nav-item': activeTag === 'tag4' }"
                 >
-                <router-link :to="{ name: 'menu', params: {} }" class="py-2 ripple list-group-item-action">
-                    <i class="bx bx-list-ul"></i><span>Menu</span>
+                    <i class="bx bx-devices"></i>
+                    <span>Thiết bị</span>
                 </router-link>
-                <router-link :to="{ name: 'modulesSub', params: {} }" class="py-2 ripple list-group-item-action"
-                    ><i class="bx bxs-component"></i><span>Chức năng</span></router-link
-                >
-                <router-link :to="{ name: 'remotes', params: {} }" class="py-2 ripple list-group-item-action"
-                    ><i class="bx bx-notepad"></i><span>Công tác</span></router-link
-                >
-                <router-link :to="{ name: 'otsSub', params: {} }" class="py-2 ripple list-group-item-action"
-                    ><i class="bx bx-time-five"></i><span>Tăng ca</span></router-link
-                >
-                <a class="py-2 ripple list-group-item-action"><i class="bx bx-note"></i><span>Thông tin</span></a>
-
+                <!-- /Thiết bị -->
+                <!-- Nghỉ phép -->
                 <router-link
                     v-if="checkRole(this.token.IdGroup) == 3 || checkRole(this.token.IdGroup) == 4"
                     :to="{ name: 'LeaveOffRegisterlists', params: {} }"
                     class="py-2 ripple list-group-item-action"
+                    @click="activeTag = 'tag5'"
+                    :class="{ 'active-nav-item': activeTag === 'tag5' }"
                 >
                     <i class="bx bx-log-out-circle"></i>
                     <span>Nghỉ phép</span>
@@ -149,6 +82,8 @@
                     v-if="checkRole(this.token.IdGroup) == 5 || checkRole(this.token.IdGroup) == 1"
                     :to="{ name: 'Acceptregisterlists', params: {} }"
                     class="py-2 ripple list-group-item-action"
+                    @click="activeTag = 'tag5'"
+                    :class="{ 'active-nav-item': activeTag === 'tag5' }"
                 >
                     <i class="bx bx-log-out-circle"></i>
                     <span>Nghỉ phép</span>
@@ -157,31 +92,72 @@
                     v-if="checkRole(this.token.IdGroup) == 2"
                     :to="{ name: 'Leaveoff', params: {} }"
                     class="py-2 ripple list-group-item-action"
+                    @click="activeTag = 'tag5'"
+                    :class="{ 'active-nav-item': activeTag === 'tag5' }"
                 >
                     <i class="bx bx-log-out-circle"></i>
                     <span>Nghỉ phép</span>
                 </router-link>
-                <router-link :to="{ name: 'ruleinfo', params: {} }" class="py-2 ripple list-group-item-action"
-                    ><i class="bx bxs-notepad"></i><span>Quy định</span></router-link
-                >
-
-                <router-link :to="{ name: 'Paid', params: {} }" class="py-2 ripple list-group-item-action"
-                    ><i class="bx bx-wallet"></i><span>Thu chi</span></router-link
-                >
-                <a class="py-2 ripple list-group-item-action"
-                    ><i class="bx bxs-credit-card"></i>
-                    <span>Chi tiêu</span>
-                </a>
-                <a
+                <!-- /Nghỉ phép -->
+                <!-- Tăng ca -->
+                <router-link
+                    :to="{ name: 'otsSub', params: {} }"
                     class="py-2 ripple list-group-item-action"
+                    @click="activeTag = 'tag6'"
+                    :class="{ 'active-nav-item': activeTag === 'tag6' }"
+                >
+                    <i class="bx bx-time-five"></i>
+                    <span>Tăng ca</span>
+                </router-link>
+                <!-- /Tăng ca -->
+                <!-- Công tác -->
+                <router-link
+                    :to="{ name: 'remotes', params: {} }"
+                    class="py-2 ripple list-group-item-action"
+                    @click="activeTag = 'tag7'"
+                    :class="{ 'active-nav-item': activeTag === 'tag7' }"
+                >
+                    <i class="bx bx-notepad"></i>
+                    <span>Công tác</span>
+                </router-link>
+                <!-- /Công tác -->
+                <!-- Thu chi -->
+                <router-link
+                    :to="{ name: 'Paid', params: {} }"
+                    class="py-2 ripple list-group-item-action"
+                    @click="activeTag = 'tag8'"
+                    :class="{ 'active-nav-item': activeTag === 'tag8' }"
+                >
+                    <i class="bx bx-wallet"></i>
+                    <span>Thu chi</span>
+                </router-link>
+                <!-- /Thu chi -->
+                <!-- Quy định -->
+                <router-link
+                    :to="{ name: 'ruleinfo', params: {} }"
+                    class="py-2 ripple list-group-item-action"
+                    @click="activeTag = 'tag9'"
+                    :class="{ 'active-nav-item': activeTag === 'tag9' }"
+                >
+                    <i class="bx bxs-notepad"></i>
+                    <span>Quy định</span>
+                </router-link>
+                <!-- /Quy định -->
+                <!--  Báo cáo-->
+                <div
+                    class="py-2 ripple sidebar_after list-group-item-action d-flex"
                     data-bs-toggle="collapse"
                     data-bs-target="#report-collapse"
                     aria-expanded="true"
-                    style="cursor: pointer"
+                    style="cursor: pointer; margin-bottom: 5px"
+                    :class="{ 'sidebar-top-level-items': isActive2 }"
+                    @click="onActive(2)"
                 >
-                    <i class="bx bx-notepad"></i>
-                    <span>Báo cáo</span>
-                </a>
+                    <a style="width: 80%">
+                        <i class="bx bx-notepad"></i>
+                        <span>Báo cáo</span>
+                    </a>
+                </div>
                 <div class="collapse" id="report-collapse">
                     <ul class="dropdownList btn-toggle-nav list-unstyled">
                         <li class="list-group-item-action">
@@ -189,6 +165,8 @@
                                 :to="{ name: 'listprojects', params: {} }"
                                 class="py-2 ripple dropdown-item"
                                 aria-current="true"
+                                @click="activeTag = 'tag10'"
+                                :class="{ 'active-nav-item': activeTag === 'tag10' }"
                             >
                                 <i class="bx bx-spreadsheet"></i>
                                 <span>Bảng thời gian</span>
@@ -199,37 +177,88 @@
                                 :to="{ name: 'projectDetails', params: {} }"
                                 class="py-2 ripple dropdown-item"
                                 aria-current="true"
+                                @click="activeTag = 'tag11'"
+                                :class="{ 'active-nav-item': activeTag === 'tag11' }"
                             >
                                 <i class="bx bx-notepad"></i>
                                 <span>Chi tiết dự án</span>
                             </router-link>
                         </li>
                         <li class="list-group-item-action">
-                            <router-link :to="{ name: 'TaskReport', params: {} }" class="py-2 ripple dropdown-item">
+                            <router-link
+                                :to="{ name: 'TaskReport', params: {} }"
+                                class="py-2 ripple dropdown-item"
+                                aria-current="true"
+                                @click="activeTag = 'tag12'"
+                                :class="{ 'active-nav-item': activeTag === 'tag12' }"
+                            >
                                 <i class="bx bxs-report"></i><span>Báo cáo công việc</span>
                             </router-link>
                         </li>
                     </ul>
                 </div>
-                <a
-                    class="py-2 ripple list-group-item-action"
+                <!--  /Báo cáo-->
+                <!-- Thiết lập -->
+                <div
+                    class="py-2 ripple sidebar_after list-group-item-action d-flex"
                     data-bs-toggle="collapse"
                     data-bs-target="#settings-collapse"
                     aria-expanded="true"
-                    style="cursor: pointer"
+                    style="cursor: pointer; margin-bottom: 3px"
+                    :class="{ 'sidebar-top-level-items': isActive3 }"
+                    @click="onActive(3)"
                 >
-                    <i class="bx bx-cog"></i>
-                    <span>Thiết lập</span>
-                </a>
+                    <a style="width: 80%">
+                        <i class="bx bx-cog"></i>
+                        <span>Thiết lập</span>
+                    </a>
+                </div>
                 <div class="collapse" id="settings-collapse">
                     <ul class="dropdownList btn-toggle-nav list-unstyled">
                         <li class="list-group-item-action">
-                            <router-link :to="{ name: 'PermissionSub', params: {} }" class="py-2 ripple dropdown-item"
-                                ><i class="bx bx-badge-check"></i><span>Phân quyền</span></router-link
+                            <router-link
+                                :to="{ name: 'menu', params: {} }"
+                                class="py-2 ripple dropdown-item"
+                                aria-current="true"
+                                @click="activeTag = 'tag13'"
+                                :class="{ 'active-nav-item': activeTag === 'tag13' }"
                             >
+                                <i class="bx bx-list-ul"></i>
+                                <span>Menu</span>
+                            </router-link>
+                        </li>
+                        <li class="list-group-item-action">
+                            <router-link
+                                :to="{ name: 'modulesSub', params: {} }"
+                                class="py-2 ripple dropdown-item"
+                                aria-current="true"
+                                @click="activeTag = 'tag14'"
+                                :class="{ 'active-nav-item': activeTag === 'tag14' }"
+                            >
+                                <i class="bx bxs-component"></i>
+                                <span>Chức năng</span>
+                            </router-link>
+                        </li>
+                        <li class="list-group-item-action">
+                            <router-link
+                                :to="{ name: 'PermissionSub', params: {} }"
+                                class="py-2 ripple dropdown-item"
+                                aria-current="true"
+                                @click="activeTag = 'tag15'"
+                                :class="{ 'active-nav-item': activeTag === 'tag15' }"
+                            >
+                                <i class="bx bx-badge-check"></i>
+                                <span>Phân quyền</span>
+                            </router-link>
                         </li>
                     </ul>
                 </div>
+                <!-- /Thiết lập -->
+                <!-- <a class="py-2 ripple list-group-item-action"><i class="bx bx-note"></i><span>Thông tin</span></a> -->
+                <!-- <a class="py-2 ripple list-group-item-action"
+                    ><i class="bx bxs-credit-card"></i>
+                    <span>Chi tiêu</span>
+                </a> -->
             </div>
         </div>
     </nav>
@@ -257,18 +286,36 @@
                 submenu: [],
                 isLoading: true,
                 module: [],
-                isActive: false,
+                isActive1: false,
+                isActive2: false,
+                isActive3: false,
                 dataGrounp: [],
                 path: null,
                 token: LocalStorage.jwtDecodeToken(),
+                activeTag: null,
+                dopdowntag: null,
             }
         },
         async created() {
             await this.getRole()
         },
+        mounted() {
+            this.activeTag = localStorage.getItem('activeTag')
+        },
+        watch: {
+            activeTag(newValue) {
+                localStorage.setItem('activeTag', newValue)
+            },
+        },
         methods: {
-            onActive() {
-                this.isActive = !this.isActive
+            onActive(dropdownNumber) {
+                if (dropdownNumber === 1) {
+                    this.isActive1 = !this.isActive1
+                } else if (dropdownNumber === 2) {
+                    this.isActive2 = !this.isActive2
+                } else if (dropdownNumber === 3) {
+                    this.isActive3 = !this.isActive3
+                }
             },
             checkRole(id) {
                 return Number(id)
@@ -350,330 +397,43 @@
     }
 </script>
 
-<!-- <style scoped>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
-    * {
-        --sidenav-color: #e4e9f7;
-        --sidebar-color: #fff;
-        --primary-color: #695cfe;
-        --primary-color-light: #f6f5ff;
-        --toggle-color: #ddd;
-        --text-color: #707070;
-
-        --tran-03: all 0.2s ease;
-        --tran-03: all 0.3s ease;
-        --tran-04: all 0.3s ease;
-        --tran-05: all 0.3s ease;
-
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Poppins', sans-serif;
-    }
-
-    .sidenav {
-        width: auto;
-        transition: var(--tran-05);
-    }
-
-    .sidenav a,
-    .sidenav.dark {
-        --sidenav-color: #18191a;
-        --sidebar-color: #242526;
-        --primary-color: #3a3b3c;
-        --primary-color-light: #3a3b3c;
-        --toggle-color: #fff;
-        --text-color: #ccc;
-    }
-
-    .sidebar {
-        position: fixed;
-        top: 70px;
-        left: 0;
-        height: -webkit-fill-available;
-        width: 250px;
-        padding: 10px 14px;
-        background: #33adff;
-        transition: var(--tran-05);
-        z-index: 100;
-    }
-
-    .sidebar.close {
-        width: 88px;
-        top: 70px;
-    }
-
-    .sidebar li {
-        height: 50px;
-        list-style: none;
-        display: flex;
-        align-items: center;
-        margin-top: 10px;
-    }
-
-    .sidebar header .image,
-    .sidebar .icon {
-        min-width: 60px;
-        border-radius: 6px;
-    }
-
-    .sidebar .icon {
-        min-width: 60px;
-        border-radius: 6px;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-    }
-
-    .sidebar .text,
-    .sidebar .icon {
-        color: #fff;
-        transition: var(--tran-03);
-    }
-
-    .sidebar .text {
-        font-size: 17px;
-        font-weight: 500;
-        white-space: nowrap;
-        opacity: 1;
-    }
-
-    .sidebar.close .text {
-        opacity: 0;
-    }
-
-    .sidebar header {
-        position: relative;
-    }
-
-    .sidebar header .image-text {
-        display: flex;
-        align-items: center;
-    }
-
-    .sidebar header .logo-text {
-        display: flex;
-        flex-direction: column;
-    }
-
-    header .image-text .name {
-        margin-top: 2px;
-        font-size: 18px;
-        font-weight: 600;
-    }
-
-    header .image-text .profession {
-        font-size: 16px;
-        margin-top: -2px;
-        display: block;
-    }
-
-    .sidebar header .image {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .sidebar header .image img {
-        width: 50px;
-        height: 50px;
-        border-radius: 6px;
-    }
-
-    .sidebar header .toggle {
-        position: absolute;
-        top: 50%;
-        right: -25px;
-        transform: translateY(-50%) rotate(180deg);
-        height: 25px;
-        width: 25px;
-        background-color: var(--primary-color);
-        color: var(--sidebar-color);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 22px;
-        cursor: pointer;
-        transition: var(--tran-05);
-    }
-
-    .sidenav.dark .sidebar header .toggle {
-        color: var(--text-color);
-    }
-
-    .sidebar.close .toggle {
-        transform: translateY(-50%) rotate(0deg);
-    }
-
-    .sidebar .menu {
-        margin-top: 10px;
-    }
-
-    .sidebar li.search-box {
-        border-radius: 6px;
-        background-color: var(--primary-color-light);
-        cursor: pointer;
-        transition: var(--tran-05);
-    }
-
-    .sidebar li.search-box input {
-        height: 100%;
-        width: 100%;
-        outline: none;
-        border: none;
-        background-color: var(--primary-color-light);
-        color: var(--text-color);
-        border-radius: 6px;
-        font-size: 17px;
-        font-weight: 500;
-        transition: var(--tran-05);
-    }
-
-    .sidebar li a {
-        list-style: none;
-        height: 100%;
-        background-color: transparent;
-        display: flex;
-        align-items: center;
-        height: 100%;
-        width: 100%;
-        border-radius: 6px;
-        text-decoration: none;
-        transition: var(--tran-03);
-    }
-
-    .sidebar li a:hover {
-        background-color: var(--primary-color);
-    }
-
-    .sidebar li a:hover .icon,
-    .sidebar li a:hover .text {
-        color: var(--sidebar-color);
-    }
-
-    .sidenav.dark .sidebar li a:hover .icon,
-    .sidenav.dark .sidebar li a:hover .text {
-        color: var(--text-color);
-    }
-
-    .sidebar .menu-bar {
-        height: calc(100% - 55px);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        overflow-y: scroll;
-    }
-
-    .menu-bar::-webkit-scrollbar {
-        display: none;
-    }
-
-    .sidebar .menu-bar .mode {
-        border-radius: 6px;
-        background-color: var(--primary-color-light);
-        position: relative;
-        transition: var(--tran-05);
-    }
-
-    .menu-bar .mode .sun-moon {
-        height: 50px;
-        width: 60px;
-    }
-
-    .mode .sun-moon i {
-        position: absolute;
-    }
-
-    .mode .sun-moon i.sun {
-        opacity: 0;
-    }
-
-    .sidenav.dark .mode .sun-moon i.sun {
-        opacity: 1;
-    }
-
-    .sidenav.dark .mode .sun-moon i.moon {
-        opacity: 0;
-    }
-
-    .menu-bar .bottom-content .toggle-switch {
-        position: absolute;
-        right: 0;
-        height: 100%;
-        min-width: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 6px;
-        cursor: pointer;
-    }
-
-    .toggle-switch .switch {
-        position: relative;
-        height: 22px;
-        width: 40px;
-        border-radius: 25px;
-        background-color: var(--toggle-color);
-        transition: var(--tran-05);
-    }
-
-    .switch::before {
-        content: '';
-        position: absolute;
-        height: 15px;
-        width: 15px;
-        border-radius: 50%;
-        top: 50%;
-        left: 5px;
-        transform: translateY(-50%);
-        background-color: var(--sidebar-color);
-        transition: var(--tran-04);
-    }
-
-    .sidenav.dark .switch::before {
-        left: 20px;
-    }
-
-    .home {
-        position: absolute;
-        top: 70px;
-        left: 250px;
-        width: calc(100% - 250px);
-        transition: var(--tran-05);
-    }
-
-    .sidebar.close ~ .home {
-        top: 70px;
-        left: 87px;
-        height: auto !important;
-        width: calc(100% - 87px);
-    }
-
-    .sidenav.dark .home .text {
-        color: var(--text-color);
-    }
-</style> -->
 <style>
+    .active-nav-item {
+        color: #0d6efd !important;
+        text-decoration: none;
+        background: rgba(0, 0, 0, 0.04);
+    }
+    .sidebar_after::after {
+        content: '\f0d7';
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
+        justify-content: end;
+        width: 20%;
+        display: flex;
+        color: rgb(149 147 147);
+        margin-right: 13px;
+    }
+    .m-t--4 {
+        margin-top: 0.5rem !important;
+    }
     .home {
         margin-top: 57px;
-        margin-left: 190px;
+        margin-left: 212px;
     }
 
     /* Sidebar */
     .sidebar {
         position: fixed;
-        top: 0;
+        top: -15px;
         bottom: 0;
         left: 0;
         padding: 58px 0 0;
         /* Height of navbar */
         border-radius: 2px;
         box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.12), 0 2px 3px 0 rgba(0, 0, 0, 0.22);
-        width: 200px;
+        width: 215px;
         z-index: 99;
     }
 

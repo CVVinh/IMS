@@ -14,9 +14,13 @@ namespace BE.Mapper
             CreateMap<Projects, AddNewProjectDto>().ReverseMap();
             CreateMap<Projects, EditProjectDto>().ReverseMap();
             CreateMap<Paid, CreatePaidDtos>().ReverseMap();
-            CreateMap<Rules, AddOrUpdateRulesDTO>().ReverseMap();
-            CreateMap<InfoDevices,CreateInfoDeviceDto>().ReverseMap();
+            CreateMap<Paid, AcceptPaymentPaidDtos>().ReverseMap();
+            CreateMap<IdPaidImgDtos, PaidImage>().ReverseMap();
 
+            CreateMap<Rules, AddOrUpdateRulesDTO>().ReverseMap();
+            CreateMap<InfoDevices, CreateInfoDeviceDto>().ReverseMap();
+            CreateMap<DeviceInstalledApps, CreateInfoDeviceDto>().ReverseMap();
+            CreateMap<DeviceInstalledApps, ApplicationDto>().ReverseMap();
         }
     }
 }

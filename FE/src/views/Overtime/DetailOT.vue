@@ -103,7 +103,7 @@
                 </div>
             </div>
         </div>
-        <template #footer style="display: flex; align-items: flex-end; justify-content: flex-end">
+        <template #footer>
             <Button
                 label="Duyệt"
                 icon="pi pi-check"

@@ -1,3 +1,4 @@
+
 using BE.Data.Contexts;
 using BE.Settings;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,8 @@ using BE.Services.PaidServices;
 using BE.shared.Interface;
 using BE.Services.RulesServices;
 using BE.Services.InfoDeviceServices;
+using BE.Data.Dtos.PaidDtos;
+using BE.Data.Dtos.PaidDtos.Validator;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,6 +72,7 @@ builder.Services.AddScoped<IPaginationServices<Projects>, PaginationServices<Pro
 builder.Services.AddScoped<IPaginationServices<Devices>, PaginationServices<Devices>>();
 builder.Services.AddScoped<IPaidServices, PaidService>();
 builder.Services.AddScoped<IPaginationServices<Paid>, PaginationServices<Paid>>();
+builder.Services.AddScoped<IPaginationServices<PaidImage>, PaginationServices<PaidImage>>();
 builder.Services.AddScoped<IRulesService, RulesService>();
 builder.Services.AddScoped<IPaginationServices<Rules>, PaginationServices<Rules>>();
 builder.Services.AddScoped<IInfoDeviceService,InfoDeviceService>();
@@ -89,6 +93,7 @@ builder.Services.AddTransient<IValidator<AddMemberDto>, AddMemberDtoValidator>()
 builder.Services.AddTransient<IValidator<AddNewLeaveOffDto>, AddNewLeaveOffDtoValidator>();
 builder.Services.AddTransient<IValidator<AccepterLeaveOffDto>, AccepterLeaveOffDtoValidator>();
 builder.Services.AddTransient<IValidator<EditRegisterLeaveOffDtos>, EditRegisterLeaveOffDtoValidator>();
+builder.Services.AddTransient<IValidator<AcceptPaymentPaidDtos>, AcceptPaymentPaidValidator>();
 #endregion
 
 builder.Services.AddControllersWithViews()

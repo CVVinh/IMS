@@ -20,7 +20,7 @@ export const ApiApplication = {
         CREATE: 'Project/addProject',
         DELETE: 'Project/DeleteProject',
     },
- 
+
     USER: {
         GET_ALL: 'Users/getAll',
         GET_BY_CODE: 'Users/getUserByUserCode/',
@@ -42,9 +42,14 @@ export const ApiApplication = {
     },
     RULEFOR: {
         GET_ALL: 'ReluFor/getListRelue',
-        CREATE: "ReluFor",
+        CREATE: 'ReluFor',
         UPDATE: (id: number) => `ReluFor/${id}`,
         DELETE: (id: number) => `ReluFor/${id}`,
-    }
-    
+    },
+    EQUIPMENT_DEVICE: {
+        GET_ALL_INFO_DEVICE: 'InfoDevices/GetAllDeviceListWithApplication',
+        SEARCH_DEVICE_BY_NAME: (name: string) => `InfoDevices/FindWithUserName/${name}`,
+        SEARCH_DEVICE_BY_OPERATINGSYSTEM: (operatingSystem: any) =>
+            `InfoDevices/FindWithOperatingSystem/${operatingSystem}`,
+    },
 }

@@ -1,8 +1,9 @@
 ﻿using BE.Data.Dtos.InfoDeviceDtos;
 using BE.Services.InfoDeviceServices;
-using BE.Services.LeaveOffServices;
-using Microsoft.AspNetCore.Http;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace BE.Controllers
 {
@@ -17,7 +18,7 @@ namespace BE.Controllers
             _infoDeviceService = infoDeviceService;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllDeviceListWithApplication")]
         public async Task<IActionResult> GetAllDeviceList()
         {
             var response = await _infoDeviceService.GetAllAsync();
@@ -27,9 +28,7 @@ namespace BE.Controllers
             }
             return BadRequest(response);
         }
-
-
-        [HttpPost]
+        [HttpPost("CreateDeviceWithListApplication")]
         public async Task<IActionResult> CreateInfoDevice(CreateInfoDeviceDto createInfoDeviceDto)
         {
             if (!ModelState.IsValid)
@@ -45,14 +44,84 @@ namespace BE.Controllers
             }
             return BadRequest(response);
         }
-        [HttpPut]
+        [HttpPut("EditDeviceWithListApplicationByDeviceId/{id}")]
         public async Task<IActionResult> EditInfoDevice(int id , CreateInfoDeviceDto createInfoDeviceDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var response = await _infoDeviceService.EditInfoDevice(id, createInfoDeviceDto);
+            var response = await _infoDeviceService.EditInfoDeviceWithDeviceId(id, createInfoDeviceDto);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+        [HttpGet("FindWithUserName/{name}")]
+        public async Task<IActionResult> GetWithName(string name)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _infoDeviceService.FindWithName(name);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+        [HttpGet("FindWithOperatingSystem/{operatingSystem}")]
+        public async Task<IActionResult> GetWithOperatingSystem(int operatingSystem)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _infoDeviceService.FindWithOperatingSystem(operatingSystem);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+        [HttpGet("FindWithUserCode/{userCode}")]
+        public async Task<IActionResult> GetWithUserCode(string userCode)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _infoDeviceService.FindWithUserCode(userCode);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+        [HttpGet("FindWithUserId/{userId}")]
+        public async Task<IActionResult> GetWithUserId(int userId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _infoDeviceService.FindWithUserId(userId);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+        [HttpPut("EditDeviceWithListApplicationByUserId/{id}")]
+        public async Task<IActionResult> EditInfoDeviceWithUserId(int id, CreateInfoDeviceDto createInfoDeviceDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _infoDeviceService.EditInfoDeviceWithUserId(id, createInfoDeviceDto);
             if (response._success)
             {
                 return Ok(response);

@@ -317,7 +317,7 @@ namespace BE.Services.LeaveOffServices
                 if (String.IsNullOrEmpty(infoDtos.fullName) == false)
                 {
                     var checkName = _appContext.Users
-                        .Where(q => (q.firstName + " " + q.lastName).ToLower().Contains(infoDtos.fullName.ToLower()))
+                        .Where(q => (q.firstName + " " + q.lastName).ToLower().Trim().Contains(infoDtos.fullName.Trim().ToLower()))
                         .ToList();
                     var idList = checkName.Select(item => item.id).ToList();
                     query = query.Where(x => idList.Contains(x.idLeaveUser));
@@ -368,7 +368,7 @@ namespace BE.Services.LeaveOffServices
                 if (String.IsNullOrEmpty(infoDtos.fullName) == false)
                 {
                     var checkName = _appContext.Users
-                        .Where(q => (q.firstName + " " + q.lastName).ToLower().Contains(infoDtos.fullName.ToLower()))
+                        .Where(q => (q.firstName + " " + q.lastName).ToLower().Trim().Contains(infoDtos.fullName.Trim().ToLower()))
                         .ToList();
                     var idList = checkName.Select(item => item.id).ToList();
                     query = query.Where(x => idList.Contains(x.idLeaveUser));

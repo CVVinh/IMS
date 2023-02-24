@@ -141,17 +141,17 @@
 
                 <Column field="x.realTime" header="Thời gian tăng ca" sortable style="min-width: 8rem">
                     <template #body="{ data }">
-                        {{ data.x.realTime }}
+                        {{ data.x.realTime + "h" }}
                     </template>
                 </Column>
                 <Column field="x.start" header="Thời gian bắt đầu" sortable style="min-width: 8rem">
                     <template #body="{ data }">
-                        {{ data.x.start }}
+                        {{ data.x.start + "h" }}
                     </template>
                 </Column>
                 <Column field="x.end" header="Ngày kết thúc" sortable style="min-width: 8rem">
                     <template #body="{ data }">
-                        {{ data.x.end }}
+                        {{ data.x.end + "h" }}
                     </template>
                 </Column>
 
@@ -171,13 +171,19 @@
                         {{ data.x.updateUser }}
                     </template>
                 </Column> -->
+        
                 <Column
                     sortable
                     v-for="(col, index) of selectedColumns"
                     :field="col.field"
                     :header="col.header"
                     :key="col.field + '_' + index"
-                ></Column>
+                >
+                    <template #body="{ data }" v-if="col.field === 'dateUpdate'">
+                        {{  data.dateUpdate !== null ? getFormattedDate(new Date(data.dateUpdate)) : null}}
+                    </template>
+                
+                </Column>
                 <Column field="x.idProject" header="Dự án" sortable style="min-width: 5rem">
                     <template #body="{ data }">
                         {{ data.name }}
@@ -288,7 +294,7 @@
             :lead="lead"
             @OpenFormRefuse="OpenFormRefuse"
         />
-
+        {{ this.selectedColumns }}
     </LayoutDefaultDynamic>
 </template>
 
@@ -417,7 +423,6 @@
                 HTTP.get(`OTs/GetAllOTsByLead/${idLEAD}`)
                     .then((res) => {
                         this.data = res.data
-                        console.log(res.data);
                     })
                     .catch((err) => console.log(err))
             },
@@ -458,7 +463,7 @@
                     return
                 }
                 this.selectedOT.forEach((element) => {
-                    if (element.status != 0) {
+                    if (element.x.status != 0) {
                         bool = false
                     }
                 })
@@ -499,7 +504,6 @@
                 this.loading = false
             },
             CheckButtonGroup(value) {
-                console.log(value)
                 // 1 admin
                 if (value == 1) {
                     this.showButton.ExportButton = true
@@ -537,7 +541,6 @@
                     this.showButton.allAcceptButton = true
                     this.showButton.viewButton = true
                     this.showButton.refuseButton = true
-                    this.showButton.editButton = true
                     this.showButton.deleteButton = true
                     this.isPM = true
                     this.getOTsByPM(this.token.Id)
@@ -612,7 +615,12 @@
                 })
             },
             showSuccess(err) {
-                this.$toast.add({ severity: 'success', summary: 'Thành công', detail: err, life: 3000 })
+                this.$toast.add({
+                                severity: 'success',
+                                summary: 'Thành công',
+                                detail: err,
+                                life: 3000,
+                            })
             },
 
             exportToExcelFollowRole(){
@@ -673,12 +681,11 @@
                     this.status = 1
                     HTTP.put('OTs/acceptOT', { id: id, status: this.status, pm: this.PM })
                         .then((res) => {
-                            this.showSuccess()
+                            this.showSuccess("Xét duyệt thành công")
                         })
                         .catch((err) => {
                             console.log(err)
                         })
-
                     setTimeout(() => {
                         this.getAllOT()
                     }, 500)
@@ -742,9 +749,13 @@
                 if(this.selectedProject !== null) {
                     idProject = this.selectedProject.code
                 }
+
+                console.log(idProject);
+
                 var stringGetAPI = `OTs/filterByRole/${month}/${year}/${idProject}/${this.token.IdGroup}/?iduser=${this.token.Id}`
                 HTTP.get(stringGetAPI).then(res=>{
                     this.data  =res.data
+                    console.log(res.data);
                 }).catch(err=>{
                     console.log(err);
                 })

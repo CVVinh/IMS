@@ -206,30 +206,34 @@ namespace BE.Controllers
         [Authorize(Roles = "module: ots update: 1")]
         public async Task<IActionResult> Update(int id, EditOTDto dto)
         {
-            var existingOT = _context.OTs.Where(o => o.id != id && o.Date == dto.Date && o.user == dto.user);
-            if (existingOT.Any())
+            try
             {
-                return BadRequest("Existing date OT and user OT!");
+                var OTs = await _context.OTs.Where(o => o.id == id).SingleOrDefaultAsync();
+                if (OTs == null)
+                    return NotFound();
+                if (OTs.status == StatusOT.accepted)
+                    return BadRequest();
+                OTs.Date = dto.Date;
+                OTs.start = dto.start;
+                OTs.end = dto.end;
+                OTs.realTime = dto.realTime;
+                OTs.user = dto.user;
+                OTs.idProject = dto.idProject;
+                OTs.description = dto.description;
+                OTs.dateUpdate = DateTime.UtcNow;
+                OTs.updateUser = dto.updateUser;
+                OTs.status = StatusOT.process;
+                OTs.note = "";
+                _context.SaveChanges();
+                return Ok(OTs);
             }
-            var OTs = await _context.OTs.Where(o => o.id == id).SingleOrDefaultAsync();
-            if (OTs == null)
-                return NotFound();
-            if (OTs.status == StatusOT.accepted)
-                return BadRequest();
-            OTs.Date = dto.Date;
-            OTs.start = dto.start;
-            OTs.end = dto.end;
-            OTs.realTime = dto.realTime;
-            OTs.user = dto.user;
-            OTs.idProject = dto.idProject;
-            OTs.description = dto.description;
-            OTs.dateUpdate = DateTime.UtcNow;
-            OTs.updateUser = dto.updateUser;
-            OTs.status = StatusOT.process;
-            OTs.note = "";
-            _context.SaveChanges();
-            return Ok(OTs);
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            
         }
+
         [HttpPut]
         [Route("deleteOT")]
         [Authorize(Roles = "permission_group: True module: ots")]
@@ -300,7 +304,7 @@ namespace BE.Controllers
                         if (list == null)
                             return NoContent();
                         // get column name for header
-                        var columns_name = typeof(OTs).GetProperties()
+                        var columns_name = typeof(ExportOT).GetProperties()
                                     .Select(property => property.Name)
                                     .ToArray();
                         // table header
@@ -357,7 +361,7 @@ namespace BE.Controllers
                         if (list == null)
                             return NoContent();
                         // get column name for header
-                        var columns_name = typeof(OTs).GetProperties()
+                        var columns_name = typeof(ExportOT).GetProperties()
                                     .Select(property => property.Name)
                                     .ToArray();
                         // table header
@@ -412,7 +416,7 @@ namespace BE.Controllers
                         if (list == null)
                             return NoContent();
                         // get column name for header
-                        var columns_name = typeof(OTs).GetProperties()
+                        var columns_name = typeof(ExportOT).GetProperties()
                                     .Select(property => property.Name)
                                     .ToArray();
                         // table header
@@ -470,7 +474,7 @@ namespace BE.Controllers
                         if (list == null)
                             return NoContent();
                         // get column name for header
-                        var columns_name = typeof(OTs).GetProperties()
+                        var columns_name = typeof(ExportOT).GetProperties()
                                     .Select(property => property.Name)
                                     .ToArray();
                         // table header
@@ -530,7 +534,7 @@ namespace BE.Controllers
                         if (list == null)
                             return NoContent();
                         // get column name for header
-                        var columns_name = typeof(OTs).GetProperties()
+                        var columns_name = typeof(ExportOT).GetProperties()
                                     .Select(property => property.Name)
                                     .ToArray();
                         // table header
@@ -588,7 +592,7 @@ namespace BE.Controllers
                         if (list == null)
                             return NoContent();
                         // get column name for header
-                        var columns_name = typeof(OTs).GetProperties()
+                        var columns_name = typeof(ExportOT).GetProperties()
                                     .Select(property => property.Name)
                                     .ToArray();
                         // table header
@@ -643,7 +647,7 @@ namespace BE.Controllers
                         if (list == null)
                             return NoContent();
                         // get column name for header
-                        var columns_name = typeof(OTs).GetProperties()
+                        var columns_name = typeof(ExportOT).GetProperties()
                                     .Select(property => property.Name)
                                     .ToArray();
                         // table header
@@ -701,7 +705,7 @@ namespace BE.Controllers
                         if (list == null)
                             return NoContent();
                         // get column name for header
-                        var columns_name = typeof(OTs).GetProperties()
+                        var columns_name = typeof(ExportOT).GetProperties()
                                     .Select(property => property.Name)
                                     .ToArray();
                         // table header
@@ -729,10 +733,6 @@ namespace BE.Controllers
                 }
                 
             }
-
-            
-
-
 
             return BadRequest("Something went wrong !");
         }
@@ -897,6 +897,8 @@ namespace BE.Controllers
                                nameLead = f.id == x.leadCreate ? f.FullName : null,
                                nameUser = x.user == d.id ? d.FullName : null,
                                nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                               dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                               note = x.note
                            };
                 return Ok(list);
             }catch(Exception ex)
@@ -923,6 +925,8 @@ namespace BE.Controllers
                                nameLead = x.leadCreate == f.id   ? f.FullName : null,
                                nameUser = x.user == d.id ? d.FullName : null,
                                nameUserUpdate =  x.updateUser == q.id ? q.FullName : null,
+                               dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                               note = x.note
                            };
                 return Ok(list);
             } catch(Exception ex)
@@ -949,6 +953,9 @@ namespace BE.Controllers
                                nameLead = f.id == x.leadCreate ? f.FullName : null,
                                nameUser = x.user == d.id ? d.FullName : null,
                                nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                               dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                               note = x.note
+
                            };
                 return Ok(list);
             }
@@ -977,6 +984,8 @@ namespace BE.Controllers
                                nameLead = f.id == x.leadCreate ? f.FullName : null,
                                nameUser = x.user == d.id ? d.FullName : null,
                                nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                               dateUpdate =x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                               note = x.note
                            }).ToList();            
                 return Ok(list);
             }catch(Exception ex)
@@ -1041,6 +1050,8 @@ namespace BE.Controllers
                                        nameLead = f.id == x.leadCreate ? f.FullName : null,
                                        nameUser = x.user == d.id ? d.FullName : null,
                                        nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                                       dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                                       note = x.note
                                    };
 
 
@@ -1050,7 +1061,7 @@ namespace BE.Controllers
 
                     }
 
-                    if (idproject == 0)
+                    if (idproject == 0 && month != 0)
                     {
                         var list = from x in _context.OTs
                                    join c in _context.Projects on x.idProject equals c.Id
@@ -1065,13 +1076,15 @@ namespace BE.Controllers
                                        nameLead = f.id == x.leadCreate ? f.FullName : null,
                                        nameUser = x.user == d.id ? d.FullName : null,
                                        nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                                       dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                                       note = x.note
                                    };
                         if (list == null)
                             return NoContent();
                         return Ok(list);
                     }
 
-                    if (month == 0)
+                    if (month == 0 && idproject !=0)
                     {
                         var list = from x in _context.OTs
                                    join c in _context.Projects on x.idProject equals c.Id
@@ -1086,6 +1099,8 @@ namespace BE.Controllers
                                        nameLead = f.id == x.leadCreate ? f.FullName : null,
                                        nameUser = x.user == d.id ? d.FullName : null,
                                        nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                                       dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                                       note = x.note
                                    };
 
                         if (list == null)
@@ -1111,6 +1126,8 @@ namespace BE.Controllers
                                        nameLead = f.id == x.leadCreate ? f.FullName : null,
                                        nameUser = x.user == d.id ? d.FullName : null,
                                        nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                                       dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                                       note = x.note
                                    };
 
 
@@ -1120,7 +1137,7 @@ namespace BE.Controllers
 
                     }
 
-                    if (idproject == 0)
+                    if (idproject == 0 && month != 0)
                     {
                         var list = from x in _context.OTs
                                    join c in _context.Projects on x.idProject equals c.Id
@@ -1135,13 +1152,15 @@ namespace BE.Controllers
                                        nameLead = f.id == x.leadCreate ? f.FullName : null,
                                        nameUser = x.user == d.id ? d.FullName : null,
                                        nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                                       dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                                       note = x.note
                                    };
                         if (list == null)
                             return NoContent();
                         return Ok(list);
                     }
 
-                    if (month == 0)
+                    if (month == 0 && idproject != 0)
                     {
                         var list = from x in _context.OTs
                                    join c in _context.Projects on x.idProject equals c.Id
@@ -1156,6 +1175,8 @@ namespace BE.Controllers
                                        nameLead = f.id == x.leadCreate ? f.FullName : null,
                                        nameUser = x.user == d.id ? d.FullName : null,
                                        nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                                       dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                                       note = x.note
                                    };
 
                         if (list == null)
@@ -1181,6 +1202,8 @@ namespace BE.Controllers
                                        nameLead = f.id == x.leadCreate ? f.FullName : null,
                                        nameUser = x.user == d.id ? d.FullName : null,
                                        nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                                       dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                                       note = x.note
                                    };
 
 
@@ -1205,20 +1228,22 @@ namespace BE.Controllers
                                        nameLead = f.id == x.leadCreate ? f.FullName : null,
                                        nameUser = x.user == d.id ? d.FullName : null,
                                        nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                                       dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                                       note = x.note
                                    };
                         if (list == null)
                             return NoContent();
                         return Ok(list);
                     }
 
-                    if (month == 0)
+                    if (month == 0 )
                     {
                         var list = from x in _context.OTs
                                    join c in _context.Projects on x.idProject equals c.Id
                                    join f in _context.Users on x.leadCreate equals f.id
                                    join q in _context.Users on x.updateUser equals q.id
                                    join d in _context.Users on x.user equals d.id
-                                   where (x.idProject == idproject && x.user == iduser)
+                                   where (x.idProject == idproject && x.leadCreate == iduser)
                                    select new
                                    {
                                        x,
@@ -1226,6 +1251,8 @@ namespace BE.Controllers
                                        nameLead = f.id == x.leadCreate ? f.FullName : null,
                                        nameUser = x.user == d.id ? d.FullName : null,
                                        nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                                       dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                                       note = x.note
                                    };
 
                         if (list == null)
@@ -1251,6 +1278,8 @@ namespace BE.Controllers
                                        nameLead = f.id == x.leadCreate ? f.FullName : null,
                                        nameUser = x.user == d.id ? d.FullName : null,
                                        nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                                       dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                                       note = x.note
                                    };
 
 
@@ -1275,6 +1304,8 @@ namespace BE.Controllers
                                        nameLead = f.id == x.leadCreate ? f.FullName : null,
                                        nameUser = x.user == d.id ? d.FullName : null,
                                        nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                                       dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                                       note = x.note
                                    };
                         if (list == null)
                             return NoContent();
@@ -1296,6 +1327,8 @@ namespace BE.Controllers
                                        nameLead = f.id == x.leadCreate ? f.FullName : null,
                                        nameUser = x.user == d.id ? d.FullName : null,
                                        nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                                       dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                                       note = x.note
                                    };
 
                         if (list == null)
@@ -1329,6 +1362,8 @@ namespace BE.Controllers
                                    nameLead = f.id == x.leadCreate ? f.FullName : null,
                                    nameUser = x.user == d.id ? d.FullName : null,
                                    nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                                   dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                                   note = x.note
                                };
                     if (list == null)
                         return NoContent();
@@ -1351,6 +1386,8 @@ namespace BE.Controllers
                                    nameLead = f.id == x.leadCreate ? f.FullName : null,
                                    nameUser = x.user == d.id ? d.FullName : null,
                                    nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                                   dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                                   note = x.note
                                };
 
                         if (list == null)
@@ -1372,6 +1409,8 @@ namespace BE.Controllers
                                    nameLead = f.id == x.leadCreate ? f.FullName : null,
                                    nameUser = x.user == d.id ? d.FullName : null,
                                    nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                                   dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                                   note = x.note
                                };
 
 

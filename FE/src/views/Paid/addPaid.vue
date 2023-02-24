@@ -17,8 +17,7 @@
                                 'p-error': v$.Datasend.customerName.required.$invalid && isSubmit,
                                 'input-title': true,
                             }"
-                            >Tên khách hàng<span style="color: red">*</span></label
-                        >
+                            >Tên khách hàng<span style="color: red">*</span></label>
                         <InputText
                             type="text"
                             v-model="v$.Datasend.customerName.$model"
@@ -28,6 +27,42 @@
                             v$.Datasend.customerName.required.$message.replace('Value', 'Customer Name')
                         }}</small>
                     </div>
+
+                    <div class="Menu__form--items-content">
+                        <label
+                            :class="{
+                                'p-error': v$.Datasend.paidReason.required.$invalid && isSubmit,
+                                'input-title': true,
+                            }"
+                        >Dự án<span style="color: red">*</span></label>
+
+                        <Dropdown
+                            class="inputdrop"
+                            v-model="Datasend.projectId"
+                            :options="projectArr"
+                            optionLabel="name"
+                            optionValue="id"
+                            placeholder="Chọn dự án"
+                        />
+                        <small class="p-error" v-if="v$.Datasend.projectId.required.$invalid && isSubmit">{{
+                            v$.Datasend.projectId.required.$message.replace('Value', 'Project')
+                        }}</small> 
+                    </div>
+                </div>
+                <div class="Menu__form--items items-right">
+                    <div class="Menu__form--items-content">
+                        <label
+                            :class="{
+                                'p-error': v$.Datasend.paidReason.required.$invalid && isSubmit,
+                                'input-title': true,
+                            }"
+                            >Lý do chi trả<span style="color: red">*</span></label>
+                        <InputText type="text" v-model="v$.Datasend.paidReason.$model" placeholder="Lý do chi" />
+                        <small class="p-error" v-if="v$.Datasend.paidReason.required.$invalid && isSubmit">{{
+                            v$.Datasend.paidReason.required.$message.replace('Value', 'Paid Reason')
+                        }}</small>
+                    </div>
+                    
                     <div class="Menu__form--items-content">
                         <label
                             :class="{
@@ -41,86 +76,24 @@
                             v$.Datasend.amountPaid.required.$message.replace('Value', 'Amount Paid')
                         }}</small>
                     </div>
-                    <div class="Menu__form--items-content">
-                        <label>Trạng thái<span style="color: red">*</span></label>
-                        <Dropdown
-                            class="inputdrop"
-                            v-model="Datasend.isPaid"
-                            :options="isPaidArr"
-                            optionLabel="name"
-                            optionValue="isPaid"
-                            placeholder="Chọn trạng thái"
-                        />
-                    </div>
-                </div>
-                <div class="Menu__form--items items-right">
-                    <div class="Menu__form--items-content">
-                        <label
-                            :class="{
-                                'p-error': v$.Datasend.paidReason.required.$invalid && isSubmit,
-                                'input-title': true,
-                            }"
-                            >Lý do chi trả<span style="color: red">*</span></label
-                        >
-                        <InputText type="text" v-model="v$.Datasend.paidReason.$model" placeholder="Lý do chi" />
-                        <small class="p-error" v-if="v$.Datasend.paidReason.required.$invalid && isSubmit">{{
-                            v$.Datasend.paidReason.required.$message.replace('Value', 'Paid Reason')
-                        }}</small>
-                    </div>
-                    <div class="Menu__form--items-content">
-                        <label
-                            :class="{
-                                'p-error': v$.Datasend.paidDate.required.$invalid && isSubmit,
-                                'input-title': true,
-                            }"
-                            >Ngày chi<span style="color: red">*</span></label
-                        >
-                        <Calendar 
-                            v-model="Datasend.paidDate" 
-                            dateFormat="yy-mm-dd"
-                            view="date"
-                            placeholder="Chọn ngày chi" 
-                            :showIcon="true" />
-                    </div>
-                    <div class="Menu__form--items-content">
-                        <label>Dự án<span style="color: red">*</span></label>
-                        <Dropdown
-                            class="inputdrop"
-                            v-model="Datasend.projectId"
-                            :options="projectArr"
-                            optionLabel="name"
-                            optionValue="id"
-                            placeholder="Chọn dự án"
-                        />
-                    </div>
                 </div>
                 
             </div>
-            <!-- <FileUpload
-                accept="image/*"
-                :maxFileSize="1000000"
-                :showUploadButton="true"
-                :multiple="true"
-                @upload="(e) => onTemplatedUpload(e)"
-                id="images"
-            >
-                <template #empty>
-                    <p>Drag and drop files to here to upload.</p>
-                </template>
-            </FileUpload> -->
-
+            
             <div class="flex justify-content-center container">
+                <h6>Thêm ảnh</h6>
                 <div class="input_file">
                     <input type="file" multiple @change="onFileChange($event)" ref="fileupload" accept="image/*"/>
                 </div>
 
-                <div class="jumbotron p-fluid" v-if="isHaveImg">
+                <div class="jumbotron p-fluid mt-3 content_box" v-if="isHaveImg">
                     <div class="row">
-                        <div v-for="(item, index) in images" :key="index">
-                            <div class="col-3" :id="index">
-                                <button type="button" @click="removeImage(index)">&times;</button>
-                                <img class="preview img-thumbnail" v-bind:ref="'image' + parseInt(index)" />
-                                {{ item.name }}
+                        <div class="col-md-3 container_img" v-for="(item, index) in images" :key="index" :id="index">
+                            <div class="image_item">
+                                <img class="preview img-thumbnail img_show" v-bind:ref="'image' + parseInt(index)" />{{ item.name }}
+                                <div class="middle_img">
+                                    <button type="button" @click="removeImage(index)" class="button_del_img">&times;</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -158,11 +131,9 @@
                     paidDate: null,
                     paidImage: [],
                 },
+                Listarrdelete : [],
                 projectArr: [],
-                isPaidArr: [
-                    { isPaid: false, name: 'Chưa Thanh Toán' },
-                    { isPaid: true, name: 'Đã Thanh Toán' },
-                ],
+                
                 isSubmit: false,
                 token: null,
                 currentUser: null,
@@ -177,7 +148,6 @@
                     customerName: { required },
                     amountPaid: { required },
                     paidReason: { required },
-                    paidDate: { required },
                 },
             }
         },
@@ -196,6 +166,7 @@
                 this.Datasend.amountPaid = ''
                 this.Datasend.paidReason = ''
                 this.isSubmit = false
+                this.paidImage = []
             },
 
             onFileChange(event) {
@@ -218,7 +189,6 @@
                     ) //add event listener
                     reader.readAsDataURL(this.images[i])
                 }
-                //this.Datasend.paidImage = this.images;
             },
 
             // removeImage(index) {
@@ -238,6 +208,20 @@
                     this.$refs.fileupload.value = null;
                     this.isHaveImg = false;
                 }
+
+                // let imagesRefs = this.$refs
+                // Object.keys(imagesRefs).forEach((key) => {
+
+                //     let refIndex = key.slice(-1) // 1; index: 0
+                //     console.log("key: "+ JSON.stringify(key) + "; refIndex: "+ JSON.stringify(refIndex) + "; index: "+ JSON.stringify(index));
+                    
+                //     if (key.includes("image")) {
+                //         if (parseInt(refIndex) > parseInt(index)) {
+                //             console.log("image"+ (refIndex - 1) + "; key: "+ JSON.stringify(key) +"; imagesRefs[" + key + "][0]: "+ JSON.stringify(imagesRefs[key][0].src));
+                //             //imagesRefs['image' + (refIndex - 1)][0].src = imagesRefs[key][0].src;
+                //         }
+                //     }
+                // });
             },
 
             async CallApi(fromData) {
@@ -256,7 +240,6 @@
                             break
                         default:
                             this.showError('Lưu lỗi!')
-                            
                     }
                 } catch (error) {
                     switch (error.code) {
@@ -277,13 +260,10 @@
 
                 const formData = new FormData()
                 formData.append('PaidPerson', this.currentUser.Id)
-                formData.append('PaidDate', DateHelper.formatDateTime(this.Datasend.paidDate))
                 formData.append('ProjectId', this.Datasend.projectId)
                 formData.append('CustomerName', this.Datasend.customerName)
                 formData.append('AmountPaid', this.Datasend.amountPaid)
                 formData.append('PaidReason', this.Datasend.paidReason)
-                formData.append('IsPaid', this.Datasend.isPaid)
-                //formData.append('paidImage', this.Datasend.paidImage)
                 
                 this.images.forEach((item) => {
                     formData.append('paidImage', item)
@@ -326,7 +306,7 @@
     }
 </script>
 
-<style>
+<style >
     .Menu__form {
         display: flex;
     }
@@ -341,6 +321,7 @@
         width: 100%;
         height: 90px;
         display: flex;
+        margin-bottom: 10px;
         flex-direction: column;
         justify-content: center;
     }
@@ -371,7 +352,6 @@
     .input_file {
         border: 1px solid #e5e5e5;
         border-radius: 10px;
-        margin: 10px;
     }
 
     input[type='file']::file-selector-button {
@@ -390,6 +370,68 @@
         background-color: #591bcc;
         border: 0px;
         border-right: 1px solid #591bcc;
+    }
+
+    .content_box {
+        box-shadow: -3px 3px 5px -3px #888888, 4px 5px 3px -4px #888888, 4px 5px 2px -5px #888888 inset;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .img_show:hover {
+        cursor: pointer;
+        box-shadow: 0 0 5px 2px rgba(0, 140, 186, 0.5);
+    }
+
+
+    .container_img {
+        position: relative;
+    }
+
+    .image_item {
+        opacity: 1;
+        display: block;
+        height: auto;
+        transition: .5s ease;
+        backface-visibility: hidden;
+    }
+
+    .middle_img {
+        transition: .5s ease;
+        opacity: 0;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+    .container_img:hover .image_item {
+        opacity: 0.5;
+    }
+
+    .container_img:hover .middle_img {
+        opacity: 1;
+    }
+
+    .button_del_img {
+        background-color: #ddd;
+        border: none;
+        color: black;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 16px;
+        font-size: 16px;
+    }
+
+    .button_del_img:hover {
+        color: white;
+        background-color: red;
     }
 
 </style>

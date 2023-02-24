@@ -45,6 +45,7 @@ namespace BE.Data.Contexts
 
 		public DbSet<Permission_Group> Permission_Groups { get; set; }
 		public DbSet<Paid> Paids { get; set; }
+		public DbSet<PaidImage> PaidImages { get; set; }
 		public DbSet<Rules> Rules { get; set; }
 		public DbSet<InfoDevices> InfoDevices { get; set; }
 		public DbSet<DeviceInstalledApps> DeviceInstalledApps { get; set; }

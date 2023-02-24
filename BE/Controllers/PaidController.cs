@@ -1,4 +1,5 @@
-﻿using BE.Data.Dtos.PaidDtos;
+﻿using BE.Data.Dtos.LeaveOffDtos;
+using BE.Data.Dtos.PaidDtos;
 using BE.Data.Enum;
 using BE.Data.Models;
 using BE.Services.PaginationServices;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BE.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "permission_group: True module: paid")]
     [ApiController]
     public class PaidController : Controller
     {
@@ -24,7 +26,6 @@ namespace BE.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "permission_group: True module: paid")]
         public async Task<IActionResult> GetAllPaid(int? pageIndex, PageSizeEnum pageSizeEnum)
         {
             var response = await _paidServices.GetAllAsync();
@@ -40,6 +41,7 @@ namespace BE.Controllers
             }
             return BadRequest(response);
         }
+
         [HttpGet("GetByUserId")]
         public async Task<IActionResult> GetPaidWithUserId(int id)
         {
@@ -50,6 +52,18 @@ namespace BE.Controllers
             }
             return BadRequest(response);
         }
+
+        [HttpGet("GetById/{id}")]
+        public async Task<IActionResult> GetPaidWithId(int id)
+        {
+            var response = await _paidServices.GetPaidWithId(id);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreatePaid([FromForm] CreatePaidDtos createPaidDtos)
         {
@@ -58,15 +72,16 @@ namespace BE.Controllers
                 return BadRequest(ModelState);
             }
             var pathServer = $"{Request.Scheme}://{Request.Host}";
-            var response = await _paidServices.CreatePaid(createPaidDtos,_host.WebRootPath, pathServer);
+            var response = await _paidServices.CreatePaid(createPaidDtos, _host.WebRootPath, pathServer);
             if (response._success)
             {
                 return Ok(response);
             }
             return BadRequest(response);
         }
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditPaid(int id,[FromForm] CreatePaidDtos createPaidDtos)
+        public async Task<IActionResult> EditPaid(int id, [FromForm] CreatePaidDtos createPaidDtos)
         {
             if (!ModelState.IsValid)
             {
@@ -81,25 +96,60 @@ namespace BE.Controllers
 
             return BadRequest(paid);
         }
+
+        //PUT: accept payment
+        [HttpPut("acceptPayment/{idPaid}")]
+        public async Task<IActionResult> acceptRegisterLeaveOff(int idPaid, AcceptPaymentPaidDtos acceptPaymentPaidDtos)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var paid = await _paidServices.AccepterPayment(idPaid, acceptPaymentPaidDtos);
+            if (paid._success)
+            {
+                return Ok(paid);
+            }
+
+            return BadRequest(paid);
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePaid(int id)
         {
-            var response = await _paidServices.DeletePaid(id);
+            var pathServer = $"{Request.Scheme}://{Request.Host}";
+            var response = await _paidServices.DeletePaid(id, _host.WebRootPath, pathServer);
             if (response._success)
             {
                 return Ok(response);
             }
             return BadRequest(response);
         }
-        [HttpGet("GetById/{id}")]
-        public async Task<IActionResult> GetPaidWithId(int id)
+
+        [HttpPost("multi-image/{id}")]
+        public async Task<IActionResult> DeleteMultiImgPaid(int id, List<int>? listImg)
         {
-            var response = await _paidServices.GetPaidWithId(id);
+            var pathServer = $"{Request.Scheme}://{Request.Host}";
+            var response = await _paidServices.DeleteMutilImgPaid(id, listImg, _host.WebRootPath, pathServer);
             if (response._success)
             {
                 return Ok(response);
             }
             return BadRequest(response);
         }
+
+        [HttpPost("SearchPaidByDay")]
+        public async Task<IActionResult> SearchPaidByDay( SearchDayPaidDtos searchDayPaidDtos)
+        {
+            var response = await _paidServices.SearchPaidByDay(searchDayPaidDtos);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+       
+
     }
 }

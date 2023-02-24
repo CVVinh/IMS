@@ -209,7 +209,12 @@
                 }
             },
             showSuccess() {
-                this.$toast.add({ severity: 'success', summary: 'Thành công', detail: 'Thành công!', life: 3000 })
+                this.$toast.add({
+                                severity: 'success',
+                                summary: 'Thành công',
+                                detail: 'Xét duyệt thành công!',
+                                life: 3000,
+                            })
             },
         },
     }

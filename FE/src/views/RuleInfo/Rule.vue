@@ -35,7 +35,7 @@
                     <h5 style="color: white">Thông tin quy định</h5>
                     <div class="header-container">
                         <div class="button-group">
-                            <Add label="Thêm" @click="openAdd" style="margin-right: 5px" />
+                            <Add label="Thêm" @click="openAdd" style="margin-right: 5px" v-if="this.showButton.add"/>
                         </div>
                         <div class="input-text">
                             <!-- <MultiSelect

@@ -9,7 +9,7 @@
         :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
         :style="{ width: '50vw' }"
     >
-    <form enctype="multipart/form-data" >
+    <form enctype="multipart/form-data" class="container">
         <div class="Menu__form">
             <div class="Menu__form--items items-left">
                 <div class="Menu__form--items-content">
@@ -29,30 +29,26 @@
                         v$.Datasend.customerName.required.$message.replace('Value', 'Customer Name')
                     }}</small>
                 </div>
+
                 <div class="Menu__form--items-content">
                     <label
                         :class="{
-                            'p-error': v$.Datasend.amountPaid.required.$invalid && isSubmit,
+                            'p-error': v$.Datasend.paidReason.required.$invalid && isSubmit,
                             'input-title': true,
                         }"
-                        >Mức chi<span style="color: red">*</span></label
-                    >
+                    >Dự án<span style="color: red">*</span></label>
 
-                    <InputNumber v-model="v$.Datasend.amountPaid.$model" placeholder="Nhập mức chi" min="0" />
-                    <small class="p-error" v-if="v$.Datasend.amountPaid.required.$invalid && isSubmit">{{
-                        v$.Datasend.amountPaid.required.$message.replace('Value', 'Amount Paid')
-                    }}</small>
-                </div>
-                <div class="Menu__form--items-content">
-                    <label>Trạng thái<span style="color: red">*</span></label>
                     <Dropdown
                         class="inputdrop"
-                        v-model="Datasend.isPaid"
-                        :options="isPaidArr"
+                        v-model="Datasend.projectId"
+                        :options="projectArr"
                         optionLabel="name"
-                        optionValue="isPaid"
-                        placeholder="Chọn trạng thái"
+                        optionValue="id"
+                        placeholder="Chọn dự án"
                     />
+                    <small class="p-error" v-if="v$.Datasend.projectId.required.$invalid && isSubmit">{{
+                        v$.Datasend.projectId.required.$message.replace('Value', 'Project')
+                    }}</small> 
                 </div>
             </div>
             <div class="Menu__form--items items-right">
@@ -73,39 +69,64 @@
                 <div class="Menu__form--items-content">
                     <label
                         :class="{
-                            'p-error': v$.Datasend.paidDate.required.$invalid && isSubmit,
+                            'p-error': v$.Datasend.amountPaid.required.$invalid && isSubmit,
                             'input-title': true,
                         }"
-                        >Ngày chi<span style="color: red">*</span></label
+                        >Mức chi<span style="color: red">*</span></label
                     >
 
-                    <Calendar
-                        v-model="Datasend.paidDate"
-                        dateFormat="yy-mm-dd"
-                        view="date"
-                        placeholder="Chọn ngày chi"
-                        :showIcon="true"
-                    />
-                </div>
-                <div class="Menu__form--items-content">
-                    <label>Dự án<span style="color: red">*</span></label>
-                    <Dropdown
-                        class="inputdrop"
-                        v-model="Datasend.projectId"
-                        :options="projectArr"
-                        optionLabel="name"
-                        optionValue="id"
-                        placeholder="Chọn dự án"
-                    />
+                    <InputNumber v-model="v$.Datasend.amountPaid.$model" placeholder="Nhập mức chi" min="0" />
+                    <small class="p-error" v-if="v$.Datasend.amountPaid.required.$invalid && isSubmit">{{
+                        v$.Datasend.amountPaid.required.$message.replace('Value', 'Amount Paid')
+                    }}</small>
                 </div>
             </div>
-            <!-- <Image v-bind:src="Datasend.paidImage.imagePath" alt="Image" width="50" preview /> -->
-            <!-- <Image alt="Image" width="50" preview /> -->
         </div>
+
+        <div class="flex justify-content-center container">
+            <h6>Thêm ảnh</h6>
+            <div class="input_file">
+                <input type="file" multiple @change="onFileChange($event)" ref="fileupload" accept="image/*"/>
+            </div>
+
+            <div class="jumbotron p-fluid mt-3 content_box" v-if="isHaveImg">
+                <div class="row">
+                    <div class="col-md-3 container_img" v-for="(item, index) in images" :key="index" :id="index">
+                        <div class="image_item">
+                            <img class="preview img-thumbnail img_show" v-bind:ref="'image' + parseInt(index)" />
+                            <div class="middle_img">
+                                <button type="button" @click="removeImage(index)" class="button_del_img">&times;</button>
+                            </div>
+                        </div>
+                        {{ item.name }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-content-center container" v-if="this.imagesOld.length > 0">
+            <div class="jumbotron p-fluid mt-5 content_box">
+                <h6>Chọn ảnh để xoá ảnh:</h6>
+                <div class="row">
+                    <div class="col-md-3" v-for="(item) in this.imagesOld" :key="item.imageId" :id="item.imageId">
+                        <div :class="{imgSelected: item.isActive}" >
+                            <img class="preview img-thumbnail img_show"  v-bind:ref="'image' + parseInt(item.imageId)" :src="item.imagePath" @click="removeOldImage(item.imageId)"/>
+                        </div>
+                        <p>Image{{ item.imageId }}</p> 
+                    </div>
+                </div>
+            </div>
+            <h6>Xoá ảnh:
+                <span v-for="(item) in this.imagesOld" :key="item.imageId">
+                    <span v-if="item.isActive">Image{{ item.imageId }}, </span>
+                </span>
+            </h6>
+        </div>
+  
     </form>
-        <template #footer>
-            <Button label="Lưu" icon="pi pi-check" autofocus @click="handleSubmit" />
-            <Button label="Hủy" icon="pi pi-times" class="p-button-text" @click="closeModal" />
+        <template #footer>           
+            <button class="btn btn-primary" @click="handleSubmit">Lưu</button>
+            <button class="btn btn-secondary" @click="closeModal">Huỷ</button>
         </template>
     </Dialog>
 </template>
@@ -132,14 +153,19 @@
                     isPaid: false,
                     paidDate: null,
                     token: null,
-                    paidImage: null,
+                    paidImages: null,
                 },
                 projectArr: [],
-                isPaidArr: [
-                    { isPaid: false, name: 'Chưa Thanh Toán' },
-                    { isPaid: true, name: 'Đã Thanh Toán' },
-                ],
                 isSubmit: false,
+                images: [],
+                imagesOld: [
+                    {
+                        imageId: null,
+                        imagePath: null,
+                        isActive: false,
+                    }
+                ],
+                isHaveImg: false,
             }
         },
         validations() {
@@ -149,13 +175,15 @@
                     customerName: { required },
                     amountPaid: { required },
                     paidReason: { required },
-                    paidDate: { required },
                 },
             }
         },
         props: ['status', 'optionmodule', 'dataedit'],
         methods: {
             closeModal() {
+                this.imagesOld = [];
+                this.images = [];
+                this.isHaveImg = false;
                 this.$emit('closemodal')
             },
 
@@ -165,37 +193,39 @@
                 this.Datasend.amountPaid = ''
                 this.Datasend.paidReason = ''
                 this.isSubmit = false
+                this.images = [];
+                this.$refs.fileupload.value = null;
             },
             
             async CallApi(fromData) {
-                try {
-                    const res = await HTTP_LOCAL.put(`Paid/${this.Datasend.id}`, fromData)
+                const res = await HTTP_LOCAL.put(`Paid/${this.Datasend.id}`, fromData).then((res) => {
+                    if(res.status == 200){
+                        this.clearform()                        
+                        this.showSuccess2('Cập nhật thành công!');
+                    }
+                    else {
+                        this.showError2('Lỗi! cập nhật!')
+                    }
+                })
+                .catch((error) => {
+                    this.showError2(error.response.data);
+                    console.log(error);
+                });
+            },
 
-                    switch (res.status) {
-                        case HttpStatus.OK:
-                            this.clearform()
-                            this.$emit('reloadpage')
-                            this.showSuccess2('Cập nhật thành công!');
-                            break
-                        case HttpStatus.UNAUTHORIZED:
-                        case HttpStatus.FORBIDDEN:
-                            this.showError2('Không có quyền thực hiện thao tác này!')
-                            break
-                        default:
-                            this.showError2('Lưu lỗi!')
-                            
+            async CallApiDeleteImg(arrImg){
+                await HTTP_LOCAL.post(`Paid/multi-image/${this.Datasend.id}`, arrImg).then((res) => {
+                    if(res.status == 200){                       
+                        this.showSuccess2('Xoá ảnh thành công!');
                     }
-                } catch (error) {
-                    switch (error.code) {
-                        case 'ERR_NETWORK':
-                            this.showError2('Kiểm tra kết nối!')
-                            break
-                        case 'ERR_BAD_REQUEST':
-                            this.showError2(error.response.data)
-                            break
-                        default:
+                    else {
+                        this.showError2('Lỗi! xoá ảnh!')
                     }
-                }
+                })
+                .catch((error) => {
+                    this.showError2(error.response.data._Message);
+                    console.log(error);
+                });
             },
 
             async handleSubmit() {
@@ -208,29 +238,79 @@
                 }
                 catch (err) {
                     console.log(err)
-                    this.showError2(error.response.data)
+                    this.showError2(err.response.data)
                 }
             },
 
             async EditPaid() {
                 this.token = LocalStorage.jwtDecodeToken()
                 try {
-                    
                     const formData = new FormData()
                     formData.append('PaidPerson', this.Datasend.user.id)
-                    formData.append('PaidDate', DateHelper.formatDateTime(this.Datasend.paidDate))
                     formData.append('ProjectId', this.Datasend.projectId)
                     formData.append('CustomerName', this.Datasend.customerName)
                     formData.append('AmountPaid', this.Datasend.amountPaid)
                     formData.append('PaidReason', this.Datasend.paidReason)
-                    formData.append('IsPaid', this.Datasend.isPaid)
-                    formData.append('paidImage', this.Datasend.paidImages)
 
+                    this.images.forEach((item) => {
+                        formData.append('paidImage', item)
+                    })
+                   
                     await this.CallApi(formData);
 
+                    var arrImg = [];
+                    this.imagesOld.forEach((item) => {
+                        if(item.isActive){
+                            arrImg.push(item.imageId);
+                        }
+                    });
+
+                    if(arrImg.length > 0){
+                        await this.CallApiDeleteImg(arrImg);
+                    }
+
+                    this.$emit('reloadpage');
                 } catch (err) {
                     console.log(err)
                 }
+            },
+
+            onFileChange(event) {
+                this.images = [];
+                this.isHaveImg = true;
+                const selectedFiles = event.target.files
+
+                for (var i = 0; i < selectedFiles.length; i++) {
+                    this.images.push(selectedFiles[i])
+                }
+
+                for (let i = 0; i < this.images.length; i++) {
+                    let reader = new FileReader()
+                    reader.addEventListener(
+                        'load',
+                        function () {
+                            this.$refs['image' + parseInt(i)][0].src = reader.result
+                        }.bind(this),
+                        false,
+                    ) //add event listener
+                    reader.readAsDataURL(this.images[i])
+                }
+            },
+
+            removeImage(index) {
+                this.images.splice(index, 1)
+                if(this.images.length == 0){
+                    this.$refs.fileupload.value = null;
+                    this.isHaveImg = false;
+                }
+            },
+
+            removeOldImage(index){
+                this.imagesOld.forEach((item) => {
+                    if(item.imageId == index){
+                        item.isActive = !item.isActive;
+                    }
+                });
             },
 
             showSuccess2(message) {
@@ -242,13 +322,23 @@
         },
 
         beforeUpdate() {
-            if (this.dataedit != null) this.Datasend = this.dataedit;
-            this.Datasend.paidDate = DateHelper.formatDate(this.Datasend.paidDate)
+            this.imagesOld = [];
+            if (this.dataedit != null){
+                this.Datasend = this.dataedit;
+                this.Datasend.paidDate = DateHelper.formatDate(this.Datasend.paidDate)
 
+                this.Datasend.paidImages.forEach((item) => {
+                    var obj = {
+                        "imageId" : item.imageId,
+                        "imagePath": item.imagePath,
+                        "isActive": false,
+                    }
+                    this.imagesOld.push(obj);
+                });
+            } 
             this.optionmodule.map((ele) => {
-                // this.Datasend.paidDate = DateHelper.formatDate(ele)
                 this.projectArr.push(ele)
-            })
+            });
         },
     }
 </script>
@@ -266,6 +356,7 @@
     .Menu__form--items-content {
         width: 100%;
         display: flex;
+        margin-bottom: 10px;
         flex-direction: column;
         justify-content: center;
     }
@@ -278,4 +369,95 @@
         display: flex;
         height: 30px;
     }
+
+    .input_file {
+        border: 1px solid #e5e5e5;
+        border-radius: 10px;
+    }
+
+    input[type='file']::file-selector-button {
+        background-color: #7128fa;
+        color: #fff;
+        border: 0px;
+        border-right: 1px solid #e5e5e5;
+        padding: 10px 15px;
+        margin-right: 20px;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        cursor: pointer;
+    }
+
+    input[type='file']::file-selector-button:hover {
+        background-color: #591bcc;
+        border: 0px;
+        border-right: 1px solid #591bcc;
+    }
+    .imgSelected {
+    background: coral;
+    box-shadow: yellow;
+    padding: 4px;
+    }
+
+    .content_box {
+        box-shadow: -3px 3px 5px -3px #888888, 4px 5px 3px -4px #888888, 4px 5px 2px -5px #888888 inset;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .img_show:hover {
+        cursor: pointer;
+        box-shadow: 0 0 5px 2px rgba(0, 140, 186, 0.5);
+    }
+
+
+    .container_img {
+        position: relative;
+    }
+
+    .image_item {
+        opacity: 1;
+        display: block;
+        height: auto;
+        transition: .5s ease;
+        backface-visibility: hidden;
+    }
+
+    .middle_img {
+        transition: .5s ease;
+        opacity: 0;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+    .container_img:hover .image_item {
+        opacity: 0.5;
+    }
+
+    .container_img:hover .middle_img {
+        opacity: 1;
+    }
+
+    .button_del_img {
+        background-color: #ddd;
+        border: none;
+        color: black;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 16px;
+        font-size: 16px;
+    }
+
+    .button_del_img:hover {
+        color: white;
+        background-color: red;
+    }
+
 </style>

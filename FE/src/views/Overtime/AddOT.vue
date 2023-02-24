@@ -51,7 +51,32 @@
                                 >Bạn chưa chon dự án OT</small
                             >
                         </div>
-                        <div class="field" style="margin-bottom: 0">
+
+                        <!-- Edit -->
+                        <div class="field" style="margin-bottom: 0" v-if="this.$route.params.id">
+                            <div class="p-float-label" :class="{ 'form-group--error': v$.data.user.$error }">
+                                <Dropdown
+                                    v-model="v$.data.user.$model"
+                                    :options="userDropdown"
+                                    optionLabel="name"
+                                    optionValue="x.id"
+                                    :class="{ 'p-invalid': v$.data.user.$invalid && submitted }"
+                                    disabled
+                                />
+                                <label for="user" :class="{ 'p-error': v$.data.user.$invalid && submitted }"
+                                    >Người OT*</label
+                                >
+                            </div>
+                            <small
+                                v-if="(v$.data.user.$invalid && submitted) || v$.data.user.$pending.$response"
+                                class="p-error"
+                                >Bạn chưa chọn người OT</small
+                            >
+                        </div>
+
+
+                        <!-- Add -->
+                        <div class="field" style="margin-bottom: 0" v-if="!this.$route.params.id" >
                             <div class="p-float-label" :class="{ 'form-group--error': v$.data.user.$error }">
                                 <MultiSelect
                                     v-model="v$.data.user.$model" 
@@ -366,23 +391,9 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                         })
                         .catch((err) => {
                             this.showWarn('Bạn không có quyền thực hiện thao tác sửa OT.')
+                            console.log(err);
                         })
                 } else if (this.data) {
-                    /*
-                    this.data.dateCreate = new Date()
-                    this.data.leadCreate = this.token.Id
-                    HTTP.post('OTs/createOT', this.data)
-                        .then((res) => {
-                            if (res.status == 200) {
-                                this.showSuccess()
-                                this.$router.push('/ots')
-                            }
-                        })
-                        .catch(() => {
-                            this.showWarn('Bạn không có quyền thực hiện thao tác thêm OT')
-                        })
-                    */
-
                     this.data.dateCreate = new Date()
                     this.data.leadCreate = this.token.Id
                     HTTP.post('OTs/AddOTs', this.data)
@@ -410,7 +421,12 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                 this.$router.push('/ots')
             },
             showSuccess() {
-                this.$toast.add({ severity: 'success', summary: 'Success Message', detail: 'Successful', life: 3000 })
+                this.$toast.add({
+                                severity: 'success',
+                                summary: 'Thành công',
+                                detail: 'Thêm mới thành công!',
+                                life: 3000,
+                            })
             },
             showWarn(err) {
                 this.$toast.add({ severity: 'warn', summary: 'Warn Message', detail: err, life: 3000 })
@@ -457,7 +473,7 @@ import { LocalStorage } from '@/helper/local-storage.helper'
 
             HTTP.get('Project/GetProjectByIdLead/'+this.token.Id).then((res) => {
                 if (res.status == 200)
-                    var formatDate =  DateHelper.formatDate(new Date());
+                    var formatDate =  DateHelper.formatDate(new Date()); 
                     res.data.forEach((element) => {
                         if (element.isDeleted != true && element.isFinished != true && (element.endDate > formatDate || element.endDate == null)) 
                         {

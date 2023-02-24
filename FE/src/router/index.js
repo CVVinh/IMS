@@ -164,15 +164,6 @@ const router = createRouter({
             component: () => import('@/views/Overtime/AcceptOT.vue'),
         },
         {
-            path: '/ots/accept/:type/:id',
-            name: 'accept',
-            meta: {
-                title: 'IMS - Ots',
-            },
-            props: true,
-            component: () => import('@/views/Overtime/OTdetail.vue'),
-        },
-        {
             path: '/remotes',
             name: 'remotes',
             meta: {
