@@ -132,7 +132,6 @@
             return {
                 userCode: {
                     required,
-                    alphaNum,
                 },
                 email: {
                     required,

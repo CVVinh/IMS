@@ -25,6 +25,17 @@ namespace BE.Controllers
             _host = host;
         }
 
+        [HttpGet("TestPAID")]
+        public async Task<IActionResult> Get()
+        {
+            var list = await _paidServices.GetAllAsync();
+
+
+            return Ok(list);
+
+        }
+
+
         [HttpGet]
         public async Task<IActionResult> GetAllPaid(int? pageIndex, PageSizeEnum pageSizeEnum)
         {
@@ -142,7 +153,7 @@ namespace BE.Controllers
         }
 
         [HttpPost("SearchPaidByDay")]
-        public async Task<IActionResult> SearchPaidByDay( SearchDayPaidDtos searchDayPaidDtos)
+        public async Task<IActionResult> SearchPaidByDay(SearchDayPaidDtos searchDayPaidDtos)
         {
             var response = await _paidServices.SearchPaidByDay(searchDayPaidDtos);
             if (response._success)
@@ -152,7 +163,7 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-       
+
 
     }
 }

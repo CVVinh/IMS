@@ -276,8 +276,8 @@
                         <div class="p-float-label" :class="{ 'form-group--error': v$.dataProject.leader.$error }">
                             <Dropdown
                                 v-model="v$.dataProject.leader.$model"
-                                :options="leader"
-                                optionLabel="name"
+                                :options="Optionleader"
+                                optionLabel="fullName"
                                 optionValue="id"
                                 :class="{ 'p-invalid': v$.dataProject.leader.$invalid && submitted }"
                             />
@@ -328,12 +328,11 @@
                 submitted: false,
                 dataProject: new ProjectDto(),
                 isOnGitlab: false,
+                Optionleader : false,
             }
         },
         beforeUpdate() {
-            this.leader.map((item) => {
-                item['name'] = `${item.firstName} ${item.lastName}`
-            })
+            this.getListLeader()
             if (this.projectSelected.id) {
                 HTTP.get('Project/getProjectById/' + this.projectSelected.id).then((res) => {
                     if (res.status === HttpStatus.OK) {
@@ -385,6 +384,12 @@
             },
         },
         methods: {
+            getListLeader(){
+                HTTP.get("/Project/getListLead").then(res=>{
+                    this.Optionleader = res.data
+                    console.log(res.data);
+                }).catch(err=>console.log(err))
+            },
             onClickCancel() {
                 this.resetForm()
                 this.$emit('closeDialog')
@@ -393,6 +398,7 @@
                 this.$emit('getAllProject')
             },
             handleSubmit(isFormValid) {
+                this.submitted = true
                 if (!this.isOnGitlab) {
                     if (!isFormValid) {
                         return
@@ -404,8 +410,10 @@
                 } else {
                     this.AddData()
                 }
+                console.log(this.projectSelected.id);
             },
             AddData() {
+                console.log('add');
                 let userLogin = LocalStorage.jwtDecodeToken()
                 const dataSave = {
                     name: this.dataProject.name,
@@ -426,10 +434,11 @@
                 if (this.isOnGitlab) {
                     dataSave.endDate = new Date()
                 }
-                console.log(dataSave)
+
                 if (dataSave) {
                     HTTP.post('Project/addProject', dataSave)
                         .then((res) => {
+                            console.log(res.data);
                             if (res.status == 200) {
                                 this.showSuccess()
                                 this.onClickCancel()
@@ -444,6 +453,7 @@
                 }
             },
             editData() {
+                console.log('edit');
                 let userLogin = LocalStorage.jwtDecodeToken()
                 let data = {
                     id: this.dataProject.id,

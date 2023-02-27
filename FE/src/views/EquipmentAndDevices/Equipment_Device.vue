@@ -242,6 +242,7 @@
             async getAllDevice() {
                 await DeviceService.getAllEquipmentDevice()
                     .then((res) => {
+                        console.log(res.data._Data)
                         res.data._Data.forEach((el) => {
                             this.dataEquipment.push({
                                 name: null,
@@ -255,6 +256,10 @@
                                     userName: null,
                                     operatingSystem: el.deviceInfo.operatingSystem,
                                     systemType: el.deviceInfo.systemType,
+                                    cpuName: el.deviceInfo.cpuName,
+                                    deviceTotalRamSize: el.deviceInfo.deviceTotalRamSize,
+                                    mainName: el.deviceInfo.mainName,
+                                    diskDriveTotalSize: el.deviceInfo.diskDriveTotalSize,
                                 },
                                 infoInstallSoftware: el.applications,
                             })

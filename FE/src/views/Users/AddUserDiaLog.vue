@@ -229,7 +229,7 @@
                                         <div class="p-float-label" :class="{ 'form-group--error': v$.idGroup.$error }">
                                             <Dropdown
                                                 v-model="v$.idGroup.$model"
-                                                :options="roleoption"
+                                                :options="optionRoles"
                                                 optionLabel="nameGroup"
                                                 optionValue="id"
                                                 :class="{ 'p-invalid': v$.idGroup.$invalid && submitted }"
@@ -555,23 +555,15 @@
                     { name: 'Unmarried', code: 2 },
                     { name: 'Undefined', code: 3 },
                 ],
-                optionRoles: [
-                    { name: 'Director', code: 1 },
-                    { name: 'Human Resource', code: 2 },
-                    { name: 'Project Manager', code: 3 },
-                    { name: 'Leader', code: 4 },
-                    { name: 'Accountant', code: 5 },
-                    { name: 'User', code: 6 },
-                    { name: 'Admin', code: 7 },
-                ],
+                optionRoles: [],
                 messages: [{ severity: 'info', content: 'Dynamic Info Message' }],
             }
         },
+      
         validations() {
             return {
                 userCode: {
                     required,
-                    alphaNum,
                 },
                 email: {
                     required,
@@ -620,6 +612,9 @@
                 },
             }
         },
+        mounted(){
+          this.GetRole()
+        },
         methods: {
             handleSubmit() {
                 this.submitted = true
@@ -629,6 +624,11 @@
                 }
             },
 
+            GetRole(){
+                HTTP.get("Group/getListGroup").then(res=>{
+                    this.optionRoles = res.data
+                }).catch(err=>console.log(err))
+            },
             closeAdd() {
                 this.$emit('closeAdd')
             },

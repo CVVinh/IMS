@@ -13,7 +13,7 @@ namespace BE.Services.PaidServices
     {
         Task<BaseResponse<List<Paid>>> GetAllAsync();
         Task<BaseResponse<List<Paid>>> GetPaidWithUserId(int userId);
-        Task<BaseResponse<Paid>> CreatePaid(CreatePaidDtos createPaidDtos,string root, string rootPath);
+        Task<BaseResponse<Paid>> CreatePaid(CreatePaidDtos createPaidDtos, string root, string rootPath);
         Task<BaseResponse<Paid>> DeletePaid(int idPaid, string root, string local);
         Task<BaseResponse<Paid>> EditPaid(int id, CreatePaidDtos createPaidDtos, string root, string local);
         Task<BaseResponse<Paid>> GetPaidWithId(int Id);
@@ -86,7 +86,7 @@ namespace BE.Services.PaidServices
             try
             {
                 var paids = await _appContext.Paids.Where(x => x.PaidPerson == userId).Include(x => x.paidImages).ToListAsync();
-                if(paids is null)
+                if (paids is null)
                 {
                     message = "Person do not have payment!";
                     data = null;
@@ -228,7 +228,7 @@ namespace BE.Services.PaidServices
                 }
 
                 _appContext.Paids.Remove(paid);
-                
+
                 if (paid.paidImages.Count > 0)
                 {
                     foreach (var item in paid.paidImages)
@@ -289,13 +289,13 @@ namespace BE.Services.PaidServices
                     }
                     else if (itemImg == null)
                     {
-                        message += "ImageId " + item +", ";
+                        message += "ImageId " + item + ", ";
                     }
                 }
                 await _appContext.SaveChangesAsync();
 
                 success = true;
-                if(message == "")
+                if (message == "")
                 {
                     message = "Deleting list image successfully";
                 }
@@ -339,7 +339,7 @@ namespace BE.Services.PaidServices
                     //        _appContext.PaidImages.Remove(item);
                     //    }
                     //}
-                    
+
                     foreach (var item in createPaidDtos.paidImage)
                     {
                         paid.paidImages = paid.paidImages ?? new List<PaidImage>();
@@ -350,7 +350,7 @@ namespace BE.Services.PaidServices
                         });
                     }
                 }
-                
+
                 var paidMap = _mapper.Map<CreatePaidDtos, Paid>(createPaidDtos, paid);
                 _appContext.Paids.Update(paidMap);
                 await _appContext.SaveChangesAsync();
@@ -401,7 +401,7 @@ namespace BE.Services.PaidServices
                 return new BaseResponse<Paid>(success, message, data);
             }
         }
-        
+
 
 
     }

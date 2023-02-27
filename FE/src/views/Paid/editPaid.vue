@@ -1,5 +1,4 @@
 <template>
-    
     <Dialog
         header="Cập nhật thu chi"
         :visible="status"
@@ -20,23 +19,24 @@
                         }"
                         >Tên khách hàng<span style="color: red">*</span></label
                     >
-                    <InputText
-                        type="text"
-                        v-model="v$.Datasend.customerName.$model"
-                        placeholder="Nhập tên khách hàng"
-                    />
+                    <!-- <InputText type="text" v-model="v$.Datasend.customerName.$model" placeholder="Nhập tên khách hàng" /> -->
+                    
+                    <Dropdown
+                            class="inputdrop"
+                            v-model="Datasend.customerName"
+                            :options="customerArray"
+                            optionLabel="fullName"
+                            optionValue="id"
+                            placeholder="Chọn khách hàng"
+                        />
+
                     <small class="p-error" v-if="v$.Datasend.customerName.required.$invalid && isSubmit">{{
                         v$.Datasend.customerName.required.$message.replace('Value', 'Customer Name')
                     }}</small>
                 </div>
 
                 <div class="Menu__form--items-content">
-                    <label
-                        :class="{
-                            'p-error': v$.Datasend.paidReason.required.$invalid && isSubmit,
-                            'input-title': true,
-                        }"
-                    >Dự án<span style="color: red">*</span></label>
+                    <label>Dự án</label>
 
                     <Dropdown
                         class="inputdrop"
@@ -46,9 +46,6 @@
                         optionValue="id"
                         placeholder="Chọn dự án"
                     />
-                    <small class="p-error" v-if="v$.Datasend.projectId.required.$invalid && isSubmit">{{
-                        v$.Datasend.projectId.required.$message.replace('Value', 'Project')
-                    }}</small> 
                 </div>
             </div>
             <div class="Menu__form--items items-right">
@@ -61,7 +58,15 @@
                         >Lý do chi trả<span style="color: red">*</span></label
                     >
 
-                    <InputText type="text" v-model="v$.Datasend.paidReason.$model" placeholder="Lý do chi" />
+                    <!-- <InputText type="text" v-model="v$.Datasend.paidReason.$model" placeholder="Lý do chi" /> -->
+                    <Dropdown
+                            class="inputdrop"
+                            v-model="Datasend.paidReason"
+                            :options="paidReasonArray"
+                            optionLabel="name"
+                            optionValue="id"
+                            placeholder="Lý do chi"
+                        />
                     <small class="p-error" v-if="v$.Datasend.paidReason.required.$invalid && isSubmit">{{
                         v$.Datasend.paidReason.required.$message.replace('Value', 'Paid Reason')
                     }}</small>
@@ -125,8 +130,8 @@
   
     </form>
         <template #footer>           
-            <button class="btn btn-primary pi pi-check p-button-icon" @click="handleSubmit"> Lưu</button>
-            <button class="btn btn-secondary pi pi-times p-button-icon" @click="closeModal"> Huỷ</button>
+            <Button label="Lưu" icon="pi pi-check" class="p-button-primary p-button-icon" @click="handleSubmit"></Button>
+            <Button label="Huỷ" icon="pi pi-times" class="p-button-secondary p-button-icon" @click="closeModal"></Button>
         </template>
     </Dialog>
 </template>
@@ -147,7 +152,7 @@
                 Datasend: {
                     projectId: '',
                     customerName: '',
-                    amountPaid: 0,
+                    amountPaid: null,
                     paidReason: '',
                     paidPerson: 0,
                     isPaid: false,
@@ -156,6 +161,8 @@
                     paidImages: null,
                 },
                 projectArr: [],
+                customerArray: [],
+                paidReasonArray: [],
                 isSubmit: false,
                 images: [],
                 imagesOld: [
@@ -171,26 +178,25 @@
         validations() {
             return {
                 Datasend: {
-                    projectId: { required },
                     customerName: { required },
                     amountPaid: { required },
                     paidReason: { required },
                 },
             }
         },
-        props: ['status', 'optionmodule', 'dataedit'],
+        props: ['status', 'optionmodule', 'dataedit', 'customerArr', 'paidReasonArr'],
         methods: {
             closeModal() {
                 this.imagesOld = [];
                 this.images = [];
                 this.isHaveImg = false;
-                this.$emit('closemodal')
+                this.$emit('closemodal');
             },
 
             clearform() {
                 this.Datasend.projectId = '';
                 this.Datasend.customerName = '';
-                this.Datasend.amountPaid = 0;
+                this.Datasend.amountPaid = null;
                 this.Datasend.paidReason = '';
                 this.isSubmit = false;
                 this.images = [];
@@ -200,11 +206,11 @@
             async CallApi(fromData) {
                 const res = await HTTP_LOCAL.put(`Paid/${this.Datasend.id}`, fromData).then((res) => {
                     if(res.status == 200){
-                        this.clearform()                        
+                        this.clearform();                
                         this.showSuccess2('Cập nhật thành công!');
                     }
                     else {
-                        this.showError2('Lỗi! cập nhật!')
+                        this.showError2('Lỗi! cập nhật!');
                     }
                 })
                 .catch((error) => {
@@ -219,7 +225,7 @@
                         this.showSuccess2('Xoá ảnh thành công!');
                     }
                     else {
-                        this.showError2('Lỗi! xoá ảnh!')
+                        this.showError2('Lỗi! xoá ảnh!');
                     }
                 })
                 .catch((error) => {
@@ -230,10 +236,10 @@
 
             async handleSubmit() {
                 try{
-                    this.isSubmit = true
+                    this.isSubmit = true;
                     if (!this.v$.$invalid) {
                         await this.EditPaid();
-                        this.closeModal()
+                        this.closeModal();
                     }
                 }
                 catch (err) {
@@ -278,10 +284,10 @@
             onFileChange(event) {
                 this.images = [];
                 this.isHaveImg = true;
-                const selectedFiles = event.target.files
+                const selectedFiles = event.target.files;
 
                 for (var i = 0; i < selectedFiles.length; i++) {
-                    this.images.push(selectedFiles[i])
+                    this.images.push(selectedFiles[i]);
                 }
 
                 for (let i = 0; i < this.images.length; i++) {
@@ -293,7 +299,7 @@
                         }.bind(this),
                         false,
                     ) //add event listener
-                    reader.readAsDataURL(this.images[i])
+                    reader.readAsDataURL(this.images[i]);
                 }
             },
 
@@ -323,19 +329,29 @@
             },
 
             showSuccess2(message) {
-                this.$toast.add({ severity: 'success', summary: 'Thành công', detail: message, life: 3000 })
+                this.$toast.add({ severity: 'success', summary: 'Thành công', detail: message, life: 3000 });
             },
+            
             showError2(message) {
-                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: message, life: 3000 })
+                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: message, life: 3000 });
             },
         },
 
         beforeUpdate() {
             this.imagesOld = [];
             this.projectArr = [];
+            this.customerArray = [];
+            this.paidReasonArray = [];
+
             if (this.dataedit != null){
                 this.Datasend = this.dataedit;
-                this.Datasend.paidDate = DateHelper.formatDate(this.Datasend.paidDate)
+
+                if(this.Datasend.paidDate === "0001-01-01T00:00:00" || this.Datasend.paidDate === "" ){
+                    this.Datasend.paidDate = "";
+                }
+                else {
+                    this.Datasend.paidDate = DateHelper.formatDate(this.Datasend.paidDate);
+                }
 
                 this.Datasend.paidImages.forEach((item) => {
                     var obj = {
@@ -345,10 +361,14 @@
                     }
                     this.imagesOld.push(obj);
                 });
-            } 
+            }
+
             this.optionmodule.map((ele) => {
-                this.projectArr.push(ele)
+                this.projectArr.push(ele);
             });
+
+            this.customerArray = this.customerArr;
+            this.paidReasonArray = this.paidReasonArr;
         },
     }
 </script>

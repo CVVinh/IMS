@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BE.Data.Models
 {
-    [Table("Paid")]
+    [Table("Paids")]
 
     public class Paid
     {
         [Key]
         public int Id { get; set; }
-        public int PaidPerson { get; set; }
+        public int? PaidPerson { get; set; }
      /*   [ForeignKey("PaidPerson")]
         public Users Users { get; set; }*/
         public DateTime PaidDate { get; set; }

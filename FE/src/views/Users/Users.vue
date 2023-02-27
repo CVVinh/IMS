@@ -42,8 +42,12 @@
                     <h5 style="color: white">Danh sách người dùng</h5>
                     <div class="header-container">
                         <div class="button-group">
-                            <Export style="margin-right: 5px" label="Xuất Excel" @click="exportCSV($event)" />
-                            <Add label="Thêm" :disabled="this.disableAddButton" @click="OpenAdd" />
+                            <Export style="margin-right: 5px" label="Xuất Excel" @click="exportCSV($event)" 
+                             v-if="this.showButton.export"
+                            />
+                            <Add label="Thêm" @click="OpenAdd" 
+                             v-if="this.showButton.add"
+                            />
                         </div>
                         <div class="input-text">
                             <MultiSelect
@@ -113,15 +117,19 @@
                 <Column field="" header="Thực thi" style="width: 10rem; text-align: left">
                     <template #body="{ data }">
                         <div class="actions-buttons" v-if="data.workStatus !== 'Nghỉ việc'">
-                            <Edit class="p-button-warning" @click="OpenEdit(data.id)" />
-                            &nbsp;
-                            <Delete @click="confirmDelete(data.id, data.workStatus)" />
+                            <Edit class="p-button-warning" @click="OpenEdit(data.id)" 
+                              v-if="this.showButton.edit"
+                              :disabled="CheckEdit(data.id)"  
+                            />
+                            
+                            <Delete @click="confirmDelete(data.id, data.workStatus)"
+                              v-if="this.showButton.delete"
+                            />
                         </div>
                     </template>
                 </Column>
             </DataTable>
         </div>
-
         <Dialog
             header="Không có quyền truy cập !"
             :visible="displayBasic"
@@ -211,6 +219,12 @@
                     { field: 'dateModified', header: 'Ngày chỉnh sửa ' },
                 ],
                 Optionrole: [],
+                showButton: {
+                    add: false,
+                    export : false,
+                    edit: false,
+                    delete:false,
+                },
                 roleList: [],
             }
         },
@@ -219,9 +233,7 @@
                 this.decode = LocalStorage.jwtDecodeToken()
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
                 if (UserRoleHelper.isAccess) {
-                    await this.getData()
-                    await this.getRoles()
-                    this.disableAddButton = false
+                    this.Permission(Number(this.decode.IdGroup),Number(this.decode.Id))    
                 } else {
                     this.countTime()
                     this.displayBasic = true
@@ -255,12 +267,62 @@
                     this.roleList = res.data
                 })
             },
+            Permission(value,id){
+              
+                //admin
+                if(value === 1){
+                    this.showButton.add = true
+                    this.showButton.edit = true
+                    this.showButton.export = true
+                    this.showButton.delete = true
+                    this.getData()
+                }
+                //ke toan
+                if(value === 2){
+                    this.getData()
+                    this.showButton.edit = true
+                }
+                if(value === 3 || value === 4 || value === 5){
+                    this.getDataByRole(id)
+                    this.showButton.edit = true  
+                }
+            },
+
+            getDataByRole(id){
+                HTTP.get('/Users/getUserById/'+id).then(res=>{
+                    if (res.status == 200) {
+                        const temp = [res.data]
+                        temp.forEach((element) => {
+                            if (element.isDeleted == 0) {
+                                this.data.push({ ...element, fullName: '' })
+                            }
+                        })
+                        this.data.forEach((element) => {
+                            element.fullName = this.mergeString(element.lastName, element.firstName)
+                            element.dateStartWork = this.formatDate(element.dateStartWork)
+                            element.dateLeave = this.formatDate(element.dateLeave)
+                            element.dateCreated = this.formatDate(element.dateCreated)
+                            element.dateModified = this.formatDate(element.dateModified)
+                            element.dOB = this.formatDate(element.dOB)
+                            element.workStatus = this.getWorkStatus(element.workStatus)
+                            element.gender = this.getGender(element.gender)
+                            element.maritalStatus = this.getMaritalStatus(element.maritalStatus)
+                            temp.forEach((user) => {
+                                if (user.id === element.userCreated)
+                                    element.userCreated = user.lastName + ' ' + user.firstName
+                                if (user.id === element.userModified)
+                                    element.userModified = user.lastName + ' ' + user.firstName
+                            })
+                        })
+                        this.isLoading = false
+                    }
+                }).catch(err=>console.log(err))
+            },
 
             getData() {
                 HTTP.get('Users/getAll').then((res) => {
                     if (res.status == 200) {
                         const temp = res.data
-
                         temp.forEach((element) => {
                             if (element.isDeleted == 0) {
                                 this.data.push({ ...element, fullName: '' })
@@ -342,6 +404,22 @@
                         month: '2-digit',
                         year: 'numeric',
                     })
+            },
+            CheckEdit(id){
+                console.log(this.decode.IdGroup);
+                if(Number(this.decode.IdGroup) === 1)
+                {
+                    return false
+                }else
+                {
+                    if(Number(this.decode.Id) === id){
+                    return false
+                }else
+                {
+                    return true
+                }
+                }
+                
             },
             deleteUser(userId) {
                 let API_URL = 'Users/deleteUser/' + userId

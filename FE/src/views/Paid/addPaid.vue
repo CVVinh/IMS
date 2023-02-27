@@ -18,10 +18,16 @@
                                 'input-title': true,
                             }"
                             >Tên khách hàng<span style="color: red">*</span></label>
-                        <InputText
-                            type="text"
-                            v-model="v$.Datasend.customerName.$model"
-                            placeholder="Nhập tên khách hàng"
+
+                        <!-- <InputText type="text" v-model="v$.Datasend.customerName.$model" placeholder="Nhập tên khách hàng"/> -->
+
+                        <Dropdown
+                            class="inputdrop"
+                            v-model="Datasend.customerName"
+                            :options="customerArray"
+                            optionLabel="fullName"
+                            optionValue="id"
+                            placeholder="Chọn khách hàng"
                         />
                         <small class="p-error" v-if="v$.Datasend.customerName.required.$invalid && isSubmit">{{
                             v$.Datasend.customerName.required.$message.replace('Value', 'Customer Name')
@@ -29,13 +35,7 @@
                     </div>
 
                     <div class="Menu__form--items-content">
-                        <label
-                            :class="{
-                                'p-error': v$.Datasend.paidReason.required.$invalid && isSubmit,
-                                'input-title': true,
-                            }"
-                        >Dự án<span style="color: red">*</span></label>
-
+                        <label>Dự án</label>
                         <Dropdown
                             class="inputdrop"
                             v-model="Datasend.projectId"
@@ -44,9 +44,6 @@
                             optionValue="id"
                             placeholder="Chọn dự án"
                         />
-                        <small class="p-error" v-if="v$.Datasend.projectId.required.$invalid && isSubmit">{{
-                            v$.Datasend.projectId.required.$message.replace('Value', 'Project')
-                        }}</small> 
                     </div>
                 </div>
                 <div class="Menu__form--items items-right">
@@ -57,7 +54,16 @@
                                 'input-title': true,
                             }"
                             >Lý do chi trả<span style="color: red">*</span></label>
-                        <InputText type="text" v-model="v$.Datasend.paidReason.$model" placeholder="Lý do chi" />
+
+                        <!-- <InputText type="text" v-model="v$.Datasend.paidReason.$model" placeholder="Lý do chi" /> -->
+                        <Dropdown
+                            class="inputdrop"
+                            v-model="Datasend.paidReason"
+                            :options="paidReasonArray"
+                            optionLabel="name"
+                            optionValue="id"
+                            placeholder="Lý do chi"
+                        />
                         <small class="p-error" v-if="v$.Datasend.paidReason.required.$invalid && isSubmit">{{
                             v$.Datasend.paidReason.required.$message.replace('Value', 'Paid Reason')
                         }}</small>
@@ -77,7 +83,6 @@
                         }}</small>
                     </div>
                 </div>
-                
             </div>
             
             <div class="flex justify-content-center container">
@@ -102,8 +107,8 @@
         </form>
 
         <template #footer>
-            <button class="btn btn-primary pi pi-check p-button-icon" @click="handleSubmit"> Lưu</button>
-            <button class="btn btn-secondary pi pi-times p-button-icon" @click="closeModal"> Huỷ</button>
+            <Button label="Lưu" icon="pi pi-check" class="p-button-primary p-button-icon" @click="handleSubmit"> </Button>
+            <Button label="Huỷ" icon="pi pi-times" class="p-button-secondary p-button-icon" @click="closeModal"></Button>
         </template>
     </Dialog>
 </template>
@@ -124,16 +129,17 @@
                 Datasend: {
                     projectId: '',
                     customerName: '',
-                    amountPaid: 0,
+                    amountPaid: null,
                     paidReason: '',
                     paidPerson: '',
                     isPaid: false,
                     paidDate: null,
                     paidImage: [],
                 },
-                Listarrdelete : [],
                 projectArr: [],
-                
+                customerArray: [],
+                paidReasonArray: [],
+
                 isSubmit: false,
                 token: null,
                 currentUser: null,
@@ -144,7 +150,6 @@
         validations() {
             return {
                 Datasend: {
-                    projectId: { required },
                     customerName: { required },
                     amountPaid: { required },
                     paidReason: { required },
@@ -152,7 +157,7 @@
             }
         },
 
-        props: ['status', 'optionmodule'],
+        props: ['status', 'optionmodule', 'customerArr', 'paidReasonArr'],
 
         methods: {
             closeModal() {
@@ -163,7 +168,7 @@
             clearform() {
                 this.Datasend.projectId = '';
                 this.Datasend.customerName = '';
-                this.Datasend.amountPaid = 0;
+                this.Datasend.amountPaid = null;
                 this.Datasend.paidReason = '';
                 this.isSubmit = false;
                 this.paidImage = [];
@@ -191,6 +196,7 @@
                 }
             },
 
+            // xin dung xoa nhung dong code comment nay
             // removeImage(index) {
             //     this.images.splice(index, 1)
             //     let imagesRefs = this.$refs
@@ -282,21 +288,23 @@
             },
 
             showError(message) {
-                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: message, life: 3000 })
+                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: message, life: 3000 });
             },
 
             showSuccess(message) {
-                this.$toast.add({ severity: 'success', summary: 'Thành công', detail: message, life: 3000 })
+                this.$toast.add({ severity: 'success', summary: 'Thành công', detail: message, life: 3000 });
             },
 
             showInfo(message) {
-                this.$toast.add({ severity: 'info', summary: 'Thông báo', detail: message, life: 3000 })
+                this.$toast.add({ severity: 'info', summary: 'Thông báo', detail: message, life: 3000 });
             },
             
         },
 
         beforeUpdate() {
-            this.projectArr = this.optionmodule
+            this.projectArr = this.optionmodule;
+            this.customerArray = this.customerArr;
+            this.paidReasonArray = this.paidReasonArr;
         },
     }
 </script>

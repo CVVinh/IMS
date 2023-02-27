@@ -135,11 +135,11 @@
                     if (
                         Number(this.token.IdGroup) == 4 ||
                         Number(this.token.IdGroup) == 3 ||
-                        Number(this.token.IdGroup) == 1
+                        Number(this.token.IdGroup) == 1 || Number(this.token.IdGroup) == 2
                     ) {
                         await this.getAllLeaveOffRegister()
                     }
-                    if (Number(this.token.IdGroup) == 5 || Number(this.token.IdGroup) == 2) {
+                    if (Number(this.token.IdGroup) == 5 ) {
                         setTimeout(() => {
                             this.$toast.add({
                                 severity: 'error',

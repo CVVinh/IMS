@@ -16,7 +16,27 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="d-flex justify-content-start">
                                 <Export style="height: 50px" label="Xuất Excel" @click="exportCSV($event)" />
-                            </div>
+
+                                <!-- <Button label="Đăng ký nghỉ phép" class="p-button-info" style="margin-left: 10px;" @click="toRegisterPage" /> -->
+                                <router-link  to="/leaveoff/Registerlists" 
+                                style="
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    color: #ffffff;
+                                    background-color: #F59E0B;
+                                    border: 1px solid #F59E0B ;
+                                    padding: 10px;
+                                    border-radius: 5px;
+                                    margin-left: 10px;
+                                    font-weight: 600;
+                                    text-decoration: none;  
+                                "
+                                 v-if="showButton.add"
+                                >
+                                    <span>Đăng ký nghỉ phép</span>        
+                                </router-link>
+                            </div> 
                             <div class="d-flex justify-content-end">
                                 <div class="input-text">
                                     <Button
@@ -158,6 +178,9 @@
                     searchLeaveOff: '',
                     idstatus: [2],
                 },
+                showButton:{
+                    add : false
+                }
             }
         },
         async created() {
@@ -170,7 +193,13 @@
 
                 if (UserRoleHelper.isAccess) {
                     // Check quyền
+                    
                     this.token = LocalStorage.jwtDecodeToken()
+
+                    if(Number(this.token.IdGroup) === 2){
+                        this.showButton.add = true
+                    }
+
                     if (
                         Number(this.token.IdGroup) == 5 ||
                         Number(this.token.IdGroup) == 2 ||
@@ -236,6 +265,11 @@
             },
             getUserById(id) {
                 return HTTP.get(GET_USER_BY_ID(id)).then((res) => res.data)
+            },
+            
+            toRegisterPage(){
+                router.push('/leaveoff/Registerlists')
+
             },
 
             async getLeaveOff() {

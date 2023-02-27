@@ -4,7 +4,7 @@
         <Toast position="top-right" />
         <div class="mx-3 mt-3">
             <DataTable
-                :value="arr"
+                :value="data"
                 ref="dt"
                 :paginator="true"
                 class="p-datatable-customers"
@@ -41,32 +41,50 @@
                     <div class="flex justify-content-center">
                         <h5 class="" style="color: white">Danh sách dự án</h5>
                         <div class="inline">
-                            <Export label="Xuất Excel" class="me-2" @click="exportToExcel()" />
-                            <Button
-                                @click="finishMulti()"
-                                label="Hoàn tất"
-                                class="p-button-sm me-2"
-                                icon="pi pi-check"
-                            />
-                            <Add @click="openDialogAdd()" label="Thêm" v-if="canAddProject()" />
-                            <div class="p-input-icon-left layout-left">
-                                <i class="pi pi-search" />
-                                <InputText
-                                    class="p-inputtext-sm"
-                                    v-model="filters['global'].value"
-                                    placeholder="Tìm kiếm"
-                                />
+                            
+                            <div style="display: flex; justify-content: space-between;" >
+                                
+                                <div>
+                                    <Export label="Xuất Excel" class="me-2" @click="exportToExcel()"
+                                    v-if="this.showButton.export"
+                                    />
+                                    <Button
+                                        @click="finishMulti()"
+                                        label="Hoàn tất"
+                                        class="p-button-sm me-2"
+                                        icon="pi pi-check"
+                                        v-if="this.showButton.finishMulti"
+                                    />
+                                    <Add @click="openDialogAdd()" label="Thêm" v-if="this.showButton.add" />     
+                                </div>
+                                
+                                <div>
+                                    <div class="p-input-icon-left layout-left">
+                                    <i class="pi pi-search" />
+                                    <InputText
+                                        class="p-inputtext-sm"
+                                        v-model="filters['global'].value"
+                                        placeholder="Tìm kiếm"
+                                    />
+                                    </div>
+                                    <div class="layout-left">
+                                        <MultiSelect
+                                            :modelValue="selectedColumns"
+                                            :options="columns"
+                                            optionLabel="header"
+                                            @update:modelValue="onToggle"
+                                            placeholder="Chọn"
+                                            style="width: 20em"
+                                        />
+                                    </div>
+
+                                </div>
+
+
+                                
                             </div>
-                            <div class="layout-left">
-                                <MultiSelect
-                                    :modelValue="selectedColumns"
-                                    :options="columns"
-                                    optionLabel="header"
-                                    @update:modelValue="onToggle"
-                                    placeholder="Chọn"
-                                    style="width: 20em"
-                                />
-                            </div>
+                            
+                            
                         </div>
                     </div>
                 </template>
@@ -90,6 +108,7 @@
                         {{ data.name }}
                     </template>
                 </Column>
+
                 <Column field="startDate" header="Ngày bắt đầu " sortable style="min-width: 8rem">
                     <template #body="{ data }">
                         {{ data.startDate }}
@@ -113,37 +132,44 @@
                         <Member
                             @click="toDetailProject(data.id)"
                             class="p-button-info mazin"
-                            :disabled="canEdit(data.isDeleted, data.isFinished, data.userCreated)"
+                            :disabled = "canOperation(data.isDeleted,data.isFinished)"
+                            v-if="this.showButton.member"
                         />
 
                         <Edit
-                            v-if="data.isOnGitlab == false"
+                            v-if="data.isOnGitlab == false && this.showButton.edit"
                             class="p-button-warning mazin"
                             @click="openDialogEdit(data)"
-                            :disabled="canEdit(data.isDeleted, data.isFinished, data.userCreated)"
+                            :disabled = "canOperation(data.isDeleted,data.isFinished)"
                         />
 
                         <Delete
                             class="p-button-danger mazin"
                             @click="confirmDelete(data.id)"
-                            :disabled="canEdit(data.isDeleted, data.isFinished, data.userCreated)"
+                            :disabled = "canOperation(data.isDeleted,data.isFinished)"
+                            v-if="this.showButton.delete"
                         />
 
                         <Button
                             @click="finishProject(data.id)"
                             class="p-button-sm mt-1 p-button-success"
                             icon="pi pi-check"
-                            :hidden="canFinished(data.isFinished, data.isDeleted)"
-                            :disabled="
-                                canFinished(data.isFinished) ||
-                                canEdit(data.isDeleted, data.isFinished, data.userCreated)
-                            "
+                            :disabled = "canOperation(data.isDeleted,data.isFinished)"
+                            v-if="this.showButton.finish"
+                            
                         />
                     </template>
                 </Column>
-                <Column field="isFinished" header="Trạng thái" sortable>
-                    <template #body="{ data }">
-                        <span :class="'badge ' + colorFinished(data.isFinished)">{{ text(data.isFinished) }}</span>
+                <Column header="Trạng thái" sortable field="isDeleted" >
+                    <template #body="{ data }" >
+                        <p :style="{color: statusText(data.isFinished,data.isDeleted) === 'Đang chạy' ?  'green' : 
+                                           statusText(data.isFinished,data.isDeleted) === 'Đã hoàn thành' ? 'orange' :
+                                           statusText(data.isFinished,data.isDeleted) === 'Đã xóa' ? 'red' : null
+                        }">
+                        {{ 
+                           statusText(data.isFinished,data.isDeleted)
+                        }}
+                        </p>
                     </template>
                 </Column>
             </DataTable>
@@ -158,8 +184,8 @@
         >
             <p>Bạn không có quyền truy cập !</p>
             <medium
-                >Bạn sẽ được điều hướng vào trang chủ <strong>{{ num }}</strong> giây!</medium
-            >
+                >Bạn sẽ được điều hướng vào trang chủ <strong>{{ num }}</strong> giây!
+            </medium>
             <template #footer>
                 <Button label="Hoàn tất" icon="pi pi-check" @click="submit" autofocus />
             </template>
@@ -181,7 +207,6 @@
     import { HTTP } from '@/http-common'
     import { FilterMatchMode } from 'primevue/api'
     import jwtDecode from 'jwt-decode'
-
     import Add from '../../components/buttons/Add.vue'
     import Edit from '../../components/buttons/Edit.vue'
     import Delete from '../../components/buttons/Delete.vue'
@@ -191,6 +216,7 @@
     import { ProjectDto } from '@/views/Project/Project.dto'
     import { UserRoleHelper } from '@/helper/user-role.helper'
     import { HTTP_API_GITLAB, GET_ALL_PROJECT } from '@/http-common'
+import { LocalStorage } from '@/helper/local-storage.helper'
 
     export default {
         data() {
@@ -203,6 +229,7 @@
                 selectedColumns: null,
                 columns: null,
                 arr: [],
+                data : [],
                 loading: true,
                 displayBasic: false,
                 pageIndex: [5, 10, 15, 20],
@@ -211,6 +238,16 @@
                 isOpenDialog: false,
                 projectSelected: new ProjectDto(),
                 user: [],
+                token : null,
+                showButton : {
+                    export : false,
+                    add : false,
+                    finishMulti : false,
+                    finish : false,
+                    delete : false,
+                    edit : false,
+                    member : false,
+                },
                 leader: [
                     {
                         id: 1,
@@ -236,16 +273,31 @@
             await this.handlerGetInfoProjects()
         },
         async mounted() {
-            try {
+            try {   
+                this.token = LocalStorage.jwtDecodeToken()
+                
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
                 if (await UserRoleHelper.isAccess) {
-                    await this.getUserInfo()
-                    await UserRoleHelper.getUserRole(this.user, this.leader)
-                } else {
+                    console.log('hello');
+                    this.Permission(Number(this.token.IdGroup),this.token.Id)
+                           
+                }else {
                     this.countTime()
                     this.displayBasic = true
-                }
-                this.columns = [
+                } 
+                
+            } catch (error) {
+                console.log(error);
+                this.countTime()
+                this.displayBasic = true
+            }
+            this.dataProjects.map(ele=>{
+                console.log(ele);
+
+            })
+
+
+            this.columns = [
                     { field: 'description', header: 'Mô tả' },
                     { field: 'userId', header: 'PM' },
                     { field: 'leader', header: 'Leader' },
@@ -254,16 +306,13 @@
                     { field: 'userUpdate', header: 'Người chỉnh sửa' },
                     { field: 'dateUpdate', header: 'Ngày chỉnh sửa' },
                 ]
-            } catch (error) {
-                this.countTime()
-                this.displayBasic = true
-            }
         },
         methods: {
             openDialogAdd() {
                 this.isOpenDialog = true
                 this.projectSelected = []
             },
+            
             closeDialog() {
                 this.isOpenDialog = false
                 this.projectSelected = []
@@ -276,18 +325,19 @@
                 return false
             },
             finishMulti() {
-                let bool = false
+                let bool = this.selectedProject.filter(function(element,index){
+                    if(element.isFinished === true || element.isDeleted === true){
+                        return false
+                    }else{
+                        return true
+                    }
+                })  
                 if (this.selectedProject == null) {
                     this.showWarn('Vui lòng chọn một dự án để kết thúc!')
                     return
                 }
-                this.selectedProject.forEach((element) => {
-                    if (!element.isFinished && !element.isDeleted) {
-                        bool = true
-                    }
-                })
-                if (bool) {
-                    this.selectedProject.forEach((element) => {
+                if (bool.length > 0) {
+                    bool.forEach((element) => {
                         this.finishProject(element.id)
                     })
                 } else this.showWarn('Không thể hoàn thành dự án!')
@@ -299,7 +349,6 @@
                 HTTP.put('Project/FinishProject/' + id, { UserId: idUser })
                     .then((res) => {
                         if (res.status == 200) {
-                            this.arr = []
                             this.getAllProject()
                             this.$toast.add({
                                 severity: 'success',
@@ -328,48 +377,25 @@
                     year: 'numeric',
                 })
             },
-            getUsername(userId) {
-                if (userId && userId !== 0) {
-                    for (var user of this.userInfo) {
-                        if (user.id == userId) {
-                            const arrName = user.lastName.split(' ')
-                            var fullName = user.firstName.replace(' ', '') + ' '
-                            arrName.forEach((x) => {
-                                fullName += x.substring(0, 1) + '.'
-                            })
-                            return fullName
-                        }
-                    }
+            statusText(isfinish,isdelete){
+                if(isdelete === false && isfinish === false){
+                    return 'Đang chạy'
                 }
-            },
-            getUserInfo() {
-                HTTP.get('Users/getInfo').then(async (res) => {
-                    if (res.data) {
-                        this.userInfo = res.data
-                        await this.getAllProject()
-                    }
-                })
+                if(isfinish === true){
+                    return 'Đã hoàn thành'
+                }
+                if(isdelete === true){
+                    return 'Đã xóa'
+                }
+               
             },
             getAllProject() {
-                this.arr = []
+                console.log('object');
                 HTTP.get('Project/getAllProject').then((res) => {
                     if (res.data) {
-                        const result = res.data
-                        let temp = []
-                        result.forEach((element) => {
-                            element.startDate = this.formatDate(element.startDate)
-                            element.endDate = this.formatDate(element.endDate)
-                            element.dateCreated = this.formatDate(element.dateCreated)
-                            element.dateUpdate = this.formatDate(element.dateUpdate)
-                            element.userCreated = this.getUsername(element.userCreated)
-                            element.userUpdate = this.getUsername(element.userUpdate)
-                            element.userId = this.getUsername(element.userId)
-                            element.leader = this.getUsername(element.leader)
-                            temp.push(element)
-                        })
-                        this.arr = temp
-                    }
-                    console.log('as', this.arr)
+                        this.data = res.data   
+                        console.log(res.data);         
+                    }            
                     this.loading = false
                 })
             },
@@ -398,14 +424,55 @@
                         this.showWarn('Không có quyền thực hiện thao tác xóa dự án.')
                     })
             },
-            canEdit(isDeleted, isFinished, userCreated) {
-                let userlogin = jwtDecode(localStorage.getItem('token'))
-                let idPM = this.getUsername(userlogin.Id)
-                if (isDeleted == true || isFinished == true || userCreated != idPM) return true
-                else return false
+            canOperation(isDeleted, isFinished) {
+                if(isDeleted === true || isFinished === true ) {
+                    return true;
+                }else{
+                    return false
+                }
             },
-            canFinished(isFinished, isDeleted) {
-                return !!(isFinished || isDeleted)
+            getProjectByLead(idlead){
+                HTTP.get(`/Project/getAllProjectByLead/${idlead}`)
+                .then(res=>{
+                    this.data = res.data
+                    this.loading = false
+                }).catch(err=>console.log(err))
+            },
+            getProjectByStaff(idstaff){
+                HTTP.get(`/Project/getAllProjectByStaff/${idstaff}`)
+                .then(res=>{
+                    this.data = res.data
+                    console.log(res.data);
+                    this.loading = false
+                }).catch(err=>console.log(err))
+            },
+            Permission(value,id){
+                if(value !== null){
+                    // sample
+                    if(value === 2) {
+                       this.getAllProject()
+                    }
+                    // lead
+                    if(value === 3){
+                        this.showButton.member = true
+                        this.getProjectByLead(id)
+                    }
+                    // staff
+                    if(value === 4){
+                        this.getProjectByStaff(id);
+                    }
+                    // pm
+                    if(value === 5){
+                        this.showButton.add = true
+                        this.showButton.delete = true
+                        this.showButton.edit = true
+                        this.showButton.export = true
+                        this.showButton.finish = true
+                        this.showButton.finishMulti = true
+                        this.showButton.member = true
+                        this.getAllProject()
+                    }
+                }
             },
             confirmDelete(id) {
                 this.$confirm.require({
@@ -487,6 +554,7 @@
             getAllProects(page) {
                 return HTTP_API_GITLAB.get(GET_ALL_PROJECT(100, page)).then((res) => res.data)
             },
+            
             async handlerGetInfoProjects() {
                 let resultCountPr = 100
                 let resultPr = []

@@ -41,6 +41,7 @@ using BE.Services.RulesServices;
 using BE.Services.InfoDeviceServices;
 using BE.Data.Dtos.PaidDtos;
 using BE.Data.Dtos.PaidDtos.Validator;
+using BE.Services.Customers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +60,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 #region Registering Services
 builder.Services.AddScoped<ILeaveOffServices, LeaveOffServices>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IPaidReasonsService, PaidReasonServices>();
 builder.Services.AddScoped<ITasksServices, TasksServices>();
 builder.Services.AddScoped<IWikiCategogyService, WikiCategogyServices>();
 builder.Services.AddScoped<IWikiPostService, WikiPostService>();
@@ -66,6 +69,8 @@ builder.Services.AddScoped<IWikiPostService, WikiPostService>();
 builder.Services.AddScoped<IMemberProjectServices, MemberProjectServices>();
 builder.Services.AddScoped<IPaginationServices<GetAllTaskDto>, PaginationServices<GetAllTaskDto>>();
 builder.Services.AddScoped<IPaginationServices<LeaveOff>, PaginationServices<LeaveOff>>();
+builder.Services.AddScoped<IPaginationServices<PaidReasons>, PaginationServices<PaidReasons>>();
+builder.Services.AddScoped<IPaginationServices<Customer>, PaginationServices<Customer>>();
 builder.Services.AddScoped<CommonHelperDtos>();
 builder.Services.AddScoped<IPaginationServices<Users>, PaginationServices<Users>>();
 builder.Services.AddScoped<IPaginationServices<Projects>, PaginationServices<Projects>>();

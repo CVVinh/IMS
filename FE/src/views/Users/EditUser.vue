@@ -562,7 +562,6 @@
                 form: {
                     userCode: {
                         required,
-                        alphaNum,
                     },
                     email: {
                         required,

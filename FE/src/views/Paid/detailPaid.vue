@@ -21,13 +21,13 @@
                 <div class="detail__content-box detail__content-box-top">
                     <div class="detail__content-box-items" >
                         <div class="detail__content-box-items-text">
-                            <b><i class="pi pi-users p-button-icon"></i> Khách hàng:</b> {{ this.Datasend.customerName }}
+                            <b><i class="pi pi-users p-button-icon"></i> Khách hàng:</b> {{ this.Datasend.customerFullName }} 
                         </div>
                     </div>
 
                     <div class="detail__content-box-items top">
                         <div class="detail__content-box-items-text">
-                            <b><i class="bx bx-notepad"></i> Dự án:</b> {{ this.project }}
+                            <b><i class="bx bx-notepad"></i> Dự án:</b> {{ this.Datasend.nameProject }}
                         </div>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
                 <div class="detail__content-box detail__content-box-top">    
                     <div class="detail__content-box-items top">
                         <div class="detail__content-box-items-text">
-                            <b><i class="bx bx-wallet"></i> Mức chi:</b> {{ this.Datasend.amountPaid.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) }}
+                            <b><i class="bx bx-wallet"></i> Mức chi:</b> {{ this.Datasend.amountPaidName }}
                         </div>
                     </div>
 
@@ -49,7 +49,7 @@
                 <div class="detail__content-box detail__content-box-top detail__content-box-size ">
                     <div class="detail__content-box-items">
                         <div class="detail__content-box-items-text">
-                            <b><i class="p-confirm-dialog-icon pi pi-info-circle"></i> Lý do chi trả:</b> {{ Datasend.paidReason }}
+                            <b><i class="p-confirm-dialog-icon pi pi-info-circle"></i> Lý do chi trả:</b> {{ Datasend.paidNameReason }} 
                         </div>
                     </div>
                 </div>
@@ -67,24 +67,25 @@
                     </Galleria>
                 </div>
                 <div v-else>
-                    <h3>Không có hình ảnh để hiển thị</h3>
+                    <img src="@/assets/noImage.png" alt="anh" class="no_image">
                 </div>
             </div>
         </div>
 
         <template #footer>   
-            <button v-if="Datasend.isPaid == false" class="btn btn-primary pi pi-check p-button-icon" @click="confirmPayment"> Thanh toán</button>        
-            <button class="btn btn-secondary pi pi-times p-button-icon" @click="closeModal"> Huỷ</button>
+            <Button v-if="Datasend.isPaid == false" label="Thanh toán" icon="pi pi-check" class="p-button-primary p-button-icon" @click="confirmPayment"></Button>        
+            <Button label="Huỷ" icon="pi pi-times" class="p-button-secondary p-button p-button-icon p-component " @click="closeModal" enter="closeModal"></Button>
         </template>
     </Dialog>
 </template>
 
 <script>
-    import { GET_LIST_PAID, HTTP, HTTP_LOCAL } from '@/http-common'
+    import { GET_LIST_PAID, HTTP, HTTP_LOCAL, GET_PROJECT_BY_ID, GET_USER_BY_ID, HTTP_API_GITLAB } from '@/http-common'
     import { useVuelidate } from '@vuelidate/core'
     import { required } from '@vuelidate/validators'
     import { DateHelper } from '@/helper/date.helper'
     import { LocalStorage } from '@/helper/local-storage.helper'
+    import { onBeforeMount } from 'vue'
 
     export default {
         data() {
@@ -99,8 +100,13 @@
                     paidDate: null,
                     token: null,
                     paidImages: null,
+
+                    paidNamePerson: null,
+                    customerFullName: null,
+                    paidNameReason: null,
+                    nameProject: null,
+                    amountPaidName: null,
                 },
-                project: null,
                 dataImgDetail: [],
                 responsiveOptions: [
                     {
@@ -120,6 +126,65 @@
         },
         props: ['status', 'dataDetail'],
         methods: {
+
+            showResponseApi(status, message = "") {
+                switch (status) {
+                    case 401:
+                    case 403:
+                        this.showError('Bạn không có quyền thực hiện chức năng này!');
+                        break;
+
+                    case 404:
+                        this.showError('Lỗi! Load dữ liệu!');
+                        break;  
+
+                    default:
+                        if(message != ""){
+                            this.showError(message);
+                        }
+                        else {
+                            this.showError("Có lỗi trong quá trình thực hiện!");
+                        }
+                        break;
+                }
+            },
+
+            async getUsers(id) {
+                return await HTTP_LOCAL.get(GET_USER_BY_ID(id))
+                    .then((respone) => respone.data)
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
+            },
+
+            async getCustomerId(id) {
+                return await HTTP_LOCAL.get(`Customer/GetById/${id}`)
+                    .then((respone) => respone.data._Data)
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
+            },
+
+            async getPaidReasonId(id) {
+                return await HTTP_LOCAL.get(`PaidReason/GetById/${id}`)
+                    .then((respone) => respone.data._Data)
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
+            },
+
+            async getProjects(id) {
+                return await HTTP_LOCAL.get(GET_PROJECT_BY_ID(id))
+                    .then((respone) => respone.data)
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
+            },
+
             closeModal() {
                 this.imagesOld = [];
                 this.images = [];
@@ -138,11 +203,34 @@
             },
         },
 
-        beforeUpdate() {
+        async beforeUpdate() { //beforeUpdate
             this.dataImgDetail = [];
+            this.Datasend = [];
+
             if (this.dataDetail != null){
                 this.Datasend = this.dataDetail;
-                this.Datasend.paidDate = DateHelper.formatDate(this.Datasend.paidDate)
+
+                var user = await this.getUsers(parseInt(this.Datasend.paidPerson))
+                var customer = await this.getCustomerId(parseInt(this.Datasend.customerName));
+                var paidReason = await this.getPaidReasonId(parseInt(this.Datasend.paidReason));
+
+                this.Datasend.paidPerson = parseInt(this.Datasend.paidPerson);
+                this.Datasend.paidNamePerson = user.fullName;
+
+                this.Datasend.customerName = parseInt(this.Datasend.customerName);
+                this.Datasend.customerFullName = customer.fullName;
+
+                this.Datasend.paidReason = parseInt(this.Datasend.paidReason);
+                this.Datasend.paidNameReason = paidReason.name;
+
+                if(this.Datasend.paidDate === "0001-01-01T00:00:00" || this.Datasend.paidDate === "" ){
+                    this.Datasend.paidDate = "";
+                }
+                else {
+                    this.Datasend.paidDate = DateHelper.formatDate(this.Datasend.paidDate);
+                }
+
+                this.Datasend.amountPaidName = this.Datasend.amountPaid.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
 
                 if(this.Datasend.paidImages.length > 0){
                     this.Datasend.paidImages.forEach(item => {
@@ -154,17 +242,14 @@
                         this.dataImgDetail.push(imgObj);
                     });
                 }
-                HTTP_LOCAL.get(`/Project/getById/${this.Datasend.projectId}`).then((res) => {
-                    if(res.status == 200){
-                        this.project = res.data.name;
-                    }
-                    else {
-                        console.log("Lỗi lấy project của người dùng!");
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+                
+                if(this.Datasend.projectId != 0){
+                    var project = await this.getProjects(this.Datasend.projectId);
+                    this.Datasend.nameProject = project.name;
+                }
+                else {
+                    this.Datasend.nameProject = "";
+                }
             } 
         },
 
@@ -224,6 +309,11 @@
             flex: 65%;
             margin-left: 15px;
         }
+    }
+
+    .no_image {
+        border: 1px solid #ddd;
+        border-radius: 15px;
     }
 
     @media (max-width: 500px) {

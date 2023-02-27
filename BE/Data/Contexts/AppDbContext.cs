@@ -49,11 +49,15 @@ namespace BE.Data.Contexts
 		public DbSet<Rules> Rules { get; set; }
 		public DbSet<InfoDevices> InfoDevices { get; set; }
 		public DbSet<DeviceInstalledApps> DeviceInstalledApps { get; set; }
-		#endregion
 
-		#region Method
-		// Use Fluent API
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<PaidReasons> PaidReasons { get; set; }
+        public DbSet<Customer_PaidReason> CustomerPaidReasons { get; set; }
+        #endregion
+
+        #region Method
+        // Use Fluent API
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
 			modelBuilder.Entity<Users>(e =>
@@ -253,8 +257,46 @@ namespace BE.Data.Contexts
 				e.Property(e => e.IdGroup).IsRequired();
 				e.Property(e => e.IdModule).IsRequired();
 			});
-			#region Config entity with fluent Api
-			modelBuilder.ApplyConfiguration(new RulesConfig());
+
+            modelBuilder.Entity<Customer>(e =>
+            {
+                e.ToTable("Customer");
+                e.HasKey(e => e.id);
+                e.Property(k => k.firstName).HasMaxLength(50).HasColumnType("varchar");
+                e.Property(k => k.lastName).HasMaxLength(50).HasColumnType("varchar");
+                e.Property(e => e.isDeleted).HasDefaultValue(false);
+                e.Property(e => e.dateCreated).HasColumnType("timestamp");
+                e.Property(e => e.userCreated).IsRequired();
+                e.Property(k => k.phoneNumber).HasMaxLength(11);
+                e.Property(k => k.address).HasMaxLength(255).HasColumnType("varchar");
+                e.Property(k => k.company).HasMaxLength(255).HasColumnType("varchar");
+                e.Property(k => k.email).HasMaxLength(255).HasColumnType("varchar");
+                e.Property(k => k.identityCard).HasMaxLength(255).HasColumnType("varchar");
+                e.Property(k => k.accountNumber).HasMaxLength(255).HasColumnType("varchar");
+            });
+
+            modelBuilder.Entity<PaidReasons>(e =>
+            {
+                e.ToTable("PaidReasons");
+                e.HasKey(e => e.id);
+                e.Property(e => e.isDeleted).HasDefaultValue(false);
+                e.Property(e => e.dateCreated).HasColumnType("timestamp");
+                e.Property(e => e.userCreated).IsRequired();
+                e.Property(k => k.name).HasMaxLength(255).HasColumnType("varchar");
+            });
+
+            modelBuilder.Entity<Customer_PaidReason>(e =>
+            {
+                e.ToTable("Customer_PaidReason");
+                e.HasKey(e => e.id);
+                e.Property(e => e.isDeleted).HasDefaultValue(false);
+                e.Property(e => e.dateCreated).HasColumnType("timestamp");
+                e.Property(e => e.idCustomer).IsRequired();
+                e.Property(e => e.idPaidReason).IsRequired();
+            });
+
+            #region Config entity with fluent Api
+            modelBuilder.ApplyConfiguration(new RulesConfig());
 			#endregion
 		}
 

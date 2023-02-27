@@ -19,13 +19,13 @@
                 responsiveLayout="scroll"
                 filterDisplay="menu"
                 v-model:filters="filters"
-                :globalFilterFields="['customerName', 'nameProject']"
+                :globalFilterFields="['customerFullName', 'nameProject']"
                 showGridlines
             >
                 <template #header>
                     <h5 class="m-0 mb-2">Danh sách thu chi</h5>
                     <div class="header-container">
-                        <Add label="Thêm" class="itemsbutton" @click="Openmodal" />
+                        <Add label="Thêm" @click="Openmodal" />
                         <div class="input-text">
                             <Button
                                 type="button"
@@ -34,8 +34,20 @@
                                 class="p-button-outlined right me-2"
                                 @click="reload()"
                             />
-                            <InputText type="date" v-model="filterStartDate" @change="filterEventStartDate()"  class="form-control me-2" />
-                            <InputText type="date" v-model="filterEndDate" @change="filterEventEndDate()" class="form-control me-2" />
+
+                            <!-- <InputText type="date" v-model="filterStartDate" @change="filterEventStartDate()"  class="form-control me-2" />
+                            <InputText type="date" v-model="filterEndDate" @change="filterEventEndDate()" class="form-control me-2" /> -->
+
+                            <InputText type="date" v-model="filterStartDate" class="form-control me-2" />
+                            <InputText type="date" v-model="filterEndDate" class="form-control me-2" />
+
+                            <Button
+                                type="button"
+                                style="background-color: antiquewhite; width: 120px"
+                                icon="pi pi-filter"
+                                class="p-button-outlined right me-2"
+                                @click="btnFilterByDate()"
+                            />
                         </div>
                     </div>
                 </template>
@@ -71,9 +83,9 @@
                     </template>
                 </Column>
 
-                <Column field="customerName" header="Khách hàng">
+                <Column field="customerFullName" header="Khách hàng">
                     <template #body="{ data }">
-                        {{ data.customerName }}
+                        {{ data.customerFullName }}
                     </template>
                     <template #filter="{ filterModel }">
                         <InputText
@@ -85,21 +97,21 @@
                     </template>
                 </Column>
 
-                <Column field="amountPaid" header="Giá tiền">
+                <Column field="amountPaidName" header="Giá tiền">
                     <template #body="{ data }">
-                        {{ data.amountPaid.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) }}
+                        {{ data.amountPaidName }}
                     </template>
                 </Column>
 
-                <Column field="paidReason" header="Lý do">
+                <Column field="paidReasonName" header="Lý do">
                     <template #body="{ data }">
-                        {{ data.paidReason }}
+                        {{ data.paidReasonName }}
                     </template>
                 </Column>
 
                 <Column sortable field="paidDate" header="Ngày Chấp Nhận">
                     <template #body="{ data }">
-                        {{ formatDate(data.paidDate) }}
+                        {{ data.paidDate }}
                     </template>
                 </Column>
 
@@ -130,6 +142,8 @@
                 @closemodal="Closemodal"
                 :optionmodule="OptionModule"
                 @reloadpage="getData"
+                :customerArr="customerArr"
+                :paidReasonArr="paidReasonArr"
             />
 
             <EditPaid
@@ -138,6 +152,8 @@
                 :dataedit="editdata"
                 :optionmodule="OptionModule"
                 @reloadpage="getData"
+                :customerArr="customerArr"
+                :paidReasonArr="paidReasonArr"
             />
 
             <DetailPaid
@@ -175,11 +191,13 @@
                 editdata: null,
                 detailData: null,
                 OptionModule: [],
+                customerArr: [],
+                paidReasonArr: [],
                 paids: [],
                 loading: false,
                 filters: {
                     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-                    customerName: {
+                    customerFullName: {
                         operator: FilterOperator.AND,
                         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
                     },
@@ -194,11 +212,11 @@
                 displayImage: false,
             }
         },
-
-        async mounted() {
+        
+        async created() {
             this.token = LocalStorage.jwtDecodeToken()
             await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
-            await this.getData();            
+            await this.getData();  
         },
 
         methods: {
@@ -243,12 +261,40 @@
                 return dayjs(dateFormat).format('DD/MM/YYYY');
             },
 
-            getProjects(id) {
-                return HTTP_LOCAL.get(GET_PROJECT_BY_ID(id)).then((respone) => respone.data);
+            async getProjects(id) {
+                return await HTTP_LOCAL.get(GET_PROJECT_BY_ID(id))
+                    .then((respone) => respone.data)
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
             },
 
-            getUsers(id) {
-                return HTTP_LOCAL.get(GET_USER_BY_ID(id)).then((respone) => respone.data);
+            async getUsers(id) {
+                return await HTTP_LOCAL.get(GET_USER_BY_ID(id))
+                    .then((respone) => respone.data)
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
+            },
+
+            async getCustomerId(id) {
+                return await HTTP_LOCAL.get(`Customer/GetById/${id}`)
+                    .then((respone) => respone.data._Data)
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
+            },
+
+            async getPaidReasonId(id) {
+                return await HTTP_LOCAL.get(`PaidReason/GetById/${id}`)
+                    .then((respone) => respone.data._Data)
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
             },
 
             showError(message) {
@@ -301,6 +347,8 @@
                             await this.getPaidByIdUser(this.token.Id);
                             await this.getAllProject(this.token.Id);    
                         }
+                        await this.getAllCustomer();
+                        await this.getAllPaidReason();
                     }
                     else {
                         alert("Bạn không có quyền truy cập module này");
@@ -335,7 +383,7 @@
 
             Delete(data) {
                 this.$confirm.require({
-                    message: `Bạn có chắc muốn xóa thu chi của "${data.customerName}"?`,
+                    message: `Bạn có chắc muốn xóa thu chi của của khách hàng này?`,
                     header: 'Xóa thu chi',
                     icon: 'pi pi-info-circle',
                     acceptClass: 'p-button-danger',
@@ -348,10 +396,34 @@
                 })
             },
 
+            async getAllCustomer() {
+                this.customerArr = [];
+                await HTTP_LOCAL.get('Customer/getAllCustomer')
+                    .then((res) => {
+                        this.customerArr = res.data._Data;
+                    })
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
+            },
+
+            async getAllPaidReason() {
+                this.paidReasonArr = [];
+                await HTTP_LOCAL.get('PaidReason/getAllPaidReason')
+                    .then((res) => {
+                        this.paidReasonArr = res.data._Data;
+                    })
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
+            },
+
             async getAllProject(idUser = null) {
                 this.OptionModule = [];
                 if(idUser == null){
-                    HTTP_LOCAL.get('Project/getAllProject')
+                    await HTTP_LOCAL.get('Project/getAllProject')
                     .then((res) => {
                         this.OptionModule = res.data
                     })
@@ -361,12 +433,20 @@
                     });
                 }
                 else {
-                    HTTP_LOCAL.get(`memberProject/getMemberProjectById/${idUser}`).then(res =>  {
+                    await HTTP_LOCAL.get(`memberProject/getMemberProjectById/${idUser}`).then(res =>  {
                         var projectByUser = res.data._Data;
+
+                        console.log("projectByUser: "+ JSON.stringify(projectByUser));
+
                         if(projectByUser.length > 0){
                             projectByUser.forEach(element => {
                                 var projectById =  HTTP_LOCAL.get(`Project/getById/${element.idProject}`).then( response => {
                                     this.OptionModule.push(response.data);
+                                })
+                                .catch((error) => {
+                                    var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                                    this.showResponseApi(error.response.status, message);
+                                    console.log(error)
                                 });
                             });
                         }
@@ -427,12 +507,37 @@
             
             async getWithName() {
                 for (let i = 0; i < this.paids.length; i++) {
-                    var project = await this.getProjects(this.paids[i].projectId)
-                    var user = await this.getUsers(this.paids[i].paidPerson)
-                    this.paids[i].project = project
+                    if(this.paids[i].projectId != 0){
+                        var project = await this.getProjects(this.paids[i].projectId);
+                        this.paids[i].project = project;
+                        this.paids[i].nameProject = project.name;
+                    }
+                    else {
+                        this.paids[i].nameProject = "";
+                    }
+                    
+                    var user = await this.getUsers(this.paids[i].paidPerson);
+                    var customer = await this.getCustomerId(parseInt(this.paids[i].customerName));
+                    var paidReason = await this.getPaidReasonId(parseInt(this.paids[i].paidReason));
+
+                    if((this.paids[i].paidDate) === "0001-01-01T00:00:00" ){
+                        this.paids[i].paidDate = "";
+                    }
+                    else {
+                        this.paids[i].paidDate = DateHelper.formatDate(this.paids[i].paidDate);
+                    }
+
+                    this.paids[i].amountPaidName = this.paids[i].amountPaid.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) 
+
+                    this.paids[i].customer = customer;
+                    this.paids[i].customerName = parseInt(this.paids[i].customerName);
+                    this.paids[i].customerFullName = customer.fullName;
+
                     this.paids[i].user = user
-                    this.paids[i].nameProject = project.name
                     this.paids[i].paidPersonName = user.fullName
+                    
+                    this.paids[i].paidReason = parseInt(this.paids[i].paidReason)
+                    this.paids[i].paidReasonName = paidReason.name
                 }
             },
 
@@ -443,6 +548,9 @@
                     this.paids = respone.data._Data;
                     if(this.paids.length == 0){
                         this.showInfo("Không tìm thấy dữ liệu!");
+                    }
+                    else {
+                        await this.getWithName();
                     }
                 })
                 .catch((error) => {
@@ -515,15 +623,17 @@
                     this.resetFieldDate();
                     return ;
                 }
-                if(this.checkStartDateEmpty() && this.checkEndDateEmpty() ){
-                    if(this.checkValidateDay()){
-                        await this.callApiFilterDay(this.filterStartDate, this.filterEndDate);
-                    }
-                    else {
-                        this.resetFieldDate();
-                    }
+                await this.filterEventStartDate();
+            },         
+            
+            async btnFilterByDate() {
+                if(this.checkStartDateEmpty() == false && this.checkEndDateEmpty() == false){
+                    this.showInfo("Ngày lọc rỗng!");
                 }
-            },           
+                else {
+                    await this.filterEventEndDate();
+                }
+            },
 
             async CallApiPaymentConfirm (idPaid) {
                 await HTTP_LOCAL.put(`Paid/acceptPayment/${idPaid}`, {"PaidPerson": this.token.Id}).then(async (res) => {
@@ -543,7 +653,7 @@
 
             paymentConfirmation(item) {
                 this.$confirm.require({
-                    message: `Bạn có chắc muốn thanh toán cho "${item.customerName}"?`,
+                    message: `Bạn có chắc muốn thanh toán cho khách hàng này?`,
                     header: 'Xác nhận thanh toán',
                     icon: 'pi pi-info-circle',
                     acceptClass: 'p-button-info',
