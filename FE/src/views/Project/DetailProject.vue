@@ -61,8 +61,8 @@
                                 placeholder="Chọn thành viên"
                             />
                             <template #footer>
-                                <Button label="Lưu" icon="pi pi-times" @click="closeBasic" class="p-button-text" />
                                 <Button label="Lưu" icon="pi pi-check" @click="submit" autofocus />
+                                <Button label="Quay về" icon="pi pi-times" @click="closeBasic" class="p-button-text" />                             
                             </template>
                         </Dialog>
                     </div>
@@ -85,7 +85,7 @@
                 </Column>
                 <Column field="" header="" style="min-width: 18rem; text-align: center">
                     <template #body="{ data }">
-                        <Delete @click="confirmDelete(data.id, this.$route.params.id)" />
+                        <Delete @click="deleteMember(data.id, this.$route.params.id)" />
                     </template>
                 </Column>
             </DataTable>
@@ -244,20 +244,7 @@
                     }
                 })
             },
-            confirmDelete(idMember, idProject) {
-                this.$confirm.require({
-                    message: 'Bạn có chắc chắn muốn xóa?',
-                    header: 'Xóa',
-                    icon: 'pi pi-exclamation-triangle',
-                    acceptClass: 'p-button-danger',
-                    accept: () => {
-                        this.deleteMember(idMember, idProject)
-                    },
-                    reject: () => {
-                        return
-                    },
-                })
-            },
+            
             showSuccess(mess) {
                 this.$toast.add({ severity: 'success', summary: 'Thành công', detail: mess, life: 3000 })
             },

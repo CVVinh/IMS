@@ -4,88 +4,88 @@
         :visible="status"
         :closable="false"
         :maximizable="true"
-        modal="true"
+        modal
         :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
     >
         <div class="detail__content">
             <div class="detail__content-box box-left">
 
-                <div class="detail__content-box-items" >
-                    <div class="detail__content-box-items-text">
-                        <b>Tên khách hàng:</b>{{ this.Datasend.customerName }}
+                <div class="detail__content-box" :style="[{ background: this.Datasend.isPaid ? 'green': 'orange'}]">
+                    <div class="detail__content-box-items">
+                        <div class="detail__content-box-items-text detail__content-box-items-format-text">
+                            <b >{{ this.Datasend.isPaid == true ? 'Đã thanh toán' : 'Chưa thanh toán' }}</b> 
+                        </div>
                     </div>
                 </div>
 
-                <div class="detail__content-box-items top">
-                    <div class="detail__content-box-items-text">
-                        <b>Mức chi:</b> {{ this.Datasend.amountPaid }}
+                <div class="detail__content-box detail__content-box-top">
+                    <div class="detail__content-box-items" >
+                        <div class="detail__content-box-items-text">
+                            <b><i class="pi pi-users p-button-icon"></i> Khách hàng:</b> {{ this.Datasend.customerFullName }}  <!-- {{ this.Datasend.customerName }} -->
+                        </div>
+                    </div>
+
+                    <div class="detail__content-box-items top">
+                        <div class="detail__content-box-items-text">
+                            <b><i class="bx bx-notepad"></i> Dự án:</b> {{ this.Datasend.nameProject }}
+                        </div>
                     </div>
                 </div>
 
-                <div class="detail__content-box-items top">
-                    <div
-                        class="detail__content-box-items-text"
-                        :style="{ color: this.Datasend.isPaid ? 'green': 'orange'}"
-                    >
-                        <b>Trạng thái:</b>
-                        {{
-                            this.Datasend.isPaid == true ? 'Đã thanh toán' : 'Chưa thanh toán'
-                        }}
+                <div class="detail__content-box detail__content-box-top">    
+                    <div class="detail__content-box-items top">
+                        <div class="detail__content-box-items-text">
+                            <b><i class="bx bx-wallet"></i> Mức chi:</b> {{ this.Datasend.amountPaidName }}
+                        </div>
+                    </div>
+
+                    <div class="detail__content-box-items top">
+                        <div class="detail__content-box-items-text">
+                            <b><i class="bx bx-time-five"></i> Ngày chi:</b> {{ Datasend.paidDate }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail__content-box detail__content-box-top detail__content-box-size ">
+                    <div class="detail__content-box-items">
+                        <div class="detail__content-box-items-text">
+                            <b><i class="p-confirm-dialog-icon pi pi-info-circle"></i> Lý do chi trả:</b> {{ Datasend.paidNameReason }} <!-- {{ Datasend.paidReason }} -->
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="detail__content-box box-center">
-                <div class="detail__content-box-items">
-                    <div class="detail__content-box-items-text">
-                        <b>Ngày chi:</b> {{ Datasend.paidDate }}
-                    </div>
+            <div class="detail__content-box box-right ">
+                <div v-if="Datasend.paidImages.length > 0" >
+                    <Galleria :value="dataImgDetail" :responsiveOptions="responsiveOptions" :numVisible="5" :circular="true" :showItemNavigators="true" :showItemNavigatorsOnHover="true" >
+                        <template #item="slotProps">
+                            <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%" />
+                        </template>
+                        <template #thumbnail="slotProps">
+                            <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" style="display: block;"/>
+                        </template>
+                    </Galleria>
                 </div>
-                <div class="detail__content-box-items top">
-                    <div class="detail__content-box-items-text">
-                        <b>Dự án:</b> {{ this.project }}
-                    </div>
+                <div v-else>
+                    <img src="@/assets/noImage.png" alt="anh" class="no_image">
                 </div>
-            </div> 
-
-            <div class="detail__content-box box-right">
-                <div class="detail__content-box-items">
-                    <div class="detail__content-box-items-text">
-                        <b>Lý do chi trả:</b> {{ Datasend.paidReason }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="content_box">
-
-            <div v-if="Datasend.paidImages.length > 0" >
-                <Galleria :value="dataImgDetail" :responsiveOptions="responsiveOptions" :numVisible="5">
-                    <template #item="slotProps">
-                        <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%" />
-                    </template>
-                    <template #thumbnail="slotProps">
-                        <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" />
-                    </template>
-                </Galleria>
-            </div>
-            <div v-else>
-                <h3>Không có hình ảnh để hiển thị</h3>
             </div>
         </div>
 
-        <template #footer>           
-            <button class="btn btn-secondary" @click="closeModal">Huỷ</button>
+        <template #footer>   
+            <Button v-if="Datasend.isPaid == false" label="Thanh toán" icon="pi pi-check" class="p-button-primary p-button-icon" @click="confirmPayment"></Button>        
+            <Button label="Huỷ" icon="pi pi-times" class="p-button-secondary p-button p-button-icon p-component " @click="closeModal" enter="closeModal"></Button>
         </template>
     </Dialog>
 </template>
 
 <script>
-    import { GET_LIST_PAID, HTTP, HTTP_LOCAL } from '@/http-common'
+    import { GET_LIST_PAID, HTTP, HTTP_LOCAL, GET_PROJECT_BY_ID, GET_USER_BY_ID, HTTP_API_GITLAB } from '@/http-common'
     import { useVuelidate } from '@vuelidate/core'
     import { required } from '@vuelidate/validators'
     import { DateHelper } from '@/helper/date.helper'
     import { LocalStorage } from '@/helper/local-storage.helper'
+    import { onBeforeMount } from 'vue'
 
     export default {
         data() {
@@ -93,40 +93,107 @@
                 Datasend: {
                     projectId: '',
                     customerName: '',
-                    amountPaid: '',
+                    amountPaid: 0,
                     paidReason: '',
                     paidPerson: 0,
                     isPaid: false,
                     paidDate: null,
                     token: null,
                     paidImages: null,
+
+                    paidNamePerson: null,
+                    customerFullName: null,
+                    paidNameReason: null,
+                    nameProject: null,
+                    amountPaidName: null,
                 },
-                project: null,
                 dataImgDetail: [],
                 responsiveOptions: [
                     {
                         breakpoint: '1024px',
-                        numVisible: 5
+                        numVisible: 8
                     },
                     {
                         breakpoint: '768px',
-                        numVisible: 3
+                        numVisible: 5
                     },
                     {
                         breakpoint: '560px',
-                        numVisible: 1
+                        numVisible: 3
                     }
                 ]
             }
         },
         props: ['status', 'dataDetail'],
         methods: {
+
+            showResponseApi(status, message = "") {
+                switch (status) {
+                    case 401:
+                    case 403:
+                        this.showError('Bạn không có quyền thực hiện chức năng này!');
+                        break;
+
+                    case 404:
+                        this.showError('Lỗi! Load dữ liệu!');
+                        break;  
+
+                    default:
+                        if(message != ""){
+                            this.showError(message);
+                        }
+                        else {
+                            this.showError("Có lỗi trong quá trình thực hiện!");
+                        }
+                        break;
+                }
+            },
+
+            async getUsers(id) {
+                return await HTTP_LOCAL.get(GET_USER_BY_ID(id))
+                    .then((respone) => respone.data)
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
+            },
+
+            async getCustomerId(id) {
+                return await HTTP_LOCAL.get(`Customer/GetById/${id}`)
+                    .then((respone) => respone.data._Data)
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
+            },
+
+            async getPaidReasonId(id) {
+                return await HTTP_LOCAL.get(`PaidReason/GetById/${id}`)
+                    .then((respone) => respone.data._Data)
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
+            },
+
+            async getProjects(id) {
+                return await HTTP_LOCAL.get(GET_PROJECT_BY_ID(id))
+                    .then((respone) => respone.data)
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
+            },
+
             closeModal() {
                 this.imagesOld = [];
                 this.images = [];
                 this.$emit('closemodal')
             },
 
+            confirmPayment () {
+                this.$emit("confirmPayment", this.Datasend);
+            },
            
             showSuccess(message) {
                 this.$toast.add({ severity: 'success', summary: 'Thành công', detail: message, life: 3000 })
@@ -136,12 +203,34 @@
             },
         },
 
-        beforeUpdate() {
+        async beforeUpdate() { //beforeUpdate
             this.dataImgDetail = [];
+            this.Datasend = [];
+
             if (this.dataDetail != null){
-                console.log(this.Datasend)
                 this.Datasend = this.dataDetail;
-                this.Datasend.paidDate = DateHelper.formatDate(this.Datasend.paidDate)
+
+                var user = await this.getUsers(parseInt(this.Datasend.paidPerson))
+                var customer = await this.getCustomerId(parseInt(this.Datasend.customerName));
+                var paidReason = await this.getPaidReasonId(parseInt(this.Datasend.paidReason));
+
+                this.Datasend.paidPerson = parseInt(this.Datasend.paidPerson);
+                this.Datasend.paidNamePerson = user.fullName;
+
+                this.Datasend.customerName = parseInt(this.Datasend.customerName);
+                this.Datasend.customerFullName = customer.fullName;
+
+                this.Datasend.paidReason = parseInt(this.Datasend.paidReason);
+                this.Datasend.paidNameReason = paidReason.name;
+
+                if(this.Datasend.paidDate === "0001-01-01T00:00:00" || this.Datasend.paidDate === "" ){
+                    this.Datasend.paidDate = "";
+                }
+                else {
+                    this.Datasend.paidDate = DateHelper.formatDate(this.Datasend.paidDate);
+                }
+
+                this.Datasend.amountPaidName = this.Datasend.amountPaid.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
 
                 if(this.Datasend.paidImages.length > 0){
                     this.Datasend.paidImages.forEach(item => {
@@ -153,17 +242,14 @@
                         this.dataImgDetail.push(imgObj);
                     });
                 }
-                HTTP_LOCAL.get(`/Project/getById/${this.Datasend.projectId}`).then((res) => {
-                    if(res.status == 200){
-                        this.project = res.data.name;
-                    }
-                    else {
-                        console.log("Lỗi lấy project của người dùng!");
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+                
+                if(this.Datasend.projectId != 0){
+                    var project = await this.getProjects(this.Datasend.projectId);
+                    this.Datasend.nameProject = project.name;
+                }
+                else {
+                    this.Datasend.nameProject = "";
+                }
             } 
         },
 
@@ -171,7 +257,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
     .detail__content {
         display: flex;
@@ -180,51 +266,67 @@
         margin-bottom: 20px;
         border-radius: 15px;
         box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+
+        .detail__content-box {
+            display: flex;
+            flex-direction: column;
+            box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
+                rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+            padding: 10px;
+            border-radius: 10px;
+
+            .detail__content-box-items {
+                width: 100%;
+                
+                .detail__content-box-items-text {
+                    font-size: 18px;
+                }
+
+                .detail__content-box-items-format-text {
+                    color: white;
+                    text-align: center;
+                }
+
+                .top {
+                    margin-top: 10px;
+                }
+            }
+        }
+
+        .detail__content-box-top {
+            margin-top: 15px;
+        }
+
+        .detail__content-box-size {
+            min-height: 150px;
+        }
+
+        .box-left {
+            flex: 35%;
+        }
+
+        .box-right {
+            flex: 65%;
+            margin-left: 15px;
+        }
     }
 
-    .detail__content-box {
-        display: flex;
-        flex-direction: column;
-        box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
-            rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
-        padding: 10px;
-        border-radius: 10px;
+    .no_image {
+        border: 1px solid #ddd;
+        border-radius: 15px;
     }
 
-    .box-left {
-        min-width: 300px;
-        width: 32%;
-    }
-    .box-right {
-        min-width: 300px;
-        width: 32%;
-        margin-left: 15px;
-    }
-    .box-center {
-        min-width: 300px;
-        width: 32%;
-        margin-left: 15px;
-    }
+    @media (max-width: 500px) {
+        .detail__content {
+            flex-direction: column;
 
-    .detail__content-box-items {
-        display: flex;
-        width: 100%;
-        align-items: center;
-    }
-    .detail__content-box-items-text {
-        font-size: 18px;
-    }
-    .top {
-        margin-top: 10px;
-    }
-    .header {
-        border: 1px solid black;
-    }
-
-    .content_box {
-        box-shadow: -3px 3px 5px -3px #888888, 4px 5px 3px -4px #888888, 4px 5px 2px -5px #888888 inset;
-        padding: 10px;
-        border-radius: 10px;
+            .box-left, .box-right {
+                flex: 100%;
+            }
+            .box-right  {
+                margin-top: 10px;
+            }
+        }
     }
 
 </style>

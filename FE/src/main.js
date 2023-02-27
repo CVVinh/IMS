@@ -11,7 +11,7 @@ import PrimeVue from 'primevue/config'
 import DataTable from 'primevue/datatable'
 import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
-import Image from 'primevue/image';
+import Image from 'primevue/image'
 import Column from 'primevue/column'
 import ColumnGroup from 'primevue/columngroup'
 import Row from 'primevue/row'
@@ -39,7 +39,7 @@ import Panel from 'primevue/panel'
 import Avatar from 'primevue/avatar'
 import Card from 'primevue/card'
 import Breadcrumb from 'primevue/breadcrumb'
-import Galleria from 'primevue/galleria';
+import Galleria from 'primevue/galleria'
 
 import InputSwitch from 'primevue/inputswitch'
 import Toolbar from 'primevue/toolbar'
@@ -49,6 +49,8 @@ import FileUpload from 'primevue/fileupload'
 import Message from 'primevue/message'
 import Divider from 'primevue/divider'
 import DatePicker from 'vue-datepicker-next'
+import Fieldset from 'primevue/fieldset'
+
 const app = createApp(App)
 
 app.use(PrimeVue)
@@ -90,6 +92,7 @@ app.component('FileUpload', FileUpload)
 app.component('Message', Message)
 app.component('DatePicker', DatePicker)
 app.component('Galleria', Galleria)
+app.component('Fieldset', Fieldset)
 
 app.use(createPinia())
 app.use(router)

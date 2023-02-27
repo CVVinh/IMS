@@ -163,7 +163,7 @@ namespace BE.Controllers
             try
             {
                 var listAllUsers = await _context.Users.Where(u => (u.workStatus == 1 &&
-                (u.IdGroup != 1 && u.IdGroup != 2 && u.IdGroup != 5 && u.IdGroup != 6))).ToListAsync();
+                (u.IdGroup == 4 ))).ToListAsync();
                 List<Users> listUserProject = new List<Users>();
                 var member = await _memberProjectServices.GetMembersByIdProjectAsync(idProject);
                 if (member._success)

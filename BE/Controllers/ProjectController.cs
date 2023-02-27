@@ -6,9 +6,13 @@ using BE.Data.Models;
 using BE.Services.PaginationServices;
 using BE.Services.TokenServices;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 
 namespace BE.Controllers
@@ -31,16 +35,35 @@ namespace BE.Controllers
 		}
 		// GET: ProjectController
 
-
+		// PM, sample
 		[HttpGet("getAllProject")]
 		[Authorize(Roles = "permission_group: True module: project")]
 		public ActionResult getAllProject()
 		{
 			try
 			{
-				var dsProject = _context.Projects.ToList();
-				return Ok(dsProject);
+				var dsProject = from x in _context.Projects
+								join k in _context.Users on x.Leader equals k.id
+								select new
+								{
+									id = x.Id,
+									dateCreated = x.DateCreated,
+									dateUpdate = x.DateUpdate,
+									description = x.Description,
+									endDate = x.EndDate,
+									isDeleted = x.IsDeleted,
+									isFinished = x.IsFinished,
+									isOnGitlab = x.IsOnGitlab,
+									leader = k.FullName,
+									name = x.Name,
+									projectCode = x.ProjectCode,
+									startDate = x.StartDate,
+									userCreated = x.UserCreated,
+									userId = x.UserId,
+									userUpdate = x.UserUpdate
+								};
 
+                return Ok(dsProject);
 			}
 			catch (Exception ew)
 			{
@@ -48,7 +71,111 @@ namespace BE.Controllers
 			}
 		}
 
-		[HttpPost("addProject")]
+		// Lead
+		[HttpGet("getAllProjectByLead/{IdLead}")]
+		public IActionResult getAllProjectByLead(int IdLead)
+		{
+
+			try
+			{
+                var list = from x in _context.Projects
+                           join d in _context.Users on x.Leader equals d.id
+                           where d.id == IdLead
+                           select new
+                           {
+                               id = x.Id,
+                               dateCreated = x.DateCreated,
+                               dateUpdate = x.DateUpdate,
+                               description = x.Description,
+                               endDate = x.EndDate,
+                               isDeleted = x.IsDeleted,
+                               isFinished = x.IsFinished,
+                               isOnGitlab = x.IsOnGitlab,
+                               leader = d.FullName,
+                               name = x.Name,
+                               projectCode = x.ProjectCode,
+                               startDate = x.StartDate,
+                               userCreated = x.UserCreated,
+                               userId = x.UserId,
+                               userUpdate = x.UserUpdate
+                           };
+
+                return Ok(list);
+            }catch(Exception ex)
+			{
+				return BadRequest(ex);
+			}
+
+			
+		}
+
+        // Staff
+        [HttpGet("getAllProjectByStaff/{idstaff}")]
+	    public IActionResult getAllProjectByStaff(int idstaff)
+		{
+
+			try
+			{
+				var list = from x in _context.Projects
+						   join c in _context.Member_Projects on x.Id equals c.idProject
+						   join k in _context.Users on x.Leader equals k.id
+						   where c.member == idstaff
+                           select new
+						   {
+							   id = x.Id,
+							   dateCreated = x.DateCreated,
+							   dateUpdate = x.DateUpdate,
+							   description = x.Description,
+							   endDate = x.EndDate,
+							   isDeleted = x.IsDeleted,
+							   isFinished = x.IsFinished,
+							   isOnGitlab = x.IsOnGitlab,
+							   leader = k.FullName,
+							   name = x.Name,
+							   projectCode = x.ProjectCode,
+							   startDate = x.StartDate,
+							   userCreated = x.UserCreated,
+							   userId = x.UserId,
+							   userUpdate = x.UserUpdate
+						   };
+
+				return Ok(list);
+
+            }
+            catch (Exception ex)
+			{
+				return BadRequest(ex);
+			}	
+		}
+
+
+
+
+
+
+
+        // get lead list in addProject
+        [HttpGet("getListLead")]
+		public IActionResult getListLead()
+		{
+			try
+			{
+                var list = _context.Users.Where(x => x.IdGroup == 3);
+                return Ok(list);
+            }
+            catch(Exception ex)
+			{
+				return BadRequest(ex);
+			}
+			
+		}
+
+
+
+
+
+
+        [HttpPost("addProject")]
 		[Authorize(Roles = "permission_group: True module: project")]
 		[Authorize(Roles = "module: project add: 1")]
 		public async Task<IActionResult> Create(AddNewProjectDto project_Model)

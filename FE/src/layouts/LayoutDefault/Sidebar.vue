@@ -42,17 +42,6 @@
                                 <i class="bx bx-user"></i><span>Nguời dùng</span>
                             </router-link>
                         </li>
-                        <li class="list-group-item-action">
-                            <router-link
-                                :to="{ name: 'groupsSubs', params: {} }"
-                                class="py-2 ripple dropdown-item"
-                                @click="activeTag = 'tag3'"
-                                :class="{ 'active-nav-item': activeTag === 'tag3' }"
-                            >
-                                <i class="bx bxs-group"></i>
-                                <span>Nhóm quyền</span>
-                            </router-link>
-                        </li>
                     </ul>
                 </div>
                 <!-- /Tổng quan -->
@@ -111,7 +100,7 @@
                 </router-link>
                 <!-- /Tăng ca -->
                 <!-- Công tác -->
-                <router-link
+                <!-- <router-link
                     :to="{ name: 'remotes', params: {} }"
                     class="py-2 ripple list-group-item-action"
                     @click="activeTag = 'tag7'"
@@ -119,7 +108,7 @@
                 >
                     <i class="bx bx-notepad"></i>
                     <span>Công tác</span>
-                </router-link>
+                </router-link> -->
                 <!-- /Công tác -->
                 <!-- Thu chi -->
                 <router-link
@@ -144,7 +133,7 @@
                 </router-link>
                 <!-- /Quy định -->
                 <!--  Báo cáo-->
-                <div
+                <!-- <div
                     class="py-2 ripple sidebar_after list-group-item-action d-flex"
                     data-bs-toggle="collapse"
                     data-bs-target="#report-collapse"
@@ -196,7 +185,7 @@
                             </router-link>
                         </li>
                     </ul>
-                </div>
+                </div> -->
                 <!--  /Báo cáo-->
                 <!-- Thiết lập -->
                 <div
@@ -237,6 +226,20 @@
                             >
                                 <i class="bx bxs-component"></i>
                                 <span>Chức năng</span>
+                            </router-link>
+                        </li>
+                        <li
+                            class="list-group-item-action"
+                            v-if="this.token !== null ? (Number(this.token.IdGroup) === 1 ? true : false) : false"
+                        >
+                            <router-link
+                                :to="{ name: 'groupsSubs', params: {} }"
+                                class="py-2 ripple dropdown-item"
+                                @click="activeTag = 'tag3'"
+                                :class="{ 'active-nav-item': activeTag === 'tag3' }"
+                            >
+                                <i class="bx bxs-group"></i>
+                                <span>Nhóm quyền</span>
                             </router-link>
                         </li>
                         <li class="list-group-item-action">

@@ -1,28 +1,9 @@
 <template>
-    <layout-fill-dynamic>
-        <sideBar />
-        <div class="spinner-loading" v-if="loading">
-            <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="3" animationDuration=".6s" />
-        </div>
-        <Toast />
-        <!-- <div class="padd">
-            <div class="col-12 row">
-                <div v-for="(menu, index) in Menus" class="col-xl-2 col-lg-4 col-md-6 p-2 item" @click="">
-                    <router-link style="text-decoration: none; width: min-content" :to="`/${menu.controller}`">
-                        <div :class="`card text-white ${this.color[index % 7]}`">
-                            <div class="card-body">
-                                <h2 class="text-center">{{ menu.title }}</h2>
-                                <hr />
-                                <div class="icon">
-                                    <i :class="menu.icon"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </router-link>
-                </div>
-            </div>
-        </div> -->
-    </layout-fill-dynamic>
+    <LayoutDefaultDynamic>
+        <ConfirmDialog></ConfirmDialog>
+        <Toast position="top-right" />
+        <div class="mx-4 mt-3"></div>
+    </LayoutDefaultDynamic>
 </template>
 <script>
     import sideBar from '@/layouts/LayoutDefault/Sidebar.vue'
@@ -45,6 +26,9 @@
                     'background-color-blue-gray-500',
                 ],
             }
+        },
+        created() {
+            window.localStorage.setItem('activeTag', '')
         },
         components: {
             ViewMenusVue,
