@@ -21,7 +21,7 @@
                 <div class="detail__content-box detail__content-box-top">
                     <div class="detail__content-box-items" >
                         <div class="detail__content-box-items-text">
-                            <b><i class="pi pi-users p-button-icon"></i> Khách hàng:</b> {{ this.Datasend.customerFullName }}  <!-- {{ this.Datasend.customerName }} -->
+                            <b><i class="pi pi-users p-button-icon"></i> Khách hàng:</b> {{ this.Datasend.customerFullName }} 
                         </div>
                     </div>
 
@@ -49,7 +49,7 @@
                 <div class="detail__content-box detail__content-box-top detail__content-box-size ">
                     <div class="detail__content-box-items">
                         <div class="detail__content-box-items-text">
-                            <b><i class="p-confirm-dialog-icon pi pi-info-circle"></i> Lý do chi trả:</b> {{ Datasend.paidNameReason }} <!-- {{ Datasend.paidReason }} -->
+                            <b><i class="p-confirm-dialog-icon pi pi-info-circle"></i> Lý do chi trả:</b> {{ Datasend.paidNameReason }} 
                         </div>
                     </div>
                 </div>
