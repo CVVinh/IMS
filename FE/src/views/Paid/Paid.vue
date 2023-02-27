@@ -20,15 +20,13 @@
                 filterDisplay="menu"
                 v-model:filters="filters"
                 :globalFilterFields="['customerName', 'nameProject']"
-                showGridlines="true"
+                showGridlines
             >
                 <template #header>
                     <h5 class="m-0 mb-2">Danh sách thu chi</h5>
-                    <div class="d-flex justify-content-between align-items-center">
-                        
+                    <div class="header-container">
                         <Add label="Thêm" class="itemsbutton" @click="Openmodal" />
-
-                        <div class="d-flex">
+                        <div class="input-text">
                             <Button
                                 type="button"
                                 style="background-color: antiquewhite; width: 120px"
@@ -36,21 +34,23 @@
                                 class="p-button-outlined right me-2"
                                 @click="reload()"
                             />
-                            <InputText type="date" placeholder="-------- ----"  v-model="filterStartDate" @change="filterEventStartDate()"  class="form-control me-2" />
-                            <InputText type="date" placeholder="-------- ----" v-model="filterEndDate" @change="filterEventEndDate()" class="form-control me-2" />
-                            
+                            <InputText type="date" v-model="filterStartDate" @change="filterEventStartDate()"  class="form-control me-2" />
+                            <InputText type="date" v-model="filterEndDate" @change="filterEventEndDate()" class="form-control me-2" />
                         </div>
                     </div>
                 </template>
-                <template #empty> Không tìm thấy. </template>
+
+                <template #empty> Không tìm thấy dữ liệu. </template>
                 <template #loading>
                     <ProgressSpinner />
                 </template>
+
                 <Column field="#" header="#" dataType="date">
                     <template #body="{ index }">
                         {{ index + 1 }}
                     </template>
                 </Column>
+
                 <Column field="nameProject" header="Dự án">
                     <template #body="{ data }">
                         {{ data.nameProject }}
@@ -64,11 +64,13 @@
                         />
                     </template>
                 </Column>
+
                 <Column field="paidPersonName" header="Người chi tiêu">
                     <template #body="{ data }">
                         {{ data.paidPersonName }}
                     </template>
                 </Column>
+
                 <Column field="customerName" header="Khách hàng">
                     <template #body="{ data }">
                         {{ data.customerName }}
@@ -78,22 +80,24 @@
                             type="text"
                             v-model="filterModel.value"
                             class="p-column-filter"
-                            placeholder="Nhập"
+                            placeholder="Nhập tên"
                         />
                     </template>
                 </Column>
+
                 <Column field="amountPaid" header="Giá tiền">
                     <template #body="{ data }">
                         {{ data.amountPaid.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) }}
                     </template>
                 </Column>
+
                 <Column field="paidReason" header="Lý do">
                     <template #body="{ data }">
                         {{ data.paidReason }}
                     </template>
                 </Column>
 
-                <Column sortable field="paidDate" header="Ngày">
+                <Column sortable field="paidDate" header="Ngày Chấp Nhận">
                     <template #body="{ data }">
                         {{ formatDate(data.paidDate) }}
                     </template>
@@ -101,8 +105,8 @@
 
                 <Column field="isPaid" header="Trạng thái" style="width: 5rem; ">
                     <template #body="{ data }">
-                        <div :class="data.isPaid == true ? 'badge bg-success' : 'badge bg-warning' ">
-                            {{ data.isPaid == true ? 'Đã Thanh Toán' : 'Chưa Thanh Toán' }}
+                        <div :class="data.isPaid ? 'badge bg-success' : 'badge bg-warning' ">
+                            {{ data.isPaid ? 'Đã Thanh Toán' : 'Chưa Thanh Toán' }}
                         </div>
                     </template>
                 </Column>
@@ -110,11 +114,12 @@
                 <Column header="Thực thi" style="width: 15rem; text-align: left">
                     <template #body="{ data }">
                         <div class="actions-buttons">
-                            <Button icon="pi pi-check" class="p-button p-component p-button-success me-2" @click="paymentConfirmation(data)" :disabled="data.isPaid" />
-                            <!-- <Button icon="pi pi-eye" @click="openDetails(data.paidImages)" class="p-button p-component me-2" /> -->
                             <Button icon="pi pi-eye" @click="openModalDetails(data)" class="p-button p-component me-2" />
-                            <Button icon="pi pi-pencil" class="p-button p-component p-button-warning me-2" @click="Openeditmodal(data)" :disabled="data.isPaid" />
-                            <Button icon="pi pi-trash" class="p-button p-component p-button-danger" @click="Delete(data.id)" :disabled="data.isPaid" />
+                            <div class="actions-buttons" v-if="data.isPaid == false">
+                                <Button icon="pi pi-pencil" class="p-button p-component p-button-warning me-2" @click="Openeditmodal(data)" />
+                                <Button icon="pi pi-trash" class="p-button p-component p-button-danger me-2" @click="Delete(data)" />
+                                <Button icon="pi pi-check" class="p-button p-component p-button-success" @click="paymentConfirmation(data)" />
+                            </div>
                         </div>
                     </template>
                 </Column>
@@ -139,33 +144,8 @@
                 :status="displayImage"
                 @closemodal="closeDetails"
                 :dataDetail="detailData"
+                @confirmPayment="paymentConfirmation($event)"
             />
-
-            <!-- <Dialog
-                header="Hình ảnh hóa đơn"
-                v-model:visible="displayImage"
-                :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
-                :style="{ width: '50vw' }"
-                :maximizable="true"
-                :modal="true"
-            >
-                <div v-if="paidImage.length > 0" class="content_box">
-                    <Galleria :value="dataImgDetail" :responsiveOptions="responsiveOptions" :numVisible="5">
-                        <template #item="slotProps">
-                            <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%" />
-                        </template>
-                        <template #thumbnail="slotProps">
-                            <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" />
-                        </template>
-                    </Galleria>
-                </div>
-                <div v-else>
-                    <h3>Không có hình ảnh để hiển thị</h3>
-                </div>
-                <template #footer>
-                    <button class="btn btn-secondary" @click="closeDetails()">Trở Về</button>
-                </template>
-            </Dialog> -->
 
             <Toast />
         </div>
@@ -182,10 +162,11 @@
     import AddPaid from './addPaid.vue'
     import EditPaid from './editPaid.vue'
     import DetailPaid from './detailPaid.vue'
-    import { LocalStorage } from '@/helper/local-storage.helper'
-    import { UserRoleHelper } from '@/helper/user-role.helper'
-    import router from '@/router'
-    
+    import { LocalStorage } from '@/helper/local-storage.helper';
+    import { UserRoleHelper } from '@/helper/user-role.helper';
+    import router from '@/router';
+    import { DateHelper } from '@/helper/date.helper';
+
     export default {
         data() {
             return {
@@ -195,9 +176,7 @@
                 detailData: null,
                 OptionModule: [],
                 paids: [],
-                loading: true,
-                projects: [],
-                users: [],
+                loading: false,
                 filters: {
                     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
                     customerName: {
@@ -213,29 +192,13 @@
                 filterEndDate: "",
                 token: null,
                 displayImage: false,
-                paidImage: [],
-                dataImgDetail: [],
-                responsiveOptions: [
-                    {
-                        breakpoint: '1024px',
-                        numVisible: 5
-                    },
-                    {
-                        breakpoint: '768px',
-                        numVisible: 3
-                    },
-                    {
-                        breakpoint: '560px',
-                        numVisible: 1
-                    }
-                ]
             }
         },
 
         async mounted() {
             this.token = LocalStorage.jwtDecodeToken()
             await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
-            await this.getData();
+            await this.getData();            
         },
 
         methods: {
@@ -256,23 +219,6 @@
                 this.openStatusEdit = false;              
             },
             
-            /* openDetails(images) {
-                this.displayImage = true
-                this.paidImage = images ?? [];
-                this.dataImgDetail = [];
-
-                if(this.paidImage!=null){
-                    this.paidImage.forEach(item => {
-                        var imgObj = {
-                            "itemImageSrc": item.imagePath,
-                            "thumbnailImageSrc": item.imagePath,
-                            "alt": "Image "+item.imageId,
-                        }
-                        this.dataImgDetail.push(imgObj);
-                    });
-                }
-            }, */
-
             openModalDetails(data){
                 this.displayImage = true;
                 this.detailData = data;
@@ -294,69 +240,107 @@
             
             formatDate(date) {
                 var dateFormat = new Date(date)
-                return dayjs(dateFormat).format('DD/MM/YYYY')
+                return dayjs(dateFormat).format('DD/MM/YYYY');
             },
 
             getProjects(id) {
-                return HTTP_LOCAL.get(GET_PROJECT_BY_ID(id)).then((respone) => respone.data)
+                return HTTP_LOCAL.get(GET_PROJECT_BY_ID(id)).then((respone) => respone.data);
             },
 
             getUsers(id) {
-                return HTTP_LOCAL.get(GET_USER_BY_ID(id)).then((respone) => respone.data)
+                return HTTP_LOCAL.get(GET_USER_BY_ID(id)).then((respone) => respone.data);
             },
 
             showError(message) {
-                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: message, life: 3000 })
+                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: message, life: 3000 });
             },
 
             showSuccess(message) {
-                this.$toast.add({ severity: 'success', summary: 'Thành công', detail: message, life: 3000 })
+                this.$toast.add({ severity: 'success', summary: 'Thành công', detail: message, life: 3000 });
             },
 
             showInfo(message) {
-                this.$toast.add({ severity: 'info', summary: 'Thông báo', detail: message, life: 3000 })
+                this.$toast.add({ severity: 'info', summary: 'Thông báo', detail: message, life: 3000 });
+            },
+
+            showResponseApi(status, message = "") {
+                switch (status) {
+                    case 401:
+                    case 403:
+                        this.showError('Bạn không có quyền thực hiện chức năng này!');
+                        break;
+
+                    case 404:
+                        this.showError('Lỗi! Load dữ liệu!');
+                        break;  
+
+                    default:
+                        if(message != ""){
+                            this.showError(message);
+                        }
+                        else {
+                            this.showError("Có lỗi trong quá trình thực hiện!");
+                        }
+                        break;
+                }
             },
 
             async getData() {
                 try {
                     this.paids = [];
                     if (UserRoleHelper.isAccess) {
+
                         // getAPI (Sample) || (Admin)
                         if (Number(this.token.IdGroup) === 2 || Number(this.token.IdGroup) === 1) {
-                            await this.getPaid()
+                            await this.getPaid();
+                            await this.getAllProject();    
                         }
+
                         // getAPI tất cả role còn lại
-                        if (Number(this.token.IdGroup) !== 2 && Number(this.token.IdGroup) !== 1) {
-                            await this.getPaidByIdUser(this.token.Id)
+                        else if (Number(this.token.IdGroup) !== 2 && Number(this.token.IdGroup) !== 1) {
+                            await this.getPaidByIdUser(this.token.Id);
+                            await this.getAllProject(this.token.Id);    
                         }
-                        await this.getAllProject()                        
-                    }else{
-                        alert("Bạn không có quyền truy cập module này")
-                        router.push('/')
+                    }
+                    else {
+                        alert("Bạn không có quyền truy cập module này");
+                        router.push('/');
                     }
                 }
-                catch(err)
+                catch(error)
                 {
-                    router.push('/')
-                    console.log(err);
+                    var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                    this.showResponseApi(error.response.status, message);
+                    router.push('/');
                 }               
             },
 
             async DeletePaid(id) {
-                await HTTP.delete(`Paid/${id}`).then(async (res) => {                    
-                    await this.getData();
-                    this.showSuccess('Xóa thành công!');
-                })
+                try{
+                    await HTTP_LOCAL.delete(`Paid/${id}`).then(async (res) => {   
+                        if(res.status == 200){
+                            await this.getData();
+                            this.showSuccess('Xóa thành công!');
+                        }              
+                        else {
+                            this.showResponseApi(res.status);
+                        }
+                    });
+                }
+                catch (error) {
+                    var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                    this.showResponseApi(error.response.status, message);
+                }
             },
 
-            Delete(id) {
+            Delete(data) {
                 this.$confirm.require({
-                    message: 'Bạn có chắc chắn muốn xóa? ' + id,
-                    header: 'Xóa',
+                    message: `Bạn có chắc muốn xóa thu chi của "${data.customerName}"?`,
+                    header: 'Xóa thu chi',
                     icon: 'pi pi-info-circle',
                     acceptClass: 'p-button-danger',
                     accept: async () => {
-                        await this.DeletePaid(id)
+                        await this.DeletePaid(data.id)
                     },
                     reject: () => {
                         return
@@ -364,49 +348,81 @@
                 })
             },
 
-            async getAllProject() {
-                HTTP.get('Project/getAllProject')
+            async getAllProject(idUser = null) {
+                this.OptionModule = [];
+                if(idUser == null){
+                    HTTP_LOCAL.get('Project/getAllProject')
                     .then((res) => {
                         this.OptionModule = res.data
                     })
                     .catch((error) => {
-                        this.showError(error.response.data);
-                        console.log(error)
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
+                }
+                else {
+                    HTTP_LOCAL.get(`memberProject/getMemberProjectById/${idUser}`).then(res =>  {
+                        var projectByUser = res.data._Data;
+                        if(projectByUser.length > 0){
+                            projectByUser.forEach(element => {
+                                var projectById =  HTTP_LOCAL.get(`Project/getById/${element.idProject}`).then( response => {
+                                    this.OptionModule.push(response.data);
+                                });
+                            });
+                        }
+                        else {
+                            this.showInfo("Người dùng chưa có dự án nào!");
+                        }
                     })
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
+                }
             },
 
             async getPaidByIdUser(iduser) {
                 try {
-                    await HTTP.get(`Paid/GetByUserId?id=${iduser}`)
+                    this.loading = true;
+                    await HTTP_LOCAL.get(`Paid/GetByUserId?id=${iduser}`)
                         .then((res) => {
-                            res.data._Data.forEach((ele) => {
-                                this.paids = res.data._Data;
-                            })
+                            this.paids = res.data._Data;  
                         })
-                        .catch((err) => {
-                            this.showError(error.response.data);
-                            console.log(err)
-                        })
-                    await this.getWithName()
-                    this.loading = false
-                } catch (err) {
-                    console.log('something went wrong:' + err )
+                        .catch((error) => {
+                            var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                            this.showResponseApi(error.response.status, message);
+                        });
+                    await this.getWithName();
+                } 
+                catch (err) {
+                    console.log('Lỗi! Lấy thông tin nhân viên:');
+                    console.log(err);
+                }
+                finally {
+                    this.loading = false;
                 }
             },
 
             async getPaid() {
-                this.loading = true;
-                this.paids = [];
-                await HTTP.get(GET_LIST_PAID)
-                    .then((respone) => {
-                        this.paids = respone.data._Data;    
-                    })
-                    .catch((error) => {
-                        this.showError(error.response.data);
-                        console.log(error)
-                    })
-                await this.getWithName()
-                this.loading = false
+                try {
+                    this.loading = true;
+                    this.paids = [];
+                    await HTTP_LOCAL.get(GET_LIST_PAID)
+                        .then((respone) => {
+                            this.paids = respone.data._Data;    
+                        })
+                        .catch((error) => {
+                            var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                            this.showResponseApi(error.response.status, message);
+                        })
+                    await this.getWithName()
+                }
+                catch (error) {
+                    console.log('Lỗi! Lấy danh sách thu chi:' + error )
+                }
+                finally {
+                    this.loading = false;
+                }
             },
             
             async getWithName() {
@@ -447,14 +463,14 @@
             },
 
             checkStartDateEmpty () {
-                if(this.filterStartDate != "" ){
+                if(this.filterStartDate != "" ) {
                     return true;
                 }
                 return false;
             },
 
             checkEndDateEmpty () {
-                if(this.filterEndDate != "" ){
+                if(this.filterEndDate != "" ) {
                     return true;
                 }
                 return false;
@@ -510,9 +526,9 @@
             },           
 
             async CallApiPaymentConfirm (idPaid) {
-                const res = await HTTP_LOCAL.put(`Paid/acceptPayment/${idPaid}`, {"PaidPerson": this.token.Id}).then(async (res) => {
+                await HTTP_LOCAL.put(`Paid/acceptPayment/${idPaid}`, {"PaidPerson": this.token.Id}).then(async (res) => {
                     if(res.status == 200){
-                        await this.getPaid()  ;                      
+                        await this.getData();      
                         this.showSuccess('Thanh toán thành công!');
                     }
                     else {
@@ -520,18 +536,19 @@
                     }
                 })
                 .catch((error) => {
-                    this.showError(error.response.data);
-                    console.log(error);
+                    var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                    this.showResponseApi(error.response.status, message);
                 });
             },
 
             paymentConfirmation(item) {
                 this.$confirm.require({
-                    message: `Bạn có chắc muốn thanh toán cho khách hàng "${item.customerName}"?`,
+                    message: `Bạn có chắc muốn thanh toán cho "${item.customerName}"?`,
                     header: 'Xác nhận thanh toán',
                     icon: 'pi pi-info-circle',
                     acceptClass: 'p-button-info',
                     accept: () => {
+                        this.displayImage = false;
                         this.CallApiPaymentConfirm(item.id);
                     },
                     reject: () => {
@@ -546,6 +563,19 @@
     }
 </script>
 <style lang="scss">
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        height: 40px;
+    }
+
+    .input-text {
+        display: flex;
+        height: 45px;
+    }
+
     .p-datatable.p-datatable-gridlines .p-datatable-header {
         background-color: #607d8b;
         color: white;
@@ -563,9 +593,5 @@
 
     .actions-buttons {
         display: flex;
-
-        .btn-margin {
-            margin-right: 5px;
-        }
     }
 </style>

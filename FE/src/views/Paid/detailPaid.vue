@@ -4,78 +4,77 @@
         :visible="status"
         :closable="false"
         :maximizable="true"
-        modal="true"
+        modal
         :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
     >
         <div class="detail__content">
             <div class="detail__content-box box-left">
 
-                <div class="detail__content-box-items" >
-                    <div class="detail__content-box-items-text">
-                        <b>Tên khách hàng:</b>{{ this.Datasend.customerName }}
+                <div class="detail__content-box" :style="[{ background: this.Datasend.isPaid ? 'green': 'orange'}]">
+                    <div class="detail__content-box-items">
+                        <div class="detail__content-box-items-text detail__content-box-items-format-text">
+                            <b >{{ this.Datasend.isPaid == true ? 'Đã thanh toán' : 'Chưa thanh toán' }}</b> 
+                        </div>
                     </div>
                 </div>
 
-                <div class="detail__content-box-items top">
-                    <div class="detail__content-box-items-text">
-                        <b>Mức chi:</b> {{ this.Datasend.amountPaid }}
+                <div class="detail__content-box detail__content-box-top">
+                    <div class="detail__content-box-items" >
+                        <div class="detail__content-box-items-text">
+                            <b><i class="pi pi-users p-button-icon"></i> Khách hàng:</b> {{ this.Datasend.customerName }}
+                        </div>
+                    </div>
+
+                    <div class="detail__content-box-items top">
+                        <div class="detail__content-box-items-text">
+                            <b><i class="bx bx-notepad"></i> Dự án:</b> {{ this.project }}
+                        </div>
                     </div>
                 </div>
 
-                <div class="detail__content-box-items top">
-                    <div
-                        class="detail__content-box-items-text"
-                        :style="{ color: this.Datasend.isPaid ? 'green': 'orange'}"
-                    >
-                        <b>Trạng thái:</b>
-                        {{
-                            this.Datasend.isPaid == true ? 'Đã thanh toán' : 'Chưa thanh toán'
-                        }}
+                <div class="detail__content-box detail__content-box-top">    
+                    <div class="detail__content-box-items top">
+                        <div class="detail__content-box-items-text">
+                            <b><i class="bx bx-wallet"></i> Mức chi:</b> {{ this.Datasend.amountPaid.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) }}
+                        </div>
+                    </div>
+
+                    <div class="detail__content-box-items top">
+                        <div class="detail__content-box-items-text">
+                            <b><i class="bx bx-time-five"></i> Ngày chi:</b> {{ Datasend.paidDate }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail__content-box detail__content-box-top detail__content-box-size ">
+                    <div class="detail__content-box-items">
+                        <div class="detail__content-box-items-text">
+                            <b><i class="p-confirm-dialog-icon pi pi-info-circle"></i> Lý do chi trả:</b> {{ Datasend.paidReason }}
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="detail__content-box box-center">
-                <div class="detail__content-box-items">
-                    <div class="detail__content-box-items-text">
-                        <b>Ngày chi:</b> {{ Datasend.paidDate }}
-                    </div>
+            <div class="detail__content-box box-right ">
+                <div v-if="Datasend.paidImages.length > 0" >
+                    <Galleria :value="dataImgDetail" :responsiveOptions="responsiveOptions" :numVisible="5" :circular="true" :showItemNavigators="true" :showItemNavigatorsOnHover="true" >
+                        <template #item="slotProps">
+                            <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%" />
+                        </template>
+                        <template #thumbnail="slotProps">
+                            <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" style="display: block;"/>
+                        </template>
+                    </Galleria>
                 </div>
-                <div class="detail__content-box-items top">
-                    <div class="detail__content-box-items-text">
-                        <b>Dự án:</b> {{ this.project }}
-                    </div>
+                <div v-else>
+                    <h3>Không có hình ảnh để hiển thị</h3>
                 </div>
-            </div> 
-
-            <div class="detail__content-box box-right">
-                <div class="detail__content-box-items">
-                    <div class="detail__content-box-items-text">
-                        <b>Lý do chi trả:</b> {{ Datasend.paidReason }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="content_box">
-
-            <div v-if="Datasend.paidImages.length > 0" >
-                <Galleria :value="dataImgDetail" :responsiveOptions="responsiveOptions" :numVisible="5">
-                    <template #item="slotProps">
-                        <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%" />
-                    </template>
-                    <template #thumbnail="slotProps">
-                        <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" />
-                    </template>
-                </Galleria>
-            </div>
-            <div v-else>
-                <h3>Không có hình ảnh để hiển thị</h3>
             </div>
         </div>
 
-        <template #footer>           
-            <button class="btn btn-secondary" @click="closeModal">Huỷ</button>
+        <template #footer>   
+            <button v-if="Datasend.isPaid == false" class="btn btn-primary pi pi-check p-button-icon" @click="confirmPayment"> Thanh toán</button>        
+            <button class="btn btn-secondary pi pi-times p-button-icon" @click="closeModal"> Huỷ</button>
         </template>
     </Dialog>
 </template>
@@ -93,7 +92,7 @@
                 Datasend: {
                     projectId: '',
                     customerName: '',
-                    amountPaid: '',
+                    amountPaid: 0,
                     paidReason: '',
                     paidPerson: 0,
                     isPaid: false,
@@ -106,15 +105,15 @@
                 responsiveOptions: [
                     {
                         breakpoint: '1024px',
-                        numVisible: 5
+                        numVisible: 8
                     },
                     {
                         breakpoint: '768px',
-                        numVisible: 3
+                        numVisible: 5
                     },
                     {
                         breakpoint: '560px',
-                        numVisible: 1
+                        numVisible: 3
                     }
                 ]
             }
@@ -127,6 +126,9 @@
                 this.$emit('closemodal')
             },
 
+            confirmPayment () {
+                this.$emit("confirmPayment", this.Datasend);
+            },
            
             showSuccess(message) {
                 this.$toast.add({ severity: 'success', summary: 'Thành công', detail: message, life: 3000 })
@@ -139,7 +141,6 @@
         beforeUpdate() {
             this.dataImgDetail = [];
             if (this.dataDetail != null){
-                console.log(this.Datasend)
                 this.Datasend = this.dataDetail;
                 this.Datasend.paidDate = DateHelper.formatDate(this.Datasend.paidDate)
 
@@ -171,7 +172,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
     .detail__content {
         display: flex;
@@ -180,51 +181,62 @@
         margin-bottom: 20px;
         border-radius: 15px;
         box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+
+        .detail__content-box {
+            display: flex;
+            flex-direction: column;
+            box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
+                rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+            padding: 10px;
+            border-radius: 10px;
+
+            .detail__content-box-items {
+                width: 100%;
+                
+                .detail__content-box-items-text {
+                    font-size: 18px;
+                }
+
+                .detail__content-box-items-format-text {
+                    color: white;
+                    text-align: center;
+                }
+
+                .top {
+                    margin-top: 10px;
+                }
+            }
+        }
+
+        .detail__content-box-top {
+            margin-top: 15px;
+        }
+
+        .detail__content-box-size {
+            min-height: 150px;
+        }
+
+        .box-left {
+            flex: 35%;
+        }
+
+        .box-right {
+            flex: 65%;
+            margin-left: 15px;
+        }
     }
 
-    .detail__content-box {
-        display: flex;
-        flex-direction: column;
-        box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
-            rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
-        padding: 10px;
-        border-radius: 10px;
-    }
+    @media (max-width: 500px) {
+        .detail__content {
+            flex-direction: column;
 
-    .box-left {
-        min-width: 300px;
-        width: 32%;
-    }
-    .box-right {
-        min-width: 300px;
-        width: 32%;
-        margin-left: 15px;
-    }
-    .box-center {
-        min-width: 300px;
-        width: 32%;
-        margin-left: 15px;
-    }
-
-    .detail__content-box-items {
-        display: flex;
-        width: 100%;
-        align-items: center;
-    }
-    .detail__content-box-items-text {
-        font-size: 18px;
-    }
-    .top {
-        margin-top: 10px;
-    }
-    .header {
-        border: 1px solid black;
-    }
-
-    .content_box {
-        box-shadow: -3px 3px 5px -3px #888888, 4px 5px 3px -4px #888888, 4px 5px 2px -5px #888888 inset;
-        padding: 10px;
-        border-radius: 10px;
+            .box-left, .box-right {
+                flex: 100%;
+            }
+            .box-right  {
+                margin-top: 10px;
+            }
+        }
     }
 
 </style>

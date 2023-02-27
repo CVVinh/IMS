@@ -12,7 +12,7 @@ namespace BE.Services.MemberProjectServices
         Task<BaseResponse<Member_Project>> AddNewMemberAsync(AddMemberDto addMemberDto);
         Task<BaseResponse<Member_Project>> DeleteMemberAsync(int idMember);
         Task<BaseResponse<Member_Project>> DeleteMemberInProjectAsync(int idMember,int idProject);
-        Task<BaseResponse<Member_Project>> GetMemberByIdAsync(int idMemberProject);
+        Task<BaseResponse<ICollection<Member_Project>>> GetMemberByIdAsync(int idMemberProject);
         Task<BaseResponse<Member_Project>> GetMemberByIdUserAtProjectAsync(int idUser, int idProject);
     }
 
@@ -117,23 +117,23 @@ namespace BE.Services.MemberProjectServices
             }
         }
 
-        public async Task<BaseResponse<Member_Project>> GetMemberByIdAsync(int idMemberProject)
+        public async Task<BaseResponse<ICollection<Member_Project>>> GetMemberByIdAsync(int idMemberProject)
         {
             var success = false;
             var message = "";
-            Member_Project? data = null;
-            var checkIdMemberProject = await _appContext.Member_Projects.Where(t => t.Id == idMemberProject && t.isDeleted == false)
-                                                    .FirstOrDefaultAsync();
+            ICollection<Member_Project>? data = null;
+            var checkIdMemberProject = await _appContext.Member_Projects.Where(t => t.member == idMemberProject && t.isDeleted == false).ToListAsync();
+
             if (checkIdMemberProject is null)
             {
                 message = "IdMemberProject does not exist";
-                return new BaseResponse<Member_Project>(success, message, data);
+                return new BaseResponse<ICollection<Member_Project>>(success, message, data);
             }
 
             success = true;
             message = "Getting a member in project by idMemberProject sucessfully";
             data = checkIdMemberProject;
-            return new BaseResponse<Member_Project>(success, message, data);
+            return new BaseResponse<ICollection<Member_Project>>(success, message, data);
         }
 
         public async Task<BaseResponse<Member_Project>> GetMemberByIdUserAtProjectAsync(int idUser, int idProject)

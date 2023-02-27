@@ -65,6 +65,7 @@ namespace BE.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "module: paid add: 1")]
         public async Task<IActionResult> CreatePaid([FromForm] CreatePaidDtos createPaidDtos)
         {
             if (!ModelState.IsValid)
@@ -81,6 +82,7 @@ namespace BE.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "module: paid update: 1")]
         public async Task<IActionResult> EditPaid(int id, [FromForm] CreatePaidDtos createPaidDtos)
         {
             if (!ModelState.IsValid)
@@ -115,6 +117,7 @@ namespace BE.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "module: paid delete: 1")]
         public async Task<IActionResult> DeletePaid(int id)
         {
             var pathServer = $"{Request.Scheme}://{Request.Host}";

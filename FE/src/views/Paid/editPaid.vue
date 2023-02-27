@@ -5,7 +5,7 @@
         :visible="status"
         :closable="false"
         :maximizable="true"
-        modal="true"
+        modal
         :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
         :style="{ width: '50vw' }"
     >
@@ -75,7 +75,7 @@
                         >Mức chi<span style="color: red">*</span></label
                     >
 
-                    <InputNumber v-model="v$.Datasend.amountPaid.$model" placeholder="Nhập mức chi" min="0" />
+                    <InputNumber v-model="v$.Datasend.amountPaid.$model" :min="0" suffix=" VND" mode="decimal" />
                     <small class="p-error" v-if="v$.Datasend.amountPaid.required.$invalid && isSubmit">{{
                         v$.Datasend.amountPaid.required.$message.replace('Value', 'Amount Paid')
                     }}</small>
@@ -125,8 +125,8 @@
   
     </form>
         <template #footer>           
-            <button class="btn btn-primary" @click="handleSubmit">Lưu</button>
-            <button class="btn btn-secondary" @click="closeModal">Huỷ</button>
+            <button class="btn btn-primary pi pi-check p-button-icon" @click="handleSubmit"> Lưu</button>
+            <button class="btn btn-secondary pi pi-times p-button-icon" @click="closeModal"> Huỷ</button>
         </template>
     </Dialog>
 </template>
@@ -147,7 +147,7 @@
                 Datasend: {
                     projectId: '',
                     customerName: '',
-                    amountPaid: '',
+                    amountPaid: 0,
                     paidReason: '',
                     paidPerson: 0,
                     isPaid: false,
@@ -188,11 +188,11 @@
             },
 
             clearform() {
-                this.Datasend.projectId = ''
-                this.Datasend.customerName = ''
-                this.Datasend.amountPaid = ''
-                this.Datasend.paidReason = ''
-                this.isSubmit = false
+                this.Datasend.projectId = '';
+                this.Datasend.customerName = '';
+                this.Datasend.amountPaid = 0;
+                this.Datasend.paidReason = '';
+                this.isSubmit = false;
                 this.images = [];
                 this.$refs.fileupload.value = null;
             },
@@ -237,23 +237,23 @@
                     }
                 }
                 catch (err) {
-                    console.log(err)
-                    this.showError2(err.response.data)
+                    console.log(err);
+                    this.showError2(err.response.data);
                 }
             },
 
             async EditPaid() {
-                this.token = LocalStorage.jwtDecodeToken()
+                this.token = LocalStorage.jwtDecodeToken();
                 try {
-                    const formData = new FormData()
-                    formData.append('PaidPerson', this.Datasend.user.id)
-                    formData.append('ProjectId', this.Datasend.projectId)
-                    formData.append('CustomerName', this.Datasend.customerName)
-                    formData.append('AmountPaid', this.Datasend.amountPaid)
-                    formData.append('PaidReason', this.Datasend.paidReason)
+                    const formData = new FormData();
+                    formData.append('PaidPerson', this.Datasend.user.id);
+                    formData.append('ProjectId', this.Datasend.projectId);
+                    formData.append('CustomerName', this.Datasend.customerName);
+                    formData.append('AmountPaid', this.Datasend.amountPaid);
+                    formData.append('PaidReason', this.Datasend.paidReason);
 
                     this.images.forEach((item) => {
-                        formData.append('paidImage', item)
+                        formData.append('paidImage', item);
                     })
                    
                     await this.CallApi(formData);
@@ -303,6 +303,15 @@
                     this.$refs.fileupload.value = null;
                     this.isHaveImg = false;
                 }
+                let imagesRefs = this.$refs
+                Object.keys(imagesRefs).forEach((key) => {
+                    let refIndex = key.slice(-1) 
+                    if (key.includes("image")) {
+                        if (parseInt(refIndex) > parseInt(index) && imagesRefs[key][0]) {
+                            imagesRefs['image' + (refIndex - 1)][0].src = imagesRefs[key][0].src;
+                        }
+                    }
+                });
             },
 
             removeOldImage(index){
@@ -323,6 +332,7 @@
 
         beforeUpdate() {
             this.imagesOld = [];
+            this.projectArr = [];
             if (this.dataedit != null){
                 this.Datasend = this.dataedit;
                 this.Datasend.paidDate = DateHelper.formatDate(this.Datasend.paidDate)

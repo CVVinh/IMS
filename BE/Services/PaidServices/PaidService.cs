@@ -180,22 +180,22 @@ namespace BE.Services.PaidServices
                 {
                     if (searchDayPaidDtos.endDate != null)
                     {
-                        getPaidByDay = await _appContext.Paids.Where(x => x.PaidDate >= searchDayPaidDtos.startDate && x.PaidDate <= searchDayPaidDtos.endDate).Include(x => x.paidImages).ToListAsync();
+                        getPaidByDay = await _appContext.Paids.Where(x => x.PaidDate.Date >= searchDayPaidDtos.startDate && x.PaidDate.Date <= searchDayPaidDtos.endDate).Include(x => x.paidImages).ToListAsync();
                     }
                     else
                     {
-                        getPaidByDay = await _appContext.Paids.Where(x => x.PaidDate >= searchDayPaidDtos.startDate).Include(x => x.paidImages).ToListAsync();
+                        getPaidByDay = await _appContext.Paids.Where(x => x.PaidDate.Date >= searchDayPaidDtos.startDate).Include(x => x.paidImages).ToListAsync();
                     }
                 }
                 else
                 {
                     if (searchDayPaidDtos.endDate != null)
                     {
-                        getPaidByDay = await _appContext.Paids.Where(x => x.PaidDate >= searchDayPaidDtos.startDate && x.PaidDate <= searchDayPaidDtos.endDate && x.PaidPerson == searchDayPaidDtos.id).Include(x => x.paidImages).ToListAsync();
+                        getPaidByDay = await _appContext.Paids.Where(x => x.PaidDate.Date >= searchDayPaidDtos.startDate && x.PaidDate.Date <= searchDayPaidDtos.endDate && x.PaidPerson == searchDayPaidDtos.id).Include(x => x.paidImages).ToListAsync();
                     }
                     else
                     {
-                        getPaidByDay = await _appContext.Paids.Where(x => x.PaidDate >= searchDayPaidDtos.startDate && x.PaidPerson == searchDayPaidDtos.id).Include(x => x.paidImages).ToListAsync();
+                        getPaidByDay = await _appContext.Paids.Where(x => x.PaidDate.Date >= searchDayPaidDtos.startDate && x.PaidPerson == searchDayPaidDtos.id).Include(x => x.paidImages).ToListAsync();
                     }
                 }
                 success = true;
