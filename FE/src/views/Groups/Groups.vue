@@ -16,6 +16,7 @@
                 currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                 responsiveLayout="scroll"
                 ref="dt"
+                showGridlines 
                 :globalFilterFields="['idGroup', 'nameGroup', 'desc']"
             >
                 <template #header>

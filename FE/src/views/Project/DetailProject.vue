@@ -85,10 +85,11 @@
                 </Column>
                 <Column field="" header="" style="min-width: 18rem; text-align: center">
                     <template #body="{ data }">
-                        <Delete @click="deleteMember(data.id, this.$route.params.id)" />
+                        <Delete @click="openDeleteconfirm(data.id, this.$route.params.id)" />
                     </template>
                 </Column>
             </DataTable>
+            <confirmDelete :display="this.display"  @close="closeDeleteconfirm" @delete="deleteMember(this.iduser,this.idproject)"  />
         </div>
     </LayoutDefaultDynamic>
 </template>
@@ -100,6 +101,7 @@
     import jwt_decode from 'jwt-decode'
     import { FilterMatchMode } from 'primevue/api'
     import { UserRoleHelper } from '@/helper/user-role.helper'
+    import confirmDelete from './confirmDelete.vue'
     export default {
         data() {
             return {
@@ -115,6 +117,9 @@
                     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
                 },
                 selectedCustomers: null,
+                display:false,
+                iduser : null,
+                idproject : null,
             }
         },
         mounted() {
@@ -127,6 +132,18 @@
             this.getData()
         },
         methods: {
+
+            openDeleteconfirm(iduser,idproject){
+                this.display = true,
+                this.iduser = iduser,
+                this.idproject = idproject
+            },
+            closeDeleteconfirm(){
+                this.display = false
+                this.iduser = null,
+                this.idproject = null
+            },
+
             async isPM() {
                 if (await UserRoleHelper.isPm()) return true
                 else return false
@@ -140,14 +157,14 @@
             toEditUserPage(id) {
                 this.$router.push({ name: 'edituser', params: { id: id } })
             },
-            confirmDelete(id) {
+            confirmDelete(id,idproject) {
                 this.$confirm.require({
                     message: 'Bạn có chắc chắn muốn xóa?',
                     header: 'Xóa',
                     icon: 'pi pi-info-circle',
                     acceptClass: 'p-button-danger',
                     accept: () => {
-                        this.deleteUser(id)
+                        this.deleteMember(id,idproject)
                     },
                     reject: () => {
                         return
@@ -168,11 +185,6 @@
                         }
                     }
                 }
-            },
-            deleteMember(memberId) {
-                HTTP.put('memberProject/deleteMemberById/' + memberId).then((res) => {
-                    alert('Xóa thành công')
-                })
             },
             openBasic() {
                 this.displayBasic = true
@@ -237,6 +249,7 @@
             deleteMember(idMember, idProject) {
                 HTTP.delete('memberProject/deleteMemberInProject/' + idMember + '/' + idProject).then((res) => {
                     if (res.data._success == true) {
+                        this.closeDeleteconfirm()
                         this.showSuccess('Xóa thành công')
                         this.getData()
                     } else {
@@ -255,7 +268,7 @@
                 return str1 + ' ' + str2
             },
         },
-        components: { Add, Delete },
+        components: { Add, Delete,confirmDelete },
     }
 </script>
 <style lang="scss" scoped>

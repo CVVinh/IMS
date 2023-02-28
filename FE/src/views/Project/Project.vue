@@ -5,6 +5,7 @@
         <div class="mx-3 mt-3">
             <DataTable
                 :value="data"
+                showGridlines
                 ref="dt"
                 :paginator="true"
                 class="p-datatable-customers"
@@ -448,6 +449,18 @@ import { LocalStorage } from '@/helper/local-storage.helper'
             },
             Permission(value,id){
                 if(value !== null){
+
+                    if(value === 1) {
+                        this.showButton.add = true
+                        this.showButton.delete = true
+                        this.showButton.edit = true
+                        this.showButton.export = true
+                        this.showButton.finish = true
+                        this.showButton.finishMulti = true
+                        this.showButton.member = true
+                       this.getAllProject()
+                    }
+
                     // sample
                     if(value === 2) {
                        this.getAllProject()

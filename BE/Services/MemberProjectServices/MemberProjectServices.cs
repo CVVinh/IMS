@@ -11,11 +11,7 @@ namespace BE.Services.MemberProjectServices
         Task<BaseResponse<ICollection<Member_Project>>> GetMembersByIdProjectAsync(int idProject);
         Task<BaseResponse<Member_Project>> AddNewMemberAsync(AddMemberDto addMemberDto);
         Task<BaseResponse<Member_Project>> DeleteMemberAsync(int idMember);
-<<<<<<< HEAD
         Task<BaseResponse<Member_Project>> DeleteMemberInProjectAsync(int idMember, int idProject);
-=======
-        Task<BaseResponse<Member_Project>> DeleteMemberInProjectAsync(int idMember,int idProject);
->>>>>>> ab607fa360c19a1041402b6afb1367c2f259866a
         Task<BaseResponse<ICollection<Member_Project>>> GetMemberByIdAsync(int idMemberProject);
         Task<BaseResponse<Member_Project>> GetMemberByIdUserAtProjectAsync(int idUser, int idProject);
     }

@@ -18,6 +18,7 @@
                 :globalFilterFields="['#', 'nameModule', 'note']"
                 responsiveLayout="scroll"
                 ref="dt"
+                showGridlines 
             >
                 <template #header>
                     <div>

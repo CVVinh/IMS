@@ -188,14 +188,11 @@
                 this.token = LocalStorage.jwtDecodeToken()
                 let indexCut = this.$route.path.lastIndexOf('/')
                 let string = this.$route.path.slice(1, indexCut)
-
                 await UserRoleHelper.isAccessModule(string)
 
                 if (UserRoleHelper.isAccess) {
-                    // Check quyền
-                    
+                    // Check quyền    
                     this.token = LocalStorage.jwtDecodeToken()
-
                     if(Number(this.token.IdGroup) === 2){
                         this.showButton.add = true
                     }

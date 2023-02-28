@@ -86,7 +86,9 @@ namespace BE.Services.InfoDeviceServices
         {
             try
             {
-                var now = DateTime.UtcNow;
+                //var now = DateTime.Now;
+                var now = DateTime.Now;
+
 
                 var infoDevice = _mapper.Map<InfoDevices>(createInfoDevice);
                 await _appContext.InfoDevices.AddAsync(infoDevice.addOrEditInfoDeviceExtentions());
@@ -134,7 +136,7 @@ namespace BE.Services.InfoDeviceServices
                 }
 
                 _mapper.Map(createInfoDeviceDto, checkInfoDevice);
-                checkInfoDevice.UpdateAt = DateTime.UtcNow;
+                checkInfoDevice.UpdateAt = DateTime.Now;
 
                 var existingApplications = await _appContext.DeviceInstalledApps.Where(a => a.DeviceId == id).ToListAsync();
                 _appContext.DeviceInstalledApps.RemoveRange(existingApplications);
@@ -146,7 +148,7 @@ namespace BE.Services.InfoDeviceServices
                         DeviceId = id,
                         ApplicationName = app.ApplicationName,
                         ApplicationLocation = app.ApplicationLocation,
-                        UpdateAt = DateTime.UtcNow
+                        UpdateAt = DateTime.Now
                     });
                     await _appContext.DeviceInstalledApps.AddRangeAsync(appsToBeAdded);
                 }
@@ -180,7 +182,7 @@ namespace BE.Services.InfoDeviceServices
                     return new BaseResponse<AppInDevice>(success, message, data);
                 }
                 _mapper.Map(createInfoDeviceDto, checkInfoDevice);
-                checkInfoDevice.UpdateAt = DateTime.UtcNow;
+                checkInfoDevice.UpdateAt = DateTime.Now;
                 var existingApplications = await _appContext.DeviceInstalledApps.Where(a => a.DeviceId == checkInfoDevice.DeviceId).ToListAsync();
                 _appContext.DeviceInstalledApps.RemoveRange(existingApplications);
                 existingApplications.Clear();
@@ -191,7 +193,7 @@ namespace BE.Services.InfoDeviceServices
                         DeviceId = checkInfoDevice.DeviceId,
                         ApplicationName = app.ApplicationName,
                         ApplicationLocation = app.ApplicationLocation,
-                        UpdateAt = DateTime.UtcNow
+                        UpdateAt = DateTime.Now
                     });
                     await _appContext.DeviceInstalledApps.AddRangeAsync(appsToBeAdded);
                 }

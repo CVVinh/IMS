@@ -378,7 +378,7 @@ const router = createRouter({
             component: () => import('@/views/Groups/Groups.vue'),
         },
         {
-            path: '/groups/groups',
+            path: '/groups',
             name: 'groupsSubs',
             meta: {
                 title: 'IMS - Groups',

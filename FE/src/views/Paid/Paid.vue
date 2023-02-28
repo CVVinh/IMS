@@ -213,7 +213,7 @@
             }
         },
         
-        async created() {
+        async mounted() {
             this.token = LocalStorage.jwtDecodeToken()
             await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
             await this.getData();  
@@ -365,7 +365,7 @@
 
             async DeletePaid(id) {
                 try{
-                    await HTTP_LOCAL.delete(`Paid/${id}`).then(async (res) => {   
+                    await HTTP_LOCAL.delete(`Paid/${id}`).then(async (res) => {  
                         if(res.status == 200){
                             await this.getData();
                             this.showSuccess('Xóa thành công!');
@@ -450,9 +450,9 @@
                                 });
                             });
                         }
-                        else {
-                            this.showInfo("Người dùng chưa có dự án nào!");
-                        }
+                        // else {
+                        //     this.showInfo("Người dùng chưa có dự án nào!");
+                        // }
                     })
                     .catch((error) => {
                         var message = error.response.data != '' ? error.response.data : error.response.statusText;

@@ -275,6 +275,18 @@ namespace BE.Data.Contexts
                 e.Property(k => k.accountNumber).HasMaxLength(255).HasColumnType("varchar");
             });
 
+            modelBuilder.Entity<Paid>(e =>
+            {
+                e.ToTable("Paids");
+                e.HasKey(e => e.Id);
+                e.Property(e => e.PaidPerson).IsRequired();
+                e.Property(e => e.CustomerName).IsRequired();
+                e.Property(e => e.PaidReason).IsRequired();
+                e.Property(e => e.PaidPerson).IsRequired();
+                e.Property(e => e.IsPaid).HasDefaultValue(false);
+                e.Property(k => k.ContentReason).HasMaxLength(255).HasColumnType("varchar");
+            });
+
             modelBuilder.Entity<PaidReasons>(e =>
             {
                 e.ToTable("PaidReasons");
