@@ -299,7 +299,7 @@
             deleteRule(ruleID) {
                 let API_URL = 'Rules/deleteRules/' + ruleID
                 HTTP.put(API_URL, {
-                    idUser: this.decode.Id,
+                    idUser: this.token.Id,
                 })
                     .then((res) => {
                         if (res.status == HttpStatus.OK) {
@@ -383,6 +383,7 @@
         async mounted() {
             try {
                 this.token = LocalStorage.jwtDecodeToken()
+
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
                 if (UserRoleHelper.isAccess) {
                     if (Number(this.token.IdGroup) === 2) {

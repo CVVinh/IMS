@@ -14,11 +14,9 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
     public class MenuController : ControllerBase
     {
-       
-
+      
         private readonly AppDbContext _context;
        
         public MenuController(AppDbContext context)

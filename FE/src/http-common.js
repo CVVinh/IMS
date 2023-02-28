@@ -15,9 +15,9 @@ export const reLoadHTTP = () => {
     }
 }
 
-export const API_KEY = '?private_token=jZ5_H54HW4NPRF8s3mEQ'
-export const API_KEY_1 = '&private_token=jZ5_H54HW4NPRF8s3mEQ'
-export const PRIVATE_TOKEN = 'private_token=jZ5_H54HW4NPRF8s3mEQ'
+export const API_KEY = '?private_token=scLbs6vA88DVDuzeZeDm'
+export const API_KEY_1 = '&private_token=scLbs6vA88DVDuzeZeDm'
+export const PRIVATE_TOKEN = 'private_token=scLbs6vA88DVDuzeZeDm'
 
 export const SEARCH = (search) => `search?scope=projects&search=${search}&` + PRIVATE_TOKEN
 export const GET_ALL_ISSUE = (id, pageSize, page) =>

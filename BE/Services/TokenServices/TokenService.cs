@@ -51,6 +51,15 @@ namespace BE.Services.TokenServices
                         claims.Add(new Claim(ClaimTypes.Role, item));
                     }
                 }
+
+                if (getPermission_by_Group(userS.id) != null)
+                {
+                    foreach (var item in getPermission_by_Group(userS.id))
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, item));
+                    }
+                }
+
                 return claims.ToArray();
             }
 
@@ -135,6 +144,7 @@ namespace BE.Services.TokenServices
             };
             return response;
         }
+        // bat theo use_menu add edit delete export = 1
         private List<string> getPermission_Use_Menu(int idUser)
         {
             var query = from a in _context.Permission_Use_Menus
@@ -163,6 +173,28 @@ namespace BE.Services.TokenServices
             }
             return null!;
         }
+
+        // bat lam duoc nhung gi
+        private List<string> getPermission_by_Group(int idUser)
+        {
+            var query = from x in _context.Groups
+                        join c in _context.Users on x.Id equals c.IdGroup
+                        where c.id == idUser
+                        select new { x, c };
+            if (query.Count() != 0)
+            {
+                List<string> data = new List<string>();
+                foreach (var permission in query)
+                {
+                    data.Add("group: " + permission.x.NameGroup);
+                }
+                return data;
+            }
+            return null!;
+        }
+
+
+        // Bat co quyen hay khong
         private List<string> getPermission_Group(int idUser)
         {
             var query = from a in _context.Permission_Groups
@@ -179,6 +211,7 @@ namespace BE.Services.TokenServices
                 {
                     data.Add("permission_group: " + permission_group.a.Access+
                         " module: "+permission_group.b.nameModule);
+
                 }
                 return data;
             }

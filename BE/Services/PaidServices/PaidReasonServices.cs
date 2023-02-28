@@ -31,7 +31,7 @@ namespace BE.Services.PaidServices
             var data = new List<PaidReasons>();
             try
             {
-                var paidReasons = await _appContext.PaidReasons.Where(s => s.isDeleted == false).OrderByDescending(s => s.dateCreated).ToListAsync();
+                var paidReasons = await _appContext.PaidReasons.Where(s => s.isDeleted == false).OrderBy(s => s.name).ToListAsync();
                 success = true;
                 message = "Get all data successfully";
                 data.AddRange(paidReasons);

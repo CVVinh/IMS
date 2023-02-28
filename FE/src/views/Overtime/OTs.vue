@@ -387,8 +387,7 @@
             try {
                 this.token = LocalStorage.jwtDecodeToken()
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
-                console.log(UserRoleHelper.isAccess);
-             
+                console.log(UserRoleHelper.isAccess);  
                 if (await UserRoleHelper.isAccess) {
                     HTTP.get('Project/getAllProject')
                         .then((res) => {
@@ -533,6 +532,7 @@
                 // 2 sample
                 if (value == 2) {
                     this.showButton.ExportButton = true
+                    
                     this.getOTsBySample()
                 }
                 // 3 lead
@@ -542,7 +542,7 @@
                     this.showButton.addButton = true
                     this.showButton.deleteButton = true
                     this.showButton.viewButton = true
-                    this.getOTsByLead(this.token.Id)
+                    this.getOTsByLead(this.token.Id)     
                 }
                 // 4 staff
                 if (value == 4) {

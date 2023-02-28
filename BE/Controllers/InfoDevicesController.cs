@@ -1,7 +1,9 @@
 ﻿using BE.Data.Dtos.InfoDeviceDtos;
+using BE.Data.Models;
 using BE.Services.InfoDeviceServices;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 

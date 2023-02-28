@@ -1,0 +1,4 @@
+INSERT INTO public."InfoDevices" ("UserId","DeviceName","OperatingSystem","SystemType","UpdateAt","CpuName","DiskDriveTotalSize","MainName","DeviceTotalRamSize") VALUES
+	 (41,'TLK','Microsoft Windows NT 10.0.22621.0',' 64-bit operating system, x64-based processor','2023-02-28 17:28:21.238734','11th Gen Intel(R) Core(TM) i5-11400 @ 2.60GHz',256.0,'Gigabyte Technology Co., Ltd.',17.0),
+	 (43,'TLK','Microsoft Windows NT 10.0.22621.0',' 64-bit operating system, x64-based processor','2023-02-28 17:30:26.899611','11th Gen Intel(R) Core(TM) i5-11400 @ 2.60GHz',256.0,'Gigabyte Technology Co., Ltd.',17.0),
+	 (45,'TLK','Microsoft Windows NT 10.0.22621.0',' 64-bit operating system, x64-based processor','2023-02-28 17:40:07.881744','11th Gen Intel(R) Core(TM) i5-11400 @ 2.60GHz',256.0,'Gigabyte Technology Co., Ltd.',17.0);

@@ -1,11 +1,14 @@
 ﻿using BE.Data.Dtos.MemberProjectDtos;
+using BE.Data.Models;
 using BE.Services.MemberProjectServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BE.Controllers
 {
     [ApiController]
     [Route("api/memberProject")]
+    //[Authorize(Roles = "permission_group: True module: member")]
     public class MemberProjectController : Controller
     {
         private readonly IMemberProjectServices _memberProjectServices;

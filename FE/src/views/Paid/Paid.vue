@@ -83,6 +83,12 @@
                     </template>
                 </Column>
 
+                <Column field="personConfirmName" header="Người xác nhận">
+                    <template #body="{ data }">
+                        {{ data.personConfirmName }}
+                    </template>
+                </Column>
+
                 <Column field="customerFullName" header="Khách hàng">
                     <template #body="{ data }">
                         {{ data.customerFullName }}
@@ -311,10 +317,10 @@
 
             showResponseApi(status, message = "") {
                 switch (status) {
-                    case 401:
-                    case 403:
-                        this.showError('Bạn không có quyền thực hiện chức năng này!');
-                        break;
+                    // case 401:
+                    // case 403:
+                    //     this.showError('Bạn không có quyền thực hiện chức năng này!');
+                    //     break;
 
                     case 404:
                         this.showError('Lỗi! Load dữ liệu!');
@@ -436,12 +442,10 @@
                     await HTTP_LOCAL.get(`memberProject/getMemberProjectById/${idUser}`).then(res =>  {
                         var projectByUser = res.data._Data;
 
-                        console.log("projectByUser: "+ JSON.stringify(projectByUser));
-
                         if(projectByUser.length > 0){
                             projectByUser.forEach(element => {
                                 var projectById =  HTTP_LOCAL.get(`Project/getById/${element.idProject}`).then( response => {
-                                    this.OptionModule.push(response.data);
+                                this.OptionModule.push(response.data);
                                 })
                                 .catch((error) => {
                                     var message = error.response.data != '' ? error.response.data : error.response.statusText;
@@ -507,7 +511,7 @@
             
             async getWithName() {
                 for (let i = 0; i < this.paids.length; i++) {
-                    if(this.paids[i].projectId != 0){
+                    if(this.paids[i].projectId != 0 ){
                         var project = await this.getProjects(this.paids[i].projectId);
                         this.paids[i].project = project;
                         this.paids[i].nameProject = project.name;
@@ -515,8 +519,18 @@
                     else {
                         this.paids[i].nameProject = "";
                     }
+
+                    if(this.paids[i].personConfirm != null) {
+                        var confirmUser = await this.getUsers(this.paids[i].personConfirm);
+                        this.paids[i].confirmUser = confirmUser;
+                        this.paids[i].personConfirmName = confirmUser.fullName; 
+                    }
+                    else {
+                        this.paids[i].personConfirmName = "";
+                    }
                     
-                    var user = await this.getUsers(this.paids[i].paidPerson);
+                    var paidUser = await this.getUsers(this.paids[i].paidPerson);
+                    
                     var customer = await this.getCustomerId(parseInt(this.paids[i].customerName));
                     var paidReason = await this.getPaidReasonId(parseInt(this.paids[i].paidReason));
 
@@ -527,17 +541,17 @@
                         this.paids[i].paidDate = DateHelper.formatDate(this.paids[i].paidDate);
                     }
 
-                    this.paids[i].amountPaidName = this.paids[i].amountPaid.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) 
+                    this.paids[i].amountPaidName = this.paids[i].amountPaid.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }); 
 
                     this.paids[i].customer = customer;
                     this.paids[i].customerName = parseInt(this.paids[i].customerName);
                     this.paids[i].customerFullName = customer.fullName;
 
-                    this.paids[i].user = user
-                    this.paids[i].paidPersonName = user.fullName
+                    this.paids[i].paidUser = paidUser;
+                    this.paids[i].paidPersonName = paidUser.fullName;                    
                     
-                    this.paids[i].paidReason = parseInt(this.paids[i].paidReason)
-                    this.paids[i].paidReasonName = paidReason.name
+                    this.paids[i].paidReason = parseInt(this.paids[i].paidReason);
+                    this.paids[i].paidReasonName = paidReason.name;
                 }
             },
 
@@ -636,10 +650,10 @@
             },
 
             async CallApiPaymentConfirm (idPaid) {
-                await HTTP_LOCAL.put(`Paid/acceptPayment/${idPaid}`, {"PaidPerson": this.token.Id}).then(async (res) => {
+                await HTTP_LOCAL.put(`Paid/acceptPayment/${idPaid}`, {"PersonConfirm": this.token.Id}).then(async (res) => {
                     if(res.status == 200){
-                        await this.getData();      
                         this.showSuccess('Thanh toán thành công!');
+                        await this.getData();      
                     }
                     else {
                         this.showError('Lỗi! cập nhật thanh toán!')

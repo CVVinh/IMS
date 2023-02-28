@@ -86,7 +86,7 @@
             </div>
             
             <div class="flex justify-content-center container">
-                <label for="note">Nội dung lý do</label>
+                <label for="note">Nội dung lý do chi</label>
                 <Textarea
                     id="note"
                     v-model="Datasend.contentReason"
@@ -139,7 +139,7 @@
         data() {
             return {
                 Datasend: {
-                    projectId: '',
+                    projectId: 0,
                     customerName: '',
                     amountPaid: null,
                     paidReason: '',
@@ -179,7 +179,7 @@
             },
 
             clearform() {
-                this.Datasend.projectId = '';
+                this.Datasend.projectId = 0;
                 this.Datasend.customerName = '';
                 this.Datasend.amountPaid = null;
                 this.Datasend.paidReason = '';

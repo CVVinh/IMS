@@ -4,6 +4,7 @@ using BE.Data.Models;
 using BE.Services.LeaveOffServices;
 using BE.Services.PaginationServices;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static BE.Data.Enum.LeaveOff.Status;
 
@@ -11,6 +12,7 @@ namespace BE.Controllers
 {
     [ApiController]
     [Route("api/leaveOff")]
+    [Authorize(Roles = "permission_group: True module: leaveoff")]
     public class LeaveOffController : Controller
     {
         private readonly ILeaveOffServices _leaveOffServices;

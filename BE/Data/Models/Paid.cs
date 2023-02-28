@@ -10,7 +10,8 @@ namespace BE.Data.Models
     {
         [Key]
         public int Id { get; set; }
-        public int? PaidPerson { get; set; }
+        public int PaidPerson { get; set; }
+        public int? PersonConfirm { get; set; }
      /*   [ForeignKey("PaidPerson")]
         public Users Users { get; set; }*/
         public DateTime PaidDate { get; set; }

@@ -2,6 +2,7 @@ using BE.Data.Contexts;
 using BE.Data.Dtos.Handover;
 using BE.Data.Dtos.HandoverDtos;
 using BE.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static BE.Data.Enum.Handover.Status;
@@ -42,7 +43,6 @@ namespace BE.Controllers
         }
 
         [HttpPut("updateHandover")]
-
         public async Task<IActionResult> updateHandover(UpdateHandover request)
         {
             try

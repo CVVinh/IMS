@@ -19,7 +19,6 @@ namespace BE.Controllers
 
         [HttpGet]
         [Route("getPermissionByUser")]
-        [Authorize(Roles = "1")]
         public ActionResult<IEnumerable<getPermissionByUserModuleDto>> getPermissionByUser(int userId)
         {
             try
@@ -53,7 +52,6 @@ namespace BE.Controllers
             }
         }
         [HttpPost("addPermissionByGroup")]
-        [Authorize(Roles = "1")]
         public async Task<IActionResult> addPermissionByGroup(int idGroup, int idUserAdd, string[][] data)
         {
             try
@@ -107,7 +105,6 @@ namespace BE.Controllers
             }
         }
         [HttpPost("addPermissionByUser")]
-        [Authorize(Roles = "1")]
         public async Task<IActionResult> addPermissionByUser(int idUser, int idUserAdd, string[][] data)
         {
             try

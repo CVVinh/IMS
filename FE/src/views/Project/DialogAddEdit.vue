@@ -328,7 +328,7 @@
                 submitted: false,
                 dataProject: new ProjectDto(),
                 isOnGitlab: false,
-                Optionleader : false,
+                Optionleader: false,
             }
         },
         beforeUpdate() {
@@ -384,11 +384,13 @@
             },
         },
         methods: {
-            getListLeader(){
-                HTTP.get("/Project/getListLead").then(res=>{
-                    this.Optionleader = res.data
-                    console.log(res.data);
-                }).catch(err=>console.log(err))
+            getListLeader() {
+                HTTP.get('/Project/getListLead')
+                    .then((res) => {
+                        this.Optionleader = res.data
+                        console.log(res.data)
+                    })
+                    .catch((err) => console.log(err))
             },
             onClickCancel() {
                 this.resetForm()
@@ -410,10 +412,10 @@
                 } else {
                     this.AddData()
                 }
-                console.log(this.projectSelected.id);
+                console.log(this.projectSelected.id)
             },
             AddData() {
-                console.log('add');
+                console.log('add')
                 let userLogin = LocalStorage.jwtDecodeToken()
                 const dataSave = {
                     name: this.dataProject.name,
@@ -438,7 +440,7 @@
                 if (dataSave) {
                     HTTP.post('Project/addProject', dataSave)
                         .then((res) => {
-                            console.log(res.data);
+                            console.log(res.data)
                             if (res.status == 200) {
                                 this.showSuccess()
                                 this.onClickCancel()
@@ -448,12 +450,13 @@
                             }
                         })
                         .catch((er) => {
-                            this.showWarn('Không có quyền thực hiện thao tác thêm dự án.')
+                            //this.showWarn('Không có quyền thực hiện thao tác thêm dự án.')
+                            console.log(er)
                         })
                 }
             },
             editData() {
-                console.log('edit');
+                console.log('edit')
                 let userLogin = LocalStorage.jwtDecodeToken()
                 let data = {
                     id: this.dataProject.id,
@@ -551,7 +554,7 @@
     }
 </script>
 
-<style scoped>
+<style>
     .select_project_displayNone {
         display: block;
     }
@@ -563,5 +566,11 @@
         width: 240px;
         display: inline-flex;
         height: 40px;
+    }
+    .p-multiselect.p-component.p-inputwrapper.p-inputwrapper-filled.p-inputwrapper-focus.p-overlay-open {
+        width: 100%;
+    }
+    .p-multiselect.p-component.p-inputwrapper {
+        width: 100%;
     }
 </style>

@@ -17,7 +17,7 @@ namespace BE.Data.Models
 
         public string fullName
         {
-            get { return $"{firstName} {lastName}"; }
+            get { return $"{lastName} {firstName}"; }
         }
 
         //public ICollection<Customer_PaidReason>? customerPaidReasons { get; set; }

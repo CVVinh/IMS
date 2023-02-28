@@ -34,7 +34,7 @@ namespace BE.Services.Customers
             var data = new List<Customer>();
             try
             {
-                var customers = await _appContext.Customers.Where(s => s.isDeleted == false).OrderByDescending(s => s.dateCreated).ToListAsync();
+                var customers = await _appContext.Customers.Where(s => s.isDeleted == false).OrderBy(s => s.lastName).ThenBy(s => s.firstName).ToListAsync();
                 success = true;
                 message = "Get all data successfully";
                 data.AddRange(customers);

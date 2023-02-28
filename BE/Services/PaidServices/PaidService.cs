@@ -136,6 +136,7 @@ namespace BE.Services.PaidServices
 
                 if (paid != null)
                 {
+                    paid.IsPaid= false;
                     await _appContext.Paids.AddAsync(paid);
                     await _appContext.SaveChangesAsync();
 
@@ -384,7 +385,7 @@ namespace BE.Services.PaidServices
                 }
 
                 paid.IsPaid = true;
-                paid.PaidPerson = acceptPaymentPaidDtos.PaidPerson;
+                paid.PersonConfirm = acceptPaymentPaidDtos.PersonConfirm;
                 paid.PaidDate = DateTime.Now;
                 _appContext.Paids.Update(paid);
                 await _appContext.SaveChangesAsync();

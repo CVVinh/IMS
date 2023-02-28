@@ -19,7 +19,8 @@ namespace BE.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class ProjectController : ControllerBase
+    [Authorize(Roles = "permission_group: True module: project")]
+    public class ProjectController : ControllerBase
 	{
 
 		private readonly AppDbContext _context;
@@ -37,7 +38,7 @@ namespace BE.Controllers
 
 		// PM, sample
 		[HttpGet("getAllProject")]
-		[Authorize(Roles = "permission_group: True module: project")]
+		
 		public ActionResult getAllProject()
 		{
 			try
@@ -170,15 +171,9 @@ namespace BE.Controllers
 			
 		}
 
-
-
-
-
-
         [HttpPost("addProject")]
-		[Authorize(Roles = "permission_group: True module: project")]
-		[Authorize(Roles = "module: project add: 1")]
-		public async Task<IActionResult> Create(AddNewProjectDto project_Model)
+        [Authorize(Roles = "group: pm")]
+        public async Task<IActionResult> Create(AddNewProjectDto project_Model)
 		{
 			try
 			{
@@ -227,9 +222,8 @@ namespace BE.Controllers
 
 		}
 		[HttpPut("DeleteProject/{id}")]
-		[Authorize(Roles = "permission_group: True module: project")]
-		[Authorize(Roles = "module: project delete: 1")]
-		public IActionResult DeleteProject(int id, IdUserChangeProjectDto request)
+        [Authorize(Roles = "group: pm")]
+        public IActionResult DeleteProject(int id, IdUserChangeProjectDto request)
 		{
 			try
 			{
@@ -254,9 +248,8 @@ namespace BE.Controllers
 		}
 
 		[HttpPut("FinishProject/{id}")]
-		[Authorize(Roles = "permission_group: True module: project")]
-		[Authorize(Roles = "module: project update: 1")]
-		public IActionResult FinishProject(int id, IdUserChangeProjectDto request)
+        [Authorize(Roles = "group: pm")]
+        public IActionResult FinishProject(int id, IdUserChangeProjectDto request)
 		{
 
 			try
@@ -282,7 +275,6 @@ namespace BE.Controllers
 		}
 
 		[HttpGet("getById/{id}")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public IActionResult getById(int id)
 		{
 			try
@@ -298,7 +290,6 @@ namespace BE.Controllers
 		}
 
 		[HttpGet("getProjectIsDelete")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public IActionResult getProIsDelete()
 		{
 			try
@@ -314,7 +305,6 @@ namespace BE.Controllers
 		}
 
 		[HttpGet("getProjectByDayBefore/{day}")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public IActionResult getProjectByDayBefore(DateTime day)
 		{
 			try
@@ -336,7 +326,6 @@ namespace BE.Controllers
 		}
 
 		[HttpGet("getProjectByName/{name}")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public IActionResult getProjectByName(string name)
 		{
 			try
@@ -352,7 +341,6 @@ namespace BE.Controllers
 			catch (Exception ex) { return BadRequest(ex); }
 		}
 		[HttpGet("getProjectIsNotFinished")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public IActionResult getProjectIsNotFinished()
 		{
 			try
@@ -371,7 +359,6 @@ namespace BE.Controllers
 
 
 		[HttpGet("getLengthOfProject/{name}")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public IActionResult getLengthOfProject(string name)
 		{
 			try
@@ -395,7 +382,6 @@ namespace BE.Controllers
 		}
 		[HttpGet]
 		[Route("getProjectById/{Id}")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public async Task<ActionResult<Projects>> getProjectById(int Id)
 		{
 			var project = await _context.Projects.SingleOrDefaultAsync(x => x.Id == Id);
@@ -409,9 +395,8 @@ namespace BE.Controllers
 		}
 
 		[HttpPut]
-		[Route("updateProject/{id}")]
-		[Authorize(Roles = "permission_group: True module: project")]
-		[Authorize(Roles = "module: project update: 1")]
+        [Authorize(Roles = "group: pm")]
+        [Route("updateProject/{id}")]
 		public async Task<ActionResult> updateProject(EditProjectDto requests, int id)
 		{
 
@@ -448,7 +433,6 @@ namespace BE.Controllers
 			return true;
 		}
 		[HttpPost("getAll")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public async Task<IActionResult> getAll(Paginate p)
 		{
 			if (p.pageIndex == 0)
@@ -488,7 +472,6 @@ namespace BE.Controllers
 
 		[HttpGet]
 		[Route("getProjectByDayAfter")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public async Task<ActionResult<Projects>> getProjectByDayAfter(DateTime d)
 		{
 			var project = await _context.Projects.Where(x => x.EndDate > d ).ToListAsync();
@@ -503,7 +486,6 @@ namespace BE.Controllers
 
 		[HttpGet]
 		[Route("getProjectisFinished")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public async Task<ActionResult<IEnumerable<Projects>>> getProjectisFinished()
 		{
 			var project = await _context.Projects.Where(x => x.IsFinished == true).ToListAsync();
@@ -516,7 +498,6 @@ namespace BE.Controllers
 
 		[HttpGet]
 		[Route("getUserByproject/{Id}")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public async Task<ActionResult> getUserByproject(int Id)
 		{
 			var project = await _context.Projects.SingleOrDefaultAsync(x => x.Id == Id);
@@ -529,8 +510,6 @@ namespace BE.Controllers
 		}
 		[HttpGet]
 		[Route("exportExcel")]
-		[Authorize(Roles = "permission_group: True module: project")]
-		[Authorize(Roles = "module: project export: 1")]
 		public async Task<string> DownloadFile()
 		{
 			var wb = new XLWorkbook();

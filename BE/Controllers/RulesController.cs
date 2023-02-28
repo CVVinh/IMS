@@ -5,6 +5,7 @@ using BE.Data.Models;
 using BE.Services.PaginationServices;
 using BE.Services.PaidServices;
 using BE.shared.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
@@ -13,7 +14,8 @@ namespace BE.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class RulesController : ControllerBase
+    [Authorize(Roles = "permission_group: True module: rule")]
+    public class RulesController : ControllerBase
 	{
 		private readonly IRulesService _rulesService;
 		private readonly IPaginationServices<Rules> _paginationService;

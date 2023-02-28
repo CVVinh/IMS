@@ -18,7 +18,6 @@ namespace BE.Controllers
             _context = context;
         }
         [HttpPost("decentralization_Group")]
-        [Authorize(Roles = "1")]
         public async Task<IActionResult> decentralization_Group(int idGroup, string[][] data)
         {
             try
@@ -67,7 +66,6 @@ namespace BE.Controllers
             }
         }
         [HttpGet("getPermissionGroup")]
-        [Authorize(Roles = "1")]
         public async Task<IActionResult> getPermissionGroup()
         {
             try

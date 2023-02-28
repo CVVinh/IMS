@@ -5,11 +5,11 @@
             <DataTable
                 :value="data"
                 :sort="1"
-                showGridlines 
+                showGridlines
                 :paginator="true"
                 ref="dt"
                 class="p-datatable-customers"
-                :rows="10"
+                :rows="20"
                 dataKey="id"
                 :rowHover="true"
                 v-model:filters="filters"
@@ -17,38 +17,22 @@
                 filterDisplay="menu"
                 responsiveLayout="scroll"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                :rowsPerPageOptions="[2, 10, 25, 50]"
+                :rowsPerPageOptions="[30, 40, 50]"
                 currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
-                :globalFilterFields="[
-                    'userCode',
-                    'userCreated',
-                    'dateCreated',
-                    'userModified',
-                    'dateModified',
-                    'fullName',
-                    'phoneNumber',
-                    'dOB',
-                    'gender',
-                    'address',
-                    'university',
-                    'yearGraduated',
-                    'email',
-                    'skype',
-                    'dateStartWork',
-                    'idGroup',
-                    'workStatus',
-                ]"
+                :globalFilterFields="['userCode']"
+                :exportFilename="'ListUser_' + newDateFormat"
             >
                 <template #header>
                     <h5 style="color: white">Danh sách người dùng</h5>
                     <div class="header-container">
                         <div class="button-group">
-                            <Export style="margin-right: 5px" label="Xuất Excel" @click="exportCSV($event)" 
-                             v-if="this.showButton.export"
+                            <Export
+                                style="margin-right: 5px"
+                                label="Xuất Excel"
+                                @click="exportCSV($event)"
+                                v-if="this.showButton.export"
                             />
-                            <Add label="Thêm" @click="OpenAdd" 
-                             v-if="this.showButton.add"
-                            />
+                            <Add label="Thêm" @click="OpenAdd" v-if="this.showButton.add" />
                         </div>
                         <div class="input-text">
                             <MultiSelect
@@ -62,7 +46,7 @@
                                 <i class="pi pi-search" />
                                 <InputText
                                     class="p-inputtext-sm"
-                                    v-model="filters['global'].value"
+                                    v-model="filters['userCode'].value"
                                     placeholder="Tìm kiếm"
                                     style="width: 20em; height: 100%; font-size: 16px"
                                 />
@@ -77,7 +61,7 @@
                     </div>
                     <div v-else>Không tìm thấy.</div>
                 </template>
-                <Column field="#" header="#" dataType="date">
+                <Column header="#" dataType="date">
                     <template #body="{ index }">
                         {{ index + 1 }}
                     </template>
@@ -87,17 +71,22 @@
                         {{ data.fullName }}
                     </template>
                 </Column>
+                <Column field="gender" header="Giới tính" sortable style="min-width: 15rem">
+                    <template #body="{ data }">
+                        {{ data.gender }}
+                    </template>
+                </Column>
                 <Column field="email" header="Email" sortable>
                     <template #body="{ data }">
                         {{ data.email }}
                     </template>
                 </Column>
-                <Column field="idGroup" header="Nhóm" sortable>
+                <!-- <Column field="idGroup" header="Nhóm" sortable>
                     <template #body="{ data }">
                         {{ data.idGroup }}
                     </template>
-                </Column>
-                <Column field="userCode" header="Tài khoản" sortable>
+                </Column> -->
+                <Column field="userCode" header="Mã Nhân Viên" sortable>
                     <template #body="{ data }">
                         {{ data.userCode }}
                     </template>
@@ -105,6 +94,11 @@
                 <Column field="workStatus" header="Trạng thái làm việc" sortable>
                     <template #body="{ data }">
                         {{ data.workStatus }}
+                    </template>
+                </Column>
+                <Column field="dateCreated" header="Ngày Gia Nhập" sortable>
+                    <template #body="{ data }">
+                        {{ data.dateCreated }}
                     </template>
                 </Column>
                 <Column
@@ -118,14 +112,14 @@
                 <Column field="" header="Thực thi" style="width: 10rem; text-align: left">
                     <template #body="{ data }">
                         <div class="actions-buttons" v-if="data.workStatus !== 'Nghỉ việc'">
-                            <Edit class="p-button-warning" @click="OpenEdit(data.id)" 
-                              v-if="this.showButton.edit"
-                              :disabled="CheckEdit(data.id)"  
+                            <Edit
+                                class="p-button-warning"
+                                @click="OpenEdit(data.id)"
+                                v-if="this.showButton.edit"
+                                :disabled="CheckEdit(data.id)"
                             />
-                            
-                            <Delete @click="confirmDelete(data.id, data.workStatus)"
-                              v-if="this.showButton.delete"
-                            />
+
+                            <Delete @click="confirmDelete(data.id, data.workStatus)" v-if="this.showButton.delete" />
                         </div>
                     </template>
                 </Column>
@@ -176,6 +170,7 @@
     import { UserRoleHelper } from '@/helper/user-role.helper'
     import { LocalStorage } from '@/helper/local-storage.helper'
     import { HttpStatus } from '@/config/app.config'
+    import { DateHelper } from '@/helper/date.helper'
     export default {
         name: 'users',
         data() {
@@ -199,7 +194,7 @@
                 num: 5,
                 timeOut: null,
                 filters: {
-                    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                    userCode: { value: null, matchMode: FilterMatchMode.CONTAINS },
                 },
                 selectedColumns: null,
                 columns: [
@@ -222,11 +217,12 @@
                 Optionrole: [],
                 showButton: {
                     add: false,
-                    export : false,
+                    export: false,
                     edit: false,
-                    delete:false,
+                    delete: false,
                 },
                 roleList: [],
+                newDateFormat: DateHelper.formatDate(new Date()),
             }
         },
         async mounted() {
@@ -234,7 +230,7 @@
                 this.decode = LocalStorage.jwtDecodeToken()
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
                 if (UserRoleHelper.isAccess) {
-                    this.Permission(Number(this.decode.IdGroup),Number(this.decode.Id))    
+                    this.Permission(Number(this.decode.IdGroup), Number(this.decode.Id))
                 } else {
                     this.countTime()
                     this.displayBasic = true
@@ -268,10 +264,9 @@
                     this.roleList = res.data
                 })
             },
-            Permission(value,id){
-              
+            Permission(value, id) {
                 //admin
-                if(value === 1){
+                if (value === 1) {
                     this.showButton.add = true
                     this.showButton.edit = true
                     this.showButton.export = true
@@ -279,45 +274,47 @@
                     this.getData()
                 }
                 //ke toan
-                if(value === 2){
+                if (value === 2) {
                     this.getData()
                     this.showButton.edit = true
                 }
-                if(value === 3 || value === 4 || value === 5){
+                if (value === 3 || value === 4 || value === 5) {
                     this.getDataByRole(id)
-                    this.showButton.edit = true  
+                    this.showButton.edit = true
                 }
             },
 
-            getDataByRole(id){
-                HTTP.get('/Users/getUserById/'+id).then(res=>{
-                    if (res.status == 200) {
-                        const temp = [res.data]
-                        temp.forEach((element) => {
-                            if (element.isDeleted == 0) {
-                                this.data.push({ ...element, fullName: '' })
-                            }
-                        })
-                        this.data.forEach((element) => {
-                            element.fullName = this.mergeString(element.lastName, element.firstName)
-                            element.dateStartWork = this.formatDate(element.dateStartWork)
-                            element.dateLeave = this.formatDate(element.dateLeave)
-                            element.dateCreated = this.formatDate(element.dateCreated)
-                            element.dateModified = this.formatDate(element.dateModified)
-                            element.dOB = this.formatDate(element.dOB)
-                            element.workStatus = this.getWorkStatus(element.workStatus)
-                            element.gender = this.getGender(element.gender)
-                            element.maritalStatus = this.getMaritalStatus(element.maritalStatus)
-                            temp.forEach((user) => {
-                                if (user.id === element.userCreated)
-                                    element.userCreated = user.lastName + ' ' + user.firstName
-                                if (user.id === element.userModified)
-                                    element.userModified = user.lastName + ' ' + user.firstName
+            getDataByRole(id) {
+                HTTP.get('/Users/getUserById/' + id)
+                    .then((res) => {
+                        if (res.status == 200) {
+                            const temp = [res.data]
+                            temp.forEach((element) => {
+                                if (element.isDeleted == 0) {
+                                    this.data.push({ ...element, fullName: '' })
+                                }
                             })
-                        })
-                        this.isLoading = false
-                    }
-                }).catch(err=>console.log(err))
+                            this.data.forEach((element) => {
+                                element.fullName = this.mergeString(element.lastName, element.firstName)
+                                element.dateStartWork = this.formatDate(element.dateStartWork)
+                                element.dateLeave = this.formatDate(element.dateLeave)
+                                element.dateCreated = this.formatDate(element.dateCreated)
+                                element.dateModified = this.formatDate(element.dateModified)
+                                element.dOB = this.formatDate(element.dOB)
+                                element.workStatus = this.getWorkStatus(element.workStatus)
+                                element.gender = this.getGender(element.gender)
+                                element.maritalStatus = this.getMaritalStatus(element.maritalStatus)
+                                temp.forEach((user) => {
+                                    if (user.id === element.userCreated)
+                                        element.userCreated = user.lastName + ' ' + user.firstName
+                                    if (user.id === element.userModified)
+                                        element.userModified = user.lastName + ' ' + user.firstName
+                                })
+                            })
+                            this.isLoading = false
+                        }
+                    })
+                    .catch((err) => console.log(err))
             },
 
             getData() {
@@ -329,6 +326,7 @@
                                 this.data.push({ ...element, fullName: '' })
                             }
                         })
+                        console.log(this.data)
                         this.data.forEach((element) => {
                             element.fullName = this.mergeString(element.lastName, element.firstName)
                             element.dateStartWork = this.formatDate(element.dateStartWork)
@@ -406,21 +404,17 @@
                         year: 'numeric',
                     })
             },
-            CheckEdit(id){
-                console.log(this.decode.IdGroup);
-                if(Number(this.decode.IdGroup) === 1)
-                {
+            CheckEdit(id) {
+                console.log(this.decode.IdGroup)
+                if (Number(this.decode.IdGroup) === 1) {
                     return false
-                }else
-                {
-                    if(Number(this.decode.Id) === id){
-                    return false
-                }else
-                {
-                    return true
+                } else {
+                    if (Number(this.decode.Id) === id) {
+                        return false
+                    } else {
+                        return true
+                    }
                 }
-                }
-                
             },
             deleteUser(userId) {
                 let API_URL = 'Users/deleteUser/' + userId

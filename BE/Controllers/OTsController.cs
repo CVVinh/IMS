@@ -39,7 +39,6 @@ namespace BE.Controllers
         }
         [HttpGet]
         [Route("getByType/{type}")]
-        [Authorize(Roles = "permission_group: True module: ots")]
         public async Task<ActionResult<IEnumerable<OTs>>> GetByType(Types type)
         {
             var ots = await _context.OTs.Where(ot => ot.type == type).ToListAsync();
@@ -49,7 +48,6 @@ namespace BE.Controllers
         }
         [HttpGet]
         [Route("getPageTotal")]
-        [Authorize(Roles = "permission_group: True module: ots")]
         public ActionResult getPage(Types type, int recordNum)
         {
             var count = _context.OTs.Count(ot => ot.type == type);
@@ -59,7 +57,6 @@ namespace BE.Controllers
         // Pagination
         [HttpPost]
         [Route("getPaginate")]
-        [Authorize(Roles = "permission_group: True module: ots")]
         public async Task<ActionResult> GetAll(PaginateOT paginate)
         {
             try
@@ -96,7 +93,6 @@ namespace BE.Controllers
 
         [HttpGet]
         [Route("getOTByUser/{userId}")]
-        [Authorize(Roles = "permission_group: True module: ots")]
         public async Task<ActionResult<IEnumerable<OTs>>> GetByUser(int userId)
         {
             var ot = await _context.OTs.Where(o => o.user == userId).ToListAsync();
@@ -106,7 +102,6 @@ namespace BE.Controllers
         }
         [HttpGet]
         [Route("getOTByLead/{leadId}")]
-        [Authorize(Roles = "permission_group: True module: ots")]
         public async Task<ActionResult<IEnumerable<OTs>>> GetById(int leadId)
         {
             var ot = await _context.OTs.Where(o => o.leadCreate == leadId).ToListAsync();
@@ -116,7 +111,6 @@ namespace BE.Controllers
         }
         [HttpGet]
         [Route("getOTByID/{id}")]
-        [Authorize(Roles = "permission_group: True module: ots")]
         public async Task<ActionResult<IEnumerable<OTs>>> GetByLead(int id)
         {
             var ot = await _context.OTs.Where(o => o.id == id).SingleOrDefaultAsync();
@@ -126,7 +120,6 @@ namespace BE.Controllers
         }
         [HttpGet]
         [Route("getByStatus/{status}")]
-        [Authorize(Roles = "permission_group: True module: ots")]
         public async Task<ActionResult<IEnumerable<OTs>>> GetByStatus(StatusOT status)
         {
             var OTs = await _context.OTs.Where(o => o.status == status).ToListAsync();
@@ -136,7 +129,6 @@ namespace BE.Controllers
         }
         [HttpGet]
         [Route("getOTByProject/{proId}")]
-        [Authorize(Roles = "permission_group: True module: ots")]
         public async Task<ActionResult<IEnumerable<OTs>>> GetByProject(int proId)
         {
             var list = from x in _context.OTs
@@ -160,8 +152,7 @@ namespace BE.Controllers
         }
         [HttpPost]
         [Route("createOT")]
-        [Authorize(Roles = "permission_group: True module: ots")]
-        [Authorize(Roles = "module: ots add: 1")]
+        [Authorize(Roles = "group: Lead")]
         public async Task<IActionResult> Create(OTs OTs)
         {
             var ots = await _context.OTs.Where(ot => ot.Date == OTs.Date && ot.user == OTs.user).SingleOrDefaultAsync();
@@ -186,7 +177,7 @@ namespace BE.Controllers
         [HttpPut]
         [Route("acceptOT")]
         [Authorize(Roles = "permission_group: True module: ots")]
-        [Authorize(Roles = "module: ots update: 1")]
+        [Authorize(Roles = "group: pm")]
         public async Task<IActionResult> Update(AcceptOTDto dto)
         {
             var ot = await _context.OTs.Where(o => o.id == dto.id).SingleOrDefaultAsync();
@@ -203,7 +194,6 @@ namespace BE.Controllers
         [HttpPut]
         [Route("updateOT/{id}")]
         [Authorize(Roles = "permission_group: True module: ots")]
-        [Authorize(Roles = "module: ots update: 1")]
         public async Task<IActionResult> Update(int id, EditOTDto dto)
         {
             try
@@ -235,9 +225,8 @@ namespace BE.Controllers
         }
 
         [HttpPut]
-        [Route("deleteOT")]
         [Authorize(Roles = "permission_group: True module: ots")]
-        [Authorize(Roles = "module: ots delete: 1")]
+        [Route("deleteOT")]
         public async Task<IActionResult> Accept(int idOT, int PM)
         {
             var ot = await _context.OTs.Where(o => o.id == idOT).SingleOrDefaultAsync();
@@ -252,6 +241,7 @@ namespace BE.Controllers
         [HttpGet]
         [Route("getAccept/{type}")]
         [Authorize(Roles = "permission_group: True module: ots")]
+        [Authorize(Roles = "group: pm")]
         public async Task<ActionResult<IEnumerable<OTs>>> getAccept(Types type)
         {
             return await _context.OTs.Where(ot => ot.type == type && ot.status == 0).ToListAsync();
@@ -743,7 +733,6 @@ namespace BE.Controllers
         [HttpGet]
         [Route("exportExcel/month={month}&year={year}&idProject={idProject}")]
         [Authorize(Roles = "permission_group: True module: ots")]
-        [Authorize(Roles = "module: ots export: 1")]
         public async Task<string> DownloadFile(int? month = 0, int? year = 0, int? idProject = 0)
         {
             var wb = new XLWorkbook();
@@ -880,6 +869,7 @@ namespace BE.Controllers
         }
         // For PM
         [HttpGet("getOTsByidPM/{IdPM}")]
+        [Authorize(Roles = "permission_group: True module: ots")]
         public ActionResult GetOTsByIdPM(int IdPM)
         {
             try
@@ -908,6 +898,7 @@ namespace BE.Controllers
         }
         // For sample
         [HttpGet("GetAllOTs")]
+        [Authorize(Roles = "permission_group: True module: ots")]
         public ActionResult GetAllOTs()
         {
             try
@@ -936,6 +927,7 @@ namespace BE.Controllers
         }
         // For staff
         [HttpGet("GetAllOTsByStaff/{idstaff}")]
+        [Authorize(Roles = "permission_group: True module: ots")]
         public ActionResult GetAllOTsByStaff(int idstaff)
         {
             try
@@ -1024,6 +1016,7 @@ namespace BE.Controllers
 
 
         [HttpGet("filterByRole/{month}/{year}/{idproject}/{idrole}")]
+        [Authorize(Roles = "permission_group: True module: ots")]
         public async Task<ActionResult> filterByRole(int? month = 0,int? year = 0,int? idproject = 0,int? idrole = 0,int? iduser =0)
         {
             if (idrole == 0 || iduser == 0)
@@ -1342,7 +1335,7 @@ namespace BE.Controllers
 
         [HttpGet]
         [Route("GetByMonthAndProject/month={month}&year={year}&idProject={idProject}")]
-        /*[Authorize(Roles = "permission_group: True module: ots")]*/
+        [Authorize(Roles = "permission_group: True module: ots")]
         public async Task<ActionResult> GetByMonthAndProject(int? month = 0, int? year = 0, int? idProject = 0)
         {
             try
@@ -1427,6 +1420,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("AddOTs")]
+        [Authorize(Roles = "permission_group: True module: ots")]
+        [Authorize(Roles = "group: Lead")]
         public async Task<IActionResult> AddOTs(AddRangeOTs OTs)
         {
             try

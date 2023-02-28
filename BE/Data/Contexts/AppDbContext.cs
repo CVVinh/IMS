@@ -283,7 +283,7 @@ namespace BE.Data.Contexts
                 e.Property(e => e.CustomerName).IsRequired();
                 e.Property(e => e.PaidReason).IsRequired();
                 e.Property(e => e.PaidPerson).IsRequired();
-                e.Property(e => e.IsPaid).HasDefaultValue(false);
+                e.Property(e => e.ProjectId).HasDefaultValue(0);
                 e.Property(k => k.ContentReason).HasMaxLength(255).HasColumnType("varchar");
             });
 
