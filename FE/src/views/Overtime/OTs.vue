@@ -288,7 +288,7 @@
             :display="this.displayFormAddEdit"
             @close ="closeFormAddEdit"
             @reloadData="getOTsByLead(this.token.Id)"
-            :idproject = "idproject"
+            :idproject = "this.idproject"
         />
         <DetailOT
             :show="DetailOT"
@@ -521,8 +521,6 @@
                 if (value == 1) {
                     this.showButton.ExportButton = true
                     this.showButton.confirmButton = true
-                    this.showButton.editButton = true
-                    this.showButton.addButton = true
                     this.showButton.allAcceptButton = true
                     this.showButton.deleteButton = true
                     this.showButton.viewButton = true
@@ -532,7 +530,6 @@
                 // 2 sample
                 if (value == 2) {
                     this.showButton.ExportButton = true
-                    
                     this.getOTsBySample()
                 }
                 // 3 lead
@@ -546,6 +543,7 @@
                 }
                 // 4 staff
                 if (value == 4) {
+                    this.showButton.ExportButton = true
                     this.getOTsByStaff(this.token.Id)
                 }
                 // 5 pm

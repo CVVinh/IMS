@@ -42,6 +42,25 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
+        [HttpGet("getAllPaid1111")]
+        public async Task<IActionResult> GetAllPaid1(int? pageIndex, PageSizeEnum pageSizeEnum)
+        {
+            var response = await _paidServices.GetAllAsync1();
+            if (response._success)
+            {
+                //var pageSize = (int)pageSizeEnum;
+                ////var resultPage = await _paginationServices.paginationListTableAsync(response._Data, pageIndex, pageSize);
+                //if (resultPage._success)
+                //{
+                //    return Ok(resultPage);
+                //}
+                //return BadRequest(resultPage);
+                return Ok(response);
+
+            }
+            return BadRequest(response);
+        }
+
         [HttpGet("GetByUserId")]
         public async Task<IActionResult> GetPaidWithUserId(int id)
         {
@@ -57,6 +76,17 @@ namespace BE.Controllers
         public async Task<IActionResult> GetPaidWithId(int id)
         {
             var response = await _paidServices.GetPaidWithId(id);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpGet("GetByIdSample/{id}")]
+        public async Task<IActionResult> GetByIdSample(int id)
+        {
+            var response = await _paidServices.GetPaidWithSampleId(id);
             if (response._success)
             {
                 return Ok(response);

@@ -11,6 +11,6 @@ namespace BE.Data.Models
         public int DeviceId { get; set; }
         public string? ApplicationName { get; set; }
         public string? ApplicationLocation { get; set; }
-        public DateTime? UpdateAt { get; set; }
+        public string? UpdateAt { get; set; }
     }
 }

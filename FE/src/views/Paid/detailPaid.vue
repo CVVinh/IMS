@@ -119,7 +119,7 @@
                     isPaid: false,
                     paidDate: null,
                     token: null,
-                    paidImages: null,
+                    paidImages: [],
 
                     paidNamePerson: null,
                     confirmNamePerson: null,
@@ -175,7 +175,7 @@
             },
 
             async getUsers(id) {
-                return await HTTP_LOCAL.get(GET_USER_BY_ID(id))
+                return await HTTP.get(GET_USER_BY_ID(id))
                     .then((respone) => respone.data)
                     .catch((error) => {
                         var message = error.response.data != '' ? error.response.data : error.response.statusText;
@@ -184,7 +184,7 @@
             },
 
             async getCustomerId(id) {
-                return await HTTP_LOCAL.get(`Customer/GetById/${id}`)
+                return await HTTP.get(`Customer/GetById/${id}`)
                     .then((respone) => respone.data._Data)
                     .catch((error) => {
                         var message = error.response.data != '' ? error.response.data : error.response.statusText;
@@ -193,7 +193,7 @@
             },
 
             async getPaidReasonId(id) {
-                return await HTTP_LOCAL.get(`PaidReason/GetById/${id}`)
+                return await HTTP.get(`PaidReason/GetById/${id}`)
                     .then((respone) => respone.data._Data)
                     .catch((error) => {
                         var message = error.response.data != '' ? error.response.data : error.response.statusText;
@@ -202,7 +202,7 @@
             },
 
             async getProjects(id) {
-                return await HTTP_LOCAL.get(GET_PROJECT_BY_ID(id))
+                return await HTTP.get(`Project/getProByIdDel/${id}`)
                     .then((respone) => respone.data)
                     .catch((error) => {
                         var message = error.response.data != '' ? error.response.data : error.response.statusText;

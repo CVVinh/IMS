@@ -57,14 +57,14 @@
                     <ProgressSpinner />
                 </template>
 
-                <Column field="#" header="#" dataType="date">
+                <Column field="#" header="#" dataType="date" >
                     <template #body="{ index }">
                         {{ index + 1 }}
                     </template>
                 </Column>
 
                 <Column field="nameProject" header="Dự án">
-                    <template #body="{ data }">
+                    <template #body="{ data }" >
                         {{ data.nameProject }}
                     </template>
                     <template #filter="{ filterModel }">
@@ -136,7 +136,7 @@
                             <div class="actions-buttons" v-if="data.isPaid == false">
                                 <Button icon="pi pi-pencil" class="p-button p-component p-button-warning me-2" @click="Openeditmodal(data)" />
                                 <Button icon="pi pi-trash" class="p-button p-component p-button-danger me-2" @click="Delete(data)" />
-                                <Button icon="pi pi-check" class="p-button p-component p-button-success" @click="paymentConfirmation(data)" />
+                                <Button icon="pi pi-check" class="p-button p-component p-button-success" @click="paymentConfirmation(data)" v-if="showButton.confirm"/>
                             </div>
                         </div>
                     </template>
@@ -216,13 +216,27 @@
                 filterEndDate: "",
                 token: null,
                 displayImage: false,
+                showButton : {
+                    add : false,
+                    edit : false,
+                    confirm  : false,
+                    delete  : false,
+                    view  : false,
+                }
             }
         },
         
         async mounted() {
             this.token = LocalStorage.jwtDecodeToken()
             await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
-            await this.getData();  
+
+            if (UserRoleHelper.isAccess){
+                await this.getData();  
+            }
+            else {
+                alert("Bạn không có quyền truy cập module này");
+                router.push('/');
+            }
         },
 
         methods: {
@@ -268,7 +282,7 @@
             },
 
             async getProjects(id) {
-                return await HTTP_LOCAL.get(GET_PROJECT_BY_ID(id))
+                return await HTTP.get(`Project/getProByIdDel/${id}`)
                     .then((respone) => respone.data)
                     .catch((error) => {
                         var message = error.response.data != '' ? error.response.data : error.response.statusText;
@@ -277,7 +291,7 @@
             },
 
             async getUsers(id) {
-                return await HTTP_LOCAL.get(GET_USER_BY_ID(id))
+                return await HTTP.get(GET_USER_BY_ID(id))
                     .then((respone) => respone.data)
                     .catch((error) => {
                         var message = error.response.data != '' ? error.response.data : error.response.statusText;
@@ -286,7 +300,7 @@
             },
 
             async getCustomerId(id) {
-                return await HTTP_LOCAL.get(`Customer/GetById/${id}`)
+                return await HTTP.get(`Customer/GetById/${id}`)
                     .then((respone) => respone.data._Data)
                     .catch((error) => {
                         var message = error.response.data != '' ? error.response.data : error.response.statusText;
@@ -295,7 +309,7 @@
             },
 
             async getPaidReasonId(id) {
-                return await HTTP_LOCAL.get(`PaidReason/GetById/${id}`)
+                return await HTTP.get(`PaidReason/GetById/${id}`)
                     .then((respone) => respone.data._Data)
                     .catch((error) => {
                         var message = error.response.data != '' ? error.response.data : error.response.statusText;
@@ -317,10 +331,10 @@
 
             showResponseApi(status, message = "") {
                 switch (status) {
-                    // case 401:
-                    // case 403:
-                    //     this.showError('Bạn không có quyền thực hiện chức năng này!');
-                    //     break;
+                    case 401:
+                    case 403:
+                        this.showError('Bạn không có quyền thực hiện chức năng này!');
+                        break;
 
                     case 404:
                         this.showError('Lỗi! Load dữ liệu!');
@@ -340,26 +354,32 @@
             async getData() {
                 try {
                     this.paids = [];
-                    if (UserRoleHelper.isAccess) {
 
-                        // getAPI (Sample) || (Admin)
-                        if (Number(this.token.IdGroup) === 2 || Number(this.token.IdGroup) === 1) {
-                            await this.getPaid();
-                            await this.getAllProject();    
-                        }
+                    if (Number(this.token.IdGroup) === 1 ) {  // getAPI (Admin)
+                        await this.getPaid();
+                        await this.getAllProject(); 
+                        this.showButton.confirm = true;  
+                    }
 
-                        // getAPI tất cả role còn lại
-                        else if (Number(this.token.IdGroup) !== 2 && Number(this.token.IdGroup) !== 1) {
+                    else if (Number(this.token.IdGroup) === 2 ) { // (Sample)
+                        await this.getPaid(this.token.Id);
+                        await this.getAllProject(); 
+                        this.showButton.confirm = true;  
+                    }
+
+                    // getAPI tất cả role còn lại
+                    else if (Number(this.token.IdGroup) !== 2 && Number(this.token.IdGroup) !== 1) {
+                        
+                        if (Number(this.token.IdGroup) === 5 ) { // pm
                             await this.getPaidByIdUser(this.token.Id);
-                            await this.getAllProject(this.token.Id);    
+                            await this.getAllProject();   
+                        }else{
+                            await this.getPaidByIdUser(this.token.Id);
+                            await this.getAllProject(this.token.Id);  
                         }
-                        await this.getAllCustomer();
-                        await this.getAllPaidReason();
                     }
-                    else {
-                        alert("Bạn không có quyền truy cập module này");
-                        router.push('/');
-                    }
+                    await this.getAllCustomer();
+                    await this.getAllPaidReason();
                 }
                 catch(error)
                 {
@@ -371,7 +391,7 @@
 
             async DeletePaid(id) {
                 try{
-                    await HTTP_LOCAL.delete(`Paid/${id}`).then(async (res) => {  
+                    await HTTP.delete(`Paid/${id}`).then(async (res) => {  
                         if(res.status == 200){
                             await this.getData();
                             this.showSuccess('Xóa thành công!');
@@ -404,7 +424,7 @@
 
             async getAllCustomer() {
                 this.customerArr = [];
-                await HTTP_LOCAL.get('Customer/getAllCustomer')
+                await HTTP.get('Customer/getAllCustomer')
                     .then((res) => {
                         this.customerArr = res.data._Data;
                     })
@@ -416,7 +436,7 @@
 
             async getAllPaidReason() {
                 this.paidReasonArr = [];
-                await HTTP_LOCAL.get('PaidReason/getAllPaidReason')
+                await HTTP.get('PaidReason/getAllPaidReason')
                     .then((res) => {
                         this.paidReasonArr = res.data._Data;
                     })
@@ -429,7 +449,7 @@
             async getAllProject(idUser = null) {
                 this.OptionModule = [];
                 if(idUser == null){
-                    await HTTP_LOCAL.get('Project/getAllProject')
+                    await HTTP.get('Project/getAllProjectRunning')
                     .then((res) => {
                         this.OptionModule = res.data
                     })
@@ -439,36 +459,31 @@
                     });
                 }
                 else {
-                    await HTTP_LOCAL.get(`memberProject/getMemberProjectById/${idUser}`).then(res =>  {
-                        var projectByUser = res.data._Data;
-
-                        if(projectByUser.length > 0){
-                            projectByUser.forEach(element => {
-                                var projectById =  HTTP_LOCAL.get(`Project/getById/${element.idProject}`).then( response => {
-                                this.OptionModule.push(response.data);
-                                })
-                                .catch((error) => {
-                                    var message = error.response.data != '' ? error.response.data : error.response.statusText;
-                                    this.showResponseApi(error.response.status, message);
-                                    console.log(error)
-                                });
-                            });
-                        }
-                        // else {
-                        //     this.showInfo("Người dùng chưa có dự án nào!");
-                        // }
-                    })
-                    .catch((error) => {
-                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
-                        this.showResponseApi(error.response.status, message);
-                    });
+                    if (Number(this.token.IdGroup) === 3 ){  // lead
+                        await HTTP.get(`Project/getAllProjectByLead/${idUser}`).then(res => {
+                            this.OptionModule = res.data
+                        })
+                        .catch((error) => {
+                            var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                            this.showResponseApi(error.response.status, message);
+                        });
+                    }
+                    if (Number(this.token.IdGroup) === 4 ){  // staff
+                        await HTTP.get(`Project/getAllProjectByStaff/${idUser}`).then(res => {
+                            this.OptionModule = res.data
+                        })
+                        .catch((error) => {
+                            var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                            this.showResponseApi(error.response.status, message);
+                        });
+                    }
                 }
             },
 
             async getPaidByIdUser(iduser) {
                 try {
                     this.loading = true;
-                    await HTTP_LOCAL.get(`Paid/GetByUserId?id=${iduser}`)
+                    await HTTP.get(`Paid/GetByUserId?id=${iduser}`)
                         .then((res) => {
                             this.paids = res.data._Data;  
                         })
@@ -487,11 +502,13 @@
                 }
             },
 
-            async getPaid() {
+            async getPaid(idSample = null) {
                 try {
                     this.loading = true;
                     this.paids = [];
-                    await HTTP_LOCAL.get(GET_LIST_PAID)
+
+                    if(idSample == null) {
+                        await HTTP.get(GET_LIST_PAID)
                         .then((respone) => {
                             this.paids = respone.data._Data;    
                         })
@@ -499,6 +516,18 @@
                             var message = error.response.data != '' ? error.response.data : error.response.statusText;
                             this.showResponseApi(error.response.status, message);
                         })
+                    }
+                    else {
+                        await HTTP.get(`Paid/GetByIdSample/${idSample}`)
+                        .then((respone) => {
+                            this.paids = respone.data._Data;    
+                        })
+                        .catch((error) => {
+                            var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                            this.showResponseApi(error.response.status, message);
+                        })
+                    }
+
                     await this.getWithName()
                 }
                 catch (error) {
@@ -513,7 +542,7 @@
                 for (let i = 0; i < this.paids.length; i++) {
                     if(this.paids[i].projectId != 0 ){
                         var project = await this.getProjects(this.paids[i].projectId);
-                        this.paids[i].project = project;
+                        this.paids[i].isDelPro= project.isDeleted;
                         this.paids[i].nameProject = project.name;
                     }
                     else {
@@ -522,7 +551,7 @@
 
                     if(this.paids[i].personConfirm != null) {
                         var confirmUser = await this.getUsers(this.paids[i].personConfirm);
-                        this.paids[i].confirmUser = confirmUser;
+                        //this.paids[i].confirmUser = confirmUser;
                         this.paids[i].personConfirmName = confirmUser.fullName; 
                     }
                     else {
@@ -543,11 +572,11 @@
 
                     this.paids[i].amountPaidName = this.paids[i].amountPaid.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }); 
 
-                    this.paids[i].customer = customer;
+                    //this.paids[i].customer = customer;
                     this.paids[i].customerName = parseInt(this.paids[i].customerName);
                     this.paids[i].customerFullName = customer.fullName;
 
-                    this.paids[i].paidUser = paidUser;
+                    //this.paids[i].paidUser = paidUser;
                     this.paids[i].paidPersonName = paidUser.fullName;                    
                     
                     this.paids[i].paidReason = parseInt(this.paids[i].paidReason);
@@ -558,7 +587,7 @@
             async callApiSearch(objSearch){
                 this.loading = true;
                 this.paids = [];
-                await HTTP_LOCAL.post("Paid/SearchPaidByDay", objSearch).then(async (respone) => {
+                await HTTP.post("Paid/SearchPaidByDay", objSearch).then(async (respone) => {
                     this.paids = respone.data._Data;
                     if(this.paids.length == 0){
                         this.showInfo("Không tìm thấy dữ liệu!");
@@ -650,7 +679,7 @@
             },
 
             async CallApiPaymentConfirm (idPaid) {
-                await HTTP_LOCAL.put(`Paid/acceptPayment/${idPaid}`, {"PersonConfirm": this.token.Id}).then(async (res) => {
+                await HTTP.put(`Paid/acceptPayment/${idPaid}`, {"PersonConfirm": this.token.Id}).then(async (res) => {
                     if(res.status == 200){
                         this.showSuccess('Thanh toán thành công!');
                         await this.getData();      

@@ -4,7 +4,11 @@ using BE.Data.Dtos.PaidDtos;
 using BE.Data.Models;
 using BE.Helpers;
 using BE.Response;
+using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using static BE.Data.Enum.LeaveOff.Status;
 
 namespace BE.Services.PaidServices
@@ -13,6 +17,7 @@ namespace BE.Services.PaidServices
     {
         Task<BaseResponse<List<Paid>>> GetAllAsync();
         Task<BaseResponse<List<Paid>>> GetPaidWithUserId(int userId);
+        Task<BaseResponse<List<Paid>>> GetPaidWithSampleId(int sampleId);
         Task<BaseResponse<Paid>> CreatePaid(CreatePaidDtos createPaidDtos, string root, string rootPath);
         Task<BaseResponse<Paid>> DeletePaid(int idPaid, string root, string local);
         Task<BaseResponse<Paid>> EditPaid(int id, CreatePaidDtos createPaidDtos, string root, string local);
@@ -20,6 +25,8 @@ namespace BE.Services.PaidServices
         Task<BaseResponse<List<PaidImage>>> DeleteMutilImgPaid(int idPaid, List<int>? listIdImg, string root, string local);
         Task<BaseResponse<List<Paid>>> SearchPaidByDay(SearchDayPaidDtos searchDayPaidDtos);
         Task<BaseResponse<Paid>> AccepterPayment(int idPaid, AcceptPaymentPaidDtos acceptPaymentPaidDtos);
+
+        Task<BaseResponse<List<Object>>> GetAllAsync1();
     }
     public class PaidService : IPaidServices
     {
@@ -48,6 +55,69 @@ namespace BE.Services.PaidServices
                 success = true;
                 message = ex.Message;
                 return (new BaseResponse<List<Paid>>(success, message, data));
+            }
+        }
+
+        public async Task<BaseResponse<List<Object>>> GetAllAsync1()
+        {
+            var success = false;
+            var message = "";
+            var data = new List<Object>();
+            try
+            {
+                var getPaids = (from p in _appContext.Paids
+                            join up in _appContext.Users on p.PaidPerson equals up.id
+                            //join uc in _appContext.Users on p.PersonConfirm equals uc.id
+                            join pj in _appContext.Projects on p.ProjectId equals pj.Id
+                            join cs in _appContext.Customers on Convert.ToInt32(p.CustomerName) equals cs.id
+                            join pr in _appContext.PaidReasons on Convert.ToInt32(p.PaidReason) equals pr.id
+                            select new
+                            {
+                                id = p.Id,
+                                paidPerson = p.PaidPerson,
+                                paidReasonName = pr.name,
+
+                                personConfirm = Convert.ToInt32(p.PersonConfirm),
+                                //personConfirmName = uc.FullName,
+
+                                paidDate = p.PaidDate,
+
+                                projectId = p.ProjectId,
+                                nameProject = pj.Name,
+                                isDelPro = pj.IsDeleted,
+
+                                customerName = Convert.ToInt32(p.CustomerName),
+                                customerFullName = cs.fullName,
+
+                                amountPaid = p.AmountPaid,
+
+                                paidReason = Convert.ToInt32(p.PaidReason),
+                                paidPersonName = up.FullName,
+
+                                contentReason = p.ContentReason,
+                                isPaid = p.IsPaid,
+                                paidImages = p.paidImages,
+                            })
+                            .ToListAsync();
+
+                var getAddComfirmUser = await (from gp in getPaids
+                                        join uc in _appContext.Users on gp.personConfirm equals uc.id
+                                        select new {
+                                            personConfirmName = uc.FullName,
+                                            gp,
+                                        }).ToListAsync();
+
+
+                success = true;
+                message = "Get all data successfully";
+                data.AddRange(getAddComfirmUser);
+                return (new BaseResponse<List<Object>>(success, message, data));
+            }
+            catch (Exception ex)
+            {
+                success = true;
+                message = ex.Message;
+                return (new BaseResponse<List<Object>>(success, message, data));
             }
         }
 
@@ -95,6 +165,37 @@ namespace BE.Services.PaidServices
                 success = true;
                 message = "Get all data successfully";
                 data.AddRange(paids);
+                return (new BaseResponse<List<Paid>>(success, message, data));
+            }
+            catch (Exception ex)
+            {
+                success = true;
+                message = ex.Message;
+                return (new BaseResponse<List<Paid>>(success, message, data));
+            }
+        }
+
+        public async Task<BaseResponse<List<Paid>>> GetPaidWithSampleId(int sampleId)
+        {
+            var success = false;
+            var message = "";
+            var data = new List<Paid>();
+            try
+            {
+                var listpaid = await (from x in _appContext.Paids
+                               join c in _appContext.Users on x.PaidPerson equals c.id
+                               where c.IdGroup != 2 || x.PaidPerson == sampleId
+                               select x).Include(x => x.paidImages).ToListAsync();
+
+                if (listpaid is null)
+                { 
+                    message = "Person do not have payment!";
+                    data = null;
+                    return new BaseResponse<List<Paid>>(success, message, data);
+                }
+                success = true;
+                message = "Get all data successfully";
+                data.AddRange(listpaid);
                 return (new BaseResponse<List<Paid>>(success, message, data));
             }
             catch (Exception ex)

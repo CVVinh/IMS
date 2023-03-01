@@ -77,7 +77,7 @@
                             }"
                             >Mức chi<span style="color: red">*</span></label
                         >
-                        <InputNumber v-model="v$.Datasend.amountPaid.$model"  :min=0 suffix=" VND" mode="decimal" />
+                        <InputNumber v-model="v$.Datasend.amountPaid.$model" :min=0 mode="decimal"/>
                         <small class="p-error" v-if="v$.Datasend.amountPaid.required.$invalid && isSubmit">{{
                             v$.Datasend.amountPaid.required.$message.replace('Value', 'Amount Paid')
                         }}</small>
@@ -97,7 +97,7 @@
                 />
             </div>
 
-            <div class="flex justify-content-center container">
+            <div class="flex justify-content-center container mt-3">
                 <h6>Thêm ảnh</h6>
                 <div class="input_file">
                     <input type="file" multiple @change="onFileChange($event)" ref="fileupload" accept="image/*"/>
@@ -241,7 +241,7 @@
 
             async CallApi(fromData) {
                 try {
-                    const res =  await HTTP_LOCAL.post(`Paid`, fromData)
+                    const res =  await HTTP.post(`Paid`, fromData)
 
                     switch (res.status) {
                         case HttpStatus.OK:

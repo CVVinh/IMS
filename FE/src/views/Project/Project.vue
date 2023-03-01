@@ -93,12 +93,12 @@
 
                 <Column field="startDate" header="Ngày bắt đầu " sortable style="min-width: 8rem">
                     <template #body="{ data }">
-                        {{ formatDate(data.startDate) }}
+                        {{ getFormattedDate(new Date( data.startDate)) }}
                     </template>
                 </Column>
                 <Column field="endDate" header="Ngày kết thúc " sortable style="min-width: 8rem">
                     <template #body="{ data }">
-                        {{ formatDate(data.endDate) == '1970-01-01' ? 'Chưa giải quyết..' : formatDate(data.endDate) }}
+                        {{  data.endDate == '1970-01-01' ? 'Chưa giải quyết..' :  getFormattedDate(new Date(data.endDate))}}
                     </template>
                 </Column>
                 <Column
@@ -559,6 +559,17 @@
                             life: 3000,
                         })
                     })
+            },
+            getFormattedDate(date) {
+                var year = date.getFullYear()
+
+                var month = (1 + date.getMonth()).toString()
+                month = month.length > 1 ? month : '0' + month
+
+                var day = date.getDate().toString()
+                day = day.length > 1 ? day : '0' + day
+
+                return day + '-' + month + '-' + year
             },
             showMember() {
                 location.reload()

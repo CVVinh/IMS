@@ -5,7 +5,7 @@
         :modal="true"
         :maximizable="true"
         :dismissableMask="true"
-        header="Sửa quy định"
+        header="Cập nhật quy định"
         :show="resetForm()"
     >
         <div>

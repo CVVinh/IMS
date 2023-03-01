@@ -86,12 +86,8 @@ namespace BE.Services.InfoDeviceServices
         {
             try
             {
-                //var now = DateTime.Now;
-                var now = DateTime.Now;
-
-
                 var infoDevice = _mapper.Map<InfoDevices>(createInfoDevice);
-                await _appContext.InfoDevices.AddAsync(infoDevice.addOrEditInfoDeviceExtentions());
+                await _appContext.InfoDevices.AddAsync(infoDevice);
                 await _appContext.SaveChangesAsync();
 
                 var installedApps = createInfoDevice.Application
@@ -100,7 +96,7 @@ namespace BE.Services.InfoDeviceServices
                         DeviceId = infoDevice.DeviceId,
                         ApplicationName = app.ApplicationName,
                         ApplicationLocation = app.ApplicationLocation,
-                        UpdateAt = now
+                        UpdateAt = infoDevice.UpdateAt
                     }).ToList();
 
                 await _appContext.DeviceInstalledApps.AddRangeAsync(installedApps);
@@ -136,7 +132,7 @@ namespace BE.Services.InfoDeviceServices
                 }
 
                 _mapper.Map(createInfoDeviceDto, checkInfoDevice);
-                checkInfoDevice.UpdateAt = DateTime.Now;
+                //checkInfoDevice.UpdateAt = createInfoDeviceDto.UpdateAt;
 
                 var existingApplications = await _appContext.DeviceInstalledApps.Where(a => a.DeviceId == id).ToListAsync();
                 _appContext.DeviceInstalledApps.RemoveRange(existingApplications);
@@ -148,7 +144,7 @@ namespace BE.Services.InfoDeviceServices
                         DeviceId = id,
                         ApplicationName = app.ApplicationName,
                         ApplicationLocation = app.ApplicationLocation,
-                        UpdateAt = DateTime.Now
+                        UpdateAt = checkInfoDevice.UpdateAt
                     });
                     await _appContext.DeviceInstalledApps.AddRangeAsync(appsToBeAdded);
                 }
@@ -182,7 +178,7 @@ namespace BE.Services.InfoDeviceServices
                     return new BaseResponse<AppInDevice>(success, message, data);
                 }
                 _mapper.Map(createInfoDeviceDto, checkInfoDevice);
-                checkInfoDevice.UpdateAt = DateTime.Now;
+                //checkInfoDevice.UpdateAt = createInfoDeviceDto.UpdateAt;
                 var existingApplications = await _appContext.DeviceInstalledApps.Where(a => a.DeviceId == checkInfoDevice.DeviceId).ToListAsync();
                 _appContext.DeviceInstalledApps.RemoveRange(existingApplications);
                 existingApplications.Clear();
@@ -193,8 +189,8 @@ namespace BE.Services.InfoDeviceServices
                         DeviceId = checkInfoDevice.DeviceId,
                         ApplicationName = app.ApplicationName,
                         ApplicationLocation = app.ApplicationLocation,
-                        UpdateAt = DateTime.Now
-                    });
+                        UpdateAt = checkInfoDevice.UpdateAt
+                });
                     await _appContext.DeviceInstalledApps.AddRangeAsync(appsToBeAdded);
                 }
 

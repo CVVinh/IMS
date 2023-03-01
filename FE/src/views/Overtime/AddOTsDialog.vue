@@ -269,7 +269,6 @@
 
             </div>
         </div>
-
 </Dialog>
 </template>
 
@@ -422,8 +421,6 @@
         },
         methods: {
 
-            
-
             handleSubmit(isFormValid) {
                 this.submitted = true
                 if (!isFormValid) {
@@ -433,20 +430,6 @@
                 this.addData()
             },
             reloadform(){
-                this.data.type = 0
-                this.data.date = ''
-                this.data.start = null
-                this.data.end =null
-                this.data.realTime=null
-                this.data.status = 0
-                this.data.description = null
-                this.data.leadCreate = ''
-                this.data.dateCreate = ''
-                this.data.updateUser = ''
-                this.data.dateUpdate = ''
-                this.data.note = ''
-                this.data.user = null
-                this.data.idProject = null
                 this.data = {
                     type: 0,
                     date: '',
@@ -463,6 +446,7 @@
                     user: null,
                     idProject: null,
                 }
+
             },
 
             addData() {
@@ -522,29 +506,27 @@
                 this.$toast.add({ severity: 'warn', summary: 'Warn Message', detail: err, life: 3000 })
             },
             checkday() {
-                if (this.data.date <= new Date(new Date().toLocaleDateString('en-EU'))) {
-                    this.valid = false
-                    return false
-                } else {
                     this.valid = true
                     return true
-                }
+                
             },
-            getUserByProject(projectid) {
-                HTTP.get('Project/UserInProject/' + projectid)
+            getUserByProject(projectid) {   
+                if(projectid !== null){
+                    HTTP.get('Project/UserInProject/' + projectid)
                     .then((res) => {
+                        console.log(res.data);
                         this.userDropdown = res.data
                     })
                     .catch((err) => console.log(err))
+                }
+                
             },
             async closeForm(){
                 this.reloadform();
-                this.$emit('close')
-                console.log('heelo');
-                
+                this.$emit('close')          
             },
             getData(){
-                if (this.idproject !== null) {
+                if(this.idproject !== null) {
                 this.edit = true
                 HTTP.get('OTs/getOTByID/' + this.idproject).then((res) => {
                     if (res.status == 200) {
@@ -565,7 +547,7 @@
                   router.push('/ots')
             } 
             // Kiểm tra cái này phải là edit hay không
-            if (this.idproject !== null) {
+            if (this.idproject !== null || this.idproject !== 0) {
                 this.edit = true
                 HTTP.get('OTs/getOTByID/' + this.idproject).then((res) => {
                     if (res.status == 200) {
@@ -592,10 +574,12 @@
         },
         watch: {
             // GET User By ID Project when change Id Data.IDProject
-            'data.idProject': function (newId, oldId) {
-                if(this.data.user !== null)
-                this.getUserByProject(newId)
+            'data.idProject': function (newId, oldId) {        
+                if(newId !== null || oldId !== null){
+                    this.getUserByProject(newId)
+                }
             },
+       
         },
 
         components: { LayoutDefault },

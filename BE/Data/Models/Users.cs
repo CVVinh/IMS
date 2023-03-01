@@ -42,7 +42,7 @@ namespace BE.Data.Models
 		[NotMapped]
 		public string FullName
 		{
-			get { return $"{firstName} {lastName}"; }
+			get { return $"{lastName} {firstName}"; }
 		}
     }
 }

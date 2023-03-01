@@ -6,36 +6,37 @@
         :maximizable="true"
         :dismissableMask="true"
         :show="resetForm()"
+        :breakpoints="{'960px': '75vw', '640px': '100vw'}" 
+        :style="{width: '50vw'}"
     >
-        <div>
-            <Toast position="top-right" />
-        </div>
+        <Toast position="top-right" />
 
         <template #header>
-            <div class="flex justify-content-center container">
-                <div class="p-fluid">
-                    <div class="row">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
                         <h3>{{ title }}</h3>
                     </div>
-                    <div class="row">
-                        <div class="col-4">Ngày tạo: {{ dateCreated }}</div>
-                        <div class="col-4">Ngày áp dụng : {{ applyDay }}</div>
-                        <div class="col-4">Ngày hết hạn : {{ expiredDay }}</div>
-                    </div>
                 </div>
+                
             </div>
         </template>
 
-        <div class="form-demo">
-            <div class="flex justify-content-center container">
-                <div class="p-fluid form-detailtrule">
+        <div class="container detail_content">
+            <div class="row detail_content_box">
+                <div class="col-4"><b><i class="pi pi-calendar-plus"></i> Ngày tạo:</b> {{ dateCreated }}</div>
+                <div class="col-4"><b><i class="pi pi-calendar-minus"></i> Ngày áp dụng:</b> {{ applyDay }}</div>
+                <div class="col-4"><b><i class="pi pi-calendar-times"></i> Ngày hết hạn:</b> {{ expiredDay }}</div>
+            </div>
+            <div class="row detail_content_box">
+                <div class="col">
                     <p v-html="content"></p>
                 </div>
             </div>
         </div>
 
         <template #footer>
-            <Button label="Hủy" icon="pi pi-times" class="p-button-secondary" @click="$emit('closeDetailt')" />
+            <Button label="Hủy" icon="pi pi-times" class="p-button-secondary" @click="$emit('closeDetailt')" autofocus/>
         </template>
     </Dialog>
 </template>
@@ -99,12 +100,20 @@
         margin-top: 2rem;
     }
 
-    .input {
-        width: 100%;
+    .detail_content {
+        // display: flex;
+        // justify-content: space-between;
+        padding: 20px 40px 10px 40px;
+        border-radius: 15px;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
     }
 
-    .form-detailtrule {
-        width: 100%;
-        height: 100%;
+    .detail_content_box {
+        display: flex;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 18px;
+        box-shadow: rgba(6, 24, 44, 0.5) 0px 0px 5px 2px ;
     }
+
 </style>

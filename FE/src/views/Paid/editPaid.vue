@@ -80,7 +80,7 @@
                         >Mức chi<span style="color: red">*</span></label
                     >
 
-                    <InputNumber v-model="v$.Datasend.amountPaid.$model" :min="0" suffix=" VND" mode="decimal" />
+                    <InputNumber v-model="v$.Datasend.amountPaid.$model" :min=0 mode="decimal" />
                     <small class="p-error" v-if="v$.Datasend.amountPaid.required.$invalid && isSubmit">{{
                         v$.Datasend.amountPaid.required.$message.replace('Value', 'Amount Paid')
                     }}</small>
@@ -100,7 +100,7 @@
             />
         </div>
 
-        <div class="flex justify-content-center container">
+        <div class="flex justify-content-center container mt-3">
             <h6>Thêm ảnh</h6>
             <div class="input_file">
                 <input type="file" multiple @change="onFileChange($event)" ref="fileupload" accept="image/*"/>
@@ -217,7 +217,7 @@
             },
             
             async CallApi(fromData) {
-                const res = await HTTP_LOCAL.put(`Paid/${this.Datasend.id}`, fromData).then((res) => {
+                const res = await HTTP.put(`Paid/${this.Datasend.id}`, fromData).then((res) => {
                     if(res.status == 200){
                         this.clearform();                
                         this.showSuccess2('Cập nhật thành công!');
@@ -233,7 +233,7 @@
             },
 
             async CallApiDeleteImg(arrImg){
-                await HTTP_LOCAL.post(`Paid/multi-image/${this.Datasend.id}`, arrImg).then((res) => {
+                await HTTP.post(`Paid/multi-image/${this.Datasend.id}`, arrImg).then((res) => {
                     if(res.status == 200){                       
                         this.showSuccess2('Xoá ảnh thành công!');
                     }

@@ -260,7 +260,7 @@ namespace BE.Controllers
             else
             {
 
-                // Admin
+                // Admin PM
                 if (idrole == 1 || idrole == 5)
                 {
                     if (month != 0 && year != 0 && idproject != 0)
@@ -721,7 +721,468 @@ namespace BE.Controllers
                         return Ok("Excel\\OTs_Table.xlsx");
                     }
                 }
-                
+                // Lead
+                if (idrole == 3)
+                {
+                    if (month != 0 && year != 0 && idproject != 0)
+                    {
+                        var list = from x in _context.OTs
+                                   join c in _context.Projects on x.idProject equals c.Id
+                                   join f in _context.Users on x.leadCreate equals f.id
+                                   join q in _context.Users on x.updateUser equals q.id
+                                   join d in _context.Users on x.user equals d.id
+                                   where (x.idProject == idproject && x.Date.Month == month && x.Date.Year == year && c.Leader == iduser)
+                                   select new
+                                   {
+                                       id = x.id,
+                                       type = x.type,
+                                       Date = x.Date,
+                                       start = x.start,
+                                       end = x.end,
+                                       realTime = x.realTime,
+                                       status = x.status,
+                                       description = x.description,
+                                       leadCreate = f.lastName + " " + f.firstName,
+                                       dateCreate = x.dateCreate,
+                                       updateUser = q.lastName + " " + q.firstName,
+                                       dateUpdate = x.dateUpdate,
+                                       note = x.note,
+                                       user = d.lastName + " " + d.firstName,
+                                       idProject = c.Name,
+                                   };
+
+
+                        if (list == null)
+                            return NoContent();
+                        // get column name for header
+                        var columns_name = typeof(ExportOT).GetProperties()
+                                    .Select(property => property.Name)
+                                    .ToArray();
+                        // table header
+                        for (int idx = 0; idx < columns_name.Length; idx++)
+                        {
+                            var cell = ws.Cell(1, idx + 1);
+                            cell.Value = columns_name[idx];
+                        }
+                        // table data
+                        ws.Cells("A2").Value = list;
+                        // Apply style to excel
+                        for (int idx = 0; idx < columns_name.Length; idx++)
+                        {
+                            var col = ws.Column(idx + 1);
+                            col.AdjustToContents();
+                        }
+                        // border for table
+                        IXLRange data_range = ws.Range(ws.Cell(1, 1).Address, ws.Cell(list.Count() + 1, columns_name.Length).Address);
+                        data_range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        data_range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                        // save file to excel folder
+                        wb.SaveAs("..\\FE\\Excel\\OTs_Table.xlsx");
+                        return Ok("Excel\\OTs_Table.xlsx");
+
+                    }
+
+                    if (idproject == 0 && month == 0)
+                    {
+                        var list = from x in _context.OTs
+                                   join c in _context.Projects on x.idProject equals c.Id
+                                   join f in _context.Users on x.leadCreate equals f.id
+                                   join q in _context.Users on x.updateUser equals q.id
+                                   join d in _context.Users on x.user equals d.id
+                                   where  c.Leader == iduser
+                                   select new
+                                   {
+                                       id = x.id,
+                                       type = x.type,
+                                       Date = x.Date,
+                                       start = x.start,
+                                       end = x.end,
+                                       realTime = x.realTime,
+                                       status = x.status,
+                                       description = x.description,
+                                       leadCreate = f.lastName + " " + f.firstName,
+                                       dateCreate = x.dateCreate,
+                                       updateUser = q.lastName + " " + q.firstName,
+                                       dateUpdate = x.dateUpdate,
+                                       note = x.note,
+                                       user = d.lastName + " " + d.firstName,
+                                       idProject = c.Name,
+                                   };
+
+
+                        if (list == null)
+                            return NoContent();
+                        // get column name for header
+                        var columns_name = typeof(ExportOT).GetProperties()
+                                    .Select(property => property.Name)
+                                    .ToArray();
+                        // table header
+                        for (int idx = 0; idx < columns_name.Length; idx++)
+                        {
+                            var cell = ws.Cell(1, idx + 1);
+                            cell.Value = columns_name[idx];
+                        }
+                        // table data
+                        ws.Cells("A2").Value = list;
+                        // Apply style to excel
+                        for (int idx = 0; idx < columns_name.Length; idx++)
+                        {
+                            var col = ws.Column(idx + 1);
+                            col.AdjustToContents();
+                        }
+                        // border for table
+                        IXLRange data_range = ws.Range(ws.Cell(1, 1).Address, ws.Cell(list.Count() + 1, columns_name.Length).Address);
+                        data_range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        data_range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                        // save file to excel folder
+                        wb.SaveAs("..\\FE\\Excel\\OTs_Table.xlsx");
+                        return Ok("Excel\\OTs_Table.xlsx");
+                    }
+
+                    if (idproject == 0)
+                    {
+                        var list = from x in _context.OTs
+                                   join c in _context.Projects on x.idProject equals c.Id
+                                   join f in _context.Users on x.leadCreate equals f.id
+                                   join q in _context.Users on x.updateUser equals q.id
+                                   join d in _context.Users on x.user equals d.id
+                                   where (x.Date.Month == month && x.Date.Year == year && c.Leader == iduser)
+                                   select new
+                                   {
+                                       id = x.id,
+                                       type = x.type,
+                                       Date = x.Date,
+                                       start = x.start,
+                                       end = x.end,
+                                       realTime = x.realTime,
+                                       status = x.status,
+                                       description = x.description,
+                                       leadCreate = f.lastName + " " + f.firstName,
+                                       dateCreate = x.dateCreate,
+                                       updateUser = q.lastName + " " + q.firstName,
+                                       dateUpdate = x.dateUpdate,
+                                       note = x.note,
+                                       user = d.lastName + " " + d.firstName,
+                                       idProject = c.Name,
+                                   };
+                        if (list == null)
+                            return NoContent();
+                        // get column name for header
+                        var columns_name = typeof(ExportOT).GetProperties()
+                                    .Select(property => property.Name)
+                                    .ToArray();
+                        // table header
+                        for (int idx = 0; idx < columns_name.Length; idx++)
+                        {
+                            var cell = ws.Cell(1, idx + 1);
+                            cell.Value = columns_name[idx];
+                        }
+                        // table data
+                        ws.Cells("A2").Value = list;
+                        // Apply style to excel
+                        for (int idx = 0; idx < columns_name.Length; idx++)
+                        {
+                            var col = ws.Column(idx + 1);
+                            col.AdjustToContents();
+                        }
+                        // border for table
+                        IXLRange data_range = ws.Range(ws.Cell(1, 1).Address, ws.Cell(list.Count() + 1, columns_name.Length).Address);
+                        data_range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        data_range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                        // save file to excel folder
+                        wb.SaveAs("..\\FE\\Excel\\OTs_Table.xlsx");
+                        return Ok("Excel\\OTs_Table.xlsx");
+                    }
+
+
+
+                    if (month == 0)
+                    {
+                        var list = from x in _context.OTs
+                                   join c in _context.Projects on x.idProject equals c.Id
+                                   join f in _context.Users on x.leadCreate equals f.id
+                                   join q in _context.Users on x.updateUser equals q.id
+                                   join d in _context.Users on x.user equals d.id
+                                   where (x.idProject == idproject && c.Leader == iduser)
+                                   select new
+                                   {
+                                       id = x.id,
+                                       type = x.type,
+                                       Date = x.Date,
+                                       start = x.start,
+                                       end = x.end,
+                                       realTime = x.realTime,
+                                       status = x.status,
+                                       description = x.description,
+                                       leadCreate = f.lastName + " " + f.firstName,
+                                       dateCreate = x.dateCreate,
+                                       updateUser = q.lastName + " " + q.firstName,
+                                       dateUpdate = x.dateUpdate,
+                                       note = x.note,
+                                       user = d.lastName + " " + d.firstName,
+                                       idProject = c.Name,
+                                   };
+
+                        if (list == null)
+                            return NoContent();
+                        // get column name for header
+                        var columns_name = typeof(ExportOT).GetProperties()
+                                    .Select(property => property.Name)
+                                    .ToArray();
+                        // table header
+                        for (int idx = 0; idx < columns_name.Length; idx++)
+                        {
+                            var cell = ws.Cell(1, idx + 1);
+                            cell.Value = columns_name[idx];
+                        }
+                        // table data
+                        ws.Cells("A2").Value = list;
+                        // Apply style to excel
+                        for (int idx = 0; idx < columns_name.Length; idx++)
+                        {
+                            var col = ws.Column(idx + 1);
+                            col.AdjustToContents();
+                        }
+                        // border for table
+                        IXLRange data_range = ws.Range(ws.Cell(1, 1).Address, ws.Cell(list.Count() + 1, columns_name.Length).Address);
+                        data_range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        data_range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                        // save file to excel folder
+                        wb.SaveAs("..\\FE\\Excel\\OTs_Table.xlsx");
+                        return Ok("Excel\\OTs_Table.xlsx");
+                    }
+                }
+                //STAFF
+                if (idrole == 4)
+                {
+                    if (month != 0 && year != 0 && idproject != 0)
+                    {
+                        var list = from x in _context.OTs
+                                   join c in _context.Projects on x.idProject equals c.Id
+                                   join f in _context.Users on x.leadCreate equals f.id
+                                   join q in _context.Users on x.updateUser equals q.id
+                                   join d in _context.Users on x.user equals d.id
+                                   where (x.idProject == idproject && x.Date.Month == month && x.Date.Year == year && x.user == iduser)
+                                   select new
+                                   {
+                                       id = x.id,
+                                       type = x.type,
+                                       Date = x.Date,
+                                       start = x.start,
+                                       end = x.end,
+                                       realTime = x.realTime,
+                                       status = x.status,
+                                       description = x.description,
+                                       leadCreate = f.lastName + " " + f.firstName,
+                                       dateCreate = x.dateCreate,
+                                       updateUser = q.lastName + " " + q.firstName,
+                                       dateUpdate = x.dateUpdate,
+                                       note = x.note,
+                                       user = d.lastName + " " + d.firstName,
+                                       idProject = c.Name,
+                                   };
+
+
+                        if (list == null)
+                            return NoContent();
+                        // get column name for header
+                        var columns_name = typeof(ExportOT).GetProperties()
+                                    .Select(property => property.Name)
+                                    .ToArray();
+                        // table header
+                        for (int idx = 0; idx < columns_name.Length; idx++)
+                        {
+                            var cell = ws.Cell(1, idx + 1);
+                            cell.Value = columns_name[idx];
+                        }
+                        // table data
+                        ws.Cells("A2").Value = list;
+                        // Apply style to excel
+                        for (int idx = 0; idx < columns_name.Length; idx++)
+                        {
+                            var col = ws.Column(idx + 1);
+                            col.AdjustToContents();
+                        }
+                        // border for table
+                        IXLRange data_range = ws.Range(ws.Cell(1, 1).Address, ws.Cell(list.Count() + 1, columns_name.Length).Address);
+                        data_range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        data_range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                        // save file to excel folder
+                        wb.SaveAs("..\\FE\\Excel\\OTs_Table.xlsx");
+                        return Ok("Excel\\OTs_Table.xlsx");
+
+                    }
+
+                    if (idproject == 0 && month == 0)
+                    {
+                        var list = from x in _context.OTs
+                                   join c in _context.Projects on x.idProject equals c.Id
+                                   join f in _context.Users on x.leadCreate equals f.id
+                                   join q in _context.Users on x.updateUser equals q.id
+                                   join d in _context.Users on x.user equals d.id
+                                   where x.user == iduser
+                                   select new
+                                   {
+                                       id = x.id,
+                                       type = x.type,
+                                       Date = x.Date,
+                                       start = x.start,
+                                       end = x.end,
+                                       realTime = x.realTime,
+                                       status = x.status,
+                                       description = x.description,
+                                       leadCreate = f.lastName + " " + f.firstName,
+                                       dateCreate = x.dateCreate,
+                                       updateUser = q.lastName + " " + q.firstName,
+                                       dateUpdate = x.dateUpdate,
+                                       note = x.note,
+                                       user = d.lastName + " " + d.firstName,
+                                       idProject = c.Name,
+                                   };
+
+
+                        if (list == null)
+                            return NoContent();
+                        // get column name for header
+                        var columns_name = typeof(ExportOT).GetProperties()
+                                    .Select(property => property.Name)
+                                    .ToArray();
+                        // table header
+                        for (int idx = 0; idx < columns_name.Length; idx++)
+                        {
+                            var cell = ws.Cell(1, idx + 1);
+                            cell.Value = columns_name[idx];
+                        }
+                        // table data
+                        ws.Cells("A2").Value = list;
+                        // Apply style to excel
+                        for (int idx = 0; idx < columns_name.Length; idx++)
+                        {
+                            var col = ws.Column(idx + 1);
+                            col.AdjustToContents();
+                        }
+                        // border for table
+                        IXLRange data_range = ws.Range(ws.Cell(1, 1).Address, ws.Cell(list.Count() + 1, columns_name.Length).Address);
+                        data_range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        data_range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                        // save file to excel folder
+                        wb.SaveAs("..\\FE\\Excel\\OTs_Table.xlsx");
+                        return Ok("Excel\\OTs_Table.xlsx");
+                    }
+
+                    if (idproject == 0)
+                    {
+                        var list = from x in _context.OTs
+                                   join c in _context.Projects on x.idProject equals c.Id
+                                   join f in _context.Users on x.leadCreate equals f.id
+                                   join q in _context.Users on x.updateUser equals q.id
+                                   join d in _context.Users on x.user equals d.id
+                                   where (x.Date.Month == month && x.Date.Year == year && x.user == iduser)
+                                   select new
+                                   {
+                                       id = x.id,
+                                       type = x.type,
+                                       Date = x.Date,
+                                       start = x.start,
+                                       end = x.end,
+                                       realTime = x.realTime,
+                                       status = x.status,
+                                       description = x.description,
+                                       leadCreate = f.lastName + " " + f.firstName,
+                                       dateCreate = x.dateCreate,
+                                       updateUser = q.lastName + " " + q.firstName,
+                                       dateUpdate = x.dateUpdate,
+                                       note = x.note,
+                                       user = d.lastName + " " + d.firstName,
+                                       idProject = c.Name,
+                                   };
+                        if (list == null)
+                            return NoContent();
+                        // get column name for header
+                        var columns_name = typeof(ExportOT).GetProperties()
+                                    .Select(property => property.Name)
+                                    .ToArray();
+                        // table header
+                        for (int idx = 0; idx < columns_name.Length; idx++)
+                        {
+                            var cell = ws.Cell(1, idx + 1);
+                            cell.Value = columns_name[idx];
+                        }
+                        // table data
+                        ws.Cells("A2").Value = list;
+                        // Apply style to excel
+                        for (int idx = 0; idx < columns_name.Length; idx++)
+                        {
+                            var col = ws.Column(idx + 1);
+                            col.AdjustToContents();
+                        }
+                        // border for table
+                        IXLRange data_range = ws.Range(ws.Cell(1, 1).Address, ws.Cell(list.Count() + 1, columns_name.Length).Address);
+                        data_range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        data_range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                        // save file to excel folder
+                        wb.SaveAs("..\\FE\\Excel\\OTs_Table.xlsx");
+                        return Ok("Excel\\OTs_Table.xlsx");
+                    }
+
+
+
+                    if (month == 0)
+                    {
+                        var list = from x in _context.OTs
+                                   join c in _context.Projects on x.idProject equals c.Id
+                                   join f in _context.Users on x.leadCreate equals f.id
+                                   join q in _context.Users on x.updateUser equals q.id
+                                   join d in _context.Users on x.user equals d.id
+                                   where (x.idProject == idproject && x.user == iduser)
+                                   select new
+                                   {
+                                       id = x.id,
+                                       type = x.type,
+                                       Date = x.Date,
+                                       start = x.start,
+                                       end = x.end,
+                                       realTime = x.realTime,
+                                       status = x.status,
+                                       description = x.description,
+                                       leadCreate = f.lastName + " " + f.firstName,
+                                       dateCreate = x.dateCreate,
+                                       updateUser = q.lastName + " " + q.firstName,
+                                       dateUpdate = x.dateUpdate,
+                                       note = x.note,
+                                       user = d.lastName + " " + d.firstName,
+                                       idProject = c.Name,
+                                   };
+
+                        if (list == null)
+                            return NoContent();
+                        // get column name for header
+                        var columns_name = typeof(ExportOT).GetProperties()
+                                    .Select(property => property.Name)
+                                    .ToArray();
+                        // table header
+                        for (int idx = 0; idx < columns_name.Length; idx++)
+                        {
+                            var cell = ws.Cell(1, idx + 1);
+                            cell.Value = columns_name[idx];
+                        }
+                        // table data
+                        ws.Cells("A2").Value = list;
+                        // Apply style to excel
+                        for (int idx = 0; idx < columns_name.Length; idx++)
+                        {
+                            var col = ws.Column(idx + 1);
+                            col.AdjustToContents();
+                        }
+                        // border for table
+                        IXLRange data_range = ws.Range(ws.Cell(1, 1).Address, ws.Cell(list.Count() + 1, columns_name.Length).Address);
+                        data_range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        data_range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                        // save file to excel folder
+                        wb.SaveAs("..\\FE\\Excel\\OTs_Table.xlsx");
+                        return Ok("Excel\\OTs_Table.xlsx");
+                    }
+                }
             }
 
             return BadRequest("Something went wrong !");

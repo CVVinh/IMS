@@ -283,7 +283,7 @@
 
             confirmDelete(id) {
                 this.$confirm.require({
-                    message: 'Bạn có chắc chắn muốn xóa?',
+                    message: 'Bạn có chắc chắn muốn xóa quy định này?',
                     header: 'Xóa',
                     icon: 'pi pi-exclamation-triangle',
                     acceptClass: 'p-button-danger',
