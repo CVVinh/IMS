@@ -12,7 +12,7 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "permission_group: True module: customer")]
+    //[Authorize(Roles = "permission_group: True module: customer")]
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;

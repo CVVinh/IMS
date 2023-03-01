@@ -2,8 +2,10 @@
     <LayoutDefaultDynamic>
         <ConfirmDialog></ConfirmDialog>
         <div class="mx-3 mt-3">
+            
             <DataTable
                 :value="data"
+                showGridlines 
                 :paginator="true"
                 ref="dt"
                 class="p-datatable-customers"
@@ -56,7 +58,7 @@
                             <Button
                                 label="Thêm"
                                 icon="pi pi-plus"
-                                @click="add()"
+                                @click="openFormAddEdit(null)"
                                 class="size__Button left"
                                 v-if="showButton.addButton"
                             />
@@ -200,7 +202,8 @@
                             <!-- confirm -->
                             <Edit
                                 icon="pi pi-check"
-                                @click="accept(true, data.x.id, data.x.leadCreate)"
+                                @click="openConfirm(true, data.x.id, data.x.leadCreate)"
+
                                 class="right p-button-success"
                                 v-if="showButton.confirmButton && data.x.status == 0"
                             />
@@ -213,7 +216,7 @@
                             />
                             <!-- Edit -->
                             <Edit
-                                @click="EditData(data.x.id)"
+                                @click="openFormAddEdit(data.x.id)"
                                 class="right top p-button-warning"
                                 v-if="showButton.editButton"
                             >
@@ -281,6 +284,12 @@
                 <Button label="Lưu" icon="pi pi-check" @click="onSubmit(data.leadCreate)" autofocus />
             </template>
         </Dialog>
+        <AddOTsDialog
+            :display="this.displayFormAddEdit"
+            @close ="closeFormAddEdit"
+            @reloadData="getOTsByLead(this.token.Id)"
+            :idproject = "idproject"
+        />
         <DetailOT
             :show="DetailOT"
             @open="OpenDetailOT"
@@ -294,7 +303,8 @@
             :lead="lead"
             @OpenFormRefuse="OpenFormRefuse"
         />
-        {{ this.selectedColumns }}
+        
+
     </LayoutDefaultDynamic>
 </template>
 
@@ -312,6 +322,7 @@
     import DetailOT from './DetailOT.vue'
     import { cloneVNode } from '@vue/runtime-core'
     import storeRole from '@/stores/role'
+    import AddOTsDialog from './AddOTsDialog.vue'
     export default {
         name: 'ots',
         data() {
@@ -368,12 +379,16 @@
                     ExportButton: false,
                 },
                 loading: true,
+                displayFormAddEdit:false,
+                idproject:null,
             }
         },
         async mounted() {
             try {
                 this.token = LocalStorage.jwtDecodeToken()
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
+                console.log(UserRoleHelper.isAccess);
+             
                 if (await UserRoleHelper.isAccess) {
                     HTTP.get('Project/getAllProject')
                         .then((res) => {
@@ -418,7 +433,6 @@
             },
             // GET OTS BY ROLE LEAD
             getOTsByLead(idLEAD) {
-                console.log('lead')
                 console.log(this.token.Id);
                 HTTP.get(`OTs/GetAllOTsByLead/${idLEAD}`)
                     .then((res) => {
@@ -750,7 +764,6 @@
                     idProject = this.selectedProject.code
                 }
 
-                console.log(idProject);
 
                 var stringGetAPI = `OTs/filterByRole/${month}/${year}/${idProject}/${this.token.IdGroup}/?iduser=${this.token.Id}`
                 HTTP.get(stringGetAPI).then(res=>{
@@ -786,8 +799,40 @@
             OpenFormRefuse() {
                 this.displayDialog2 = true
             },
+
+            openFormAddEdit(value){
+                this.displayFormAddEdit = true
+                this.idproject = value
+            },
+
+            closeFormAddEdit(){
+                this.displayFormAddEdit = false
+                this.idproject =0
+            },
+
+            openConfirm(accepted, id, lead){
+                this.$confirm.require({
+                message: 'Bạn có chắc chắn xác nhận duyệt tăng ca này',
+                header: 'Duyệt tăng ca',
+                icon: 'pi pi-exclamation-triangle',
+                acceptClass: 'p-button-success',
+                accept: () => {
+                    this.accept(accepted, id, lead)
+                },
+                reject: () => {
+                    
+                },
+                onShow: () => {
+                    //callback to execute when dialog is shown
+                },
+                onHide: () => {
+                    //callback to execute when dialog is hidden
+                }
+            });
+            },
+
         },
-        components: { Edit, Delete, Export, DetailOT },
+        components: { Edit, Delete, Export, DetailOT,AddOTsDialog },
     }
 </script>
 

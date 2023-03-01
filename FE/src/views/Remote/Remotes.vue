@@ -3,6 +3,7 @@
         <div class="mx-3 mt-3">
             <DataTable
                 :value="data"
+                showGridlines 
                 :paginator="true"
                 ref="dt"
                 class="p-datatable-customers"

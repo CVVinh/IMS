@@ -21,7 +21,7 @@
                 <div class="detail__content-box detail__content-box-top">
                     <div class="detail__content-box-items" >
                         <div class="detail__content-box-items-text">
-                            <b><i class="pi pi-users p-button-icon"></i> Khách hàng:</b> {{ this.Datasend.customerFullName }} 
+                            <b><i class="pi pi-users p-button-icon"></i> Khách hàng:</b> {{ this.Datasend.customerFullName }}  
                         </div>
                     </div>
 
@@ -57,11 +57,11 @@
 
             <div class="detail__content-box box-right ">
                 <div v-if="Datasend.paidImages.length > 0" >
-                    <Galleria :value="dataImgDetail" :responsiveOptions="responsiveOptions" :numVisible="5" :circular="true" :showItemNavigators="true" :showItemNavigatorsOnHover="true" >
+                    <Galleria :value="dataImgDetail" :responsiveOptions="responsiveOptions" :numVisible="3" :circular="true" :showItemNavigators="true" :showItemNavigatorsOnHover="true" :showIndicators="true" :showIndicatorsOnItem="true" >
                         <template #item="slotProps">
-                            <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%" />
+                            <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%; display: block;"/>
                         </template>
-                        <template #thumbnail="slotProps">
+                        <template #thumbnail="slotProps" >
                             <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" style="display: block;"/>
                         </template>
                     </Galleria>
@@ -111,15 +111,19 @@
                 responsiveOptions: [
                     {
                         breakpoint: '1024px',
-                        numVisible: 8
-                    },
-                    {
-                        breakpoint: '768px',
                         numVisible: 5
                     },
                     {
-                        breakpoint: '560px',
+                        breakpoint: '960px',
+                        numVisible: 4
+                    },
+                    {
+                        breakpoint: '768px',
                         numVisible: 3
+                    },
+                    {
+                        breakpoint: '560px',
+                        numVisible: 1
                     }
                 ]
             }

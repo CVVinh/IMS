@@ -5,6 +5,7 @@
             <DataTable
                 :value="data"
                 :sort="1"
+                showGridlines 
                 :paginator="true"
                 ref="dt"
                 class="p-datatable-customers"

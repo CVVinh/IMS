@@ -86,6 +86,18 @@
             </div>
             
             <div class="flex justify-content-center container">
+                <label for="note">Nội dung lý do</label>
+                <Textarea
+                    id="note"
+                    v-model="Datasend.contentReason"
+                    :autoResize="true"
+                    rows="5"
+                    cols="30"
+                    style="width: 100%"
+                />
+            </div>
+
+            <div class="flex justify-content-center container">
                 <h6>Thêm ảnh</h6>
                 <div class="input_file">
                     <input type="file" multiple @change="onFileChange($event)" ref="fileupload" accept="image/*"/>
@@ -132,6 +144,7 @@
                     amountPaid: null,
                     paidReason: '',
                     paidPerson: '',
+                    contentReason: '',
                     isPaid: false,
                     paidDate: null,
                     paidImage: [],
@@ -170,6 +183,7 @@
                 this.Datasend.customerName = '';
                 this.Datasend.amountPaid = null;
                 this.Datasend.paidReason = '';
+                this.Datasend.contentReason = '';
                 this.isSubmit = false;
                 this.paidImage = [];
             },
@@ -259,12 +273,13 @@
                 var token = localStorage.getItem('token')
                 this.currentUser = jwt_decode(token)
 
-                const formData = new FormData()
-                formData.append('PaidPerson', this.currentUser.Id)
-                formData.append('ProjectId', this.Datasend.projectId)
-                formData.append('CustomerName', this.Datasend.customerName)
-                formData.append('AmountPaid', this.Datasend.amountPaid)
-                formData.append('PaidReason', this.Datasend.paidReason)
+                const formData = new FormData();
+                formData.append('PaidPerson', this.currentUser.Id);
+                formData.append('ProjectId', this.Datasend.projectId);
+                formData.append('CustomerName', this.Datasend.customerName);
+                formData.append('AmountPaid', this.Datasend.amountPaid);
+                formData.append('PaidReason', this.Datasend.paidReason);
+                formData.append('ContentReason', this.Datasend.contentReason);
                 
                 this.images.forEach((item) => {
                     formData.append('paidImage', item)

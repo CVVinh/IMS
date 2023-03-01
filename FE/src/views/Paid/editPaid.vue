@@ -89,6 +89,18 @@
         </div>
 
         <div class="flex justify-content-center container">
+            <label for="note">Nội dung lý do</label>
+            <Textarea
+                id="note"
+                v-model="Datasend.contentReason"
+                :autoResize="true"
+                rows="5"
+                cols="30"
+                style="width: 100%"
+            />
+        </div>
+
+        <div class="flex justify-content-center container">
             <h6>Thêm ảnh</h6>
             <div class="input_file">
                 <input type="file" multiple @change="onFileChange($event)" ref="fileupload" accept="image/*"/>
@@ -154,6 +166,7 @@
                     customerName: '',
                     amountPaid: null,
                     paidReason: '',
+                    contentReason: '',
                     paidPerson: 0,
                     isPaid: false,
                     paidDate: null,

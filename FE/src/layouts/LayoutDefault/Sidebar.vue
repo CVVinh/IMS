@@ -204,7 +204,22 @@
                 </div>
                 <div class="collapse" id="settings-collapse">
                     <ul class="dropdownList btn-toggle-nav list-unstyled">
-                        <li class="list-group-item-action">
+                        <li class="list-group-item-action"
+                        v-if="this.token !== null ? Number(this.token.IdGroup) === 1 ? true : false : false"
+                        >
+                            <router-link
+                                :to="{ name: 'groupsSubs', params: {} }"
+                                class="py-2 ripple dropdown-item"
+                                @click="activeTag = 'tag3'"
+                                :class="{ 'active-nav-item': activeTag === 'tag3' }"
+                            >
+                                <i class="bx bxs-group"></i>
+                                <span>Nhóm quyền</span>
+                            </router-link>
+                        </li>
+                        <li class="list-group-item-action"
+                        v-if="this.token !== null ? Number(this.token.IdGroup) === 1 ? true : false : false"
+                        >
                             <router-link
                                 :to="{ name: 'menu', params: {} }"
                                 class="py-2 ripple dropdown-item"
@@ -216,7 +231,10 @@
                                 <span>Menu</span>
                             </router-link>
                         </li>
-                        <li class="list-group-item-action">
+
+                        <li class="list-group-item-action"
+                        v-if="this.token !== null ? Number(this.token.IdGroup) === 1 ? true : false : false"
+                        >
                             <router-link
                                 :to="{ name: 'modulesSub', params: {} }"
                                 class="py-2 ripple dropdown-item"

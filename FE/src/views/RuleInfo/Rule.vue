@@ -5,6 +5,7 @@
         <div class="mx-3 mt-3">
             <DataTable
                 ref="tableRule"
+                showGridlines 
                 class="p-datatable-customers"
                 :value="listRule"
                 :sort="1"

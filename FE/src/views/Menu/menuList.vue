@@ -21,6 +21,7 @@
                 :rowHover="true"
                 :rows="10"
                 :paginator="true"
+                showGridlines 
                 v-model:filters="filters"
             >
                 <template #header>
