@@ -26,7 +26,9 @@ namespace BE.Services.PaidServices
         Task<BaseResponse<List<Paid>>> SearchPaidByDay(SearchDayPaidDtos searchDayPaidDtos);
         Task<BaseResponse<Paid>> AccepterPayment(int idPaid, AcceptPaymentPaidDtos acceptPaymentPaidDtos);
 
+
         Task<BaseResponse<List<Object>>> GetAllAsync1();
+        Task<BaseResponse<Object>> GetPaidWithId1(int Id);
     }
     public class PaidService : IPaidServices
     {
@@ -65,52 +67,45 @@ namespace BE.Services.PaidServices
             var data = new List<Object>();
             try
             {
-                var getPaids = (from p in _appContext.Paids
-                            join up in _appContext.Users on p.PaidPerson equals up.id
-                            //join uc in _appContext.Users on p.PersonConfirm equals uc.id
-                            join pj in _appContext.Projects on p.ProjectId equals pj.Id
-                            join cs in _appContext.Customers on Convert.ToInt32(p.CustomerName) equals cs.id
-                            join pr in _appContext.PaidReasons on Convert.ToInt32(p.PaidReason) equals pr.id
-                            select new
-                            {
-                                id = p.Id,
-                                paidPerson = p.PaidPerson,
-                                paidReasonName = pr.name,
+                var getPaids = await (from p in _appContext.Paids
+                                join up in _appContext.Users on p.PaidPerson equals up.id
+                                join cs in _appContext.Customers on Convert.ToInt32(p.CustomerName) equals cs.id
+                                join pr in _appContext.PaidReasons on Convert.ToInt32(p.PaidReason) equals pr.id 
+                                join pj in _appContext.Projects on p.ProjectId equals pj.Id into pj1
+                                from pj in pj1.DefaultIfEmpty()
+                                join uc in _appContext.Users on p.PersonConfirm equals uc.id into uc1
+                                from uc in uc1.DefaultIfEmpty()
+                                select new
+                                {
+                                    id = p.Id,
+                                    paidPerson = p.PaidPerson,
+                                    paidReasonName = pr.name,
 
-                                personConfirm = Convert.ToInt32(p.PersonConfirm),
-                                //personConfirmName = uc.FullName,
+                                    personConfirm = Convert.ToInt32(p.PersonConfirm),
+                                    personConfirmName = uc != null ? uc.FullName : "",
 
-                                paidDate = p.PaidDate,
+                                    paidDate = p.PaidDate != DateTime.MinValue ? p.PaidDate.ToString("MM/dd/yyyy") : null,
 
-                                projectId = p.ProjectId,
-                                nameProject = pj.Name,
-                                isDelPro = pj.IsDeleted,
+                                    projectId = p.ProjectId,
+                                    nameProject = pj != null ? pj.Name : "",
+                                    isDelPro = pj != null ? pj.IsDeleted : false,
 
-                                customerName = Convert.ToInt32(p.CustomerName),
-                                customerFullName = cs.fullName,
+                                    customerName = Convert.ToInt32(p.CustomerName),
+                                    customerFullName = cs.fullName,
 
-                                amountPaid = p.AmountPaid,
+                                    amountPaid = p.AmountPaid,
 
-                                paidReason = Convert.ToInt32(p.PaidReason),
-                                paidPersonName = up.FullName,
+                                    paidReason = Convert.ToInt32(p.PaidReason),
+                                    paidPersonName = up.FullName,
 
-                                contentReason = p.ContentReason,
-                                isPaid = p.IsPaid,
-                                paidImages = p.paidImages,
-                            })
-                            .ToListAsync();
-
-                var getAddComfirmUser = await (from gp in getPaids
-                                        join uc in _appContext.Users on gp.personConfirm equals uc.id
-                                        select new {
-                                            personConfirmName = uc.FullName,
-                                            gp,
-                                        }).ToListAsync();
-
+                                    contentReason = p.ContentReason,
+                                    isPaid = p.IsPaid,
+                                    paidImages = p.paidImages,
+                                }).ToListAsync();
 
                 success = true;
                 message = "Get all data successfully";
-                data.AddRange(getAddComfirmUser);
+                data.AddRange(getPaids);
                 return (new BaseResponse<List<Object>>(success, message, data));
             }
             catch (Exception ex)
@@ -118,6 +113,63 @@ namespace BE.Services.PaidServices
                 success = true;
                 message = ex.Message;
                 return (new BaseResponse<List<Object>>(success, message, data));
+            }
+        }
+
+        public async Task<BaseResponse<Object>> GetPaidWithId1(int Id)
+        {
+            var success = false;
+            var message = "";
+            var data = new List<Object>();
+            try
+            {
+                var getPaids = await (from p in _appContext.Paids
+                                      join up in _appContext.Users on p.PaidPerson equals up.id
+                                      join cs in _appContext.Customers on Convert.ToInt32(p.CustomerName) equals cs.id
+                                      join pr in _appContext.PaidReasons on Convert.ToInt32(p.PaidReason) equals pr.id
+                                      join pj in _appContext.Projects on p.ProjectId equals pj.Id into pj1
+                                      from pj in pj1.DefaultIfEmpty()
+                                      join uc in _appContext.Users on p.PersonConfirm equals uc.id into uc1
+                                      from uc in uc1.DefaultIfEmpty()
+                                      where p.Id == Id
+                                      select new
+                                      {
+                                          id = p.Id,
+                                          paidPerson = p.PaidPerson,
+                                          paidReasonName = pr.name,
+
+                                          personConfirm = Convert.ToInt32(p.PersonConfirm),
+                                          personConfirmName = uc != null ? uc.FullName : "",
+
+                                          paidDate = p.PaidDate != DateTime.MinValue ? p.PaidDate.ToString("MM/dd/yyyy") : null,
+
+                                          projectId = p.ProjectId,
+                                          nameProject = pj != null ? pj.Name : "",
+                                          isDelPro = pj != null ? pj.IsDeleted : false,
+
+                                          customerName = Convert.ToInt32(p.CustomerName),
+                                          customerFullName = cs.fullName,
+
+                                          amountPaid = p.AmountPaid,
+
+                                          paidReason = Convert.ToInt32(p.PaidReason),
+                                          paidPersonName = up.FullName,
+
+                                          contentReason = p.ContentReason,
+                                          isPaid = p.IsPaid,
+                                          paidImages = p.paidImages,
+                                      }).ToListAsync();
+
+                success = true;
+                message = "Get all data successfully";
+                data.AddRange(getPaids);
+                return (new BaseResponse<Object>(success, message, data));
+            }
+            catch (Exception ex)
+            {
+                success = true;
+                message = ex.Message;
+                return (new BaseResponse<Object>(success, message, data));
             }
         }
 

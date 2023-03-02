@@ -7,5 +7,11 @@
 			public const int MAX_LENGTH_TITLE = 300;
 			public const string TABLE_NAME = "Rules";
 		}
-	}
+        public static class Notifications
+        {
+            public const int MAX_LENGTH_TITLE = 300;
+            public const string TABLE_NAME = "Notification";
+			public const int MAX_LENGTH_MESSAGE = 500;
+        }
+    }
 }

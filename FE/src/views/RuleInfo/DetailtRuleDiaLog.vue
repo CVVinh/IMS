@@ -51,6 +51,7 @@
     import { LocalStorage } from '@/helper/local-storage.helper'
 
     export default {
+        name: 'RuleInfoDetail',
         props: ['statusopen', 'dataRuleById'],
 
         data() {
@@ -64,7 +65,6 @@
                 dateCreated: null,
                 formFile: null,
                 deleteMesg: true,
-
                 submitted: false,
             }
         },
@@ -79,8 +79,6 @@
                 this.userUpdated = this.dataRuleById ? this.dataRuleById.userCreated : this.decode.Id
                 this.formFile = this.dataRuleById ? this.dataRuleById.pathFile : null
                 this.dataRuleById ? (this.deleteMesg = true) : (this.deleteMesg = false)
-
-                //console.log("dataRuleById: "+ JSON.stringify(this.dataRuleById))
             },
         },
 

@@ -77,7 +77,7 @@
                             'p-error': v$.Datasend.amountPaid.required.$invalid && isSubmit,
                             'input-title': true,
                         }"
-                        >Mức chi<span style="color: red">*</span></label
+                        >Mức chi (VND)<span style="color: red">*</span></label
                     >
 
                     <InputNumber v-model="v$.Datasend.amountPaid.$model" :min=0 mode="decimal" />
@@ -227,7 +227,7 @@
                     }
                 })
                 .catch((error) => {
-                    this.showError2(error.response.data);
+                    //this.showError2(error.response.data);
                     console.log(error);
                 });
             },
@@ -242,7 +242,7 @@
                     }
                 })
                 .catch((error) => {
-                    this.showError2(error.response.data._Message);
+                    //this.showError2(error.response.data._Message);
                     console.log(error);
                 });
             },
@@ -257,7 +257,7 @@
                 }
                 catch (err) {
                     console.log(err);
-                    this.showError2(err.response.data);
+                    //this.showError2(err.response.data);
                 }
             },
 
@@ -265,7 +265,7 @@
                 this.token = LocalStorage.jwtDecodeToken();
                 try {
                     const formData = new FormData();
-                    formData.append('PaidPerson', this.Datasend.user.id);
+                    formData.append('PaidPerson', this.token.Id);
                     formData.append('ProjectId', this.Datasend.projectId);
                     formData.append('CustomerName', this.Datasend.customerName);
                     formData.append('AmountPaid', this.Datasend.amountPaid);

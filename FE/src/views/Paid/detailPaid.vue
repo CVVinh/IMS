@@ -154,10 +154,10 @@
 
             showResponseApi(status, message = "") {
                 switch (status) {
-                    // case 401:
-                    // case 403:
-                    //     this.showError('Bạn không có quyền thực hiện chức năng này!');
-                    //     break;
+                    case 401:
+                    case 403:
+                        //this.showError('Bạn không có quyền thực hiện chức năng này!');
+                        break;
 
                     case 404:
                         this.showError('Lỗi! Load dữ liệu!');

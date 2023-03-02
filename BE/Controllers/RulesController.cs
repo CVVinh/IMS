@@ -14,7 +14,7 @@ namespace BE.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-    [Authorize(Roles = "permission_group: True module: rule")]
+    [Authorize(Roles = "permission_group: True module: rules")]
     public class RulesController : ControllerBase
 	{
 		private readonly IRulesService _rulesService;
@@ -26,6 +26,7 @@ namespace BE.Controllers
 			_paginationService = paginationService;
 			_host = host;
 		}
+
 		/// <summary>
 		/// Get all rules
 		/// </summary>
@@ -48,6 +49,7 @@ namespace BE.Controllers
 			}
 			return BadRequest(response);
 		}
+
 		[HttpGet("GetRulesByIdUser/{id}")]
 		public async Task<IActionResult> GetRulesByIdUser([FromRoute] int id)
 		{
@@ -58,8 +60,12 @@ namespace BE.Controllers
 			}
 			return BadRequest(response);
 		}
+
 		[HttpPost]
-		public async Task<IActionResult> CreateRules([FromForm] AddOrUpdateRulesDTO createRules)
+        //[Authorize(Roles = "Listgroup: sample")]
+        [Authorize(Roles = "sample")]
+        [Authorize(Roles = "module: rules add: 1")]
+        public async Task<IActionResult> CreateRules([FromForm] AddOrUpdateRulesDTO createRules)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -73,8 +79,11 @@ namespace BE.Controllers
 			}
 			return BadRequest(response);
 		}
+
 		[HttpPut("updateRules/{id}")]
-		public async Task<IActionResult> UpdateRules([FromRoute] int id, [FromForm] AddOrUpdateRulesDTO updateRules)
+        [Authorize(Roles = "sample")]
+        [Authorize(Roles = "module: rules update: 1")]
+        public async Task<IActionResult> UpdateRules([FromRoute] int id, [FromForm] AddOrUpdateRulesDTO updateRules)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -88,7 +97,10 @@ namespace BE.Controllers
 			}
 			return BadRequest(rules);
 		}
-		[HttpPut("deleteRules/{id}")]
+
+        [HttpPut("deleteRules/{id}")]
+        [Authorize(Roles = "sample")]
+        [Authorize(Roles = "module: rules delete: 1")]
 		public async Task<IActionResult> DeleteRules([FromRoute] int id, DeleteRulesDTO userDelete)
 		{
 			var response = await _rulesService.DeleteRules(id, userDelete);
@@ -98,6 +110,7 @@ namespace BE.Controllers
 			}
 			return BadRequest(response);
 		}
+
 		[HttpGet("searchRulesByTitle/{searchTitle}")]
 		public async Task<IActionResult> FindRulesByTitleName(string searchTitle)
 		{
@@ -108,5 +121,6 @@ namespace BE.Controllers
 			}
 			return BadRequest(response);
 		}
+
 	}
 }

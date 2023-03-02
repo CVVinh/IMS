@@ -249,6 +249,40 @@
             },
         },
         methods: {
+            showError(message) {
+                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: message, life: 3000 });
+            },
+
+            showSuccess(message) {
+                this.$toast.add({ severity: 'success', summary: 'Thành công', detail: message, life: 3000 });
+            },
+
+            showInfo(message) {
+                this.$toast.add({ severity: 'info', summary: 'Thông báo', detail: message, life: 3000 });
+            },
+
+            showResponseApi(status, message = "") {
+                switch (status) {
+                    case 401:
+                    case 403:
+                        this.showError('Bạn không có quyền thực hiện chức năng này!');
+                        break;
+
+                    case 404:
+                        this.showError('Lỗi! Load dữ liệu!');
+                        break;  
+
+                    default:
+                        if(message != ""){
+                            this.showError(message);
+                        }
+                        else {
+                            this.showError("Có lỗi trong quá trình thực hiện!");
+                        }
+                        break;
+                }
+            },
+
             async handlerReload() {
                 this.keySearch = null
                 this.listRule = null
@@ -271,6 +305,10 @@
                     this.formatData()
                     this.isLoading = false
                 })
+                .catch((error) => {
+                    var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                    this.showResponseApi(error.response.status, message);
+                });
             },
 
             async GetAllRuleList() {
@@ -279,6 +317,28 @@
                     this.formatData()
                     this.isLoading = false
                 })
+                .catch((error) => {
+                    var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                    this.showResponseApi(error.response.status, message);
+                });
+            },
+
+            deleteRule(ruleID) {
+                let API_URL = 'Rules/deleteRules/' + ruleID
+                HTTP.put(API_URL, {
+                    idUser: this.token.Id,
+                })
+                    .then((res) => {
+                        if (res.status == HttpStatus.OK) {
+                            this.showSuccess('Xóa thành công!');
+                            this.listRule = []
+                            this.GetAllRuleList()
+                        }
+                    })
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
             },
 
             confirmDelete(id) {
@@ -296,115 +356,88 @@
                 })
             },
 
-            deleteRule(ruleID) {
-                let API_URL = 'Rules/deleteRules/' + ruleID
-                HTTP.put(API_URL, {
-                    idUser: this.token.Id,
-                })
-                    .then((res) => {
-                        if (res.status == HttpStatus.OK) {
-                            this.listRule = []
-                            this.GetAllRuleList()
-                            this.$toast.add({
-                                severity: 'success',
-                                summary: 'Thành công',
-                                detail: 'Xóa thành công!',
-                                life: 2000,
-                            })
-                        }
-                    })
-                    .catch((error) => {
-                        this.$toast.add({ severity: 'warn', summary: 'Cảnh báo ', detail: error, life: 2000 })
-                    })
-            },
-
             countTime() {
                 if (this.num == 0) {
-                    this.navigationToHome()
+                    this.navigationToHome();
                     return
                 }
-                this.num = this.num - 1
-                this.timeOut = setTimeout(() => this.countTime(), 1000)
+                this.num = this.num - 1;
+                this.timeOut = setTimeout(() => this.countTime(), 1000);
             },
 
             navigationToHome() {
-                clearTimeout(this.timeOut)
-                this.$router.push({ name: 'home' })
+                clearTimeout(this.timeOut);
+                this.$router.push({ name: 'home' });
             },
 
             exportCSV() {
-                this.$refs.tableRule.exportCSV()
+                this.$refs.tableRule.exportCSV();
             },
 
             openEdit(dataRuleById) {
-                this.dataRuleById = dataRuleById
-                this.openEditform = true
+                this.dataRuleById = dataRuleById;
+                this.openEditform = true;
             },
 
             closeEdit() {
-                this.openEditform = false
+                this.openEditform = false;
             },
 
             openAdd() {
-                this.openAddform = true
+                this.openAddform = true;
             },
 
             closeAdd() {
-                this.openAddform = false
+                this.openAddform = false;
             },
 
             openDetailt(dataRuleById) {
-                this.dataRuleById = dataRuleById
-                this.openDetailtform = true
+                this.dataRuleById = dataRuleById;
+                this.openDetailtform = true;
             },
 
             closeDetailt() {
-                this.openDetailtform = false
+                this.openDetailtform = false;
             },
 
             downloadFile(url) {
-                var nameFile = url.substring(url.lastIndexOf('/') + 1)
+                var nameFile = url.substring(url.lastIndexOf('/') + 1);
                 HTTP.get(url, { responseType: 'blob' })
                     .then((response) => {
                         saveAs(response.data, nameFile)
                     })
                     .catch((error) => {
                         if (error.code == 'ERR_BAD_REQUEST') {
-                            this.$toast.add({
-                                severity: 'error',
-                                summary: 'Lỗi',
-                                detail: 'File không tồn tại!',
-                                life: 3000,
-                            })
+                            this.showError('File không tồn tại!');
                         }
-                    })
+                    });
             },
         },
         async mounted() {
             try {
-                this.token = LocalStorage.jwtDecodeToken()
+                this.token = LocalStorage.jwtDecodeToken();
 
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
                 if (UserRoleHelper.isAccess) {
                     if (Number(this.token.IdGroup) === 2) {
-                        this.showButton.view = true
-                        this.showButton.edit = true
-                        this.showButton.add = true
-                        this.showButton.delete = true
-                        this.showButton.download = true
+                        this.showButton.view = true;
+                        this.showButton.edit = true;
+                        this.showButton.add = true;
+                        this.showButton.delete = true;
+                        this.showButton.download = true;
                     }
                     if (Number(this.token.IdGroup) !== 2) {
-                        this.showButton.download = true
-                        this.showButton.view = true
+                        this.showButton.download = true;
+                        this.showButton.view = true;
                     }
-                    this.GetAllRuleList()
+                    this.GetAllRuleList();
                 } else {
-                    this.countTime()
-                    this.displayBasic = true
+                    this.countTime();
+                    this.displayBasic = true;
                 }
             } catch (err) {
-                this.countTime()
-                this.displayBasic = true
+                this.countTime();
+                this.displayBasic = true;
             }
         },
         components: { Export, Add, Edit, View, Delete, AddRuleDiaLog, EditRuleDiaLog, DetailtRuleDiaLog },

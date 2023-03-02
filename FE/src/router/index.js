@@ -539,7 +539,7 @@ const router = createRouter({
             component: () => import('@/views/LeaveOff/LeaveOffRegister.vue'),
         },
         {
-            path: '/rule',
+            path: '/rules',
             name: 'ruleinfo',
             meta: {
                 title: 'IMS - Rule Info',
@@ -547,7 +547,7 @@ const router = createRouter({
             component: () => import('@/views/RuleInfo/Rule.vue'),
         },
         {
-            path: '/paid',
+            path: '/paids',
             name: 'Paid',
             meta: {
                 title: 'IMS - Paid',

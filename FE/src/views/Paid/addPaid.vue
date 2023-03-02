@@ -75,7 +75,7 @@
                                 'p-error': v$.Datasend.amountPaid.required.$invalid && isSubmit,
                                 'input-title': true,
                             }"
-                            >Mức chi<span style="color: red">*</span></label
+                            >Mức chi (VND)<span style="color: red">*</span></label
                         >
                         <InputNumber v-model="v$.Datasend.amountPaid.$model" :min=0 mode="decimal"/>
                         <small class="p-error" v-if="v$.Datasend.amountPaid.required.$invalid && isSubmit">{{
@@ -262,7 +262,7 @@
                             this.showError('Kiểm tra kết nối!')
                             break
                         case 'ERR_BAD_REQUEST':
-                            this.showError(error.response.data)
+                            console.log(error.response.data)
                             break
                         default:
                     }
@@ -298,7 +298,6 @@
                 }
                 catch (err) {
                     console.log(err)
-                    this.showError(error.response.data)
                 }
             },
 

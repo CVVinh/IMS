@@ -1,11 +1,13 @@
 ﻿using BE.Data.Dtos.LeaveOffDtos;
 using BE.Data.Enum;
 using BE.Data.Models;
+using BE.Hubs;
 using BE.Services.LeaveOffServices;
 using BE.Services.PaginationServices;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using static BE.Data.Enum.LeaveOff.Status;
 
 namespace BE.Controllers
@@ -17,11 +19,13 @@ namespace BE.Controllers
     {
         private readonly ILeaveOffServices _leaveOffServices;
         private readonly IPaginationServices<LeaveOff> _paginationServices;
+        IHubContext<NotificationHub> _notificationHubs;
 
-        public LeaveOffController(ILeaveOffServices leaveOffServices, IPaginationServices<LeaveOff> paginationServices)
+        public LeaveOffController(ILeaveOffServices leaveOffServices, IPaginationServices<LeaveOff> paginationServices, IHubContext<NotificationHub> notificationHubs)
         {
             _leaveOffServices = leaveOffServices;
             _paginationServices = paginationServices;
+            _notificationHubs = notificationHubs;
         }
 
         //GET: get all leave off
@@ -102,6 +106,7 @@ namespace BE.Controllers
             var response = await _leaveOffServices.AddNewLeaveOffAsync(addNewLeaveOffDto);
             if(response._success)
             {
+                await _notificationHubs.Clients.All.SendAsync("ReceiveLeaveOff");
                 return Ok(response);
             }
             return BadRequest(response);

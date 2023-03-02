@@ -393,8 +393,8 @@
                 try{
                     await HTTP.delete(`Paid/${id}`).then(async (res) => {  
                         if(res.status == 200){
-                            await this.getData();
                             this.showSuccess('Xóa thành công!');
+                            await this.getData();
                         }              
                         else {
                             this.showResponseApi(res.status);
@@ -515,7 +515,7 @@
                         .catch((error) => {
                             var message = error.response.data != '' ? error.response.data : error.response.statusText;
                             this.showResponseApi(error.response.status, message);
-                        })
+                        });
                     }
                     else {
                         await HTTP.get(`Paid/GetByIdSample/${idSample}`)
@@ -525,13 +525,14 @@
                         .catch((error) => {
                             var message = error.response.data != '' ? error.response.data : error.response.statusText;
                             this.showResponseApi(error.response.status, message);
-                        })
+                        });
                     }
 
                     await this.getWithName()
                 }
                 catch (error) {
-                    console.log('Lỗi! Lấy danh sách thu chi:' + error )
+                    console.log('Lỗi! Lấy danh sách thu chi')
+                    console.log(error)
                 }
                 finally {
                     this.loading = false;
@@ -597,7 +598,7 @@
                     }
                 })
                 .catch((error) => {
-                    this.showError(error.response.data._Message);
+                    //this.showError(error.response.data._Message);
                     console.log(error)
                 })
                 .finally(() => {
