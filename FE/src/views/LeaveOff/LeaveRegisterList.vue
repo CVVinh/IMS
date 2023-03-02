@@ -182,7 +182,7 @@
                 await UserRoleHelper.isAccessModule(string)
                 if (UserRoleHelper.isAccess) {
                     // Phân quyền button
-                    if (Number(this.token.IdGroup) == 5) {
+                    if (Number(this.token.IdGroup) == 5 || Number(this.token.IdGroup) == 1) {
                         this.Action = true
                     }
                     // Check quyền

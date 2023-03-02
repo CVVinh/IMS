@@ -17,6 +17,7 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class UsersController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -39,6 +40,7 @@ namespace BE.Controllers
         }
 
         [HttpPost("SendEmail")]
+       
         public async Task<IActionResult> SendMail(MailDto mailDto)
         {
             try
@@ -71,9 +73,8 @@ namespace BE.Controllers
                 return BadRequest(ex);
             }
         }*/
-
         [HttpGet("getAll")]
-        [Authorize(Roles = "permission_group: True module: users")]
+  
         public async Task<ActionResult<Users>> GetAll()
         {
             try
@@ -115,9 +116,7 @@ namespace BE.Controllers
                 return BadRequest(ex);
             }
         }
-
         [HttpGet("getAllUsersByIdProject/{idProject}")]
-        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<IActionResult> getAllUsersByIdProject(int idProject)
         {
             var success = false;
@@ -153,7 +152,6 @@ namespace BE.Controllers
                 return StatusCode(500, new BaseResponse<List<Users>>(success, messgae, data));
             }
         }
-
         [HttpGet("getUsersOutsideProject/{idProject}")]
         public async Task<IActionResult> getAllUsersOutsideProject(int idProject)
         {
@@ -192,9 +190,7 @@ namespace BE.Controllers
                 return StatusCode(500, new BaseResponse<List<Users>>(success, messgae, data));
             }
         }
-
         [HttpGet("getUserById/{id}")]
-        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<ActionResult<Users>> GetUsersById(int id)
         {
             if (_context.Users == null)
@@ -208,9 +204,7 @@ namespace BE.Controllers
             }
             return Ok(users);
         }
-
         [HttpGet("getUserByUserCode/{usercode}")]
-        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<ActionResult<Users>> GetUsersByUserCode(string usercode)
         {
             if (_context.Users == null)
@@ -223,9 +217,7 @@ namespace BE.Controllers
             var data = new GetAllDto(users);
             return Ok(data);
         }
-
         [HttpGet("getByGender/{gender}")]
-        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<ActionResult<Users>> GetUsersByGender(int gender)
         {
             if (_context.Users == null)
@@ -240,9 +232,7 @@ namespace BE.Controllers
             }
             return Ok(data);
         }
-
         [HttpGet("getByWorkStatus/{workStatus}")]
-        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<ActionResult<Users>> GetUsersByWorkStatus(int workStatus)
         {
             if (_context.Users == null)
@@ -258,9 +248,7 @@ namespace BE.Controllers
             return Ok(data);
         }
 
-
         [HttpGet("getBydOB/{dOB}")]
-        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<ActionResult<Users>> GetUsersByDOB(DateTime dOB)
         {
             if (_context.Users == null)
@@ -276,10 +264,7 @@ namespace BE.Controllers
             return Ok(data);
         }
 
-
-
         [HttpGet("userDropdown")]
-        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<ActionResult<IEnumerable<DropdownUserDto>>> GetUsersDropdown()
         {
             var users = await _context.Users.ToListAsync();
@@ -290,9 +275,7 @@ namespace BE.Controllers
             }
             return Ok(userDropdown);
         }
-
         [HttpGet("getInfo")]
-        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<ActionResult<UserInfoDto>> GetInfo()
         {
             var users = await _context.Users.ToListAsync();
@@ -307,10 +290,7 @@ namespace BE.Controllers
             }
             return Ok(usersInfo);
         }
-
         [HttpPut("deleteUser/{id}")]
-        [Authorize(Roles = "permission_group: True module: users")]
-        [Authorize(Roles = "module: users delete: 1")]
         public async Task<IActionResult> DeleteUser(int id, DeleteUserDto dto)
         {
             var users = await _context.Users.FindAsync(id);
@@ -328,9 +308,7 @@ namespace BE.Controllers
 
             return Ok("Delete success...");
         }
-
         [HttpGet("getGroupByUser/{id}")]
-        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<IActionResult> GetRoleUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -340,8 +318,8 @@ namespace BE.Controllers
             }
             return Ok(user.IdGroup);
         }
-
         [HttpPost("addUser")]
+        [Authorize(Roles = "group: Admin")]
         //[Authorize(Roles = "permission_group: True module: users")]
         //[Authorize(Roles = "module: users add: 1")]
         public async Task<ActionResult<AddUserDto>> CreateUser(AddUserDto request)
@@ -413,10 +391,7 @@ namespace BE.Controllers
                 return BadRequest(ex);
             }
         }
-
         [HttpPut("updateUser/{id}")]
-        [Authorize(Roles = "permission_group: True module: users")]
-        [Authorize(Roles = "module: users update: 1")]
         public async Task<ActionResult<Users>> UpdateUser(int id, EditUserDto user_dto)
         {
             var mess = "";
@@ -480,7 +455,6 @@ namespace BE.Controllers
                 return BadRequest("Unknown error !");
             }
         }
-
         [HttpPut("changePassword/{userCode}")]
         [Authorize]
         public async Task<IActionResult> ChangePassword(string userCode, [FromBody] ChangePassDto resource)
@@ -544,7 +518,6 @@ namespace BE.Controllers
                 return BadRequest("Wrong password !");
             }
         }
-
         [HttpPost]
         [Route("ResetPass")]
         public async Task<IActionResult> GetNewPass([FromBody] string request)
@@ -587,7 +560,6 @@ namespace BE.Controllers
                 });
             }
         }
-
         [HttpGet("Pagination")]
         [Authorize]
         public async Task<ActionResult> GetUsers(int page)
@@ -614,7 +586,6 @@ namespace BE.Controllers
         }
 
         [HttpPost("Logout")]
-
         public IActionResult Logout([FromBody] string Username)
         {
             var user = _context.Users.SingleOrDefault(u => u.userCode.ToLower() == Username.ToLower());
@@ -633,11 +604,8 @@ namespace BE.Controllers
                 });
             }
         }
-
         [HttpGet]
         [Route("exportExcel")]
-        /*[Authorize(Roles = "permission_group: True module: groups")]
-        [Authorize(Roles = "module: groups export: 1")]*/
         public async Task<string> DownloadFile()
         {
             var wb = new XLWorkbook();

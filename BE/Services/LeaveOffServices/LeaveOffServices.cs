@@ -80,6 +80,18 @@ namespace BE.Services.LeaveOffServices
             {
                 var leaveOff = _mapper.Map<LeaveOff>(addNewLeaveOffDto);
                 await _appContext.leaveOffs.AddAsync(leaveOff.addNewLeaveOffExtention());
+                var getUser = await _appContext.Users.Where(x => x.id.Equals(leaveOff.idLeaveUser)).FirstOrDefaultAsync();
+                
+                Notification noti = new Notification()
+                {
+                    requestUser = leaveOff.idLeaveUser,
+                    message = leaveOff.reasons,
+                    title = $"Nghỉ phép từ nhân viên '{getUser.FullName ?? "Ẩn danh"}'",
+                    isWatched = false,
+                    userCreated = leaveOff.idLeaveUser,
+                    link = "http://localhost:3000/leaveoff/acceptregisterlists"
+                };
+                _appContext.Notifications.Add(noti);
                 await _appContext.SaveChangesAsync();
 
                 success = true;

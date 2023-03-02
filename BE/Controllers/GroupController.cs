@@ -26,8 +26,8 @@ namespace BE.Controllers
             _context = context;
             
         }
+       
         [HttpGet("getListGroup")]
-        [Authorize(Roles = "permission_group: True module: groups")]
         public ActionResult getListGroup()
         {
             try
@@ -41,7 +41,6 @@ namespace BE.Controllers
             }
         }
         [HttpGet("getUserByGroup/{idGroup}")]
-        [Authorize(Roles = "permission_group: True module: groups")]
         public async Task<ActionResult> getUserByGroup(int idGroup) {
             try
             {
@@ -70,9 +69,10 @@ namespace BE.Controllers
                 return BadRequest(ex);
             }                     
         }
+        
         [HttpPost("addGroup")]
         [Authorize(Roles = "permission_group: True module: groups")]
-        [Authorize(Roles = "module: groups add: 1")]
+        [Authorize(Roles ="group: Admin")]
         public async Task<IActionResult> addGroup(AddGroupDtos req)
         {
             try
@@ -99,9 +99,10 @@ namespace BE.Controllers
             }
         }
 
+ 
         [HttpPut("updateGroup")]
         [Authorize(Roles = "permission_group: True module: groups")]
-        [Authorize(Roles = "module: groups update: 1")]
+        [Authorize(Roles = "group: Admin")]
         public async Task<ActionResult> updateGroup(UpdateGroupDtos req)
         {
             try
@@ -118,18 +119,17 @@ namespace BE.Controllers
                     return Ok();
 
                 }
-                return NotFound();
+                return NotFound("hello");
             }
             catch (Exception ex)
             {
                 return BadRequest(ex);
-            }
-
-           
+            }     
         }
+
         [HttpPut("deleteGroup/{id}")]
         [Authorize(Roles = "permission_group: True module: groups")]
-        [Authorize(Roles = "module: groups delete: 1")]
+        [Authorize(Roles = "group: Admin")]
         public async Task<ActionResult> deleteGroup(int id)
         {
             try
@@ -138,15 +138,11 @@ namespace BE.Controllers
                 if (deleteG != null)
                 {
                     deleteG.IsDeleted = 1;
-                    
                     deleteG.dateModified = DateTime.UtcNow;
                     await _context.SaveChangesAsync();
                     return Ok();
-                }
-                else
-                {
-                    return NotFound("Khong tim thay du lieu");
-                }
+                }    
+                    return NotFound();
             }
             catch (Exception ex)
             {
@@ -156,7 +152,7 @@ namespace BE.Controllers
         [HttpGet]
         [Route("exportExcel")]
         [Authorize(Roles = "permission_group: True module: groups")]
-        [Authorize(Roles = "module: groups export: 1")]
+        [Authorize(Roles = "group: Admin")]
         public async Task<string> DownloadFile()
         {
             var wb = new XLWorkbook();

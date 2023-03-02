@@ -36,8 +36,6 @@ namespace BE.Controllers
             }
         }
         [HttpPost("addDevices")]
-        [Authorize(Roles = "permission_group: True module: equipments")]
-        [Authorize(Roles = "module: equipments delete: 1")]
         public async Task<IActionResult> addDevices(AddDeviceDto req)
         {
             try

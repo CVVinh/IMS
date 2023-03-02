@@ -288,7 +288,7 @@
             :display="this.displayFormAddEdit"
             @close ="closeFormAddEdit"
             @reloadData="getOTsByLead(this.token.Id)"
-            :idproject = "idproject"
+            :idproject = "this.idproject"
         />
         <DetailOT
             :show="DetailOT"
@@ -387,8 +387,7 @@
             try {
                 this.token = LocalStorage.jwtDecodeToken()
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
-                console.log(UserRoleHelper.isAccess);
-             
+                console.log(UserRoleHelper.isAccess);  
                 if (await UserRoleHelper.isAccess) {
                     HTTP.get('Project/getAllProject')
                         .then((res) => {
@@ -522,8 +521,6 @@
                 if (value == 1) {
                     this.showButton.ExportButton = true
                     this.showButton.confirmButton = true
-                    this.showButton.editButton = true
-                    this.showButton.addButton = true
                     this.showButton.allAcceptButton = true
                     this.showButton.deleteButton = true
                     this.showButton.viewButton = true
@@ -542,10 +539,11 @@
                     this.showButton.addButton = true
                     this.showButton.deleteButton = true
                     this.showButton.viewButton = true
-                    this.getOTsByLead(this.token.Id)
+                    this.getOTsByLead(this.token.Id)     
                 }
                 // 4 staff
                 if (value == 4) {
+                    this.showButton.ExportButton = true
                     this.getOTsByStaff(this.token.Id)
                 }
                 // 5 pm

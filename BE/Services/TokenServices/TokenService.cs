@@ -1,6 +1,7 @@
 ﻿using BE.Data.Contexts;
 using BE.Data.Models;
 using BE.Settings;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -36,7 +37,7 @@ namespace BE.Services.TokenServices
                 claims.Add(new Claim("Id", userS.id.ToString()));
                 claims.Add(new Claim("IdGroup", userS.IdGroup.ToString()));
                 claims.Add(new Claim("TokenId", Guid.NewGuid().ToString()));
-                claims.Add(new Claim(ClaimTypes.Role, userS.IdGroup.ToString()));
+
                 if (getPermission_Use_Menu(userS.id) != null)
                 {
                     foreach (var item in getPermission_Use_Menu(userS.id))
@@ -44,13 +45,22 @@ namespace BE.Services.TokenServices
                         claims.Add(new Claim(ClaimTypes.Role, item));
                     }
                 }
-                if (getPermission_Group(userS.id) != null)
+                if (getPermission_Group_AccessModule(userS.id) != null)
                 {
-                    foreach (var item in getPermission_Group(userS.id))
+                    foreach (var item in getPermission_Group_AccessModule(userS.id))
                     {
                         claims.Add(new Claim(ClaimTypes.Role, item));
                     }
                 }
+
+                if (getPermission_by_Group(userS.id) != null)
+                {
+                    foreach (var item in getPermission_by_Group(userS.id))
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, item));
+                    }
+                }
+
                 return claims.ToArray();
             }
 
@@ -135,6 +145,7 @@ namespace BE.Services.TokenServices
             };
             return response;
         }
+        // bat theo use_menu add edit delete export = 1
         private List<string> getPermission_Use_Menu(int idUser)
         {
             var query = from a in _context.Permission_Use_Menus
@@ -157,13 +168,43 @@ namespace BE.Services.TokenServices
                         "delete: " + permission.a.Delete);
 
                     data.Add("module: " + permission.b.nameModule + " " +
+                        "deleteMulti: " + permission.a.DeleteMulti);
+
+                    data.Add("module: " + permission.b.nameModule + " " +
+                        "confirm: " + permission.a.Confirm);
+
+                    data.Add("module: " + permission.b.nameModule + " " +
                         "export: " + permission.a.Export);
                 }
                 return data;
             }
             return null!;
         }
-        private List<string> getPermission_Group(int idUser)
+
+        // bat lam duoc nhung gi
+        private List<string> getPermission_by_Group(int idUser)
+        {
+            var query = from u in _context.Users
+                            join g in _context.UserGroups on u.id equals g.idUser
+                            join d in _context.Groups on g.idGroup equals d.Id
+                            where u.id == idUser    
+                            select d.NameGroup.ToLower();
+
+            if (query.Count() != 0)
+            {
+                List<string> data = new List<string>();
+                foreach (var permission in query)
+                {
+                    data.Add(permission);
+                }
+                return data;
+            }
+            return null!;
+        }
+
+
+        // Bat co quyen hay khong
+        private List<string> getPermission_Group_AccessModule(int idUser)
         {
             var query = from a in _context.Permission_Groups
                         join b in _context.modules
@@ -179,6 +220,7 @@ namespace BE.Services.TokenServices
                 {
                     data.Add("permission_group: " + permission_group.a.Access+
                         " module: "+permission_group.b.nameModule);
+
                 }
                 return data;
             }

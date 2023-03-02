@@ -53,6 +53,8 @@ namespace BE.Data.Contexts
         public DbSet<Customer> Customers { get; set; }
         public DbSet<PaidReasons> PaidReasons { get; set; }
         public DbSet<Customer_PaidReason> CustomerPaidReasons { get; set; }
+        public DbSet<User_Group> UserGroups { get; set; }
+		public DbSet<Notification> Notifications { get; set; }
         #endregion
 
         #region Method
@@ -227,6 +229,8 @@ namespace BE.Data.Contexts
 				e.Property(e => e.Add).IsRequired().HasDefaultValue(0);
 				e.Property(e => e.Update).IsRequired().HasDefaultValue(0);
 				e.Property(e => e.Delete).IsRequired().HasDefaultValue(0);
+				e.Property(e => e.DeleteMulti).IsRequired().HasDefaultValue(0);
+				e.Property(e => e.Confirm).IsRequired().HasDefaultValue(0);
 				e.Property(e => e.Export).IsRequired().HasDefaultValue(0);
 			});
 			modelBuilder.Entity<Menu>(e =>
@@ -283,7 +287,7 @@ namespace BE.Data.Contexts
                 e.Property(e => e.CustomerName).IsRequired();
                 e.Property(e => e.PaidReason).IsRequired();
                 e.Property(e => e.PaidPerson).IsRequired();
-                e.Property(e => e.IsPaid).HasDefaultValue(false);
+                e.Property(e => e.ProjectId).HasDefaultValue(0);
                 e.Property(k => k.ContentReason).HasMaxLength(255).HasColumnType("varchar");
             });
 
@@ -305,6 +309,18 @@ namespace BE.Data.Contexts
                 e.Property(e => e.dateCreated).HasColumnType("timestamp");
                 e.Property(e => e.idCustomer).IsRequired();
                 e.Property(e => e.idPaidReason).IsRequired();
+            });
+
+            modelBuilder.Entity<User_Group>(e =>
+            {
+                e.ToTable("User_Group");
+                e.HasKey(e => e.id);
+                e.Property(e => e.idUser).IsRequired();
+                e.Property(e => e.idGroup).IsRequired();
+                e.Property(e => e.isDeleted).HasDefaultValue(false);
+                e.Property(e => e.dateCreated).HasColumnType("date");
+                e.Property(e => e.dateUpdated).HasColumnType("date");
+                e.Property(e => e.dateDeleted).HasColumnType("date");
             });
 
             #region Config entity with fluent Api

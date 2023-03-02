@@ -21,6 +21,10 @@ namespace BE.Data.Models
         [Required]
         public int Delete { get; set; }
         [Required]
+        public int DeleteMulti { get; set; }
+        [Required]
+        public int Confirm { get; set; }
+        [Required]
         public int Export { get; set; }
         public int? userCreated { get; set; }
         public DateTime? dateCreated { get; set; }

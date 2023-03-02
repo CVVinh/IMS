@@ -21,33 +21,20 @@
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 :rowsPerPageOptions="pageIndex"
                 currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
-                :globalFilterFields="[
-                    '#',
-                    'id',
-                    'name',
-                    'projectCode',
-                    'description',
-                    'startDate',
-                    'endDate',
-                    'isDeleted',
-                    'isFinished',
-                    'userId',
-                    'leader',
-                    'userUpdate',
-                    'isOnGitlab',
-                ]"
+                :globalFilterFields="['name']"
             >
                 <!-- Header -->
                 <template #header>
                     <div class="flex justify-content-center">
                         <h5 class="" style="color: white">Danh sách dự án</h5>
                         <div class="inline">
-                            
-                            <div style="display: flex; justify-content: space-between;" >
-                                
+                            <div style="display: flex; justify-content: space-between">
                                 <div>
-                                    <Export label="Xuất Excel" class="me-2" @click="exportToExcel()"
-                                    v-if="this.showButton.export"
+                                    <Export
+                                        label="Xuất Excel"
+                                        class="me-2"
+                                        @click="exportToExcel()"
+                                        v-if="this.showButton.export"
                                     />
                                     <Button
                                         @click="finishMulti()"
@@ -56,17 +43,17 @@
                                         icon="pi pi-check"
                                         v-if="this.showButton.finishMulti"
                                     />
-                                    <Add @click="openDialogAdd()" label="Thêm" v-if="this.showButton.add" />     
+                                    <Add @click="openDialogAdd()" label="Thêm" v-if="this.showButton.add" />
                                 </div>
-                                
+
                                 <div>
                                     <div class="p-input-icon-left layout-left">
-                                    <i class="pi pi-search" />
-                                    <InputText
-                                        class="p-inputtext-sm"
-                                        v-model="filters['global'].value"
-                                        placeholder="Tìm kiếm"
-                                    />
+                                        <i class="pi pi-search" />
+                                        <InputText
+                                            class="p-inputtext-sm"
+                                            v-model="filters['name'].value"
+                                            placeholder="Tìm kiếm"
+                                        />
                                     </div>
                                     <div class="layout-left">
                                         <MultiSelect
@@ -78,14 +65,8 @@
                                             style="width: 20em"
                                         />
                                     </div>
-
                                 </div>
-
-
-                                
                             </div>
-                            
-                            
                         </div>
                     </div>
                 </template>
@@ -112,12 +93,12 @@
 
                 <Column field="startDate" header="Ngày bắt đầu " sortable style="min-width: 8rem">
                     <template #body="{ data }">
-                        {{ data.startDate }}
+                        {{ getFormattedDate(new Date( data.startDate)) }}
                     </template>
                 </Column>
                 <Column field="endDate" header="Ngày kết thúc " sortable style="min-width: 8rem">
                     <template #body="{ data }">
-                        {{ data.endDate == '1970-01-01' ? 'Chưa giải quyết..' : data.endDate }}
+                        {{  data.endDate == '1970-01-01' ? 'Chưa giải quyết..' :  getFormattedDate(new Date(data.endDate))}}
                     </template>
                 </Column>
                 <Column
@@ -133,7 +114,7 @@
                         <Member
                             @click="toDetailProject(data.id)"
                             class="p-button-info mazin"
-                            :disabled = "canOperation(data.isDeleted,data.isFinished)"
+                            :disabled="canOperation(data.isDeleted, data.isFinished)"
                             v-if="this.showButton.member"
                         />
 
@@ -141,13 +122,13 @@
                             v-if="data.isOnGitlab == false && this.showButton.edit"
                             class="p-button-warning mazin"
                             @click="openDialogEdit(data)"
-                            :disabled = "canOperation(data.isDeleted,data.isFinished)"
+                            :disabled="canOperation(data.isDeleted, data.isFinished)"
                         />
 
                         <Delete
                             class="p-button-danger mazin"
                             @click="confirmDelete(data.id)"
-                            :disabled = "canOperation(data.isDeleted,data.isFinished)"
+                            :disabled="canOperation(data.isDeleted, data.isFinished)"
                             v-if="this.showButton.delete"
                         />
 
@@ -155,21 +136,26 @@
                             @click="finishProject(data.id)"
                             class="p-button-sm mt-1 p-button-success"
                             icon="pi pi-check"
-                            :disabled = "canOperation(data.isDeleted,data.isFinished)"
+                            :disabled="canOperation(data.isDeleted, data.isFinished)"
                             v-if="this.showButton.finish"
-                            
                         />
                     </template>
                 </Column>
-                <Column header="Trạng thái" sortable field="isDeleted" >
-                    <template #body="{ data }" >
-                        <p :style="{color: statusText(data.isFinished,data.isDeleted) === 'Đang chạy' ?  'green' : 
-                                           statusText(data.isFinished,data.isDeleted) === 'Đã hoàn thành' ? 'orange' :
-                                           statusText(data.isFinished,data.isDeleted) === 'Đã xóa' ? 'red' : null
-                        }">
-                        {{ 
-                           statusText(data.isFinished,data.isDeleted)
-                        }}
+                <Column header="Trạng thái" sortable field="isDeleted">
+                    <template #body="{ data }">
+                        <p
+                            :style="{
+                                color:
+                                    statusText(data.isFinished, data.isDeleted) === 'Đang chạy'
+                                        ? 'green'
+                                        : statusText(data.isFinished, data.isDeleted) === 'Đã hoàn thành'
+                                        ? 'orange'
+                                        : statusText(data.isFinished, data.isDeleted) === 'Đã xóa'
+                                        ? 'red'
+                                        : null,
+                            }"
+                        >
+                            {{ statusText(data.isFinished, data.isDeleted) }}
                         </p>
                     </template>
                 </Column>
@@ -205,7 +191,7 @@
 
 <script>
     import router from '@/router/index'
-    import { HTTP } from '@/http-common'
+    import { GET_USER_BY_ID, HTTP } from '@/http-common'
     import { FilterMatchMode } from 'primevue/api'
     import jwtDecode from 'jwt-decode'
     import Add from '../../components/buttons/Add.vue'
@@ -217,20 +203,20 @@
     import { ProjectDto } from '@/views/Project/Project.dto'
     import { UserRoleHelper } from '@/helper/user-role.helper'
     import { HTTP_API_GITLAB, GET_ALL_PROJECT } from '@/http-common'
-import { LocalStorage } from '@/helper/local-storage.helper'
-
+    import { LocalStorage } from '@/helper/local-storage.helper'
+    import { DateHelper } from '@/helper/date.helper'
     export default {
         data() {
             return {
                 filters: {
-                    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                    name: { value: null, matchMode: FilterMatchMode.CONTAINS },
                 },
                 userInfo: [],
                 selectedProject: [],
                 selectedColumns: null,
                 columns: null,
                 arr: [],
-                data : [],
+                data: [],
                 loading: true,
                 displayBasic: false,
                 pageIndex: [5, 10, 15, 20],
@@ -239,33 +225,16 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                 isOpenDialog: false,
                 projectSelected: new ProjectDto(),
                 user: [],
-                token : null,
-                showButton : {
-                    export : false,
-                    add : false,
-                    finishMulti : false,
-                    finish : false,
-                    delete : false,
-                    edit : false,
-                    member : false,
+                token: null,
+                showButton: {
+                    export: false,
+                    add: false,
+                    finishMulti: false,
+                    finish: false,
+                    delete: false,
+                    edit: false,
+                    member: false,
                 },
-                leader: [
-                    {
-                        id: 1,
-                        firstName: 'Nguyễn',
-                        lastName: 'Mạnh 1',
-                    },
-                    {
-                        id: 2,
-                        firstName: 'Nguyễn',
-                        lastName: 'Mạnh 2',
-                    },
-                    {
-                        id: 3,
-                        firstName: 'Nguyễn',
-                        lastName: 'Mạnh 3',
-                    },
-                ],
                 acceptRole: ['pm', 'admin', 'director', 'leader'],
                 dataProjects: [],
             }
@@ -274,46 +243,41 @@ import { LocalStorage } from '@/helper/local-storage.helper'
             await this.handlerGetInfoProjects()
         },
         async mounted() {
-            try {   
+            try {
                 this.token = LocalStorage.jwtDecodeToken()
-                
+
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
                 if (await UserRoleHelper.isAccess) {
-                    console.log('hello');
-                    this.Permission(Number(this.token.IdGroup),this.token.Id)
-                           
-                }else {
+                    console.log('hello')
+                    this.Permission(Number(this.token.IdGroup), this.token.Id)
+                } else {
                     this.countTime()
                     this.displayBasic = true
-                } 
-                
+                }
             } catch (error) {
-                console.log(error);
+                console.log(error)
                 this.countTime()
                 this.displayBasic = true
             }
-            this.dataProjects.map(ele=>{
-                console.log(ele);
-
+            this.dataProjects.map((ele) => {
+                console.log(ele)
             })
 
-
             this.columns = [
-                    { field: 'description', header: 'Mô tả' },
-                    { field: 'userId', header: 'PM' },
-                    { field: 'leader', header: 'Leader' },
-                    { field: 'userCreated', header: 'Người tạo' },
-                    { field: 'dateCreated', header: 'Ngày tạo' },
-                    { field: 'userUpdate', header: 'Người chỉnh sửa' },
-                    { field: 'dateUpdate', header: 'Ngày chỉnh sửa' },
-                ]
+                { field: 'description', header: 'Mô tả' },
+                { field: 'userId', header: 'PM' },
+                { field: 'leader', header: 'Leader' },
+                { field: 'userCreated', header: 'Người tạo' },
+                { field: 'dateCreated', header: 'Ngày tạo' },
+                { field: 'userUpdate', header: 'Người chỉnh sửa' },
+                { field: 'dateUpdate', header: 'Ngày chỉnh sửa' },
+            ]
         },
         methods: {
             openDialogAdd() {
                 this.isOpenDialog = true
                 this.projectSelected = []
             },
-            
             closeDialog() {
                 this.isOpenDialog = false
                 this.projectSelected = []
@@ -326,13 +290,13 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                 return false
             },
             finishMulti() {
-                let bool = this.selectedProject.filter(function(element,index){
-                    if(element.isFinished === true || element.isDeleted === true){
+                let bool = this.selectedProject.filter(function (element, index) {
+                    if (element.isFinished === true || element.isDeleted === true) {
                         return false
-                    }else{
+                    } else {
                         return true
                     }
-                })  
+                })
                 if (this.selectedProject == null) {
                     this.showWarn('Vui lòng chọn một dự án để kết thúc!')
                     return
@@ -345,60 +309,110 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                 this.selectedProject = []
             },
             finishProject(id) {
-                let userlogin = jwtDecode(localStorage.getItem('token'))
-                let idUser = userlogin.Id
-                HTTP.put('Project/FinishProject/' + id, { UserId: idUser })
-                    .then((res) => {
-                        if (res.status == 200) {
-                            this.getAllProject()
-                            this.$toast.add({
-                                severity: 'success',
-                                summary: 'Thành công',
-                                detail: 'Dự án hoàn tất!',
-                                life: 2000,
+                this.$confirm.require({
+                    message: 'Are you sure you want to proceed?',
+                    header: 'Confirmation',
+                    icon: 'pi pi-exclamation-triangle',
+                    accept: () => {
+                        let userlogin = jwtDecode(localStorage.getItem('token'))
+                        let idUser = userlogin.Id
+                        HTTP.put('Project/FinishProject/' + id, { UserId: idUser })
+                            .then((res) => {
+                                if (res.status == 200) {
+                                    this.getAllProject()
+                                    this.$toast.add({
+                                        severity: 'success',
+                                        summary: 'Thành công',
+                                        detail: 'Dự án hoàn tất!',
+                                        life: 2000,
+                                    })
+                                }
                             })
-                        }
-                    })
-                    .catch((err) => {
+                            .catch((err) => {
+                                this.$toast.add({
+                                    severity: 'error',
+                                    summary: 'Lỗi',
+                                    detail: 'Không có quyền thực hiện thao tác kết thúc dự án!',
+                                    life: 2000,
+                                })
+                            })
+                    },
+                    reject: () => {
                         this.$toast.add({
                             severity: 'error',
-                            summary: 'Lỗi',
-                            detail: 'Không có quyền thực hiện thao tác kết thúc dự án!',
-                            life: 2000,
+                            summary: 'Hủy bỏ',
+                            detail: 'Bạn đã hủy thao tác',
+                            life: 3000,
                         })
-                    })
+                    },
+                })
             },
             onToggle(value) {
                 this.selectedColumns = this.columns.filter((col) => value.includes(col))
             },
             formatDate(value) {
-                return new Date(value).toLocaleDateString('en-CA', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                })
+                return DateHelper.convertFullDate(value)
             },
-            statusText(isfinish,isdelete){
-                if(isdelete === false && isfinish === false){
+            statusText(isfinish, isdelete) {
+                if (isdelete === false && isfinish === false) {
                     return 'Đang chạy'
                 }
-                if(isfinish === true){
+                if (isfinish === true) {
                     return 'Đã hoàn thành'
                 }
-                if(isdelete === true){
+                if (isdelete === true) {
                     return 'Đã xóa'
                 }
-               
             },
-            getAllProject() {
-                console.log('object');
-                HTTP.get('Project/getAllProject').then((res) => {
-                    if (res.data) {
-                        this.data = res.data   
-                        console.log(res.data);         
-                    }            
-                    this.loading = false
-                })
+            async getAllProject() {
+                this.loading = true
+                await HTTP.get('Project/getAllProject')
+                    .then((res) => {
+                        if (res.data) {
+                            this.data = res.data
+                            console.log(res)
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+                this.getPMName()
+                this.getUserCreated()
+                this.getUserEdited()
+                console.log(this.data)
+                this.loading = false
+            },
+            async getPMName() {
+                for (let i = 0; i < this.data.length; i++) {
+                    if (this.data[i].userId != 0) {
+                        var PM = await this.getUserById(this.data[i].userId)
+                        this.data[i].userId = PM.fullName
+                        this.data[i].dateUpdate = this.formatDate(this.data[i].dateUpdate)
+                        this.data[i].dateCreated = this.formatDate(this.data[i].dateCreated)
+                    } else {
+                        this.data[i].PMName = ''
+                    }
+                }
+            },
+            async getUserCreated() {
+                for (let i = 0; i < this.data.length; i++) {
+                    if (this.data[i].userCreated != 0) {
+                        var usercreate = await this.getUserById(this.data[i].userCreated)
+                        this.data[i].userCreated = usercreate.fullName
+                    } else {
+                        this.data[i].userCreated = ''
+                    }
+                }
+            },
+            async getUserEdited() {
+                for (let i = 0; i < this.data.length; i++) {
+                    if (this.data[i].userUpdate != 0) {
+                        var userEdited = await this.getUserById(this.data[i].userUpdate)
+                        this.data[i].userUpdate = userEdited.fullName
+                    } else {
+                        this.data[i].userEdited = ''
+                    }
+                }
             },
             addProject() {
                 this.$router.push('/project/add')
@@ -426,31 +440,32 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                     })
             },
             canOperation(isDeleted, isFinished) {
-                if(isDeleted === true || isFinished === true ) {
-                    return true;
-                }else{
+                if (isDeleted === true || isFinished === true) {
+                    return true
+                } else {
                     return false
                 }
             },
-            getProjectByLead(idlead){
+            getProjectByLead(idlead) {
                 HTTP.get(`/Project/getAllProjectByLead/${idlead}`)
-                .then(res=>{
-                    this.data = res.data
-                    this.loading = false
-                }).catch(err=>console.log(err))
+                    .then((res) => {
+                        this.data = res.data
+                        this.loading = false
+                    })
+                    .catch((err) => console.log(err))
             },
-            getProjectByStaff(idstaff){
+            getProjectByStaff(idstaff) {
                 HTTP.get(`/Project/getAllProjectByStaff/${idstaff}`)
-                .then(res=>{
-                    this.data = res.data
-                    console.log(res.data);
-                    this.loading = false
-                }).catch(err=>console.log(err))
+                    .then((res) => {
+                        this.data = res.data
+                        console.log(res.data)
+                        this.loading = false
+                    })
+                    .catch((err) => console.log(err))
             },
-            Permission(value,id){
-                if(value !== null){
-
-                    if(value === 1) {
+            Permission(value, id) {
+                if (value !== null) {
+                    if (value === 1) {
                         this.showButton.add = true
                         this.showButton.delete = true
                         this.showButton.edit = true
@@ -458,24 +473,24 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                         this.showButton.finish = true
                         this.showButton.finishMulti = true
                         this.showButton.member = true
-                       this.getAllProject()
+                        this.getAllProject()
                     }
 
                     // sample
-                    if(value === 2) {
-                       this.getAllProject()
+                    if (value === 2) {
+                        this.getAllProject()
                     }
                     // lead
-                    if(value === 3){
+                    if (value === 3) {
                         this.showButton.member = true
                         this.getProjectByLead(id)
                     }
                     // staff
-                    if(value === 4){
-                        this.getProjectByStaff(id);
+                    if (value === 4) {
+                        this.getProjectByStaff(id)
                     }
                     // pm
-                    if(value === 5){
+                    if (value === 5) {
                         this.showButton.add = true
                         this.showButton.delete = true
                         this.showButton.edit = true
@@ -545,6 +560,17 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                         })
                     })
             },
+            getFormattedDate(date) {
+                var year = date.getFullYear()
+
+                var month = (1 + date.getMonth()).toString()
+                month = month.length > 1 ? month : '0' + month
+
+                var day = date.getDate().toString()
+                day = day.length > 1 ? day : '0' + day
+
+                return day + '-' + month + '-' + year
+            },
             showMember() {
                 location.reload()
             },
@@ -567,7 +593,6 @@ import { LocalStorage } from '@/helper/local-storage.helper'
             getAllProects(page) {
                 return HTTP_API_GITLAB.get(GET_ALL_PROJECT(100, page)).then((res) => res.data)
             },
-            
             async handlerGetInfoProjects() {
                 let resultCountPr = 100
                 let resultPr = []
@@ -579,6 +604,9 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                     resultCountPr = newResultsPr.length
                     resultPr = resultPr.concat(newResultsPr)
                 }
+            },
+            getUserById(id) {
+                return HTTP.get(GET_USER_BY_ID(id)).then((res) => res.data)
             },
         },
         components: { Add, Edit, Delete, Member, Export, DialogAddEdit },
@@ -663,5 +691,10 @@ import { LocalStorage } from '@/helper/local-storage.helper'
         .maz {
             margin-right: 5px;
         }
+    }
+</style>
+<style>
+    .p-multiselect-panel.p-component.p-ripple-disabled {
+        margin-top: 4px;
     }
 </style>

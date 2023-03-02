@@ -11,5 +11,6 @@
         public string MainName { get; set; }
         public decimal DiskDriveTotalSize { get; set; }
         public List<ApplicationDto>? Application { get; set; }
+        public string UpdateAt { get; set; }
     }
 }

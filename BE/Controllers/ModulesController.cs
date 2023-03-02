@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class ModulesController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -21,6 +22,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("addModule")]
+        [Authorize(Roles = "permission_group: True module: groups")]
+        [Authorize(Roles = "group: Admin")]
         public IActionResult Create(addModuleDtos module)
         {
             try
@@ -44,6 +47,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("updateMoudel")]
+        [Authorize(Roles = "permission_group: True module: groups")]
+        [Authorize(Roles = "group: Admin")]
         public async Task<ActionResult> updateModule(Module mod)
         {
             try
@@ -81,6 +86,8 @@ namespace BE.Controllers
 
         [HttpPut]
         [Route("deleteModule/{idModule}")]
+        [Authorize(Roles = "permission_group: True module: groups")]
+        [Authorize(Roles = "group: Admin")]
         public async Task<IActionResult> deleteModule(int idModule)
         {
             try

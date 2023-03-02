@@ -18,6 +18,6 @@ namespace BE.Data.Models
         public decimal? DiskDriveTotalSize { get; set; }
         public string? OperatingSystem { get; set; }
         public string? SystemType { get; set; }
-        public DateTime? UpdateAt { get; set; }
+        public string? UpdateAt { get; set; }
     }
 }

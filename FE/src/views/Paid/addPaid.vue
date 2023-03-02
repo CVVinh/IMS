@@ -75,9 +75,9 @@
                                 'p-error': v$.Datasend.amountPaid.required.$invalid && isSubmit,
                                 'input-title': true,
                             }"
-                            >Mức chi<span style="color: red">*</span></label
+                            >Mức chi (VND)<span style="color: red">*</span></label
                         >
-                        <InputNumber v-model="v$.Datasend.amountPaid.$model"  :min=0 suffix=" VND" mode="decimal" />
+                        <InputNumber v-model="v$.Datasend.amountPaid.$model" :min=0 mode="decimal"/>
                         <small class="p-error" v-if="v$.Datasend.amountPaid.required.$invalid && isSubmit">{{
                             v$.Datasend.amountPaid.required.$message.replace('Value', 'Amount Paid')
                         }}</small>
@@ -86,7 +86,7 @@
             </div>
             
             <div class="flex justify-content-center container">
-                <label for="note">Nội dung lý do</label>
+                <label for="note">Nội dung lý do chi</label>
                 <Textarea
                     id="note"
                     v-model="Datasend.contentReason"
@@ -97,7 +97,7 @@
                 />
             </div>
 
-            <div class="flex justify-content-center container">
+            <div class="flex justify-content-center container mt-3">
                 <h6>Thêm ảnh</h6>
                 <div class="input_file">
                     <input type="file" multiple @change="onFileChange($event)" ref="fileupload" accept="image/*"/>
@@ -139,7 +139,7 @@
         data() {
             return {
                 Datasend: {
-                    projectId: '',
+                    projectId: 0,
                     customerName: '',
                     amountPaid: null,
                     paidReason: '',
@@ -179,7 +179,7 @@
             },
 
             clearform() {
-                this.Datasend.projectId = '';
+                this.Datasend.projectId = 0;
                 this.Datasend.customerName = '';
                 this.Datasend.amountPaid = null;
                 this.Datasend.paidReason = '';
@@ -241,7 +241,7 @@
 
             async CallApi(fromData) {
                 try {
-                    const res =  await HTTP_LOCAL.post(`Paid`, fromData)
+                    const res =  await HTTP.post(`Paid`, fromData)
 
                     switch (res.status) {
                         case HttpStatus.OK:
@@ -262,7 +262,7 @@
                             this.showError('Kiểm tra kết nối!')
                             break
                         case 'ERR_BAD_REQUEST':
-                            this.showError(error.response.data)
+                            console.log(error.response.data)
                             break
                         default:
                     }
@@ -298,7 +298,6 @@
                 }
                 catch (err) {
                     console.log(err)
-                    this.showError(error.response.data)
                 }
             },
 

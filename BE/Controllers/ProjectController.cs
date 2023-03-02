@@ -19,7 +19,8 @@ namespace BE.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class ProjectController : ControllerBase
+    [Authorize(Roles = "permission_group: True module: project")]
+    public class ProjectController : ControllerBase
 	{
 
 		private readonly AppDbContext _context;
@@ -37,13 +38,13 @@ namespace BE.Controllers
 
 		// PM, sample
 		[HttpGet("getAllProject")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public ActionResult getAllProject()
 		{
 			try
 			{
 				var dsProject = from x in _context.Projects
 								join k in _context.Users on x.Leader equals k.id
+								where x.IsDeleted == false
 								select new
 								{
 									id = x.Id,
@@ -71,8 +72,43 @@ namespace BE.Controllers
 			}
 		}
 
-		// Lead
-		[HttpGet("getAllProjectByLead/{IdLead}")]
+        [HttpGet("getAllProjectRunning")]
+        public ActionResult getAllProjectRunning()
+        {
+            try
+            {
+                var dsProject = from x in _context.Projects
+                                join k in _context.Users on x.Leader equals k.id
+                                where x.IsDeleted == false && x.IsFinished == false
+                                select new
+                                {
+                                    id = x.Id,
+                                    dateCreated = x.DateCreated,
+                                    dateUpdate = x.DateUpdate,
+                                    description = x.Description,
+                                    endDate = x.EndDate,
+                                    isDeleted = x.IsDeleted,
+                                    isFinished = x.IsFinished,
+                                    isOnGitlab = x.IsOnGitlab,
+                                    leader = k.FullName,
+                                    name = x.Name,
+                                    projectCode = x.ProjectCode,
+                                    startDate = x.StartDate,
+                                    userCreated = x.UserCreated,
+                                    userId = x.UserId,
+                                    userUpdate = x.UserUpdate
+                                };
+
+                return Ok(dsProject);
+            }
+            catch (Exception ew)
+            {
+                return BadRequest(ew);
+            }
+        }
+
+        // Lead
+        [HttpGet("getAllProjectByLead/{IdLead}")]
 		public IActionResult getAllProjectByLead(int IdLead)
 		{
 
@@ -80,7 +116,7 @@ namespace BE.Controllers
 			{
                 var list = from x in _context.Projects
                            join d in _context.Users on x.Leader equals d.id
-                           where d.id == IdLead
+                           where d.id == IdLead && x.IsDeleted == false && x.IsFinished == false
                            select new
                            {
                                id = x.Id,
@@ -105,8 +141,6 @@ namespace BE.Controllers
 			{
 				return BadRequest(ex);
 			}
-
-			
 		}
 
         // Staff
@@ -119,7 +153,7 @@ namespace BE.Controllers
 				var list = from x in _context.Projects
 						   join c in _context.Member_Projects on x.Id equals c.idProject
 						   join k in _context.Users on x.Leader equals k.id
-						   where c.member == idstaff
+						   where c.member == idstaff && x.IsDeleted == false && x.IsFinished == false
                            select new
 						   {
 							   id = x.Id,
@@ -148,12 +182,6 @@ namespace BE.Controllers
 			}	
 		}
 
-
-
-
-
-
-
         // get lead list in addProject
         [HttpGet("getListLead")]
 		public IActionResult getListLead()
@@ -170,15 +198,9 @@ namespace BE.Controllers
 			
 		}
 
-
-
-
-
-
         [HttpPost("addProject")]
-		[Authorize(Roles = "permission_group: True module: project")]
-		[Authorize(Roles = "module: project add: 1")]
-		public async Task<IActionResult> Create(AddNewProjectDto project_Model)
+        [Authorize(Roles = "group: pm")]
+        public async Task<IActionResult> Create(AddNewProjectDto project_Model)
 		{
 			try
 			{
@@ -227,9 +249,8 @@ namespace BE.Controllers
 
 		}
 		[HttpPut("DeleteProject/{id}")]
-		[Authorize(Roles = "permission_group: True module: project")]
-		[Authorize(Roles = "module: project delete: 1")]
-		public IActionResult DeleteProject(int id, IdUserChangeProjectDto request)
+        [Authorize(Roles = "group: pm")]
+        public IActionResult DeleteProject(int id, IdUserChangeProjectDto request)
 		{
 			try
 			{
@@ -254,9 +275,8 @@ namespace BE.Controllers
 		}
 
 		[HttpPut("FinishProject/{id}")]
-		[Authorize(Roles = "permission_group: True module: project")]
-		[Authorize(Roles = "module: project update: 1")]
-		public IActionResult FinishProject(int id, IdUserChangeProjectDto request)
+        [Authorize(Roles = "group: pm")]
+        public IActionResult FinishProject(int id, IdUserChangeProjectDto request)
 		{
 
 			try
@@ -282,24 +302,37 @@ namespace BE.Controllers
 		}
 
 		[HttpGet("getById/{id}")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public IActionResult getById(int id)
 		{
 			try
 			{
-				var pro = _context.Projects.SingleOrDefault(p => p.Id == id);
+				var pro = _context.Projects.Where(p => p.IsDeleted == false).SingleOrDefault(p => p.Id == id);
 				if (pro == null)
 				{
-					return NotFound("Khong tim thay doi tuong");
+					return NotFound();
 				}
 				return Ok(pro);
 			}
 			catch (Exception ex) { return BadRequest(ex.Message); }
 		}
 
-		[HttpGet("getProjectIsDelete")]
-		[Authorize(Roles = "permission_group: True module: project")]
-		public IActionResult getProIsDelete()
+        [HttpGet("getProByIdDel/{id}")]
+        public IActionResult getProByIdDel(int id)
+        {
+            try
+            {
+                var pro = _context.Projects.SingleOrDefault(p => p.Id == id);
+                if (pro == null)
+                {
+                    return NotFound();
+                }
+                return Ok(pro);
+            }
+            catch (Exception ex) { return BadRequest(ex.Message); }
+        }
+
+        [HttpGet("getProjectIsDelete")]
+		public IActionResult getListProIsDelete()
 		{
 			try
 			{
@@ -314,12 +347,11 @@ namespace BE.Controllers
 		}
 
 		[HttpGet("getProjectByDayBefore/{day}")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public IActionResult getProjectByDayBefore(DateTime day)
 		{
 			try
 			{
-				var pro = _context.Projects.Where(p => p.EndDate < day);
+				var pro = _context.Projects.Where(p => p.IsDeleted == false).Where(p => p.EndDate < day);
 				if (pro == null)
 				{
 					return NotFound("Khong tim thay du an");
@@ -336,12 +368,11 @@ namespace BE.Controllers
 		}
 
 		[HttpGet("getProjectByName/{name}")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public IActionResult getProjectByName(string name)
 		{
 			try
 			{
-				var pro = _context.Projects.SingleOrDefault(p => p.Name == name);
+				var pro = _context.Projects.Where(p => p.IsDeleted == false).SingleOrDefault(p => p.Name == name);
 				if (pro == null)
 				{
 					return NotFound();
@@ -352,7 +383,6 @@ namespace BE.Controllers
 			catch (Exception ex) { return BadRequest(ex); }
 		}
 		[HttpGet("getProjectIsNotFinished")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public IActionResult getProjectIsNotFinished()
 		{
 			try
@@ -371,12 +401,11 @@ namespace BE.Controllers
 
 
 		[HttpGet("getLengthOfProject/{name}")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public IActionResult getLengthOfProject(string name)
 		{
 			try
 			{
-				var pro = _context.Projects.SingleOrDefault(p => p.Name == name);
+				var pro = _context.Projects.Where(p => p.IsDeleted == false).SingleOrDefault(p => p.Name == name);
 				if (pro == null)
 				{
 					return NotFound();
@@ -395,10 +424,9 @@ namespace BE.Controllers
 		}
 		[HttpGet]
 		[Route("getProjectById/{Id}")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public async Task<ActionResult<Projects>> getProjectById(int Id)
 		{
-			var project = await _context.Projects.SingleOrDefaultAsync(x => x.Id == Id);
+			var project = await _context.Projects.Where(p => p.IsDeleted == false).SingleOrDefaultAsync(x => x.Id == Id);
 
 			if (project == null)
 			{
@@ -409,9 +437,8 @@ namespace BE.Controllers
 		}
 
 		[HttpPut]
-		[Route("updateProject/{id}")]
-		[Authorize(Roles = "permission_group: True module: project")]
-		[Authorize(Roles = "module: project update: 1")]
+        [Authorize(Roles = "group: pm")]
+        [Route("updateProject/{id}")]
 		public async Task<ActionResult> updateProject(EditProjectDto requests, int id)
 		{
 
@@ -448,7 +475,6 @@ namespace BE.Controllers
 			return true;
 		}
 		[HttpPost("getAll")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public async Task<IActionResult> getAll(Paginate p)
 		{
 			if (p.pageIndex == 0)
@@ -460,7 +486,8 @@ namespace BE.Controllers
 			{
 				p.pageSizeEnum = 2;
 			}
-			var keyWord = await _context.Projects.Where(i => string.IsNullOrEmpty(p.word)
+			var keyWord = await _context.Projects.Where(i => i.IsFinished == false 
+															&& (string.IsNullOrEmpty(p.word)
 															|| i.Id.ToString().Contains(p.word)
 															|| i.StartDate.ToString().Contains(p.word)
 															|| i.EndDate.ToString().Contains(p.word)
@@ -472,7 +499,7 @@ namespace BE.Controllers
 															|| i.DateUpdate.ToString().Contains(p.word)
 															|| i.ProjectCode.Contains(p.word)
 															|| i.Name.Contains(p.word)
-															|| i.Description!.Contains(p.word)).Skip((p.pageIndex - 1) * p.pageSizeEnum).Take(p.pageSizeEnum).ToListAsync();
+															|| i.Description!.Contains(p.word))).Skip((p.pageIndex - 1) * p.pageSizeEnum).Take(p.pageSizeEnum).ToListAsync();
 
 			var listSort = keyWord.OrderBy(i => i.DateCreated).ToList();
 			var pageIndex = p.pageIndex;
@@ -488,22 +515,19 @@ namespace BE.Controllers
 
 		[HttpGet]
 		[Route("getProjectByDayAfter")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public async Task<ActionResult<Projects>> getProjectByDayAfter(DateTime d)
 		{
-			var project = await _context.Projects.Where(x => x.EndDate > d ).ToListAsync();
+			var project = await _context.Projects.Where(x => x.EndDate > d && x.IsDeleted == false).ToListAsync();
 			if (project == null)
 			{
 				return NotFound();
 			}
 			return Ok(project);
-           
         }
 
 
 		[HttpGet]
 		[Route("getProjectisFinished")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public async Task<ActionResult<IEnumerable<Projects>>> getProjectisFinished()
 		{
 			var project = await _context.Projects.Where(x => x.IsFinished == true).ToListAsync();
@@ -516,10 +540,9 @@ namespace BE.Controllers
 
 		[HttpGet]
 		[Route("getUserByproject/{Id}")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public async Task<ActionResult> getUserByproject(int Id)
 		{
-			var project = await _context.Projects.SingleOrDefaultAsync(x => x.Id == Id);
+			var project = await _context.Projects.Where(x => x.IsFinished == false).SingleOrDefaultAsync(x => x.Id == Id);
 			if (project == null)
 			{
 				return NotFound();
@@ -529,8 +552,6 @@ namespace BE.Controllers
 		}
 		[HttpGet]
 		[Route("exportExcel")]
-		[Authorize(Roles = "permission_group: True module: project")]
-		[Authorize(Roles = "module: project export: 1")]
 		public async Task<string> DownloadFile()
 		{
 			var wb = new XLWorkbook();
@@ -568,7 +589,7 @@ namespace BE.Controllers
         {
             try
             {
-				var pro = _context.Projects.Where(p => p.IsOnGitlab == true).ToList();
+				var pro = _context.Projects.Where(p => p.IsOnGitlab == true && p.IsDeleted == false).ToList();
                 if (pro == null)
                 {
                     return NotFound();
@@ -587,7 +608,7 @@ namespace BE.Controllers
                 var listuser = from x in _context.Users
                                join c in _context.Member_Projects on x.id equals c.member
                                join d in _context.Projects on c.idProject equals d.Id
-                               where d.Id == idproject
+                               where d.Id == idproject && d.IsDeleted == false
                                select new
                                {
                                    x,

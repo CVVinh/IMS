@@ -7,7 +7,7 @@ namespace BE.Data.Dtos.PaidDtos.Validator
     {
         public AcceptPaymentPaidValidator() 
         {
-            RuleFor(x => x.PaidPerson).NotEmpty().WithMessage("PaidPerson is not empty");
+            RuleFor(x => x.PersonConfirm).NotEmpty().WithMessage("PersonConfirm is not empty");
         }
 
     }

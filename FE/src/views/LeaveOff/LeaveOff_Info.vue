@@ -15,7 +15,7 @@
 
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="d-flex justify-content-start">
-                                <Export style="height: 50px" label="Xuất Excel" @click="exportCSV($event)" />
+                                <Export style="height: 50px;" label="Xuất Excel"  @click="exportCSV($event)" />
 
                                 <!-- <Button label="Đăng ký nghỉ phép" class="p-button-info" style="margin-left: 10px;" @click="toRegisterPage" /> -->
                                 <router-link  to="/leaveoff/Registerlists" 
@@ -24,8 +24,8 @@
                                     align-items: center;
                                     justify-content: center;
                                     color: #ffffff;
-                                    background-color: #F59E0B;
-                                    border: 1px solid #F59E0B ;
+                                    background-color: #3B82F6;
+                                    border:1px solid #3B82F6;
                                     padding: 10px;
                                     border-radius: 5px;
                                     margin-left: 10px;
@@ -34,7 +34,7 @@
                                 "
                                  v-if="showButton.add"
                                 >
-                                    <span>Đăng ký nghỉ phép</span>        
+                                <i class="pi pi-sign-out"></i> &ensp;  <span>Đăng ký nghỉ phép</span>        
                                 </router-link>
                             </div> 
                             <div class="d-flex justify-content-end">

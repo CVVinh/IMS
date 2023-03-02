@@ -248,6 +248,7 @@
                                             optionLabel="nameGroup"
                                             optionValue="id"
                                             :class="{ 'p-invalid': v$.form.idGroup.$invalid && submitted }"
+                                            :disabled="checkRoleEditGroup()"
                                         />
                                         <label
                                             for="idGroup"
@@ -554,6 +555,7 @@
     import LayoutDefault from '../../layouts/LayoutDefault/LayoutDefault.vue'
     import { UserRoleHelper } from '@/helper/user-role.helper'
     import { HttpStatus } from '@/config/app.config'
+import { LocalStorage } from '@/helper/local-storage.helper'
     export default {
         props: ['statusopen', 'iduser', 'roleoption'],
         setup: () => ({
@@ -562,6 +564,7 @@
         name: 'edituser',
         data() {
             return {
+                token : null,
                 form: {
                     userCode: null,
                     password: null,
@@ -713,9 +716,21 @@
             },
         },
         mounted() {
+            this.token = LocalStorage.jwtDecodeToken();
             this.getAllGroup()
         },
+        
         methods: {
+            checkRoleEditGroup(){
+                if(this.token){
+                    if(Number(this.token.IdGroup) === 1){
+                        return false
+                    }
+                    if(Number(this.token.IdGroup) !== 1){
+                        return true
+                    }
+                }
+            },
             getAllGroup() {
                 HTTP.get('Group/getListGroup/')
                     .then((res) => {

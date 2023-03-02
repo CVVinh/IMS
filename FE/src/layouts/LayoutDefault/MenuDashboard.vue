@@ -382,7 +382,6 @@
     import { ProjectDto } from '@/views/Project/Project.dto'
     import DialogAddEdit from '@/views/Project/DialogAddEdit.vue'
     import AddUserDiaLog from '@/views/Users/AddUserDiaLog.vue'
-
     const router = useRouter()
 
     let DialogProject = reactive({
@@ -521,7 +520,41 @@
         if (objChange.dropdown[option].open && dropdown.Target != event.target) return true
     }
 </script>
-
+<script>
+    import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr'
+    export default {
+        data() {
+            return { noti: [] }
+        },
+        created() {
+            const connection = new HubConnectionBuilder()
+                .withUrl('http://localhost:5001/NotificationHub')
+                .configureLogging(LogLevel.Information)
+                .build()
+            connection.on('ReceiveLeaveOff', () => {
+                this.toastSuccess('Thành Công !!!')
+                this.getNotification()
+            })
+            connection.start()
+        },
+        methods: {
+            getNotification() {
+                HTTP.get('Notification').then((res) => {
+                    this.noti = res.data
+                    console.log(this.noti)
+                })
+            },
+            toastSuccess(message) {
+                this.$toast.add({
+                    severity: 'success',
+                    summary: 'Thành công',
+                    detail: message,
+                    life: 3000,
+                })
+            },
+        },
+    }
+</script>
 <style scoped>
     @import '../../styles/Css/header.css';
     .isToggle {

@@ -9,6 +9,5 @@ namespace BE.Data.Models
         public string note { get; set; }
         public int isDeleted { get; set; }
         public int idSort { get; set; }
-
     }
 }

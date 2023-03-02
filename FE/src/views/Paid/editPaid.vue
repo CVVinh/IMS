@@ -77,10 +77,10 @@
                             'p-error': v$.Datasend.amountPaid.required.$invalid && isSubmit,
                             'input-title': true,
                         }"
-                        >Mức chi<span style="color: red">*</span></label
+                        >Mức chi (VND)<span style="color: red">*</span></label
                     >
 
-                    <InputNumber v-model="v$.Datasend.amountPaid.$model" :min="0" suffix=" VND" mode="decimal" />
+                    <InputNumber v-model="v$.Datasend.amountPaid.$model" :min=0 mode="decimal" />
                     <small class="p-error" v-if="v$.Datasend.amountPaid.required.$invalid && isSubmit">{{
                         v$.Datasend.amountPaid.required.$message.replace('Value', 'Amount Paid')
                     }}</small>
@@ -89,7 +89,7 @@
         </div>
 
         <div class="flex justify-content-center container">
-            <label for="note">Nội dung lý do</label>
+            <label for="note">Nội dung lý do chi</label>
             <Textarea
                 id="note"
                 v-model="Datasend.contentReason"
@@ -100,7 +100,7 @@
             />
         </div>
 
-        <div class="flex justify-content-center container">
+        <div class="flex justify-content-center container mt-3">
             <h6>Thêm ảnh</h6>
             <div class="input_file">
                 <input type="file" multiple @change="onFileChange($event)" ref="fileupload" accept="image/*"/>
@@ -162,7 +162,7 @@
         data() {
             return {
                 Datasend: {
-                    projectId: '',
+                    projectId: 0,
                     customerName: '',
                     amountPaid: null,
                     paidReason: '',
@@ -207,7 +207,7 @@
             },
 
             clearform() {
-                this.Datasend.projectId = '';
+                this.Datasend.projectId = 0;
                 this.Datasend.customerName = '';
                 this.Datasend.amountPaid = null;
                 this.Datasend.paidReason = '';
@@ -217,7 +217,7 @@
             },
             
             async CallApi(fromData) {
-                const res = await HTTP_LOCAL.put(`Paid/${this.Datasend.id}`, fromData).then((res) => {
+                const res = await HTTP.put(`Paid/${this.Datasend.id}`, fromData).then((res) => {
                     if(res.status == 200){
                         this.clearform();                
                         this.showSuccess2('Cập nhật thành công!');
@@ -227,13 +227,13 @@
                     }
                 })
                 .catch((error) => {
-                    this.showError2(error.response.data);
+                    //this.showError2(error.response.data);
                     console.log(error);
                 });
             },
 
             async CallApiDeleteImg(arrImg){
-                await HTTP_LOCAL.post(`Paid/multi-image/${this.Datasend.id}`, arrImg).then((res) => {
+                await HTTP.post(`Paid/multi-image/${this.Datasend.id}`, arrImg).then((res) => {
                     if(res.status == 200){                       
                         this.showSuccess2('Xoá ảnh thành công!');
                     }
@@ -242,7 +242,7 @@
                     }
                 })
                 .catch((error) => {
-                    this.showError2(error.response.data._Message);
+                    //this.showError2(error.response.data._Message);
                     console.log(error);
                 });
             },
@@ -257,7 +257,7 @@
                 }
                 catch (err) {
                     console.log(err);
-                    this.showError2(err.response.data);
+                    //this.showError2(err.response.data);
                 }
             },
 
@@ -265,11 +265,12 @@
                 this.token = LocalStorage.jwtDecodeToken();
                 try {
                     const formData = new FormData();
-                    formData.append('PaidPerson', this.Datasend.user.id);
+                    formData.append('PaidPerson', this.token.Id);
                     formData.append('ProjectId', this.Datasend.projectId);
                     formData.append('CustomerName', this.Datasend.customerName);
                     formData.append('AmountPaid', this.Datasend.amountPaid);
                     formData.append('PaidReason', this.Datasend.paidReason);
+                    formData.append('ContentReason', this.Datasend.contentReason);
 
                     this.images.forEach((item) => {
                         formData.append('paidImage', item);

@@ -147,6 +147,7 @@
     import { DateHelper } from '@/helper/date.helper'
 
     export default {
+        name: 'RuleInfoAdd',
         props: ['statusopen'],
 
         setup: () => ({
@@ -161,7 +162,6 @@
                 idUser: localStorage.getItem('username'),
                 formFile: null,
                 content: null,
-
                 submitted: false,
             }
         },
@@ -184,10 +184,6 @@
         },
 
         methods: {
-            onUploadFile() {
-                this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 })
-            },
-
             closeAdd() {
                 this.$emit('closeAdd')
             },
@@ -209,56 +205,62 @@
                 this.content = null
             },
 
+            showError(message) {
+                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: message, life: 3000 });
+            },
+
+            showSuccess(message) {
+                this.$toast.add({ severity: 'success', summary: 'Thành công', detail: message, life: 3000 });
+            },
+
+            showInfo(message) {
+                this.$toast.add({ severity: 'info', summary: 'Thông báo', detail: message, life: 3000 });
+            },
+
+            showResponseApi(status, message = "") {
+                switch (status) {
+                    case 401:
+                    case 403:
+                        this.showError('Bạn không có quyền thực hiện chức năng này!');
+                        break;
+
+                    case 404:
+                        this.showError('Lỗi! Load dữ liệu!');
+                        break;  
+
+                    default:
+                        if(message != ""){
+                            this.showError(message);
+                        }
+                        else {
+                            this.showError("Có lỗi trong quá trình thực hiện!");
+                        }
+                        break;
+                }
+            },
+
             async CallApi(fromData) {
                 try {
-                    const res = await HTTP.post('/Rules', fromData)
-
-                    switch (res.status) {
-                        case HttpStatus.OK:
-                            this.resetForm()
-                            this.$emit('reloadpage')
-                            this.$toast.add({
-                                severity: 'success',
-                                summary: 'Thành công',
-                                detail: 'Thêm mới thành công!',
-                                life: 3000,
-                            })
-                            break
-                        case HttpStatus.UNAUTHORIZED:
-                        case HttpStatus.FORBIDDEN:
-                            this.$toast.add({
-                                severity: 'error',
-                                summary: 'Lỗi',
-                                detail: 'Không có quyền thực hiện thao tác này!',
-                                life: 2000,
-                            })
-                            break
-                        default:
-                            this.$toast.add({
-                                severity: 'error',
-                                summary: 'Lỗi',
-                                detail: 'Lưu lỗi ',
-                                life: 3000,
-                            })
-                    }
+                    const res = await HTTP.post('/Rules', fromData).then( res => {
+                        if(res.status == 200){
+                            this.resetForm();
+                            this.$emit('reloadpage');
+                            this.showSuccess('Thêm mới thành công!');
+                        }
+                        else this.showResponseApi(res.status);
+                    })
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
                 } catch (error) {
                     switch (error.code) {
                         case 'ERR_NETWORK':
-                            this.$toast.add({
-                                severity: 'error',
-                                summary: 'Lỗi',
-                                detail: 'Kiểm tra kết nối !',
-                                life: 3000,
-                            })
-                            break
+                            this.showInfo('Kiểm tra kêt nối!');
+                            break;
                         case 'ERR_BAD_REQUEST':
-                            this.$toast.add({
-                                severity: 'error',
-                                summary: 'Lỗi',
-                                detail: error.response.data,
-                                life: 3000,
-                            })
-                            break
+                            console.log(error.response.data);
+                            break;
                         default:
                     }
                 }

@@ -21,6 +21,20 @@
                 <div class="detail__content-box detail__content-box-top">
                     <div class="detail__content-box-items" >
                         <div class="detail__content-box-items-text">
+                            <b><i class="pi pi-id-card p-button-icon"></i> Người chi tiêu:</b> {{ this.Datasend.paidNamePerson }}  
+                        </div>
+                    </div>
+
+                    <div class="detail__content-box-items top">
+                        <div class="detail__content-box-items-text">
+                            <b><i class="pi pi-user-edit"></i> Người xác nhận:</b> {{ this.Datasend.confirmNamePerson }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail__content-box detail__content-box-top">
+                    <div class="detail__content-box-items" >
+                        <div class="detail__content-box-items-text">
                             <b><i class="pi pi-users p-button-icon"></i> Khách hàng:</b> {{ this.Datasend.customerFullName }}  
                         </div>
                     </div>
@@ -35,6 +49,11 @@
                 <div class="detail__content-box detail__content-box-top">    
                     <div class="detail__content-box-items top">
                         <div class="detail__content-box-items-text">
+                            <b><i class="p-confirm-dialog-icon pi pi-info-circle"></i> Lý do chi:</b> {{ Datasend.paidNameReason }} 
+                        </div>
+                    </div>
+                    <div class="detail__content-box-items top">
+                        <div class="detail__content-box-items-text">
                             <b><i class="bx bx-wallet"></i> Mức chi:</b> {{ this.Datasend.amountPaidName }}
                         </div>
                     </div>
@@ -46,10 +65,10 @@
                     </div>
                 </div>
 
-                <div class="detail__content-box detail__content-box-top detail__content-box-size ">
+                <div class="detail__content-box detail__content-box-top detail__content-box-size_content_reason ">
                     <div class="detail__content-box-items">
                         <div class="detail__content-box-items-text">
-                            <b><i class="p-confirm-dialog-icon pi pi-info-circle"></i> Lý do chi trả:</b> {{ Datasend.paidNameReason }} 
+                            <b><i class="p-confirm-dialog-icon pi pi-book"></i> Nội dung chi:</b> {{ Datasend.contentReason }}
                         </div>
                     </div>
                 </div>
@@ -67,7 +86,7 @@
                     </Galleria>
                 </div>
                 <div v-else>
-                    <img src="@/assets/noImage.png" alt="anh" class="no_image">
+                    <img src="@/assets/noImage2.png" alt="anh" class="no_image">
                 </div>
             </div>
         </div>
@@ -95,13 +114,15 @@
                     customerName: '',
                     amountPaid: 0,
                     paidReason: '',
+                    contentReason: '',
                     paidPerson: 0,
                     isPaid: false,
                     paidDate: null,
                     token: null,
-                    paidImages: null,
+                    paidImages: [],
 
                     paidNamePerson: null,
+                    confirmNamePerson: null,
                     customerFullName: null,
                     paidNameReason: null,
                     nameProject: null,
@@ -111,15 +132,15 @@
                 responsiveOptions: [
                     {
                         breakpoint: '1024px',
-                        numVisible: 5
-                    },
-                    {
-                        breakpoint: '960px',
                         numVisible: 4
                     },
                     {
-                        breakpoint: '768px',
+                        breakpoint: '960px',
                         numVisible: 3
+                    },
+                    {
+                        breakpoint: '768px',
+                        numVisible: 2
                     },
                     {
                         breakpoint: '560px',
@@ -135,7 +156,7 @@
                 switch (status) {
                     case 401:
                     case 403:
-                        this.showError('Bạn không có quyền thực hiện chức năng này!');
+                        //this.showError('Bạn không có quyền thực hiện chức năng này!');
                         break;
 
                     case 404:
@@ -154,7 +175,7 @@
             },
 
             async getUsers(id) {
-                return await HTTP_LOCAL.get(GET_USER_BY_ID(id))
+                return await HTTP.get(GET_USER_BY_ID(id))
                     .then((respone) => respone.data)
                     .catch((error) => {
                         var message = error.response.data != '' ? error.response.data : error.response.statusText;
@@ -163,7 +184,7 @@
             },
 
             async getCustomerId(id) {
-                return await HTTP_LOCAL.get(`Customer/GetById/${id}`)
+                return await HTTP.get(`Customer/GetById/${id}`)
                     .then((respone) => respone.data._Data)
                     .catch((error) => {
                         var message = error.response.data != '' ? error.response.data : error.response.statusText;
@@ -172,7 +193,7 @@
             },
 
             async getPaidReasonId(id) {
-                return await HTTP_LOCAL.get(`PaidReason/GetById/${id}`)
+                return await HTTP.get(`PaidReason/GetById/${id}`)
                     .then((respone) => respone.data._Data)
                     .catch((error) => {
                         var message = error.response.data != '' ? error.response.data : error.response.statusText;
@@ -181,7 +202,7 @@
             },
 
             async getProjects(id) {
-                return await HTTP_LOCAL.get(GET_PROJECT_BY_ID(id))
+                return await HTTP.get(`Project/getProByIdDel/${id}`)
                     .then((respone) => respone.data)
                     .catch((error) => {
                         var message = error.response.data != '' ? error.response.data : error.response.statusText;
@@ -214,12 +235,20 @@
             if (this.dataDetail != null){
                 this.Datasend = this.dataDetail;
 
-                var user = await this.getUsers(parseInt(this.Datasend.paidPerson))
+                if(this.Datasend.personConfirm != null) {
+                    var confirmUser = await this.getUsers(parseInt(this.Datasend.personConfirm));
+                    this.Datasend.confirmNamePerson = confirmUser.fullName;
+                }
+                else {
+                    this.Datasend.confirmNamePerson = "";
+                }
+
+                var paidUser = await this.getUsers(parseInt(this.Datasend.paidPerson));
                 var customer = await this.getCustomerId(parseInt(this.Datasend.customerName));
                 var paidReason = await this.getPaidReasonId(parseInt(this.Datasend.paidReason));
 
                 this.Datasend.paidPerson = parseInt(this.Datasend.paidPerson);
-                this.Datasend.paidNamePerson = user.fullName;
+                this.Datasend.paidNamePerson = paidUser.fullName;
 
                 this.Datasend.customerName = parseInt(this.Datasend.customerName);
                 this.Datasend.customerFullName = customer.fullName;
@@ -247,7 +276,7 @@
                     });
                 }
                 
-                if(this.Datasend.projectId != 0){
+                if(this.Datasend.projectId != 0 ){
                     var project = await this.getProjects(this.Datasend.projectId);
                     this.Datasend.nameProject = project.name;
                 }
@@ -301,8 +330,8 @@
             margin-top: 15px;
         }
 
-        .detail__content-box-size {
-            min-height: 150px;
+        .detail__content-box-size_content_reason {
+            min-height: 160px;
         }
 
         .box-left {

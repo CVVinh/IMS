@@ -42,6 +42,7 @@ using BE.Services.InfoDeviceServices;
 using BE.Data.Dtos.PaidDtos;
 using BE.Data.Dtos.PaidDtos.Validator;
 using BE.Services.Customers;
+using BE.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +53,7 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Services.AddControllers()
     .AddFluentValidation();
-
+builder.Services.AddSignalR();
 #region Registering AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 #endregion
@@ -119,9 +120,11 @@ builder.Services.AddCors(otps =>
 {
     otps.AddPolicy("AppCorsPolicy", policy => 
     {
-        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        //policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        policy.WithOrigins("http://localhost:3000/").SetIsOriginAllowed((host) => true).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
     });
 });
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -189,7 +192,10 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.MapHub<NotificationHub>("/NotificationHub");
+
 app.MapControllers();
+
 
 app.Run();
 

@@ -30,11 +30,24 @@
         created() {
             window.localStorage.setItem('activeTag', '')
         },
+        mounted() {
+            this.reloadClass()
+        },
         components: {
             ViewMenusVue,
             sideBar,
         },
         methods: {
+            reloadClass() {
+                var el = document.getElementById('NavItems').querySelectorAll('a')
+                if (el != null) {
+                    for (let i = 0; i < el.length; i++) {
+                        if (el[i].classList.contains('active-nav-item')) {
+                            el[i].classList.remove('active-nav-item')
+                        }
+                    }
+                }
+            },
             getRoles() {
                 HTTP.get('Group/getListGroup').then((res) => {
                     this.listRole = res.data

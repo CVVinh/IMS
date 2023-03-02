@@ -20,6 +20,7 @@ namespace BE.Data.Extentions
             leaveOff.startTime = editLeaveOff.startTime;
             leaveOff.endTime = editLeaveOff.endTime;
             leaveOff.reasons = editLeaveOff.reasons;
+            leaveOff.idCompanyBranh = editLeaveOff.idCompanyBranh;
             return leaveOff;
         }
 

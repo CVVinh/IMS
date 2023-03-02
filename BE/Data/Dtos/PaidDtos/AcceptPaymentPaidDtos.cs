@@ -2,6 +2,6 @@
 {
     public class AcceptPaymentPaidDtos
     {
-        public int PaidPerson { get; set; }
+        public int PersonConfirm { get; set; }
     }
 }

@@ -5,7 +5,7 @@
         :modal="true"
         :maximizable="true"
         :dismissableMask="true"
-        header="Sửa quy định"
+        header="Cập nhật quy định"
         :show="resetForm()"
     >
         <div>
@@ -146,15 +146,16 @@
 </template>
 
 <script>
-    import { required, alphaNum, numeric, between, minLength, maxLength } from '@vuelidate/validators'
-    import { useVuelidate } from '@vuelidate/core'
-    import { HTTP, HTTP_LOCAL } from '@/http-common'
-    import jwt_decode from 'jwt-decode'
-    import { HttpStatus } from '@/config/app.config'
-    import { DateHelper } from '@/helper/date.helper'
-    import { LocalStorage } from '@/helper/local-storage.helper'
+    import { required, alphaNum, numeric, between, minLength, maxLength } from '@vuelidate/validators';
+    import { useVuelidate } from '@vuelidate/core';
+    import { HTTP, HTTP_LOCAL } from '@/http-common';
+    import jwt_decode from 'jwt-decode';
+    import { HttpStatus } from '@/config/app.config';
+    import { DateHelper } from '@/helper/date.helper';
+    import { LocalStorage } from '@/helper/local-storage.helper';
 
     export default {
+        name: 'RuleInfoEdit',
         props: ['statusopen', 'dataRuleById'],
 
         setup: () => ({
@@ -194,75 +195,83 @@
 
         methods: {
             closeEdit() {
-                this.$emit('closeEdit')
+                this.$emit('closeEdit');
             },
 
             handleSubmit() {
-                this.submitted = true
+                this.submitted = true;
                 if (this.v$.$invalid === false) {
-                    this.submit()
-                    this.closeEdit()
+                    this.submit();
+                    this.closeEdit();
+                }
+            },
+
+            showError(message) {
+                this.$toast.add({ severity: 'error', summary: 'Lỗi', detail: message, life: 3000 });
+            },
+
+            showSuccess(message) {
+                this.$toast.add({ severity: 'success', summary: 'Thành công', detail: message, life: 3000 });
+            },
+
+            showInfo(message) {
+                this.$toast.add({ severity: 'info', summary: 'Thông báo', detail: message, life: 3000 });
+            },
+
+            showResponseApi(status, message = "") {
+                switch (status) {
+                    case 401:
+                    case 403:
+                        this.showError('Bạn không có quyền thực hiện chức năng này!');
+                        break;
+
+                    case 404:
+                        this.showError('Lỗi! Load dữ liệu!');
+                        break;  
+
+                    default:
+                        if(message != ""){
+                            this.showError(message);
+                        }
+                        else {
+                            this.showError("Có lỗi trong quá trình thực hiện!");
+                        }
+                        break;
                 }
             },
 
             resetForm() {
-                this.title = this.dataRuleById ? this.dataRuleById.title : null
-                this.applyDay = this.dataRuleById ? this.dataRuleById.applyDay : new Date()
-                this.expiredDay = this.dataRuleById ? this.dataRuleById.expiredDay : new Date()
-                this.content = this.dataRuleById ? this.dataRuleById.content : null
-                this.userUpdated = this.dataRuleById ? this.dataRuleById.userCreated : this.decode.Id
-                this.formFile = this.dataRuleById ? this.dataRuleById.pathFile : null
+                this.title = this.dataRuleById ? this.dataRuleById.title : null;
+                this.applyDay = this.dataRuleById ? this.dataRuleById.applyDay : new Date();
+                this.expiredDay = this.dataRuleById ? this.dataRuleById.expiredDay : new Date();
+                this.content = this.dataRuleById ? this.dataRuleById.content : null;
+                this.userUpdated = this.dataRuleById ? this.dataRuleById.userCreated : this.decode.Id;
+                this.formFile = this.dataRuleById ? this.dataRuleById.pathFile : null;
             },
 
             async CallApi(fromData) {
                 try {
                     const res = await HTTP.put('/Rules/updateRules/' + this.dataRuleById.id, fromData)
-                    switch (res.status) {
-                        case HttpStatus.OK:
-                            this.resetForm()
-                            this.$emit('reloadpage')
-                            this.$toast.add({
-                                severity: 'success',
-                                summary: 'Thành công',
-                                detail: 'Thêm mới thành công!',
-                                life: 3000,
-                            })
-                            break
-                        case HttpStatus.UNAUTHORIZED:
-                        case HttpStatus.FORBIDDEN:
-                            this.$toast.add({
-                                severity: 'error',
-                                summary: 'Lỗi',
-                                detail: 'Không có quyền thực hiện thao tác này!',
-                                life: 2000,
-                            })
-                            break
-                        default:
-                            this.$toast.add({
-                                severity: 'error',
-                                summary: 'Lỗi',
-                                detail: 'Lưu lỗi ',
-                                life: 3000,
-                            })
-                    }
+                    .then( res => {
+                        if(res.status == 200){
+                            this.resetForm();
+                            this.$emit('reloadpage');
+                            this.showSuccess('Thêm mới thành công!');
+                        }
+                        else this.showResponseApi(res.status);
+                    })
+                    .catch((error) => {
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
+                        this.showResponseApi(error.response.status, message);
+                    });
                 } catch (error) {
                     switch (error.code) {
                         case 'ERR_NETWORK':
-                            this.$toast.add({
-                                severity: 'error',
-                                summary: 'Lỗi',
-                                detail: 'Kiểm tra kêt nối!',
-                                life: 3000,
-                            })
-                            break
+                            this.showInfo('Kiểm tra kêt nối!');
+                            break;
                         case 'ERR_BAD_REQUEST':
-                            this.$toast.add({
-                                severity: 'error',
-                                summary: 'Lỗi',
-                                detail: error.response.data,
-                                life: 3000,
-                            })
-                            break
+                            console.log(error.response.data);
+                            break;
                         default:
                     }
                 }
