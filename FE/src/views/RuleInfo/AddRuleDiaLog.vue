@@ -74,10 +74,17 @@
                                     >
                                 </div>
                                 <small
-                                    v-if="(v$.expiredDay.$invalid && submitted) || v$.expiredDay.$pending.$response"
+                                    v-if="(v$.expiredDay.$invalid && submitted) || v$.expiredDay.$pending.$response" class="p-error">{{ v$.expiredDay.required.$message.replace('Value', 'Expire Day') }}</small>
+                                <small
+                                    v-if="
+                                        !v$.expiredDay.$invalid &&
+                                        !checkEndDate() &&
+                                        submitted
+                                    "
                                     class="p-error"
-                                    >{{ v$.expiredDay.required.$message.replace('Value', 'Expire Day') }}</small
                                 >
+                                    Ngày hết hạn phải lớn hơn ngày áp dụng!
+                                </small>
                             </div>
                         </div>
 
@@ -203,6 +210,10 @@
                 this.idUser = localStorage.getItem('username')
                 this.content = null
                 this.content = null
+            },
+
+            checkEndDate() {
+                return (this.valid = DateHelper.compareDate(this.applyDay, '<', this.expiredDay));
             },
 
             showError(message) {
