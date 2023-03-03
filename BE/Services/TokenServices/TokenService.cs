@@ -58,6 +58,7 @@ namespace BE.Services.TokenServices
                     foreach (var item in getPermission_by_Group(userS.id))
                     {
                         claims.Add(new Claim(ClaimTypes.Role, item));
+                        claims.Add(new Claim("ListGroup", item));
                     }
                 }
 

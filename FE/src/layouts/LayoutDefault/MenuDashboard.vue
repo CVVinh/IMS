@@ -15,7 +15,7 @@
                         </a>
                     </div>
                     <div class="gl-display-flex gl-align-items-center"></div>
-                    <div class="gl-display-none gl-sm-display-block">
+                    <!-- <div class="gl-display-none gl-sm-display-block">
                         <ul class="list-unstyled nav navbar-sub-nav" id="js-top-nav">
                             <li class="dropdown header-projects qa-projects-dropdown ms-2">
                                 <a
@@ -112,9 +112,9 @@
                                 </a>
                             </li>
                         </ul>
-                    </div>
+                    </div> -->
                 </div>
-                <div
+                <!-- <div
                     class="navbar-collapse gl-transition-medium collapse gl-mr-auto global-search-container hide-when-top-nav-responsive-open ms-2"
                 >
                     <ul class="nav navbar-nav gl-w-full gl-align-items-center">
@@ -152,11 +152,10 @@
                             </a>
                         </li>
                     </ul>
-                </div>
+                </div> -->
                 <div class="navbar-collapse gl-transition-medium collapse" :class="{ isToggle: objChange.isToggle }">
                     <ul class="nav navbar-nav gl-w-full gl-align-items-center gl-justify-content-end">
-                        <!--
-                        <li class="header-new dropdown gl-display-none gl-sm-display-block gl-text-right">
+                        <!-- <li class="header-new dropdown gl-display-none gl-sm-display-block gl-text-right">
                             <a
                                 class="header-new-dropdown-toggle has-tooltip gl-display-flex dropdown-toggle"
                                 type="button"
@@ -240,63 +239,88 @@
                                     >0
                                 </span></a
                             >
-                        </li>
+                        </li> -->
 
                         <li class="nav-item header-help dropdown d-none d-md-block">
                             <a
                                 class="header-help-dropdown-toggle dropdown-toggle gl-relative"
                                 data-toggle="dropdown"
-                                :class="{ 'active-dropdown-btn': objChange.dropdown.Help.open }"
+                                :class="{
+                                    'active-dropdown-btn': objChange.dropdown.Help.open,
+                                }"
                                 :ref="(e) => (objChange.dropdown.Help.Target = e)"
                                 @click="HandleDropdown('Help')"
                             >
-                                <span class="gl-sr-only"> Help </span>
-                                <i class="fa-solid fa-circle-question" style="font-size: 16px"></i>
+                                <span class="gl-sr-only"> Notifications </span>
+                                <div v-if="count <= 0">
+                                    <i class="fa-regular fa-bell" style="font-size: 16px"></i>
+                                </div>
+                                <div v-else>
+                                    <i
+                                        class="fa-regular fa-bell"
+                                        :class="{ 'ring-animation': hasNewData }"
+                                        style="font-size: 16px"
+                                    ></i>
+                                </div>
+
+                                <div class="main-count-noti">
+                                    <span class="badge badge-pill todos-count js-todos-count main-acount-noti-span">{{
+                                        count
+                                    }}</span>
+                                </div>
+
                                 <span class="notification-dot rounded-circle gl-absolute"></span>
                             </a>
                             <div
                                 :if="objChange.dropdown.Help.open"
+                                style="width: 375px"
                                 class="dropdown-menu dropdown-menu-right dropdown-content-top"
                                 :class="{ 'show-dropdown': objChange.dropdown.Help.open === true }"
                             >
-                                <ul>
-                                    <li>
-                                        <button class="d-flex" type="button">
-                                            What&#39;s new
-                                            <span class="gl-badge-count">0</span>
-                                        </button>
-                                    </li>
+                                <div class="d-flex border-bottom border-1 pb-2">
+                                    <div class="p-2">
+                                        <span class="noti-header-left">Thông báo mới </span>
+                                    </div>
+                                </div>
 
-                                    <li>
-                                        <a href="#">Help</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Support</a>
-                                    </li>
-                                    <li>
-                                        <a target="_blank" class="text-nowrap" href="#">Community forum</a>
-                                    </li>
-                                    <li>
-                                        <button class="d-flex" type="button">
-                                            Keyboard shortcuts
-                                            <kbd aria-hidden="true" class="gl-badge-count">?</kbd>
-                                        </button>
-                                    </li>
-                                    <li class="divider"></li>
-                                    <li>
-                                        <a href="#">Submit feedback</a>
-                                    </li>
-                                    <li>
-                                        <a target="_blank" class="text-nowrap" href="#">Contribute to GitLab </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="">Switch to GitLab Next</a>
-                                    </li>
+                                <ul style="padding: 3px">
+                                    <ScrollPanel style="width: 100%; height: 300px; padding: 0px 10px 0px 0px">
+                                        <li
+                                            :class="{ 'is-watch': item.isWatched, 'default-watch': !item.isWatched }"
+                                            v-for="item in noti"
+                                            :key="item.id"
+                                            class="border-bottom border-1 item-info mt-1 mb-1"
+                                            style="padding: 5px 0px 5px 0px; height: 90px; cursor: pointer"
+                                        >
+                                            <router-link
+                                                :to="item.link"
+                                                :target="item.target"
+                                                :class="item.class"
+                                                style="text-decoration: none; color: inherit"
+                                                @click="putNotification(item.id)"
+                                            >
+                                                <span class="noti-name-text" style="font-size: 14px">
+                                                    {{ item.title }}</span
+                                                >
+                                                <h7
+                                                    class="d-flex"
+                                                    style="
+                                                        margin-top: 5px;
+                                                        margin-bottom: 2px;
+                                                        color: gray;
+                                                        font-size: 14px;
+                                                    "
+                                                >
+                                                    {{ item.message }}
+                                                </h7>
+                                                <h7 class="noti-time-text">{{ formartDate(item.dateCreated) }}</h7>
+                                            </router-link>
+                                        </li>
+                                    </ScrollPanel>
                                 </ul>
                             </div>
                         </li>
-                        -->
+
                         <li class="nav-item header-user js-nav-user-dropdown dropdown">
                             <a
                                 class="header-user-dropdown-toggle dropdown-toggle"
@@ -327,14 +351,18 @@
                                     <li class="divider"></li>
                                     <li v-for="(item, index) in moreMenuItemsUser" :key="index">
                                         <router-link :to="item.path"> {{ item.label }}</router-link>
+                                        <div class="border-bottom border-1 mt-1 mb-1"></div>
                                     </li>
-                                    <li class="divider d-md-none"></li>
-                                    <li v-for="(item, index) in moreMenuItemsSupport" :key="index" class="d-md-none">
+                                    <li
+                                        v-for="(item, index) in moreMenuItemsSupport"
+                                        :key="index"
+                                        class="d-md-none"
+                                        style="border-bottom: ridge"
+                                    >
                                         <router-link :to="item.path" :target="item.target" :class="item.class">
                                             {{ item.label }}</router-link
                                         >
                                     </li>
-                                    <li class="divider"></li>
                                     <li class="cursor-pointer">
                                         <a class="sign-out-link" @click="() => HandlerLogout()">Đăng xuất</a>
                                     </li>
@@ -382,6 +410,7 @@
     import { ProjectDto } from '@/views/Project/Project.dto'
     import DialogAddEdit from '@/views/Project/DialogAddEdit.vue'
     import AddUserDiaLog from '@/views/Users/AddUserDiaLog.vue'
+    import dayjs from 'dayjs'
     const router = useRouter()
 
     let DialogProject = reactive({
@@ -394,6 +423,9 @@
     let DialogUser = reactive({
         isOpenUser: false,
         listRole: [],
+    })
+    let hasNewData = reactive({
+        hasNewData: true,
     })
 
     let objChange = reactive({
@@ -519,35 +551,61 @@
         if (dropdown.Target == event.target) return false
         if (objChange.dropdown[option].open && dropdown.Target != event.target) return true
     }
+
+    function formartDate(date) {
+        const fmDate = new Date(date)
+        return dayjs(fmDate).format('DD/MM/YYYY HH:mm:ss')
+    }
 </script>
 <script>
     import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr'
+    import { HTTP_SINGNALRHUB } from '@/http-common'
+    import { NotificationService } from '@/service/notification.service'
     export default {
         data() {
-            return { noti: [] }
+            return { noti: [], count: 0, hasNewData: false }
         },
         created() {
             const connection = new HubConnectionBuilder()
-                .withUrl('http://localhost:5001/NotificationHub')
+                .withUrl(HTTP_SINGNALRHUB)
                 .configureLogging(LogLevel.Information)
                 .build()
             connection.on('ReceiveLeaveOff', () => {
-                this.toastSuccess('Thành Công !!!')
-                this.getNotification()
+                this.getNotification('Có thông báo mới !!!')
             })
             connection.start()
         },
+        mounted() {
+            this.getNotification(null)
+        },
+        watch: {
+            noti: {
+                handler: function Change(varss) {
+                    console.log(varss)
+                    let count1 = this.noti.filter(function (element) {
+                        return element.isWatched == false
+                    })
+                    console.log(count1)
+                    this.count = count1.length <= 0 ? 0 : count1.length
+                },
+            },
+        },
         methods: {
-            getNotification() {
-                HTTP.get('Notification').then((res) => {
+            getNotification(meess) {
+                NotificationService.getAllNotification().then((res) => {
                     this.noti = res.data
-                    console.log(this.noti)
+                    if (meess != null) {
+                        this.toastInfo(meess)
+                    }
                 })
             },
-            toastSuccess(message) {
+            putNotification(id) {
+                return NotificationService.isWatchNotification(id).then((res) => res.data)
+            },
+            toastInfo(message) {
                 this.$toast.add({
-                    severity: 'success',
-                    summary: 'Thành công',
+                    severity: 'info',
+                    summary: 'Thông báo',
                     detail: message,
                     life: 3000,
                 })
@@ -557,6 +615,15 @@
 </script>
 <style scoped>
     @import '../../styles/Css/header.css';
+    .is-watch {
+        background-color: white;
+    }
+    .default-watch {
+        background-color: rgba(131, 127, 127, 0.58);
+    }
+    /* .item-info:hover {
+        background-color: rgba(209, 209, 240, 0.2);
+    } */
     .isToggle {
         display: flex !important;
         flex: 1 1 auto !important;
@@ -587,6 +654,10 @@
         background-color: #fff !important;
         pointer-events: none !important;
     }
+
+    .active-noti {
+        background: black !important;
+    }
     .cursor-pointer {
         cursor: pointer;
     }
@@ -597,5 +668,121 @@
     }
     .height-header-content {
         height: 42px;
+    }
+    .navbar-gitlab .container-fluid .navbar-nav li .badge.badge-pill[data-v-0a3a650e]:not(.gl-badge) {
+        box-shadow: none;
+        font-weight: 600;
+        color: whitesmoke;
+    }
+    .navbar-gitlab .container-fluid .navbar-nav li .badge.badge-pill[data-v-0a3a650e]:not(.gl-badge):before {
+        box-shadow: none;
+        font-weight: 600;
+    }
+    .main-count-noti {
+        height: 17px;
+        width: 17px;
+        margin-left: 2px;
+        position: relative;
+        top: -7px;
+        right: 2px;
+    }
+    .main-acount-noti-span {
+        background: red !important;
+        /* background: linear-gradient(to bottom left, #ef8d9c 40%, #ffc39e 100%); */
+        width: inherit;
+        height: inherit;
+        line-height: 9px;
+    }
+    .noti-time-text {
+        margin-top: 10px;
+        color: gray;
+    }
+    .noti-name-text {
+        font-weight: 500;
+    }
+    .noti-header-left {
+        font-weight: 800;
+        margin-left: 3px;
+    }
+    .dropdown-menu.dropdown-menu-right.dropdown-content-top.show-dropdown {
+        width: 300px;
+    }
+    .ring-animation {
+        animation: ring 0.5s infinite;
+    }
+    @keyframes ring {
+        0% {
+            transform: rotate(0);
+        }
+        1% {
+            transform: rotate(30deg);
+        }
+        3% {
+            transform: rotate(-28deg);
+        }
+        5% {
+            transform: rotate(34deg);
+        }
+        7% {
+            transform: rotate(-32deg);
+        }
+        9% {
+            transform: rotate(30deg);
+        }
+        11% {
+            transform: rotate(-28deg);
+        }
+        13% {
+            transform: rotate(26deg);
+        }
+        15% {
+            transform: rotate(-24deg);
+        }
+        17% {
+            transform: rotate(22deg);
+        }
+        19% {
+            transform: rotate(-20deg);
+        }
+        21% {
+            transform: rotate(18deg);
+        }
+        23% {
+            transform: rotate(-16deg);
+        }
+        25% {
+            transform: rotate(14deg);
+        }
+        27% {
+            transform: rotate(-12deg);
+        }
+        29% {
+            transform: rotate(10deg);
+        }
+        31% {
+            transform: rotate(-8deg);
+        }
+        33% {
+            transform: rotate(6deg);
+        }
+        35% {
+            transform: rotate(-4deg);
+        }
+        37% {
+            transform: rotate(2deg);
+        }
+        39% {
+            transform: rotate(-1deg);
+        }
+        41% {
+            transform: rotate(1deg);
+        }
+
+        43% {
+            transform: rotate(0);
+        }
+        100% {
+            transform: rotate(0);
+        }
     }
 </style>

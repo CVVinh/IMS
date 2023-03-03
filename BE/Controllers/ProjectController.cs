@@ -19,7 +19,7 @@ namespace BE.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-    [Authorize(Roles = "permission_group: True module: project")]
+    //[Authorize(Roles = "permission_group: True module: project")]
     public class ProjectController : ControllerBase
 	{
 
@@ -199,7 +199,6 @@ namespace BE.Controllers
 		}
 
         [HttpPost("addProject")]
-        [Authorize(Roles = "group: pm")]
         public async Task<IActionResult> Create(AddNewProjectDto project_Model)
 		{
 			try
@@ -249,7 +248,6 @@ namespace BE.Controllers
 
 		}
 		[HttpPut("DeleteProject/{id}")]
-        [Authorize(Roles = "group: pm")]
         public IActionResult DeleteProject(int id, IdUserChangeProjectDto request)
 		{
 			try
@@ -275,7 +273,6 @@ namespace BE.Controllers
 		}
 
 		[HttpPut("FinishProject/{id}")]
-        [Authorize(Roles = "group: pm")]
         public IActionResult FinishProject(int id, IdUserChangeProjectDto request)
 		{
 
@@ -437,7 +434,6 @@ namespace BE.Controllers
 		}
 
 		[HttpPut]
-        [Authorize(Roles = "group: pm")]
         [Route("updateProject/{id}")]
 		public async Task<ActionResult> updateProject(EditProjectDto requests, int id)
 		{
@@ -584,7 +580,6 @@ namespace BE.Controllers
 			return "Excel\\Projects_Table.xlsx";
 		}
         [HttpGet("getProjectOnGitlab")]
-		[Authorize(Roles = "permission_group: True module: project")]
 		public IActionResult getProjectOnGitlab()
         {
             try

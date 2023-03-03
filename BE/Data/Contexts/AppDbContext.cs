@@ -55,6 +55,9 @@ namespace BE.Data.Contexts
         public DbSet<Customer_PaidReason> CustomerPaidReasons { get; set; }
         public DbSet<User_Group> UserGroups { get; set; }
 		public DbSet<Notification> Notifications { get; set; }
+
+		public DbSet<Action_Module> ActionModules { get; set; }
+		public DbSet<Permission_Action_Module> PermissionActionModules { get; set; }
         #endregion
 
         #region Method
@@ -231,6 +234,9 @@ namespace BE.Data.Contexts
 				e.Property(e => e.Delete).IsRequired().HasDefaultValue(0);
 				e.Property(e => e.DeleteMulti).IsRequired().HasDefaultValue(0);
 				e.Property(e => e.Confirm).IsRequired().HasDefaultValue(0);
+				e.Property(e => e.ConfirmMulti).IsRequired().HasDefaultValue(0);
+				e.Property(e => e.Refuse).IsRequired().HasDefaultValue(0);
+				e.Property(e => e.AddMember).IsRequired().HasDefaultValue(0);
 				e.Property(e => e.Export).IsRequired().HasDefaultValue(0);
 			});
 			modelBuilder.Entity<Menu>(e =>
@@ -250,9 +256,10 @@ namespace BE.Data.Contexts
 			{
 				e.ToTable("Module");
 				e.HasKey(e => e.id);
-				e.Property(e => e.nameModule);
-				e.Property(e => e.note);
-				e.Property(e => e.idSort);
+				e.Property(e => e.nameModule).IsRequired().HasMaxLength(255).HasColumnType("varchar");
+				e.Property(e => e.note).HasMaxLength(500).HasColumnType("varchar");
+                e.Property(e => e.isDeleted).HasDefaultValue(0);
+                e.Property(e => e.idSort).HasDefaultValue(0);
 			});
 			modelBuilder.Entity<Permission_Group>(e =>
 			{
@@ -317,6 +324,29 @@ namespace BE.Data.Contexts
                 e.HasKey(e => e.id);
                 e.Property(e => e.idUser).IsRequired();
                 e.Property(e => e.idGroup).IsRequired();
+                e.Property(e => e.isDeleted).HasDefaultValue(false);
+                e.Property(e => e.dateCreated).HasColumnType("date");
+                e.Property(e => e.dateUpdated).HasColumnType("date");
+                e.Property(e => e.dateDeleted).HasColumnType("date");
+            });
+
+            modelBuilder.Entity<Action_Module>(e =>
+            {
+                e.ToTable("Action_Module");
+                e.HasKey(e => e.id);
+                e.Property(e => e.name).IsRequired().HasMaxLength(255).HasColumnType("varchar");
+                e.Property(e => e.isDeleted).HasDefaultValue(false);
+                e.Property(e => e.dateCreated).HasColumnType("date");
+                e.Property(e => e.dateUpdated).HasColumnType("date");
+                e.Property(e => e.dateDeleted).HasColumnType("date");
+            });
+
+            modelBuilder.Entity<Permission_Action_Module>(e =>
+            {
+                e.ToTable("Permission_Action_Module");
+                e.HasKey(e => e.id);
+                e.Property(e => e.idModul).IsRequired();
+                e.Property(e => e.idAction).IsRequired();
                 e.Property(e => e.isDeleted).HasDefaultValue(false);
                 e.Property(e => e.dateCreated).HasColumnType("date");
                 e.Property(e => e.dateUpdated).HasColumnType("date");

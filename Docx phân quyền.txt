@@ -1,0 +1,47 @@
+admin, pm, lead, sample, staff
+
+Check Module_Group ( Coi group đó có quyền truy cập vào module nào ) Table [ Permission_group ]
+Check Group đó được sử dụng những gì Table [Group]
+GET API theo level group trong module ( chẳng hạn Module Thu chi thì Level Sample cao hơn PM nhưng trong OTs thì level pm cao hơn sample )
+Phân quyền theo ShowButton thì ( Gộp tất cả quyền lại với nhau )
+
+Xong authen
+
+
+-> Tổng quan ( Dự án )
+ ( PM <=> Admin ) toàn quyền
+ ( Staff ) Chỉ được coi các project mình đang join vào
+ ( Lead ) Coi được các project mình đang đảm nhận và Add member_project
+ ( sample )  coi được tất cả project
+
+-> Tổng quan ( người dùng )
+ ( Admin toàn quyền )
+ ( Tất cả role còn lại chỉ được chỉnh sửa của mình ) riêng sample chỉnh được của mình và coi được toàn bộ người dùng
+
+-> Màn Device ( chỉ Admin toàn quyền)
+
+-> Màn LeaveOff ( có 2 màn 1 màn đăng ký và 1 màn tổng hợp )
+ ( Admin <=> PM ) toàn quyền
+ ( Sample ) Coi được toàn bộ danh sách OTs (đã được xác nhận) 
+ ( Staff && LEAD && SAMPLE ) Chỉ coi được những OTs của mình đã đăng ký ( bao gồm hủy hoặc xác nhận )
+
+-> Màn OTs
+ ( Admin <=> PM ) toàn quyền trừ thêm OTs
+ ( Lead ) Đăng ký OTs cho các nhân viên trong project ( đang chạy ) mình đảm nhận
+ ( Staff ) Coi được các ots được lead đăng ký
+
+-> Màn Thu chi
+ ( Sample <=> admin ) toàn quyền nhưng không coi được các thêm của các sample khác cần kế toán trường confirm
+ ( all ) chỉ được thao tác trên những thu chi mình sửa
+
+-> quy định
+ ( Sample <=> Admin ) Toàn quyền
+ ( all ) chỉ được xem và download
+
+=> Chỉ được Admin vào
+-> Thiết lập (  Nhóm quyền )
+-> Thiết lập ( Menu ) [Đang thừa nhưng đừng đụng]
+-> Thiết lập ( Chức năng )
+-> Thiết lập ( Phân quyền ) [Đang thừa nhưng đừng đụng]
+-> Thiết lập ( Phân quyền Module ) [Đang thiếu cần thêm]
+

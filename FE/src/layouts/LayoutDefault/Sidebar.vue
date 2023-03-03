@@ -39,7 +39,7 @@
                                 @click="activeTag = 'tag2'"
                                 :class="{ 'active-nav-item': activeTag === 'tag2' }"
                             >
-                                <i class="bx bx-user"></i><span>Nguời dùng</span>
+                                <i class="bx bx-user"></i><span>Người dùng</span>
                             </router-link>
                         </li>
                     </ul>
@@ -51,7 +51,7 @@
                     class="py-2 ripple list-group-item-action"
                     @click="activeTag = 'tag4'"
                     :class="{ 'active-nav-item': activeTag === 'tag4' }"
-                    v-if="this.token ? Number(this.token.IdGroup) === 1 ? true : false : false"
+                    v-if="this.token ? (Number(this.token.IdGroup) === 1 ? true : false) : false"
                 >
                     <i class="bx bx-devices"></i>
                     <span>Thiết bị</span>
@@ -219,7 +219,7 @@
                                 <span>Nhóm quyền</span>
                             </router-link>
                         </li>
-
+                        <!-- 
                         <li
                             class="list-group-item-action"
                             v-if="this.token !== null ? (Number(this.token.IdGroup) === 1 ? true : false) : false"
@@ -263,7 +263,7 @@
                                 <i class="bx bx-badge-check"></i>
                                 <span>Phân quyền</span>
                             </router-link>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
                 <!-- /Thiết lập -->

@@ -14,7 +14,7 @@ namespace BE.Controllers
 {
     [ApiController]
     [Route("api/leaveOff")]
-    [Authorize(Roles = "permission_group: True module: leaveoff")]
+    //[Authorize(Roles = "permission_group: True module: leaveoff")]
     public class LeaveOffController : Controller
     {
         private readonly ILeaveOffServices _leaveOffServices;

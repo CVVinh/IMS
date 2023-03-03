@@ -11,7 +11,7 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
+    //[Authorize(Roles = "permission_group: True module: modules")]
     public class ModulesController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -22,8 +22,7 @@ namespace BE.Controllers
         }
 
         [HttpPost("addModule")]
-        [Authorize(Roles = "permission_group: True module: groups")]
-        [Authorize(Roles = "group: Admin")]
+        [Authorize(Roles = "admin")]
         public IActionResult Create(addModuleDtos module)
         {
             try
@@ -46,17 +45,16 @@ namespace BE.Controllers
             }
         }
 
-        [HttpPut("updateMoudel")]
-        [Authorize(Roles = "permission_group: True module: groups")]
-        [Authorize(Roles = "group: Admin")]
-        public async Task<ActionResult> updateModule(Module mod)
+        [HttpPut("updateMoudel/{id}")]
+       
+        public async Task<ActionResult> updateModule(int id, addModuleDtos mod)
         {
             try
             {
-                var upModules = await _context.modules.FindAsync(mod.id);
+                var upModules = await _context.modules.Where(x => x.isDeleted == 0).FirstOrDefaultAsync(x => x.id == id);
                 if (upModules == null)
                 {
-                    return NotFound("Not found");
+                    return NotFound();
                 }
                 upModules.nameModule = mod.nameModule;
                 upModules.note = mod.note;
@@ -75,7 +73,7 @@ namespace BE.Controllers
         {
             try
             {
-                var list = await _context.modules.OrderBy(m => m.idSort).ToListAsync();
+                var list = await _context.modules.Where(x => x.isDeleted == 0).OrderBy(m => m.idSort).ToListAsync();
                 return Ok(list);
             }
             catch (Exception ex)
@@ -86,13 +84,11 @@ namespace BE.Controllers
 
         [HttpPut]
         [Route("deleteModule/{idModule}")]
-        [Authorize(Roles = "permission_group: True module: groups")]
-        [Authorize(Roles = "group: Admin")]
         public async Task<IActionResult> deleteModule(int idModule)
         {
             try
             {
-                var module = await _context.modules.SingleOrDefaultAsync(p => p.id == idModule);
+                var module = await _context.modules.Where(x => x.isDeleted == 0).SingleOrDefaultAsync(p => p.id == idModule);
                 if(module == null)
                 {
                     return NotFound();
