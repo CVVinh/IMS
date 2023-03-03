@@ -1,5 +1,7 @@
 ﻿using BE.Data.Contexts;
+using BE.Data.Models;
 using BE.Hubs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -20,12 +22,25 @@ namespace BE.Controllers
             _context = context;
             _notificationHubs = notificationHubs;
         }
-        [HttpGet]
+        [HttpGet("GetAllListNotification")]
         public async Task<IActionResult> GetNotificationByPMId()
         {
-            var data = await _context.Notifications.ToListAsync();
+            var data = await _context.Notifications.OrderByDescending(s => s.dateCreated).ToListAsync();
 
             return Ok(data);
+        }
+        [HttpPut("WatchNotification/{id}")]
+        public async Task<IActionResult> isWatchNotification(int id)
+        {
+            var check = await _context.Notifications.FindAsync(id);
+            if (check != null)
+            {
+                check.isWatched = true;
+                _context.Update(check);
+                await _context.SaveChangesAsync();
+                return Ok(check);
+            }
+            return BadRequest();
         }
 
     }

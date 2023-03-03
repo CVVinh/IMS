@@ -216,6 +216,7 @@
                 num: 5,
                 timeOut: null,
                 token: null,
+                listGroup: null,
                 filters: {
                     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
                 },
@@ -412,21 +413,26 @@
                         }
                     });
             },
+
+            checkRoleSample(){
+                return (this.listGroup.includes("sample"));
+            }
         },
         async mounted() {
             try {
                 this.token = LocalStorage.jwtDecodeToken();
+                this.listGroup = JSON.stringify(this.token.role);
 
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
                 if (UserRoleHelper.isAccess) {
-                    if (Number(this.token.IdGroup) === 2) {
+                    if (this.checkRoleSample()) {
                         this.showButton.view = true;
                         this.showButton.edit = true;
                         this.showButton.add = true;
                         this.showButton.delete = true;
                         this.showButton.download = true;
                     }
-                    if (Number(this.token.IdGroup) !== 2) {
+                    if (!this.checkRoleSample()) {
                         this.showButton.download = true;
                         this.showButton.view = true;
                     }
@@ -435,6 +441,10 @@
                     this.countTime();
                     this.displayBasic = true;
                 }
+
+                var arr = JSON.stringify(this.token.role);
+                console.log(this.checkRoleSample());
+
             } catch (err) {
                 this.countTime();
                 this.displayBasic = true;

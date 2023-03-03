@@ -24,15 +24,15 @@ const permissionAccess = ({
                     permissionAccess.state.listModule.map(module => {
                         dataAccess.data.forEach(item => {
                             if (item.idModule === module.id) {
-                                module['access'] = item.access;
+                                module['access'] = item.access;  
                             }
                         })
                     })
                 }
             }
         },
-        getListModule() {
-            HTTP.get(ApiApplication.MODULE.GET_ALL).then(res => {
+        async getListModule() {
+          await  HTTP.get(ApiApplication.MODULE.GET_ALL).then(res => {
                 if (res.data) {
                     permissionAccess.state.listModule = res.data;
                 }

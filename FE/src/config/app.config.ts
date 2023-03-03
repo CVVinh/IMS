@@ -52,4 +52,8 @@ export const ApiApplication = {
         SEARCH_DEVICE_BY_OPERATINGSYSTEM: (operatingSystem: any) =>
             `InfoDevices/FindWithOperatingSystem/${operatingSystem}`,
     },
+    NOTIFICATION: {
+        GET_ALL_NOTIFICATION: 'Notification/GetAllListNotification',
+        IS_WATCH_NOTIFICATION: (id: number) => `Notification/WatchNotification/${id}`,
+    },
 }

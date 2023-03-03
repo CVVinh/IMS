@@ -178,7 +178,9 @@
                                     for=" startDate"
                                     :class="{
                                         'p-error':
-                                            (v$.dataProject.startDate.$invalid || !checkStartDate()) && submitted,
+                                            (v$.dataProject.startDate.$invalid || !checkStartDate()) &&
+                                            submitted &&
+                                            isOnGitlab == false,
                                     }"
                                 >
                                     Ngày bắt đầu
@@ -186,7 +188,9 @@
                                 </label>
                                 <div
                                     class="p-float-label"
-                                    :class="{ 'form-group--error': v$.dataProject.startDate.$error }"
+                                    :class="{
+                                        'form-group--error': v$.dataProject.startDate.$error && isOnGitlab == false,
+                                    }"
                                 >
                                     <Calendar
                                         id="startDate"
@@ -196,13 +200,15 @@
                                         :class="{
                                             input_disabled: isOnGitlab === true,
                                             'p-invalid':
-                                                (v$.dataProject.startDate.$invalid || !checkStartDate()) && submitted,
+                                                (v$.dataProject.startDate.$invalid || !checkStartDate()) &&
+                                                submitted &&
+                                                isOnGitlab == false,
                                         }"
                                     />
                                 </div>
                                 <small
                                     v-if="
-                                        (v$.dataProject.startDate.$invalid && submitted) ||
+                                        (v$.dataProject.startDate.$invalid && submitted && isOnGitlab == false) ||
                                         v$.dataProject.startDate.$pending.$response
                                     "
                                     class="p-error"
@@ -211,7 +217,12 @@
                                     }}</small
                                 >
                                 <small
-                                    v-if="!v$.dataProject.startDate.$invalid && !checkStartDate() && submitted"
+                                    v-if="
+                                        !v$.dataProject.startDate.$invalid &&
+                                        !checkStartDate() &&
+                                        submitted &&
+                                        isOnGitlab == false
+                                    "
                                     class="p-error"
                                 >
                                     Ngày bắt đầu phải lớn hơn hôm nay!
@@ -225,7 +236,10 @@
                                     class="mb-2"
                                     for=" endDate"
                                     :class="{
-                                        'p-error': (v$.dataProject.endDate.$invalid || !checkEndDate()) && submitted,
+                                        'p-error':
+                                            (v$.dataProject.endDate.$invalid || !checkEndDate()) &&
+                                            submitted &&
+                                            isOnGitlab == false,
                                     }"
                                 >
                                     Ngày kết thúc
@@ -233,7 +247,9 @@
                                 </label>
                                 <div
                                     class="p-float-label"
-                                    :class="{ 'form-group--error': v$.dataProject.endDate.$error }"
+                                    :class="{
+                                        'form-group--error': v$.dataProject.endDate.$error && isOnGitlab == false,
+                                    }"
                                 >
                                     <Calendar
                                         id="endDate"
@@ -243,20 +259,27 @@
                                         :class="{
                                             input_disabled: isOnGitlab === true,
                                             'p-invalid':
-                                                (v$.dataProject.endDate.$invalid || !checkEndDate()) && submitted,
+                                                (v$.dataProject.endDate.$invalid || !checkEndDate()) &&
+                                                submitted &&
+                                                isOnGitlab == false,
                                         }"
                                     />
                                 </div>
                                 <small
                                     v-if="
-                                        (v$.dataProject.endDate.$invalid && submitted) ||
+                                        (v$.dataProject.endDate.$invalid && submitted && isOnGitlab == false) ||
                                         v$.dataProject.endDate.$pending.$response
                                     "
                                     class="p-error"
                                     >{{ v$.dataProject.endDate.required.$message.replace('Value', 'End date') }}</small
                                 >
                                 <small
-                                    v-if="!v$.dataProject.endDate.$invalid && !checkEndDate() && submitted"
+                                    v-if="
+                                        !v$.dataProject.endDate.$invalid &&
+                                        !checkEndDate() &&
+                                        submitted &&
+                                        isOnGitlab == false
+                                    "
                                     class="p-error"
                                 >
                                     Ngày kết thúc phải lớn hơn ngày bắt đầu!

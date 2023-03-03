@@ -387,23 +387,8 @@
             try {
                 this.token = LocalStorage.jwtDecodeToken()
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
-                console.log(UserRoleHelper.isAccess);  
+                console.log(UserRoleHelper.isAccess);
                 if (await UserRoleHelper.isAccess) {
-                    HTTP.get('Project/getAllProject')
-                        .then((res) => {
-                            if (res.status === HttpStatus.OK) {
-                                res.data.forEach((element) => {
-                                    this.proName[element.id] = element.name
-                                    if (!element.isDeleted && !element.isFinished) {
-                                        this.project.push(element)
-                                        this.proPM[element.name] = element.userId
-                                    }
-                                })
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
                         this.getAllOT()   
                 } else {
                     this.countTime()
@@ -423,7 +408,6 @@
         methods: {
             // GET OTS BY ROLE PM
             getOTsByPM(idPM) {
-                console.log('pm')
                 HTTP.get(`OTs/getOTsByidPM/${idPM}`)
                     .then((res) => {
                         this.data = res.data
@@ -432,7 +416,6 @@
             },
             // GET OTS BY ROLE LEAD
             getOTsByLead(idLEAD) {
-                console.log(this.token.Id);
                 HTTP.get(`OTs/GetAllOTsByLead/${idLEAD}`)
                     .then((res) => {
                         this.data = res.data
@@ -441,7 +424,6 @@
             },
             // GET OTS BY ROLE STAFF
             getOTsByStaff(idSTAFF) {
-                console.log('staff')
                 HTTP.get(`OTs/GetAllOTsByStaff/${idSTAFF}`)
                     .then((res) => {
                         this.data = res.data
@@ -450,7 +432,6 @@
             },
             // GET OTS BY ROLE SAMPLE
             getOTsBySample() {
-                console.log('sample')
                 HTTP.get('OTs/GetAllOTs')
                     .then((res) => {
                         this.data = res.data
@@ -761,12 +742,9 @@
                 if(this.selectedProject !== null) {
                     idProject = this.selectedProject.code
                 }
-
-
                 var stringGetAPI = `OTs/filterByRole/${month}/${year}/${idProject}/${this.token.IdGroup}/?iduser=${this.token.Id}`
                 HTTP.get(stringGetAPI).then(res=>{
                     this.data  =res.data
-                    console.log(res.data);
                 }).catch(err=>{
                     console.log(err);
                 })

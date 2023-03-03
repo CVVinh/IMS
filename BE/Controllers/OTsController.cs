@@ -15,7 +15,7 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "permission_group: True module: ots")]
+    //[Authorize(Roles = "permission_group: True module: ots")]
     public class OTsController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -1904,7 +1904,6 @@ namespace BE.Controllers
 
 
         [HttpPost("AddOTs")]
-        [Authorize(Roles = "Listgroup: admin")]
         public async Task<IActionResult> AddOTs(AddRangeOTs OTs)
         {
             try

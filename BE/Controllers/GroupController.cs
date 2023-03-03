@@ -17,6 +17,7 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "permission_group: True module: groups")]
     public class GroupController: ControllerBase
     {
         private readonly AppDbContext _context;
@@ -32,7 +33,7 @@ namespace BE.Controllers
         {
             try
             {
-                var listGroup = _context.Groups.ToList();
+                var listGroup = _context.Groups.Where(x => x.IsDeleted == 0).ToList();
                 return Ok(listGroup);
             }
             catch(Exception ex)
@@ -40,15 +41,16 @@ namespace BE.Controllers
                 return BadRequest(ex);
             }
         }
+
         [HttpGet("getUserByGroup/{idGroup}")]
         public async Task<ActionResult> getUserByGroup(int idGroup) {
             try
             {
                
                 var user = await (from u in _context.Users
-                            join g in _context.Groups
-                            on u.IdGroup equals g.Id
-                            where g.Id == idGroup
+                            join g in _context.UserGroups
+                            on u.id equals g.idUser
+                            where g.idGroup == idGroup && g.isDeleted == false
                             select new
                             {
                                 firstName = u.firstName,
@@ -71,8 +73,8 @@ namespace BE.Controllers
         }
         
         [HttpPost("addGroup")]
-        [Authorize(Roles = "permission_group: True module: groups")]
-        [Authorize(Roles ="group: Admin")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: groups add: 1")]
         public async Task<IActionResult> addGroup(AddGroupDtos req)
         {
             try
@@ -100,14 +102,14 @@ namespace BE.Controllers
         }
 
  
-        [HttpPut("updateGroup")]
-        [Authorize(Roles = "permission_group: True module: groups")]
-        [Authorize(Roles = "group: Admin")]
-        public async Task<ActionResult> updateGroup(UpdateGroupDtos req)
+        [HttpPut("updateGroup/{id}")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: groups update: 1")]
+        public async Task<ActionResult> updateGroup(int id, UpdateGroupDtos req)
         {
             try
             {
-                var updateG =  _context.Groups.Find(req.Id);
+                var updateG =  await _context.Groups.Where(x => x.IsDeleted == 0).FirstOrDefaultAsync(x => x.Id == id);
                 if (updateG != null)
                 {
                     updateG.NameGroup=req.NameGroup;
@@ -119,7 +121,7 @@ namespace BE.Controllers
                     return Ok();
 
                 }
-                return NotFound("hello");
+                else return NotFound();
             }
             catch (Exception ex)
             {
@@ -128,13 +130,13 @@ namespace BE.Controllers
         }
 
         [HttpPut("deleteGroup/{id}")]
-        [Authorize(Roles = "permission_group: True module: groups")]
-        [Authorize(Roles = "group: Admin")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: groups delete: 1")]
         public async Task<ActionResult> deleteGroup(int id)
         {
             try
             {
-                var deleteG = await _context.Groups.FirstOrDefaultAsync(g => g.Id == id);
+                var deleteG = await _context.Groups.Where(x => x.IsDeleted == 0).FirstOrDefaultAsync(g => g.Id == id);
                 if (deleteG != null)
                 {
                     deleteG.IsDeleted = 1;
@@ -142,17 +144,18 @@ namespace BE.Controllers
                     await _context.SaveChangesAsync();
                     return Ok();
                 }    
-                    return NotFound();
+                else return NotFound();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex);
             }
         }
+
         [HttpGet]
         [Route("exportExcel")]
-        [Authorize(Roles = "permission_group: True module: groups")]
-        [Authorize(Roles = "group: Admin")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: groups export: 1")]
         public async Task<string> DownloadFile()
         {
             var wb = new XLWorkbook();
@@ -184,5 +187,7 @@ namespace BE.Controllers
             wb.SaveAs("..\\FE\\Excel\\Group_Table.xlsx");
             return "Excel\\Group_Table.xlsx";
         }
+
+
     }
 }

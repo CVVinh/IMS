@@ -62,16 +62,26 @@
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         :rowsPerPageOptions="[5, 10, 15, 30]"
                         currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
-                        :globalFilterFields="['#', 'id', 'name', 'updateAt']"
+                        :globalFilterFields="['#', 'id', 'userName', 'name', 'updateAt']"
                     >
                         <Column field="#" header="No.">
                             <template #body="{ index }">
                                 {{ index + 1 }}
                             </template>
                         </Column>
+                        <Column field="userName" header="Mã nhân viên" :sortable="true">
+                            <template #body="{ data }">
+                                {{ data.userName }}
+                            </template>
+                        </Column>
                         <Column field="name" header="Tên nhân viên" :sortable="true">
                             <template #body="{ data }">
                                 {{ data.name }}
+                            </template>
+                        </Column>
+                        <Column field="mechineName" header="Tên thiết bị" :sortable="true">
+                            <template #body="{ data }">
+                                {{ data.infoDevice.mechineName }}
                             </template>
                         </Column>
                         <Column field="updateAt" header="Thời gian cập nhật">

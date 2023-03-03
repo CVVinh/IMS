@@ -89,7 +89,8 @@ namespace BE.Services.LeaveOffServices
                     title = $"Nghỉ phép từ nhân viên '{getUser.FullName ?? "Ẩn danh"}'",
                     isWatched = false,
                     userCreated = leaveOff.idLeaveUser,
-                    link = "http://localhost:3000/leaveoff/acceptregisterlists"
+                    link = "/leaveoff/acceptregisterlists",
+                    dateCreated= DateTime.Now,
                 };
                 _appContext.Notifications.Add(noti);
                 await _appContext.SaveChangesAsync();

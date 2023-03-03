@@ -25,6 +25,12 @@ namespace BE.Data.Models
         [Required]
         public int Confirm { get; set; }
         [Required]
+        public int ConfirmMulti { get; set; }
+        [Required]
+        public int Refuse { get; set; }
+        [Required]
+        public int AddMember { get; set; }
+        [Required]
         public int Export { get; set; }
         public int? userCreated { get; set; }
         public DateTime? dateCreated { get; set; }
