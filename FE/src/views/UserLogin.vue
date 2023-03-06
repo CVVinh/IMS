@@ -237,7 +237,7 @@
                                 case 'ERR_NETWORK':
                                     this.$toast.add({
                                         severity: ToastSeverity.ERROR,
-                                        summary: 'Error!',
+                                        summary: 'Lỗi',
                                         detail: 'Kiểm tra kết nối !',
                                         life: 3000,
                                     })
@@ -245,7 +245,7 @@
                                 case 'ERR_BAD_REQUEST':
                                     this.$toast.add({
                                         severity: ToastSeverity.ERROR,
-                                        summary: 'Error!',
+                                        summary: 'Lỗi',
                                         detail: error.response.data,
                                         life: 3000,
                                     })

@@ -69,8 +69,8 @@
                 if (this.username == null) {
                     this.$toast.add({
                         severity: ToastSeverity.WARN,
-                        summary: 'Warning',
-                        detail: 'Username is required !',
+                        summary: 'Cảnh báo',
+                        detail: 'Tên người dùng là bắt buộc !',
                         life: 3000,
                     })
                 } else {

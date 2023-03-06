@@ -17,7 +17,7 @@
                         v-if="userGroup.length > 0"
                     >
                         <template #item="data">
-                            <Button @click=";async () => await selectedGroup(data)" class="p-button-text">
+                            <Button @click="async () => await selectedGroup(data)" class="p-button-text">
                                 <div class="user-group">
                                     <div class="group-list-detail">
                                         <h5 class="mb-2 text-body">{{ data.item.nameGroup }}</h5>
@@ -33,7 +33,7 @@
                         <button
                             label="SAVE"
                             class="btn btn-primary"
-                            @click="confirmSave()"
+                            @click="PermissionGroup()"
                             :disabled="!this.selectedGroupId"
                         >
                             Lưu
@@ -74,6 +74,7 @@
                 </div>
             </div>
         </div>
+        {{ selectedAccess }}
         <Dialog
             header="Truy cập bị từ chối!"
             :visible="displayBasic"
@@ -90,6 +91,7 @@
                 <Button label="Lưu" icon="pi pi-check" @click="submit" autofocus />
             </template>
         </Dialog>
+       
     </LayoutDefaultDynamic>
 </template>
 
@@ -267,6 +269,17 @@
                     })
                 }
             },
+            PermissionGroup(){
+                HTTP.post(`Permission_Groups/PermissionGroupModule/${this.selectedGroupId}`,this.selectedAccess)
+                .then(res=>
+                {
+                    console.log(res.data)
+                }).catch(err=>
+                {
+                    console.log(err.request.response);
+                })
+
+            },
             save() {
                 if (this.selectedGroupId) {
                     this.loading = true
@@ -295,7 +308,7 @@
                             this.selectedAccess = null
                             this.arrModuleAccess = []
                         }
-                    })
+                    }).catch(err=>console.log(err))
                 } else {
                     this.$toast.add({
                         severity: 'error',
@@ -372,6 +385,38 @@
                         }
                     })
                 }
+            },
+            isSelectedCheck(id, isChecked) {
+               if(isChecked){
+                this.selectedAccess.push(id)
+               }
+               
+               
+                // if (isChecked) {
+                //     this.selectedAccess.push([id, 1])
+                //     this.arrModulePermissionAll.map((item) => {
+                //         if (item[1] === id) {
+                //             item[2] = 1
+                //             item[3] = 1
+                //             item[4] = 1
+                //             item[5] = 1
+                //         }
+                //     })
+                // } else {
+                //     this.selectedAccess.map((item) => {
+                //         if (item[0] === id) {
+                //             item[1] = 0
+                //         }
+                //     })
+                //     this.arrModulePermissionAll.map((item) => {
+                //         if (item[1] === id) {
+                //             item[2] = 0
+                //             item[3] = 0
+                //             item[4] = 0
+                //             item[5] = 0
+                //         }
+                //     })
+                // }
             },
         },
     }

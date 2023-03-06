@@ -93,12 +93,16 @@
 
                 <Column field="startDate" header="Ngày bắt đầu " sortable style="min-width: 8rem">
                     <template #body="{ data }">
-                        {{ getFormattedDate(new Date( data.startDate)) }}
+                        {{ getFormattedDate(new Date(data.startDate)) }}
                     </template>
                 </Column>
                 <Column field="endDate" header="Ngày kết thúc " sortable style="min-width: 8rem">
                     <template #body="{ data }">
-                        {{  data.endDate == '1970-01-01' ? 'Chưa giải quyết..' :  getFormattedDate(new Date(data.endDate))}}
+                        {{
+                            data.endDate == '1970-01-01'
+                                ? 'Chưa giải quyết..'
+                                : getFormattedDate(new Date(data.endDate))
+                        }}
                     </template>
                 </Column>
                 <Column
@@ -340,7 +344,7 @@
                     reject: () => {
                         this.$toast.add({
                             severity: 'error',
-                            summary: 'Hủy bỏ',
+                            summary: 'Từ chối',
                             detail: 'Bạn đã hủy thao tác',
                             life: 3000,
                         })
@@ -525,7 +529,7 @@
                 })
             },
             showWarn(message) {
-                this.$toast.add({ severity: 'warn', summary: 'Warn Message', detail: message, life: 2000 })
+                this.$toast.add({ severity: 'warn', summary: 'Cảnh báo', detail: message, life: 2000 })
             },
             toDetailProject(id) {
                 this.$router.push({ name: 'detailproject', params: { id: id } })

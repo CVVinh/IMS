@@ -19,7 +19,7 @@ namespace BE.Services.LeaveOffServices
         Task<BaseResponse<LeaveOff>> AddNewLeaveOffAsync(AddNewLeaveOffDto addNewLeaveOffDto);
         Task<BaseResponse<LeaveOff>> EditRegisterLeaveOffAsync(int id, EditRegisterLeaveOffDtos editRegisterLeaveOffDtos);
         Task<BaseResponse<LeaveOff>> AccepterLeaveOffAsync(int idLeaveOff, int idAccepter);
-        Task<BaseResponse<LeaveOff>> NotAccepterLeaveOffAsync(int idLeaveOff,NotAcceptLeaveOffDto notAcceptLeaveOffDto);
+        Task<BaseResponse<LeaveOff>> NotAccepterLeaveOffAsync(int idLeaveOff, NotAcceptLeaveOffDto notAcceptLeaveOffDto);
         Task<BaseResponse<LeaveOff>> GetLeaveOffByIdAsync(int idLeaveOff);
         Task<BaseResponse<LeaveOff>> DeleteLeaveOffByIdAsync(int idLeaveOff);
         Task<BaseResponse<List<LeaveOff>>> GetAllLeaveOffByStatus(StatusLO statusLO);
@@ -49,7 +49,7 @@ namespace BE.Services.LeaveOffServices
                                                           .FirstOrDefaultAsync();
                 if (leaveOff is null)
                 {
-                    message = "idLeaveOff doesn't exist !";
+                    message = "idLeaveOff không tồn tại!";
                     data = null;
                     return new BaseResponse<LeaveOff>(success, message, data);
                 }
@@ -59,13 +59,13 @@ namespace BE.Services.LeaveOffServices
                 await _appContext.SaveChangesAsync();
 
                 success = true;
-                message = "Accepting leave off successfully";
+                message = "Chấp nhận nghỉ phép thành công";
                 data = leaveOff;
                 return new BaseResponse<LeaveOff>(success, message, data);
             }
             catch (Exception ex)
             {
-                message = $"Accepting leave off failed! {ex.InnerException}";
+                message = $"Chấp nhận nghỉ không thành công! {ex.InnerException}";
                 data = null;
                 return new BaseResponse<LeaveOff>(success, message, data);
             }
@@ -81,28 +81,46 @@ namespace BE.Services.LeaveOffServices
                 var leaveOff = _mapper.Map<LeaveOff>(addNewLeaveOffDto);
                 await _appContext.leaveOffs.AddAsync(leaveOff.addNewLeaveOffExtention());
                 var getUser = await _appContext.Users.Where(x => x.id.Equals(leaveOff.idLeaveUser)).FirstOrDefaultAsync();
-                
-                Notification noti = new Notification()
+
+                if (getUser != null)
                 {
-                    requestUser = leaveOff.idLeaveUser,
-                    message = leaveOff.reasons,
-                    title = $"Nghỉ phép từ nhân viên '{getUser.FullName ?? "Ẩn danh"}'",
-                    isWatched = false,
-                    userCreated = leaveOff.idLeaveUser,
-                    link = "/leaveoff/acceptregisterlists",
-                    dateCreated= DateTime.Now,
-                };
-                _appContext.Notifications.Add(noti);
+                    Notification noti = new Notification()
+                    {
+                        requestUser = leaveOff.idLeaveUser,
+                        message = leaveOff.reasons,
+                        title = $"Nghỉ phép từ nhân viên '{getUser.FullName}'",
+                        isWatched = false,
+                        userCreated = leaveOff.idLeaveUser,
+                        link = "/leaveoff/acceptregisterlists",
+                        dateCreated = DateTime.Now,
+                    };
+                    _appContext.Notifications.Add(noti);
+                }
+                else
+                {
+                    Notification noti = new Notification()
+                    {
+                        requestUser = leaveOff.idLeaveUser,
+                        message = leaveOff.reasons,
+                        title = $"Nghỉ phép từ nhân viên 'Ẩn danh'",
+                        isWatched = false,
+                        userCreated = leaveOff.idLeaveUser,
+                        link = "/leaveoff/acceptregisterlists",
+                        dateCreated = DateTime.Now,
+                    };
+                    _appContext.Notifications.Add(noti);
+                }
+
                 await _appContext.SaveChangesAsync();
 
                 success = true;
-                message = "Add new leave off successfully";
+                message = "Thêm ngày nghỉ mới thành công";
                 data = leaveOff;
                 return new BaseResponse<LeaveOff>(success, message, data);
             }
             catch (Exception ex)
             {
-                message = $"Adding new leave off failed! {ex.Message}";
+                message = $"Thêm ngày nghỉ mới không thành công! {ex.Message}";
                 data = null;
                 return new BaseResponse<LeaveOff>(success, message, data);
             }
@@ -119,22 +137,24 @@ namespace BE.Services.LeaveOffServices
                                                           .FirstOrDefaultAsync();
                 if (leaveOff is null)
                 {
-                    message = "idLeaveOff doesn't exist !";
+                    message = "idLeaveOff không tồn tại!";
                     data = null;
+                    success= false;
                     return new BaseResponse<LeaveOff>(success, message, data);
                 }
 
                 _appContext.leaveOffs.Remove(leaveOff);
                 await _appContext.SaveChangesAsync();
                 success = true;
-                message = "Deleting leave off successfully";
+                message = "Xóa nghỉ phép thành công";
                 data = leaveOff;
                 return new BaseResponse<LeaveOff>(success, message, data);
             }
             catch (Exception ex)
             {
-                message = $"Deleting leave off failed! {ex.InnerException}";
+                message = $"Xóa nghỉ phép không thành công! {ex.InnerException}";
                 data = null;
+                success = false;
                 return new BaseResponse<LeaveOff>(success, message, data);
             }
         }
@@ -150,8 +170,9 @@ namespace BE.Services.LeaveOffServices
                                                           .FirstOrDefaultAsync();
                 if (leaveOff is null)
                 {
-                    message = "idLeaveOff doesn't exist !";
+                    message = "idLeaveOff không tồn tại!";
                     data = null;
+                    success= false;
                     return new BaseResponse<LeaveOff>(success, message, data);
                 }
                 var leaveOffMap = editRegisterLeaveOffDtos.editRegisterLeaveOffExtention(leaveOff);
@@ -159,14 +180,15 @@ namespace BE.Services.LeaveOffServices
                 await _appContext.SaveChangesAsync();
 
                 success = true;
-                message = "Editing leave off successfully";
+                message = "Chỉnh sửa nghỉ phép thành công";
                 data = leaveOffMap;
                 return new BaseResponse<LeaveOff>(success, message, data);
             }
             catch (Exception ex)
             {
-                message = $"Editing leave off failed! {ex.Message}";
+                message = $"Không thể chỉnh sửa nghỉ phép! {ex.Message}";
                 data = null;
+                success= false;
                 return new BaseResponse<LeaveOff>(success, message, data);
             }
         }
@@ -181,7 +203,7 @@ namespace BE.Services.LeaveOffServices
                 var listLeaveOff = await _appContext.leaveOffs.OrderByDescending(t => t.createTime)
                                                               .ToListAsync();
                 success = true;
-                message = "Get all data successfully";
+                message = "Nhận tất cả dữ liệu thành công";
                 data.AddRange(listLeaveOff);
                 return (new BaseResponse<List<LeaveOff>>(success, message, data));
             }
@@ -203,7 +225,7 @@ namespace BE.Services.LeaveOffServices
                                                               .OrderByDescending(t => t.createTime)
                                                               .ToListAsync();
                 success = true;
-                message = "Get all data successfully";
+                message = "Nhận tất cả dữ liệu thành công";
                 data.AddRange(listLeaveOff);
                 return (new BaseResponse<List<LeaveOff>>(success, message, data));
             }
@@ -228,7 +250,7 @@ namespace BE.Services.LeaveOffServices
                                                               .OrderByDescending(t => t.createTime)
                                                               .ToListAsync();
                     success = true;
-                    message = "Get all data successfully";
+                    message = "Nhận tất cả dữ liệu thành công";
                     data.AddRange(listAllLeaveOff);
                     return (new BaseResponse<List<LeaveOff>>(success, message, data));
                 }
@@ -237,7 +259,7 @@ namespace BE.Services.LeaveOffServices
                                                               .OrderByDescending(t => t.createTime)
                                                               .ToListAsync();
                 success = true;
-                message = "Get all data successfully";
+                message = "Nhận tất cả dữ liệu thành công";
                 data.AddRange(listLeaveOff);
                 return (new BaseResponse<List<LeaveOff>>(success, message, data));
             }
@@ -260,19 +282,19 @@ namespace BE.Services.LeaveOffServices
                                                           .FirstOrDefaultAsync();
                 if (leaveOff is null)
                 {
-                    message = "idLeaveOff doesn't exist !";
+                    message = "idLeaveOff không tồn tại!";
                     data = null;
                     return new BaseResponse<LeaveOff>(success, message, data);
                 }
 
                 success = true;
-                message = "Getting leave off successfully";
+                message = "Nghỉ phép thành công";
                 data = leaveOff;
                 return new BaseResponse<LeaveOff>(success, message, data);
             }
             catch (Exception ex)
             {
-                message = $"Getting leave off failed! {ex.Message}";
+                message = $"Nghỉ phép không thành công! {ex.Message}";
                 data = null;
                 return new BaseResponse<LeaveOff>(success, message, data);
             }
@@ -289,7 +311,7 @@ namespace BE.Services.LeaveOffServices
                                                           .FirstOrDefaultAsync();
                 if (leaveOff is null)
                 {
-                    message = "idLeaveOff doesn't exist !";
+                    message = "idLeaveOff không tồn tại!";
                     data = null;
                     return new BaseResponse<LeaveOff>(success, message, data);
                 }
@@ -298,13 +320,13 @@ namespace BE.Services.LeaveOffServices
                 await _appContext.SaveChangesAsync();
 
                 success = true;
-                message = "Not accepting leave off successfully";
+                message = "Không chấp nhận nghỉ phép thành công";
                 data = leaveOff;
                 return new BaseResponse<LeaveOff>(success, message, data);
             }
             catch (Exception ex)
             {
-                message = $"Not accepting leave off failed! {ex.InnerException}";
+                message = $"Không chấp nhận nghỉ phép không thành công! {ex.InnerException}";
                 data = null;
                 return new BaseResponse<LeaveOff>(success, message, data);
             }
@@ -319,7 +341,7 @@ namespace BE.Services.LeaveOffServices
             if (infoDtos.fullName == null && infoDtos.status == null && infoDtos.date == null)
             {
                 success = false;
-                message = "Getting leave off failed! Input parameters are not provided.";
+                message = "Nghỉ phép không thành công! Thông số đầu vào không được cung cấp.";
                 return (new BaseResponse<List<LeaveOff>>(success, message, data));
             }
 
@@ -350,13 +372,13 @@ namespace BE.Services.LeaveOffServices
 
                 data = await query.ToListAsync();
                 success = true;
-                message = "Get all data successfully";
+                message = "Nhận tất cả dữ liệu thành công";
                 return (new BaseResponse<List<LeaveOff>>(success, message, data));
             }
             catch (Exception ex)
             {
                 success = false;
-                message = "Getting leave off failed! An error occurred: " + ex.Message;
+                message = "Nghỉ phép không thành công! Đã xảy ra lỗi: " + ex.Message;
                 return (new BaseResponse<List<LeaveOff>>(success, message, data));
             }
         }
@@ -370,7 +392,7 @@ namespace BE.Services.LeaveOffServices
             if (infoDtos.fullName == null && infoDtos.status == null && infoDtos.date == null)
             {
                 success = false;
-                message = "Getting leave off failed! Input parameters are not provided.";
+                message = "Nghỉ phép không thành công! Thông số đầu vào không được cung cấp.";
                 return (new BaseResponse<List<LeaveOff>>(success, message, data));
             }
 
@@ -400,13 +422,13 @@ namespace BE.Services.LeaveOffServices
 
                 data = await query.ToListAsync();
                 success = true;
-                message = "Get all data successfully";
+                message = "Nhận tất cả dữ liệu thành công";
                 return (new BaseResponse<List<LeaveOff>>(success, message, data));
             }
             catch (Exception ex)
             {
                 success = false;
-                message = "Getting leave off failed! An error occurred: " + ex.Message;
+                message = "Không thể nghỉ phép! Đã xảy ra lỗi: " + ex.Message;
                 return (new BaseResponse<List<LeaveOff>>(success, message, data));
             }
         }

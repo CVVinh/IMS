@@ -636,15 +636,15 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                         required,
                     },
                     phoneNumber: {
-                        numeric,
-                        checkPhoneNumber(value) {
-                            0.3
-                            if (!value) return true
-                            if (value.length === 0) return true
-                            if (value.includes('.')) return false
-                            if (value.length === 10) return true
-                            else return false
-                        },
+                        required,
+                        // checkPhoneNumber(value) {
+                        //     0.3
+                        //     if (!value) return true
+                        //     if (value.length === 0) return true
+                        //     if (value.includes('.')) return false
+                        //     if (value.length === 10) return true
+                        //     else return false
+                        // },
                     },
                     dob: {},
                     identitycard: {
@@ -794,7 +794,7 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                                 this.$toast.add({
                                     severity: 'success',
                                     summary: 'Thành công',
-                                    detail: 'Thêm mới thành công!',
+                                    detail: 'Chỉnh sửa thành công!',
                                     life: 3000,
                                 })
                                 break
@@ -836,9 +836,6 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                         }
                     }
                 }
-            },
-            backToUser() {
-                this.$router.push('/users')
             },
             closeDialog() {
                 this.submitted = false

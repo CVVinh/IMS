@@ -1,4 +1,4 @@
-using BE.Data.Contexts;
+﻿using BE.Data.Contexts;
 using BE.Data.Dtos.UsersDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +17,7 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
+
     public class UsersController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -40,7 +40,7 @@ namespace BE.Controllers
         }
 
         [HttpPost("SendEmail")]
-       
+
         public async Task<IActionResult> SendMail(MailDto mailDto)
         {
             try
@@ -74,7 +74,7 @@ namespace BE.Controllers
             }
         }*/
         [HttpGet("getAll")]
-  
+
         public async Task<ActionResult<Users>> GetAll()
         {
             try
@@ -138,7 +138,7 @@ namespace BE.Controllers
                     }
 
                     success = true;
-                    messgae = "Get All Users By IdProject Succsessfully";
+                    messgae = "Nhận tất cả người dùng bằng IdProject thành công";
                     return Ok(new BaseResponse<List<Users>>(success, messgae, data));
                 }
                 messgae = member._Message;
@@ -161,7 +161,7 @@ namespace BE.Controllers
             try
             {
                 var listAllUsers = await _context.Users.Where(u => (u.workStatus == 1 &&
-                (u.IdGroup == 4 ))).ToListAsync();
+                (u.IdGroup == 4))).ToListAsync();
                 List<Users> listUserProject = new List<Users>();
                 var member = await _memberProjectServices.GetMembersByIdProjectAsync(idProject);
                 if (member._success)
@@ -176,7 +176,7 @@ namespace BE.Controllers
                     IEnumerable<Users> users = listAllUsers.Except<Users>(listUserProject);
                     data = users.ToList();
                     success = true;
-                    messgae = "Get All Users outside project Succsessfully";
+                    messgae = "Nhận tất cả người dùng bên ngoài dự án thành công";
                     return Ok(new BaseResponse<List<Users>>(success, messgae, data));
                 }
                 messgae = member._Message;
@@ -319,7 +319,6 @@ namespace BE.Controllers
             return Ok(user.IdGroup);
         }
         [HttpPost("addUser")]
-        [Authorize(Roles = "group: Admin")]
         //[Authorize(Roles = "permission_group: True module: users")]
         //[Authorize(Roles = "module: users add: 1")]
         public async Task<ActionResult<AddUserDto>> CreateUser(AddUserDto request)
@@ -329,36 +328,36 @@ namespace BE.Controllers
                 var userexist = _context.Users.Where(u => u.userCode == request.userCode);
                 if (userexist.Any())
                 {
-                    return BadRequest("Usercode is exist");
+                    return BadRequest("Mã người dùng đang tồn tại");
                 }
 
                 var isNumber = request.identitycard.All(char.IsDigit);
                 if (!isNumber)
-                    return BadRequest("Identity card is not a number");
+                    return BadRequest("Chứng minh nhân dân không phải là số");
                 if (request.identitycard.Length != 9 && request.identitycard.Length != 12)
-                    return BadRequest("Identity number's length must be 9 or 12.");
+                    return BadRequest("Độ dài của số CMND phải là 9 hoặc 12.");
 
                 //check is exist
                 var identityExist = _context.Users.Where(u => u.identitycard == request.identitycard);
                 if (identityExist.Any())
-                    return BadRequest("Identity number is exist");
+                    return BadRequest("Số nhận dạng tồn tại");
                 var phoneExist = _context.Users.Where(u => u.phoneNumber == request.phoneNumber);
                 if (request.phoneNumber != null)
                 {
                     if (phoneExist.Any() && request.phoneNumber.Length != 0)
-                        return BadRequest("Phone number is exist");
+                        return BadRequest("Số điện thoại tồn tại");
                 }
 
                 var emailExist = _context.Users.Where(u => u.email == request.email);
                 if (emailExist.Any())
-                    return BadRequest("Email is exist");
+                    return BadRequest("Email tồn tại");
                 var user = new Users
                 {
 
                     userCode = request.userCode,
                     userPassword = request.userPassword == null ?
-                        BCrypt.Net.BCrypt.HashPassword(request.userCode) :
-                        BCrypt.Net.BCrypt.HashPassword(request.userPassword), // if password is null -> password is usercode
+                    BCrypt.Net.BCrypt.HashPassword(request.userCode) :
+                    BCrypt.Net.BCrypt.HashPassword(request.userPassword), // if password is null -> password is usercode
                     userCreated = request.userCreated,
                     dateCreated = request.dateCreated,
                     firstName = request.firstName,
@@ -401,18 +400,18 @@ namespace BE.Controllers
                 var editor = await _context.Users.Where(u => u.id == user_dto.userModified).FirstOrDefaultAsync();
                 if (user == null)
                 {
-                    return NotFound("User does not exist !");
+                    return NotFound("Số nhận dạng tồn tại");
                 }
                 //check is exist
                 var identityExist = _context.Users.Where(u => u.identitycard == user_dto.identitycard && u.id != id);
                 if (identityExist.Any())
-                    return BadRequest("Identity number is exist");
+                    return BadRequest("CMND đã tồn tại");
                 var phoneExist = _context.Users.Where(u => u.phoneNumber == user_dto.phoneNumber && u.id != id && u.phoneNumber != null);
                 if (phoneExist.Any())
-                    return BadRequest("Phone number is exist");
+                    return BadRequest("Số điện thoại đã tồn tại");
                 var emailExist = _context.Users.Where(u => u.email == user_dto.email && u.id != id);
                 if (emailExist.Any())
-                    return BadRequest("Email is exist");
+                    return BadRequest("Email tồn tại");
 
                 if (user_dto.userModified != null)
                 {
@@ -445,18 +444,17 @@ namespace BE.Controllers
                     return Ok(new ApiResponseDto
                     {
                         Success = true,
-                        Message = mess == "" ? "Update success !" : mess, // if mess is empty => return Update success
+                        Message = mess == "" ? "Cập nhật thành công!" : mess, // if mess is empty => return Update success
                     });
                 }
-                return BadRequest("Cannot get information of editor !");
+                return BadRequest("Không lấy được thông tin của editor !");
             }
             catch
             {
-                return BadRequest("Unknown error !");
+                return BadRequest("Lỗi không rõ !");
             }
         }
         [HttpPut("changePassword/{userCode}")]
-        [Authorize]
         public async Task<IActionResult> ChangePassword(string userCode, [FromBody] ChangePassDto resource)
         {
             if (_context.Users == null)
@@ -466,23 +464,23 @@ namespace BE.Controllers
             var users = await _context.Users.FirstOrDefaultAsync(d => d.userCode.Equals(userCode));
             if (users == null)
             {
-                return NotFound("User does not exist !");
+                return NotFound("Người dùng không tồn tại !");
             }
             if (users.workStatus != 1)
             {
-                return BadRequest("Your account has been locked !");
+                return BadRequest("Tài khoản của bạn đã bị khóa !");
             }
             if (resource.newPassword.Equals(resource.oldPassword))
             {
-                return BadRequest("New password can't same old password!");
+                return BadRequest("Mật khẩu mới không thể giống mật khẩu cũ!");
             }
             if (BCrypt.Net.BCrypt.Verify(resource.oldPassword, users.userPassword))
             {
                 users.userPassword = BCrypt.Net.BCrypt.HashPassword(resource.newPassword);
                 await _context.SaveChangesAsync();
-                return Ok("Change password successfully!");
+                return Ok("Đổi mật khẩu thành công!");
             }
-            return BadRequest("The current password is not correct!");
+            return BadRequest("Mật khẩu hiện tại không chính xác!");
         }
 
         [HttpPost("Login")]
@@ -491,11 +489,11 @@ namespace BE.Controllers
             var user = await _context.Users.SingleOrDefaultAsync(u => u.userCode.ToLower() == loginDto.UserName.ToLower());
             if (user == null || user.isDeleted == 1)
             {
-                return NotFound("Account does not exist !");
+                return NotFound("Tài khoản không tồn tại !");
             }
             if (user.workStatus != 1)
             {
-                return BadRequest("User has been locked !");
+                return BadRequest("Người dùng đã bị khóa!");
             }
             else
             {
@@ -510,12 +508,12 @@ namespace BE.Controllers
                     return Ok(new ApiResponseDto
                     {
                         Success = true,
-                        Message = "Authenticate success...",
+                        Message = "Xác thực thành công...",
                         Username = loginDto.UserName,
                         Token = accessToken,
                     });
                 }
-                return BadRequest("Wrong password !");
+                return BadRequest("Sai mật khẩu !");
             }
         }
         [HttpPost]
@@ -529,26 +527,26 @@ namespace BE.Controllers
             var user = await _context.Users.Where(u => u.userCode == request).SingleOrDefaultAsync();
             if (user == null)
             {
-                return NotFound("Account does not exist !");
+                return NotFound("Tài khoản không tồn tại !");
             }
             if (user.workStatus != 1)
             {
-                return BadRequest("User has been locked !");
+                return BadRequest("Người dùng đã bị khóa!");
             }
             Guid id = Guid.NewGuid();
             string newPass = id.ToString().Substring(0, 8);
             user.userPassword = BCrypt.Net.BCrypt.HashPassword(newPass);
             var maildto = new MailDto();
             maildto.To = user.email;
-            maildto.Subject = "Reset Password";
-            maildto.Body = "This is new password: " + newPass;
+            maildto.Subject = "Đặt lại mật khẩu";
+            maildto.Body = "Đây là mật khẩu mới: " + newPass;
             if (await _mailService.SendMail(maildto))
             {
                 _context.SaveChanges();
                 return Ok(new ApiResponseDto
                 {
                     Success = true,
-                    Message = "Please check your email !"
+                    Message = "Vui lòng kiểm tra email của bạn !"
                 });
             }
             else
@@ -556,12 +554,11 @@ namespace BE.Controllers
                 return Ok(new ApiResponseDto
                 {
                     Success = false,
-                    Message = "Cannot reset password !"
+                    Message = "Không thể đặt lại mật khẩu!"
                 });
             }
         }
         [HttpGet("Pagination")]
-        [Authorize]
         public async Task<ActionResult> GetUsers(int page)
         {
             if (_context.Users == null)
@@ -591,7 +588,7 @@ namespace BE.Controllers
             var user = _context.Users.SingleOrDefault(u => u.userCode.ToLower() == Username.ToLower());
             if (user == null)
             {
-                return BadRequest("User does not exist...");
+                return BadRequest("Người dùng không tồn tại...");
             }
             else
             {

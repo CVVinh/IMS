@@ -74,16 +74,15 @@
                             >
                         </div>
 
-
                         <!-- Add -->
-                        <div class="field" style="margin-bottom: 0" v-if="!this.$route.params.id" >
+                        <div class="field" style="margin-bottom: 0" v-if="!this.$route.params.id">
                             <div class="p-float-label" :class="{ 'form-group--error': v$.data.user.$error }">
                                 <MultiSelect
-                                    v-model="v$.data.user.$model" 
+                                    v-model="v$.data.user.$model"
                                     :options="userDropdown"
-                                    optionLabel="name" 
+                                    optionLabel="name"
                                     optionValue="x.id"
-                                    placeholder="Người OTs" 
+                                    placeholder="Người OTs"
                                     :class="{ 'p-invalid': v$.data.user.$invalid && submitted }"
                                 />
                                 <label for="user" :class="{ 'p-error': v$.data.user.$invalid && submitted }"
@@ -95,7 +94,6 @@
                                 class="p-error"
                                 >Bạn chưa chọn người OT</small
                             >
-                        
                         </div>
                         <div class="field" style="margin-bottom: 0">
                             <div :class="{ 'form-group--error': v$.data.start.$error }">
@@ -189,7 +187,7 @@
                                 >
                             </div>
                         </div>
-                        
+
                         <div class="field">
                             <div class="p-float-label" :class="{ 'form-group--error': v$.data.description.$error }">
                                 <Textarea
@@ -234,7 +232,7 @@
     import axios from 'axios'
     import { HTTP } from '@/http-common'
     import { DateHelper } from '@/helper/date.helper'
-import { LocalStorage } from '@/helper/local-storage.helper'
+    import { LocalStorage } from '@/helper/local-storage.helper'
 
     export default {
         setup: () => ({
@@ -259,7 +257,7 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                     user: null,
                     idProject: null,
                 },
-                token:null,
+                token: null,
                 userDropdown: [],
                 project: [],
                 edit: false,
@@ -385,13 +383,13 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                     HTTP.put('OTs/updateOT/' + this.$route.params.id, this.data)
                         .then((res) => {
                             if (res.status == 200) {
-                                this.showSuccess()
+                                this.showSuccess('Cập nhât OT thành công!')
                                 this.$router.push('/ots')
                             }
                         })
                         .catch((err) => {
                             this.showWarn('Bạn không có quyền thực hiện thao tác sửa OT.')
-                            console.log(err);
+                            console.log(err)
                         })
                 } else if (this.data) {
                     this.data.dateCreate = new Date()
@@ -399,18 +397,14 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                     HTTP.post('OTs/AddOTs', this.data)
                         .then((res) => {
                             if (res.status == 200) {
-                                this.showSuccess()
+                                this.showSuccess('Thêm mới OT thành công!')
                                 this.$router.push('/ots')
-                                console.log(res.data);
+                                console.log(res.data)
                             }
                         })
                         .catch(() => {
                             this.showWarn('Bạn không có quyền thực hiện thao tác thêm OT')
                         })
-
-
-
-
                 }
             },
             check_status(status) {
@@ -420,16 +414,16 @@ import { LocalStorage } from '@/helper/local-storage.helper'
             backToOT() {
                 this.$router.push('/ots')
             },
-            showSuccess() {
+            showSuccess(mess) {
                 this.$toast.add({
-                                severity: 'success',
-                                summary: 'Thành công',
-                                detail: 'Thêm mới thành công!',
-                                life: 3000,
-                            })
+                    severity: 'success',
+                    summary: 'Thành công',
+                    detail: mess,
+                    life: 3000,
+                })
             },
             showWarn(err) {
-                this.$toast.add({ severity: 'warn', summary: 'Warn Message', detail: err, life: 3000 })
+                this.$toast.add({ severity: 'warn', summary: 'Tin nhắn cảnh báo', detail: err, life: 3000 })
             },
             checkday() {
                 if (this.data.date <= new Date(new Date().toLocaleDateString('en-EU'))) {
@@ -447,15 +441,14 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                     })
                     .catch((err) => console.log(err))
             },
-        
         },
         mounted() {
             this.token = LocalStorage.jwtDecodeToken()
-            console.log(this.token.IdGroup);
+            console.log(this.token.IdGroup)
             // Nếu người dùng không phải là leader hay admin sẽ chuyển đến ots
-            if(Number(this.token.IdGroup) !== 3 && Number(this.token.IdGroup) !== 1){
-                  router.push('/ots')
-            } 
+            if (Number(this.token.IdGroup) !== 3 && Number(this.token.IdGroup) !== 1) {
+                router.push('/ots')
+            }
             // Kiểm tra cái này phải là edit hay không
             if (this.$route.params.id) {
                 this.edit = true
@@ -471,15 +464,17 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                 this.data.end = '00:00'
             }
 
-            HTTP.get('Project/GetProjectByIdLead/'+this.token.Id).then((res) => {
-                if (res.status == 200)
-                    var formatDate =  DateHelper.formatDate(new Date()); 
-                    res.data.forEach((element) => {
-                        if (element.isDeleted != true && element.isFinished != true && (element.endDate > formatDate || element.endDate == null)) 
-                        {
-                            this.project.push(element)
-                        }
-                    })
+            HTTP.get('Project/GetProjectByIdLead/' + this.token.Id).then((res) => {
+                if (res.status == 200) var formatDate = DateHelper.formatDate(new Date())
+                res.data.forEach((element) => {
+                    if (
+                        element.isDeleted != true &&
+                        element.isFinished != true &&
+                        (element.endDate > formatDate || element.endDate == null)
+                    ) {
+                        this.project.push(element)
+                    }
+                })
             })
         },
         watch: {

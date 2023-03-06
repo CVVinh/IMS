@@ -2,10 +2,9 @@
     <LayoutDefaultDynamic>
         <ConfirmDialog></ConfirmDialog>
         <div class="mx-3 mt-3">
-            
             <DataTable
                 :value="data"
-                showGridlines 
+                showGridlines
                 :paginator="true"
                 ref="dt"
                 class="p-datatable-customers"
@@ -76,14 +75,15 @@
                         </div>
                         <div class="filter-pro">
                             <div class="filter-pro-input">
-                                <div class="filter-pro-top"></div>
-                                <Button
-                                    type="button"
-                                    style="background-color: antiquewhite"
-                                    icon="pi pi-filter-slash"
-                                    class="p-button-outlined right"
-                                    @click="clearFilter()"
-                                />
+                                <div class="filter-pro-top">
+                                    <Button
+                                        type="button"
+                                        style="background-color: antiquewhite"
+                                        icon="pi pi-filter-slash"
+                                        class="p-button-outlined right me-2"
+                                        @click="clearFilter()"
+                                    />
+                                </div>
                                 <Dropdown
                                     class="p-column-filter filter-pro-item right"
                                     v-model="selectedMonth"
@@ -143,17 +143,17 @@
 
                 <Column field="x.realTime" header="Thời gian tăng ca" sortable style="min-width: 8rem">
                     <template #body="{ data }">
-                        {{ data.x.realTime + "h" }}
+                        {{ data.x.realTime + 'h' }}
                     </template>
                 </Column>
                 <Column field="x.start" header="Thời gian bắt đầu" sortable style="min-width: 8rem">
                     <template #body="{ data }">
-                        {{ data.x.start + "h" }}
+                        {{ data.x.start + 'h' }}
                     </template>
                 </Column>
                 <Column field="x.end" header="Ngày kết thúc" sortable style="min-width: 8rem">
                     <template #body="{ data }">
-                        {{ data.x.end + "h" }}
+                        {{ data.x.end + 'h' }}
                     </template>
                 </Column>
 
@@ -173,7 +173,7 @@
                         {{ data.x.updateUser }}
                     </template>
                 </Column> -->
-        
+
                 <Column
                     sortable
                     v-for="(col, index) of selectedColumns"
@@ -182,9 +182,8 @@
                     :key="col.field + '_' + index"
                 >
                     <template #body="{ data }" v-if="col.field === 'dateUpdate'">
-                        {{  data.dateUpdate !== null ? getFormattedDate(new Date(data.dateUpdate)) : null}}
+                        {{ data.dateUpdate !== null ? getFormattedDate(new Date(data.dateUpdate)) : null }}
                     </template>
-                
                 </Column>
                 <Column field="x.idProject" header="Dự án" sortable style="min-width: 5rem">
                     <template #body="{ data }">
@@ -203,7 +202,6 @@
                             <Edit
                                 icon="pi pi-check"
                                 @click="openConfirm(true, data.x.id, data.x.leadCreate)"
-
                                 class="right p-button-success"
                                 v-if="showButton.confirmButton && data.x.status == 0"
                             />
@@ -252,7 +250,6 @@
                     </template>
                 </Column>
             </DataTable>
-           
         </div>
         <Dialog
             header="Không có quyền truy cập !"
@@ -286,9 +283,9 @@
         </Dialog>
         <AddOTsDialog
             :display="this.displayFormAddEdit"
-            @close ="closeFormAddEdit"
+            @close="closeFormAddEdit"
             @reloadData="getOTsByLead(this.token.Id)"
-            :idproject = "this.idproject"
+            :idproject="this.idproject"
         />
         <DetailOT
             :show="DetailOT"
@@ -303,8 +300,6 @@
             :lead="lead"
             @OpenFormRefuse="OpenFormRefuse"
         />
-        
-
     </LayoutDefaultDynamic>
 </template>
 
@@ -379,17 +374,17 @@
                     ExportButton: false,
                 },
                 loading: true,
-                displayFormAddEdit:false,
-                idproject:null,
+                displayFormAddEdit: false,
+                idproject: null,
             }
         },
         async mounted() {
             try {
                 this.token = LocalStorage.jwtDecodeToken()
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
-                console.log(UserRoleHelper.isAccess);
+                console.log(UserRoleHelper.isAccess)
                 if (await UserRoleHelper.isAccess) {
-                        this.getAllOT()   
+                    this.getAllOT()
                 } else {
                     this.countTime()
                     this.displayDialog1 = true
@@ -491,7 +486,6 @@
                 })
             },
             async getAllOT() {
-                
                 if (this.token) {
                     this.CheckButtonGroup(this.token.IdGroup)
                 }
@@ -520,7 +514,7 @@
                     this.showButton.addButton = true
                     this.showButton.deleteButton = true
                     this.showButton.viewButton = true
-                    this.getOTsByLead(this.token.Id)     
+                    this.getOTsByLead(this.token.Id)
                 }
                 // 4 staff
                 if (value == 4) {
@@ -609,14 +603,14 @@
             },
             showSuccess(err) {
                 this.$toast.add({
-                                severity: 'success',
-                                summary: 'Thành công',
-                                detail: err,
-                                life: 3000,
-                            })
+                    severity: 'success',
+                    summary: 'Thành công',
+                    detail: err,
+                    life: 3000,
+                })
             },
 
-            exportToExcelFollowRole(){
+            exportToExcelFollowRole() {
                 var month = 0
                 var year = 0
                 var idProject = 0
@@ -625,21 +619,24 @@
                     year = this.selectedMonth.year
                 }
                 if (this.selectedProject != null) idProject = this.selectedProject.code
-                HTTP.get(`OTs/exportExcelFollowRole/${month}/${year}/${idProject}/${this.token.IdGroup}/${this.token.Id}`)
-                .then(res=>{
-                    if(res.status === 200){
-                        this.$toast.add({
+                HTTP.get(
+                    `OTs/exportExcelFollowRole/${month}/${year}/${idProject}/${this.token.IdGroup}/${this.token.Id}`,
+                )
+                    .then((res) => {
+                        if (res.status === 200) {
+                            this.$toast.add({
                                 severity: 'success',
                                 summary: 'Thành công',
                                 detail: 'Xuất file excel thành công!',
                                 life: 3000,
                             })
-                        window.location = res.data
-                    }
-                }).catch(err=>{
-                    console.log(err);
-                    this.showWarn('Bạn không có quyền thực hiện thao tác xuất file excel!')
-                })
+                            window.location = res.data
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                        this.showWarn('Bạn không có quyền thực hiện thao tác xuất file excel!')
+                    })
             },
 
             exportToExcel() {
@@ -674,7 +671,7 @@
                     this.status = 1
                     HTTP.put('OTs/acceptOT', { id: id, status: this.status, pm: this.PM })
                         .then((res) => {
-                            this.showSuccess("Xét duyệt thành công")
+                            this.showSuccess('Xét duyệt thành công')
                         })
                         .catch((err) => {
                             console.log(err)
@@ -731,23 +728,25 @@
                 }
             },
 
-            Fillter(){
+            Fillter() {
                 var month = 0
                 var year = 0
                 var idProject = 0
-                if(this.selectedMonth !== null){
+                if (this.selectedMonth !== null) {
                     month = this.selectedMonth.month
                     year = this.selectedMonth.year
                 }
-                if(this.selectedProject !== null) {
+                if (this.selectedProject !== null) {
                     idProject = this.selectedProject.code
                 }
                 var stringGetAPI = `OTs/filterByRole/${month}/${year}/${idProject}/${this.token.IdGroup}/?iduser=${this.token.Id}`
-                HTTP.get(stringGetAPI).then(res=>{
-                    this.data  =res.data
-                }).catch(err=>{
-                    console.log(err);
-                })
+                HTTP.get(stringGetAPI)
+                    .then((res) => {
+                        this.data = res.data
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
             },
             getProject() {
                 HTTP.get('Project/getAllProject')
@@ -776,39 +775,36 @@
                 this.displayDialog2 = true
             },
 
-            openFormAddEdit(value){
+            openFormAddEdit(value) {
                 this.displayFormAddEdit = true
                 this.idproject = value
             },
 
-            closeFormAddEdit(){
+            closeFormAddEdit() {
                 this.displayFormAddEdit = false
-                this.idproject =0
+                this.idproject = 0
             },
 
-            openConfirm(accepted, id, lead){
+            openConfirm(accepted, id, lead) {
                 this.$confirm.require({
-                message: 'Bạn có chắc chắn xác nhận duyệt tăng ca này',
-                header: 'Duyệt tăng ca',
-                icon: 'pi pi-exclamation-triangle',
-                acceptClass: 'p-button-success',
-                accept: () => {
-                    this.accept(accepted, id, lead)
-                },
-                reject: () => {
-                    
-                },
-                onShow: () => {
-                    //callback to execute when dialog is shown
-                },
-                onHide: () => {
-                    //callback to execute when dialog is hidden
-                }
-            });
+                    message: 'Bạn có chắc chắn xác nhận duyệt tăng ca này',
+                    header: 'Duyệt tăng ca',
+                    icon: 'pi pi-exclamation-triangle',
+                    acceptClass: 'p-button-success',
+                    accept: () => {
+                        this.accept(accepted, id, lead)
+                    },
+                    reject: () => {},
+                    onShow: () => {
+                        //callback to execute when dialog is shown
+                    },
+                    onHide: () => {
+                        //callback to execute when dialog is hidden
+                    },
+                })
             },
-
         },
-        components: { Edit, Delete, Export, DetailOT,AddOTsDialog },
+        components: { Edit, Delete, Export, DetailOT, AddOTsDialog },
     }
 </script>
 

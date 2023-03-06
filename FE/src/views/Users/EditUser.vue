@@ -641,8 +641,8 @@
                     .catch((er) => {
                         this.$toast.add({
                             severity: ToastSeverity.ERROR,
-                            summary: 'Error ',
-                            detail: "Can't get information of user create !",
+                            summary: 'Lỗi ',
+                            detail: 'Không thể lấy thông tin của người dùng tạo!',
                             life: 3000,
                         })
                     })
@@ -695,8 +695,8 @@
                                 this.$router.push('/users')
                                 this.$toast.add({
                                     severity: 'success',
-                                    summary: 'Info Message',
-                                    detail: 'Edit user success!',
+                                    summary: 'Thành công',
+                                    detail: 'Chỉnh sửa người dùng thành công!',
                                     life: 3000,
                                 })
                             }

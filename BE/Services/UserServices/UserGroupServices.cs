@@ -14,7 +14,7 @@ namespace BE.Services.UserServices
     {
         Task<BaseResponse<List<User_Group>>> GetAllUserGroupAsync();
         Task<BaseResponse<List<User_Group>>> GetUserGroupWithUserId(int userId);
-        Task<BaseResponse<List<User_Group>>> GetUserGroupWithGroupId(int userId);
+        Task<BaseResponse<List<User_Group>>> GetUserGroupWithGroupId(int groupId);
         Task<BaseResponse<List<User_Group>>> CreateUserGroup(List<UserGroupCreatedDto> userGroupCreatedDto);
         Task<BaseResponse<User_Group>> UpdateUserGroup(int idUser, int idGroup, UserGroupUpdatedDto userGroupUpdatedDto);
         Task<BaseResponse<User_Group>> DeleteUserGroup(UserGroupDeletedDto userGroupDeletedDto);
@@ -184,14 +184,14 @@ namespace BE.Services.UserServices
                 }
 
                 var userGroupMapData = _mapper.Map<UserGroupDeletedDto, User_Group>(userGroupDeletedDto, userGroup);
-                userGroup.dateDeleted = DateTime.Now;
-                userGroup.isDeleted = true;
-                _db.UserGroups.Update(userGroup);
+                userGroupMapData.dateDeleted = DateTime.Now;
+                userGroupMapData.isDeleted = true;
+                _db.UserGroups.Update(userGroupMapData);
                 await _db.SaveChangesAsync();
 
                 success = true;
                 message = "Deleting UserGroup successfully";
-                return new BaseResponse<User_Group>(success, message, userGroup);
+                return new BaseResponse<User_Group>(success, message, userGroupMapData);
             }
             catch (Exception ex)
             {

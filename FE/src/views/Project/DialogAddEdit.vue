@@ -200,7 +200,7 @@
                                         :class="{
                                             input_disabled: isOnGitlab === true,
                                             'p-invalid':
-                                                (v$.dataProject.startDate.$invalid || !checkStartDate()) &&
+                                                (v$.dataProject.startDate.$invalid /*|| !checkStartDate()*/) &&
                                                 submitted &&
                                                 isOnGitlab == false,
                                         }"
@@ -216,7 +216,7 @@
                                         v$.dataProject.startDate.required.$message.replace('Value', 'Start date')
                                     }}</small
                                 >
-                                <small
+                                <!-- <small
                                     v-if="
                                         !v$.dataProject.startDate.$invalid &&
                                         !checkStartDate() &&
@@ -226,7 +226,7 @@
                                     class="p-error"
                                 >
                                     Ngày bắt đầu phải lớn hơn hôm nay!
-                                </small>
+                                </small> -->
                             </div>
                         </div>
 
@@ -428,7 +428,7 @@
                     if (!isFormValid) {
                         return
                     }
-                    if (!this.valid || !this.checkStartDate() || !this.checkEndDate()) return
+                    if (!this.valid || /*!this.checkStartDate() ||*/ !this.checkEndDate()) return
                 }
                 if (this.projectSelected.id) {
                     this.editData()
@@ -438,7 +438,6 @@
                 console.log(this.projectSelected.id)
             },
             AddData() {
-                console.log('add')
                 let userLogin = LocalStorage.jwtDecodeToken()
                 const dataSave = {
                     name: this.dataProject.name,

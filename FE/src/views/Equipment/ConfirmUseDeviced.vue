@@ -68,8 +68,8 @@
                     if (res.status == 200) {
                         this.$toast.add({
                             severity: 'success',
-                            summary: 'Successfull',
-                            detail: `Confirm ${id.length} Handover successfull!`,
+                            summary: 'Thành công',
+                            detail: `Xác nhận ${id.length} Bàn giao thành công!`,
                             life: 3000,
                         })
                         this.getAllHandover()
@@ -82,8 +82,8 @@
                     if (res.status == 200) {
                         this.$toast.add({
                             severity: 'success',
-                            summary: 'Successfull',
-                            detail: `Confirm Handover successfull!`,
+                            summary: 'Thành công',
+                            detail: `Xác nhận Bàn giao thành công!`,
                             life: 3000,
                         })
                         this.getAllHandover()

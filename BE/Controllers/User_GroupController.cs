@@ -29,7 +29,7 @@ namespace BE.Controllers
             _paginationService = paginationService;
         }
 
-        [HttpGet("getAllUserGroupAsync")]
+        [HttpGet("getAllUserGroup")]
         public async Task<IActionResult> GetAllUserGroupAsync(int? pageIndex, PageSizeEnum pageSizeEnum)
         {
             var response = await _userGroupServices.GetAllUserGroupAsync();
@@ -90,12 +90,12 @@ namespace BE.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var rules = await _userGroupServices.UpdateUserGroup(idUser, idGroup, userGroupUpdatedDto);
-            if (rules._success)
+            var response = await _userGroupServices.UpdateUserGroup(idUser, idGroup, userGroupUpdatedDto);
+            if (response._success)
             {
-                return Ok(rules);
+                return Ok(response);
             }
-            return BadRequest(rules);
+            return BadRequest(response);
         }
 
         [HttpPut("deleteUserGroup")]

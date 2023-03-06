@@ -200,7 +200,7 @@
             showWarn() {
                 this.$toast.add({
                     severity: 'warn',
-                    summary: 'Cảnh báo Message',
+                    summary: 'Cảnh báo',
                     detail: 'Lưu không thành công !!!',
                     life: 3000,
                 })

@@ -138,7 +138,7 @@ namespace BE.Controllers
         [HttpPut("acceptPayment/{idPaid}")]
         [Authorize(Roles = "admin,pm,sample")]
         [Authorize(Roles = "module: paids confirm: 1")]
-        public async Task<IActionResult> acceptRegisterLeaveOff(int idPaid, AcceptPaymentPaidDtos acceptPaymentPaidDtos)
+        public async Task<IActionResult> acceptRegisterPaid(int idPaid, AcceptPaymentPaidDtos acceptPaymentPaidDtos)
         {
             if (!ModelState.IsValid)
             {
@@ -193,6 +193,24 @@ namespace BE.Controllers
         }
 
 
+        //PUT: not accept payment
+        [HttpPut("NotAcceptPayment/{idPaid}")]
+        [Authorize(Roles = "admin,pm,sample")]
+        [Authorize(Roles = "module: paids confirm: 1")]
+        public async Task<IActionResult> NotAcceptRegisterPaid(int idPaid, AcceptPaymentPaidDtos acceptPaymentPaidDtos)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var paid = await _paidServices.NotAccepterPayment(idPaid, acceptPaymentPaidDtos);
+            if (paid._success)
+            {
+                return Ok(paid);
+            }
+
+            return BadRequest(paid);
+        }
 
     }
 }

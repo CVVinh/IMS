@@ -1,5 +1,12 @@
 ﻿using BE.Data.Contexts;
+using BE.Data.Dtos.GruopDtos;
+using BE.Data.Dtos.UserDtos;
+using BE.Data.Enum;
 using BE.Data.Models;
+using BE.Services.GroupServices;
+using BE.Services.PaginationServices;
+using BE.Services.UserServices;
+using DocumentFormat.OpenXml.InkML;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,89 +19,97 @@ namespace BE.Controllers
     [ApiController]
     public class Permission_GroupsController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public Permission_GroupsController(AppDbContext context)
+        private readonly IPermissionGroupServices _permissionGroupServices;
+        private readonly IPaginationServices<Permission_Group> _paginationService;
+
+        public Permission_GroupsController(IPermissionGroupServices permissionGroupServices, IPaginationServices<Permission_Group> paginationService)
         {
-            _context = context;
+            _permissionGroupServices = permissionGroupServices;
+            _paginationService = paginationService;
         }
-        [HttpPost("decentralization_Group")]
-        public async Task<IActionResult> decentralization_Group(int idGroup, string[][] data)
-        {
-            try
-            {
-                for (int i = 0; i < data.Length; i++)
-                {
-                    int a = int.Parse(data[i][0]);
-                    var permission = await _context.Permission_Groups.SingleOrDefaultAsync(x => x.IdGroup == idGroup && x.IdModule == int.Parse(data[i][0]));
-                    if (permission != null)
-                    {
-                        if(int.Parse(data[i][1]) == 0)
-                        {
-                            permission.Access = false;
-                        }
-                        if(int.Parse(data[i][1]) == 1)
-                        {
-                            permission.Access = true;
-                        }
-                        _context.Permission_Groups.Update(permission);
-                    }
-                    else
-                    {
-                        permission = new Permission_Group();
-                        permission.IdGroup = idGroup;
-                        permission.IdModule = int.Parse(data[i][0]);
-                        if (int.Parse(data[i][1]) == 0)
-                        {
-                            permission.Access = false;
-                        }
-                        if (int.Parse(data[i][1]) == 1)
-                        {
-                            permission.Access = true;
-                        }
-                    _context.Permission_Groups.Add(permission);
-                    }
-                }
-                await _context.SaveChangesAsync();
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
+
         [HttpGet("getPermissionGroup")]
-        public async Task<IActionResult> getPermissionGroup()
+        public async Task<IActionResult> GetAllPermissionGroupAsync(int? pageIndex, PageSizeEnum pageSizeEnum)
         {
-            try
+            var response = await _permissionGroupServices.GetAllPermissionGroupAsync();
+            if (response._success)
             {
-                var data = await _context.Permission_Groups.ToListAsync();
-                if (data.Count() != 0)
+                var pageSize = (int)pageSizeEnum;
+                var resultPage = await _paginationService.paginationListTableAsync(response._Data, pageIndex, pageSize);
+                if (resultPage._success)
                 {
-                    return Ok(data);
+                    return Ok(resultPage);
                 }
-                return NotFound("No data");
+                return BadRequest(resultPage);
             }
-            catch(Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(response);
         }
-        [HttpGet("getPermissionGroup_By_IdGroup")]
-        public async Task<IActionResult> getPermissionGroup_By_IdGroup(int idGroup)
+        
+
+        [HttpGet("getPermissionGroup_By_IdGroup/{groupId}")]
+        public async Task<IActionResult> GetPermissionGroupWithGroupId([FromRoute] int groupId)
         {
-            try
+            var response = await _permissionGroupServices.GetPermissionGroupWithGroupId(groupId);
+            if (response._success)
             {
-                var data = await _context.Permission_Groups.Where(x=>x.IdGroup == idGroup).ToListAsync();
-                if (data != null)
-                {
-                    return Ok(data);
-                }
-                return NotFound();
+                return Ok(response);
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(response);
         }
+
+        [HttpGet("getPermissionGroup_By_IdModule/{moduleId}")]
+        public async Task<IActionResult> GetPermissionGroupWithModuleId([FromRoute] int moduleId)
+        {
+            var response = await _permissionGroupServices.GetPermissionGroupWithModuleId(moduleId);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpPost("decentralization_Group")]
+        public async Task<IActionResult> CreatePermissionGroup(List<PermissionGroupDto> permissionGroupDtos)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _permissionGroupServices.CreatePermissionGroup(permissionGroupDtos);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpPut("UpdatePermissionGroup/{idGroup}/{idModule}")]
+        public async Task<IActionResult> UpdatePermissionGroup([FromRoute] int idGroup, [FromRoute] int idModule, PermissionGroupDto permissionGroupDtos)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _permissionGroupServices.UpdatePermissionGroup(idGroup, idModule, permissionGroupDtos);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpDelete("deletePermissionGroup/{idGroup}/{idModule}")]
+        public async Task<IActionResult> DeletePermissionGroup([FromRoute] int idGroup, [FromRoute] int idModule)
+        {
+            var response = await _permissionGroupServices.DeletePermissionGroup(idGroup, idModule);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+
+
     }
 }

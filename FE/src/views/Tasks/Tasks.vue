@@ -183,7 +183,7 @@
                     .catch((error) => {
                         this.$toast.add({
                             severity: 'info',
-                            summary: 'Thông tin ',
+                            summary: 'Xác nhận',
                             detail: error.response.data,
                             life: 2000,
                         })

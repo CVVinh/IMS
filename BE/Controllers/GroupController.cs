@@ -12,6 +12,11 @@ using DocumentFormat.OpenXml.InkML;
 using Group = BE.Data.Models.Group;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
+using BE.Services.PaginationServices;
+using BE.Services.UserServices;
+using BE.Services.GroupServices;
+using BE.Data.Enum;
+using BE.Data.Dtos.UserDtos;
 
 namespace BE.Controllers
 {
@@ -20,172 +25,103 @@ namespace BE.Controllers
     [Authorize(Roles = "permission_group: True module: groups")]
     public class GroupController: ControllerBase
     {
-        private readonly AppDbContext _context;
-        
-        public GroupController(AppDbContext context)
+        private readonly IGroupServices _groupServices;
+        private readonly IPaginationServices<Group> _paginationService;
+
+        public GroupController(IGroupServices groupServices, IPaginationServices<Group> paginationService)
         {
-            _context = context;
-            
+            _groupServices = groupServices;
+            _paginationService = paginationService;
         }
        
         [HttpGet("getListGroup")]
-        public ActionResult getListGroup()
+        public async Task<IActionResult> GetAllGroupAsync(int? pageIndex, PageSizeEnum pageSizeEnum)
         {
-            try
+            var response = await _groupServices.GetAllGroupAsync();
+            if (response._success)
             {
-                var listGroup = _context.Groups.Where(x => x.IsDeleted == 0).ToList();
-                return Ok(listGroup);
+                var pageSize = (int)pageSizeEnum;
+                var resultPage = await _paginationService.paginationListTableAsync(response._Data, pageIndex, pageSize);
+                if (resultPage._success)
+                {
+                    return Ok(resultPage);
+                }
+                return BadRequest(resultPage);
             }
-            catch(Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(response);
         }
 
+
         [HttpGet("getUserByGroup/{idGroup}")]
-        public async Task<ActionResult> getUserByGroup(int idGroup) {
-            try
+        public async Task<IActionResult> GetGroupById([FromRoute] int idGroup)
+        {
+            var response = await _groupServices.GetGroupById(idGroup);
+            if (response._success)
             {
-               
-                var user = await (from u in _context.Users
-                            join g in _context.UserGroups
-                            on u.id equals g.idUser
-                            where g.idGroup == idGroup && g.isDeleted == false
-                            select new
-                            {
-                                firstName = u.firstName,
-                                lastName = u.lastName,
-                                id =u.id,
-                            }).ToListAsync();
-                if (user!= null)
-                {
-                    return Ok(user);
-                }
-                else
-                {
-                    return NotFound("Khong tim thay du lieu");
-                }
+                return Ok(response);
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }                     
+            return BadRequest(response);
         }
-        
+
         [HttpPost("addGroup")]
         [Authorize(Roles = "admin")]
         [Authorize(Roles = "module: groups add: 1")]
-        public async Task<IActionResult> addGroup(AddGroupDtos req)
+        public async Task<IActionResult> CreateGroup(AddGroupDtos addGroupDtos)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                var add_g = await _context.Groups.SingleOrDefaultAsync(g => g.NameGroup!.ToLower() == req.NameGroup!.ToLower());
-                if (add_g == null)
-                {
-                    var g = new Group();
-                    g.NameGroup=req.NameGroup;
-                    g.Discription=req.Discription;
-                    g.userCreated=req.userCreated;
-                    g.dateCreated = DateTime.UtcNow;
-                    g.Key = g.NameGroup!.ToLower();
-                    _context.Groups.Add(g);
-                    await _context.SaveChangesAsync();
-                    return Ok(g);
-
-                }
-                return BadRequest("Da Ton Tai");
+                return BadRequest(ModelState);
             }
-            catch (Exception ex)
+            var response = await _groupServices.CreateGroup(addGroupDtos);
+            if (response._success)
             {
-                return BadRequest(ex);
+                return Ok(response);
             }
+            return BadRequest(response);
         }
 
- 
-        [HttpPut("updateGroup/{id}")]
+        [HttpPut("updateGroup/{idGroup}")]
         [Authorize(Roles = "admin")]
         [Authorize(Roles = "module: groups update: 1")]
-        public async Task<ActionResult> updateGroup(int id, UpdateGroupDtos req)
+        public async Task<IActionResult> UpdateGroup([FromRoute] int idGroup, UpdateGroupDtos updateGroupDtos)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                var updateG =  await _context.Groups.Where(x => x.IsDeleted == 0).FirstOrDefaultAsync(x => x.Id == id);
-                if (updateG != null)
-                {
-                    updateG.NameGroup=req.NameGroup;
-                    updateG.Discription=req.Discription;
-                    updateG.userModified =req.userModified;
-                    updateG.dateModified= DateTime.Now;
-
-                    await _context.SaveChangesAsync();
-                    return Ok();
-
-                }
-                else return NotFound();
+                return BadRequest(ModelState);
             }
-            catch (Exception ex)
+            var response = await _groupServices.UpdateGroup(idGroup, updateGroupDtos);
+            if (response._success)
             {
-                return BadRequest(ex);
-            }     
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
 
-        [HttpPut("deleteGroup/{id}")]
+        [HttpPut("deleteGroup/{idGroup}")]
         [Authorize(Roles = "admin")]
         [Authorize(Roles = "module: groups delete: 1")]
-        public async Task<ActionResult> deleteGroup(int id)
+        public async Task<IActionResult> DeleteGroup(int idGroup)
         {
-            try
+            var response = await _groupServices.DeleteGroup(idGroup);
+            if (response._success)
             {
-                var deleteG = await _context.Groups.Where(x => x.IsDeleted == 0).FirstOrDefaultAsync(g => g.Id == id);
-                if (deleteG != null)
-                {
-                    deleteG.IsDeleted = 1;
-                    deleteG.dateModified = DateTime.UtcNow;
-                    await _context.SaveChangesAsync();
-                    return Ok();
-                }    
-                else return NotFound();
+                return Ok(response);
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(response);
         }
 
         [HttpGet]
         [Route("exportExcel")]
         [Authorize(Roles = "admin")]
         [Authorize(Roles = "module: groups export: 1")]
-        public async Task<string> DownloadFile()
+        public async Task<IActionResult> DownloadFile()
         {
-            var wb = new XLWorkbook();
-            var ws = wb.Worksheets.Add("Sheet1");
-            // get data from DB
-            var _data = await _context.Groups.ToListAsync();
-            var columns_name = typeof(Group).GetProperties()
-                        .Select(property => property.Name)
-                        .ToArray();
-            // table header
-            for (int idx = 0; idx < columns_name.Length; idx++)
+            var response = await _groupServices.DownloadFile();
+            if (response._success)
             {
-                var cell = ws.Cell(1, idx + 1);
-                cell.Value = columns_name[idx];
+                return Ok(response);
             }
-            // table data
-            ws.Cells("A2").Value = _data;
-            // Apply style to excel
-            for (int idx = 0; idx < columns_name.Length; idx++)
-            {
-                var col = ws.Column(idx + 1);
-                col.AdjustToContents();
-            }
-            // border for table
-            IXLRange data_range = ws.Range(ws.Cell(1, 1).Address, ws.Cell(_data.Count() + 1, columns_name.Length).Address);
-            data_range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            data_range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-            // save file to excel folder
-            wb.SaveAs("..\\FE\\Excel\\Group_Table.xlsx");
-            return "Excel\\Group_Table.xlsx";
+            return BadRequest(response);
         }
 
 
