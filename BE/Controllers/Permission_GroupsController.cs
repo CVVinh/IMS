@@ -31,33 +31,30 @@ namespace BE.Controllers
                         if(int.Parse(data[i][1]) == 0)
                         {
                             permission.Access = false;
-                            await _context.SaveChangesAsync();
                         }
                         if(int.Parse(data[i][1]) == 1)
                         {
                             permission.Access = true;
-                            await _context.SaveChangesAsync();
                         }
+                        _context.Permission_Groups.Update(permission);
                     }
                     else
                     {
-                        var permission_group = new Permission_Group();
-                        permission_group.IdGroup = idGroup;
-                        permission_group.IdModule = int.Parse(data[i][0]);
+                        permission = new Permission_Group();
+                        permission.IdGroup = idGroup;
+                        permission.IdModule = int.Parse(data[i][0]);
                         if (int.Parse(data[i][1]) == 0)
                         {
-                            permission_group.Access = false;
-                            await _context.SaveChangesAsync();
+                            permission.Access = false;
                         }
                         if (int.Parse(data[i][1]) == 1)
                         {
-                            permission_group.Access = true;
-                            await _context.SaveChangesAsync();
+                            permission.Access = true;
                         }
-                        _context.Permission_Groups.Add(permission_group);
-                        await _context.SaveChangesAsync();
+                    _context.Permission_Groups.Add(permission);
                     }
                 }
+                await _context.SaveChangesAsync();
                 return Ok();
             }
             catch (Exception ex)

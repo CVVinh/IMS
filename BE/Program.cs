@@ -43,6 +43,7 @@ using BE.Data.Dtos.PaidDtos;
 using BE.Data.Dtos.PaidDtos.Validator;
 using BE.Services.Customers;
 using BE.Hubs;
+using BE.Services.UserServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +67,7 @@ builder.Services.AddScoped<IPaidReasonsService, PaidReasonServices>();
 builder.Services.AddScoped<ITasksServices, TasksServices>();
 builder.Services.AddScoped<IWikiCategogyService, WikiCategogyServices>();
 builder.Services.AddScoped<IWikiPostService, WikiPostService>();
+builder.Services.AddScoped<IUserGroupServices, UserGroupServices>();
 
 builder.Services.AddScoped<IMemberProjectServices, MemberProjectServices>();
 builder.Services.AddScoped<IPaginationServices<GetAllTaskDto>, PaginationServices<GetAllTaskDto>>();
@@ -81,6 +83,7 @@ builder.Services.AddScoped<IPaginationServices<Paid>, PaginationServices<Paid>>(
 builder.Services.AddScoped<IPaginationServices<PaidImage>, PaginationServices<PaidImage>>();
 builder.Services.AddScoped<IRulesService, RulesService>();
 builder.Services.AddScoped<IPaginationServices<Rules>, PaginationServices<Rules>>();
+builder.Services.AddScoped<IPaginationServices<User_Group>, PaginationServices<User_Group>>();
 builder.Services.AddScoped<IInfoDeviceService,InfoDeviceService>();
 #endregion
 

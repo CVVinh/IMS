@@ -6,9 +6,11 @@ using BE.Helpers;
 using BE.Response;
 using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using static BE.Data.Enum.LeaveOff.Status;
 
 namespace BE.Services.PaidServices
@@ -68,40 +70,40 @@ namespace BE.Services.PaidServices
             try
             {
                 var getPaids = await (from p in _appContext.Paids
-                                join up in _appContext.Users on p.PaidPerson equals up.id
-                                join cs in _appContext.Customers on Convert.ToInt32(p.CustomerName) equals cs.id
-                                join pr in _appContext.PaidReasons on Convert.ToInt32(p.PaidReason) equals pr.id 
-                                join pj in _appContext.Projects on p.ProjectId equals pj.Id into pj1
-                                from pj in pj1.DefaultIfEmpty()
-                                join uc in _appContext.Users on p.PersonConfirm equals uc.id into uc1
-                                from uc in uc1.DefaultIfEmpty()
-                                select new
-                                {
-                                    id = p.Id,
-                                    paidPerson = p.PaidPerson,
-                                    paidReasonName = pr.name,
+                                      join up in _appContext.Users on p.PaidPerson equals up.id
+                                      join cs in _appContext.Customers on Convert.ToInt32(p.CustomerName) equals cs.id
+                                      join pr in _appContext.PaidReasons on Convert.ToInt32(p.PaidReason) equals pr.id
+                                      join pj in _appContext.Projects on p.ProjectId equals pj.Id into pj1
+                                      from pj in pj1.DefaultIfEmpty()
+                                      join uc in _appContext.Users on p.PersonConfirm equals uc.id into uc1
+                                      from uc in uc1.DefaultIfEmpty()
+                                      select new
+                                      {
+                                          id = p.Id,
+                                          paidPerson = p.PaidPerson,
+                                          paidReasonName = pr.name,
 
-                                    personConfirm = Convert.ToInt32(p.PersonConfirm),
-                                    personConfirmName = uc != null ? uc.FullName : "",
+                                          personConfirm = Convert.ToInt32(p.PersonConfirm),
+                                          personConfirmName = uc != null ? uc.FullName : "",
 
-                                    paidDate = p.PaidDate != DateTime.MinValue ? p.PaidDate.ToString("MM/dd/yyyy") : null,
+                                          paidDate = p.PaidDate != DateTime.MinValue ? p.PaidDate.ToString("MM/dd/yyyy") : null,
 
-                                    projectId = p.ProjectId,
-                                    nameProject = pj != null ? pj.Name : "",
-                                    isDelPro = pj != null ? pj.IsDeleted : false,
+                                          projectId = p.ProjectId,
+                                          nameProject = pj != null ? pj.Name : "",
+                                          isDelPro = pj != null ? pj.IsDeleted : false,
 
-                                    customerName = Convert.ToInt32(p.CustomerName),
-                                    customerFullName = cs.fullName,
+                                          customerName = Convert.ToInt32(p.CustomerName),
+                                          customerFullName = cs.fullName,
 
-                                    amountPaid = p.AmountPaid,
+                                          amountPaid = p.AmountPaid,
 
-                                    paidReason = Convert.ToInt32(p.PaidReason),
-                                    paidPersonName = up.FullName,
+                                          paidReason = Convert.ToInt32(p.PaidReason),
+                                          paidPersonName = up.FullName,
 
-                                    contentReason = p.ContentReason,
-                                    isPaid = p.IsPaid,
-                                    paidImages = p.paidImages,
-                                }).ToListAsync();
+                                          contentReason = p.ContentReason,
+                                          isPaid = p.IsPaid,
+                                          paidImages = p.paidImages,
+                                      }).ToListAsync();
 
                 success = true;
                 message = "Get all data successfully";

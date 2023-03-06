@@ -52,6 +52,17 @@ namespace BE.Controllers
             }
             return BadRequest(response);
         }
+        [HttpGet("GetById1111/{id}")]
+        public async Task<IActionResult> GetPaidWithId1(int id)
+        {
+            var response = await _paidServices.GetPaidWithId1(id);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
 
         [HttpGet("GetByUserId")]
         public async Task<IActionResult> GetPaidWithUserId(int id)
