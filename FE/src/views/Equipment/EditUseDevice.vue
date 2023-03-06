@@ -173,8 +173,8 @@
                     if (res.status == 200) {
                         this.$toast.add({
                             severity: 'success',
-                            summary: 'Successfull',
-                            detail: `Edit Handover success full!`,
+                            summary: 'Thành công',
+                            detail: `Chỉnh sửa Bàn giao thành công!`,
                             life: 3000,
                         })
                     }

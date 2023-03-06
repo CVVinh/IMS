@@ -146,14 +146,14 @@
             :statusopen="openAddform"
             @closeAdd="closeAdd()"
             :roleoption="Optionrole"
-            @reloadpage="getData()"
+            @reloadpage="reloadData()"
         />
         <EditUserDiaLog
             :statusopen="OpenEditform"
             @closeModal="closeModal()"
             :iduser="Iduser"
             :roleoption="Optionrole"
-            @reloadpage="getData"
+            @reloadpage="reloadData"
         />
     </LayoutDefaultDynamic>
 </template>
@@ -317,6 +317,42 @@
                     .catch((err) => console.log(err))
             },
 
+
+            reloadData(){
+                this.data=[]
+                if(Number(this.decode.IdGroup) === 1){
+                    HTTP.get('Users/getAll').then((res) => {
+                    if (res.status == 200) {
+                        const temp = res.data
+                        temp.forEach((element) => {
+                            if (element.isDeleted == 0) {
+                                this.data.push({ ...element, fullName: '' })
+                            }
+                        })
+                        this.data.forEach((element) => {
+                            element.fullName = this.mergeString(element.lastName, element.firstName)
+                            element.dateStartWork = this.formatDate(element.dateStartWork)
+                            element.dateLeave = this.formatDate(element.dateLeave)
+                            element.dateCreated = this.formatDate(element.dateCreated)
+                            element.dateModified = this.formatDate(element.dateModified)
+                            element.dOB = this.formatDate(element.dOB)
+                            element.workStatus = this.getWorkStatus(element.workStatus)
+                            element.gender = this.getGender(element.gender)
+                            element.maritalStatus = this.getMaritalStatus(element.maritalStatus)
+                            temp.forEach((user) => {
+                                if (user.id === element.userCreated)
+                                    element.userCreated = user.lastName + ' ' + user.firstName
+                                if (user.id === element.userModified)
+                                    element.userModified = user.lastName + ' ' + user.firstName
+                            })
+                        })
+                        this.isLoading = false
+                    }
+                })
+                }else{
+                    this.getDataByRole(this.decode.Id)
+                }
+            },
             getData() {
                 HTTP.get('Users/getAll').then((res) => {
                     if (res.status == 200) {

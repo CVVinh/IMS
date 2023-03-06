@@ -220,8 +220,8 @@
                         if (res.status == 200)
                             this.$toast.add({
                                 severity: 'success',
-                                summary: 'Info Message',
-                                detail: 'Add user success!',
+                                summary: 'Thành công',
+                                detail: 'Thêm người dùng thành công!',
                                 life: 3000,
                             })
                     } catch (error) {

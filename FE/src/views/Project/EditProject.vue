@@ -249,12 +249,12 @@
                     dateUpdate: this.data.dateUpdate,
                     userUpdate: this.data.userUpdate,
                 }
-            
+
                 if (data) {
                     this.data.dateUpdate = new Date()
                     let userlogin = jwtDecode(localStorage.getItem('token'))
                     this.data.userUpdate = userlogin.Id
-                    console.log(data);
+                    console.log(data)
                     data.startDate = new Date(this.data.startDate).toLocaleString()
                     data.endDate = new Date(this.data.endDate).toLocaleString()
 
@@ -276,7 +276,7 @@
             showSuccess() {
                 this.$toast.add({
                     severity: 'success',
-                    summary: 'Success Message',
+                    summary: 'Thành công',
                     detail: 'Chỉnh sửa dự án thành công !!!',
                     life: 3000,
                 })
@@ -284,7 +284,7 @@
             showWarn() {
                 this.$toast.add({
                     severity: 'warn',
-                    summary: 'Warn Message',
+                    summary: 'Cảnh báo',
                     detail: 'Chỉnh sửa dự án thất bại !!!',
                     life: 3000,
                 })

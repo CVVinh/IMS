@@ -406,7 +406,7 @@
                     .catch((er) => {
                         this.$toast.add({
                             severity: ToastSeverity.ERROR,
-                            summary: 'Error ',
+                            summary: 'Lỗi',
                             detail: 'Không thể lấy thông tin người dùng!',
                             life: 3000,
                         })

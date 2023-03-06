@@ -9,19 +9,37 @@
     >
         <div class="detail__content">
             <div class="detail__content-box box-left">
-
-                <div class="detail__content-box" :style="[{ background: this.Datasend.isPaid ? 'green': 'orange'}]">
+                <div
+                    class="detail__content-box"
+                    :style="[
+                        {
+                            background:
+                                this.Datasend.isPaid && this.Datasend.isAccept
+                                    ? 'green'
+                                    : this.Datasend.isPaid && !this.Datasend.isAccept
+                                    ? 'red'
+                                    : 'orange',
+                        },
+                    ]"
+                >
                     <div class="detail__content-box-items">
                         <div class="detail__content-box-items-text detail__content-box-items-format-text">
-                            <b >{{ this.Datasend.isPaid == true ? 'Đã thanh toán' : 'Chưa thanh toán' }}</b> 
+                            <b>{{
+                                this.Datasend.isPaid && this.Datasend.isAccept
+                                    ? 'Đã Thanh Toán'
+                                    : this.Datasend.isPaid && !this.Datasend.isAccept
+                                    ? 'Từ Chối Thanh Toán'
+                                    : 'Chưa Thanh Toán'
+                            }}</b>
                         </div>
                     </div>
                 </div>
 
                 <div class="detail__content-box detail__content-box-top">
-                    <div class="detail__content-box-items" >
+                    <div class="detail__content-box-items">
                         <div class="detail__content-box-items-text">
-                            <b><i class="pi pi-id-card p-button-icon"></i> Người chi tiêu:</b> {{ this.Datasend.paidNamePerson }}  
+                            <b><i class="pi pi-id-card p-button-icon"></i> Người chi tiêu:</b>
+                            {{ this.Datasend.paidNamePerson }}
                         </div>
                     </div>
 
@@ -33,9 +51,10 @@
                 </div>
 
                 <div class="detail__content-box detail__content-box-top">
-                    <div class="detail__content-box-items" >
+                    <div class="detail__content-box-items">
                         <div class="detail__content-box-items-text">
-                            <b><i class="pi pi-users p-button-icon"></i> Khách hàng:</b> {{ this.Datasend.customerFullName }}  
+                            <b><i class="pi pi-users p-button-icon"></i> Khách hàng:</b>
+                            {{ this.Datasend.customerFullName }}
                         </div>
                     </div>
 
@@ -46,10 +65,11 @@
                     </div>
                 </div>
 
-                <div class="detail__content-box detail__content-box-top">    
+                <div class="detail__content-box detail__content-box-top">
                     <div class="detail__content-box-items top">
                         <div class="detail__content-box-items-text">
-                            <b><i class="p-confirm-dialog-icon pi pi-info-circle"></i> Lý do chi:</b> {{ Datasend.paidNameReason }} 
+                            <b><i class="p-confirm-dialog-icon pi pi-info-circle"></i> Lý do chi:</b>
+                            {{ Datasend.paidNameReason }}
                         </div>
                     </div>
                     <div class="detail__content-box-items top">
@@ -60,40 +80,75 @@
 
                     <div class="detail__content-box-items top">
                         <div class="detail__content-box-items-text">
-                            <b><i class="bx bx-time-five"></i> Ngày chi:</b> {{ Datasend.paidDate }}
+                            <b><i class="bx bx-time-five"></i> Ngày Tạo:</b> {{ Datasend.createDate }}
+                        </div>
+                    </div>
+                    <div class="detail__content-box-items top">
+                        <div class="detail__content-box-items-text">
+                            <b><i class="bx bx-time-five"></i> Ngày Chi:</b> {{ Datasend.paidDate }}
                         </div>
                     </div>
                 </div>
 
-                <div class="detail__content-box detail__content-box-top detail__content-box-size_content_reason ">
+                <div class="detail__content-box detail__content-box-top detail__content-box-size_content_reason">
                     <div class="detail__content-box-items">
                         <div class="detail__content-box-items-text">
-                            <b><i class="p-confirm-dialog-icon pi pi-book"></i> Nội dung chi:</b> {{ Datasend.contentReason }}
+                            <b><i class="p-confirm-dialog-icon pi pi-book"></i> Nội dung chi:</b>
+                            {{ Datasend.contentReason }}
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="detail__content-box box-right ">
-                <div v-if="Datasend.paidImages.length > 0" >
-                    <Galleria :value="dataImgDetail" :responsiveOptions="responsiveOptions" :numVisible="3" :circular="true" :showItemNavigators="true" :showItemNavigatorsOnHover="true" :showIndicators="true" :showIndicatorsOnItem="true" >
+            <div class="detail__content-box box-right">
+                <div v-if="Datasend.paidImages.length > 0">
+                    <Galleria
+                        :value="dataImgDetail"
+                        :responsiveOptions="responsiveOptions"
+                        :numVisible="3"
+                        :circular="true"
+                        :showItemNavigators="true"
+                        :showItemNavigatorsOnHover="true"
+                        :showIndicators="true"
+                        :showIndicatorsOnItem="true"
+                    >
                         <template #item="slotProps">
-                            <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%; display: block;"/>
+                            <img
+                                :src="slotProps.item.itemImageSrc"
+                                :alt="slotProps.item.alt"
+                                style="width: 100%; display: block"
+                            />
                         </template>
-                        <template #thumbnail="slotProps" >
-                            <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" style="display: block;"/>
+                        <template #thumbnail="slotProps">
+                            <img
+                                :src="slotProps.item.thumbnailImageSrc"
+                                :alt="slotProps.item.alt"
+                                style="display: block"
+                            />
                         </template>
                     </Galleria>
                 </div>
                 <div v-else>
-                    <img src="@/assets/noImage2.png" alt="anh" class="no_image">
+                    <img src="@/assets/noImage2.png" alt="anh" class="no_image" />
                 </div>
             </div>
         </div>
 
-        <template #footer>   
-            <Button v-if="Datasend.isPaid == false" label="Thanh toán" icon="pi pi-check" class="p-button-primary p-button-icon" @click="confirmPayment"></Button>        
-            <Button label="Huỷ" icon="pi pi-times" class="p-button-secondary p-button p-button-icon p-component " @click="closeModal" enter="closeModal"></Button>
+        <template #footer>
+            <Button
+                v-if="Datasend.isPaid == false"
+                label="Thanh toán"
+                icon="pi pi-check"
+                class="p-button-primary p-button-icon"
+                @click="confirmPayment"
+            ></Button>
+            <Button
+                label="Huỷ"
+                icon="pi pi-times"
+                class="p-button-secondary p-button p-button-icon p-component"
+                @click="closeModal"
+                enter="closeModal"
+            ></Button>
         </template>
     </Dialog>
 </template>
@@ -117,60 +172,59 @@
                     contentReason: '',
                     paidPerson: 0,
                     isPaid: false,
+                    isAccept: false,
                     paidDate: null,
                     token: null,
                     paidImages: [],
-
                     paidNamePerson: null,
                     confirmNamePerson: null,
                     customerFullName: null,
                     paidNameReason: null,
                     nameProject: null,
                     amountPaidName: null,
+                    createDate: null,
                 },
                 dataImgDetail: [],
                 responsiveOptions: [
                     {
                         breakpoint: '1024px',
-                        numVisible: 4
+                        numVisible: 4,
                     },
                     {
                         breakpoint: '960px',
-                        numVisible: 3
+                        numVisible: 3,
                     },
                     {
                         breakpoint: '768px',
-                        numVisible: 2
+                        numVisible: 2,
                     },
                     {
                         breakpoint: '560px',
-                        numVisible: 1
-                    }
-                ]
+                        numVisible: 1,
+                    },
+                ],
             }
         },
         props: ['status', 'dataDetail'],
         methods: {
-
-            showResponseApi(status, message = "") {
+            showResponseApi(status, message = '') {
                 switch (status) {
                     case 401:
                     case 403:
                         //this.showError('Bạn không có quyền thực hiện chức năng này!');
-                        break;
+                        break
 
                     case 404:
-                        this.showError('Lỗi! Load dữ liệu!');
-                        break;  
+                        this.showError('Lỗi! Load dữ liệu!')
+                        break
 
                     default:
-                        if(message != ""){
-                            this.showError(message);
+                        if (message != '') {
+                            this.showError(message)
+                        } else {
+                            this.showError('Có lỗi trong quá trình thực hiện!')
                         }
-                        else {
-                            this.showError("Có lỗi trong quá trình thực hiện!");
-                        }
-                        break;
+                        break
                 }
             },
 
@@ -178,48 +232,48 @@
                 return await HTTP.get(GET_USER_BY_ID(id))
                     .then((respone) => respone.data)
                     .catch((error) => {
-                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
-                        this.showResponseApi(error.response.status, message);
-                    });
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText
+                        this.showResponseApi(error.response.status, message)
+                    })
             },
 
             async getCustomerId(id) {
                 return await HTTP.get(`Customer/GetById/${id}`)
                     .then((respone) => respone.data._Data)
                     .catch((error) => {
-                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
-                        this.showResponseApi(error.response.status, message);
-                    });
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText
+                        this.showResponseApi(error.response.status, message)
+                    })
             },
 
             async getPaidReasonId(id) {
                 return await HTTP.get(`PaidReason/GetById/${id}`)
                     .then((respone) => respone.data._Data)
                     .catch((error) => {
-                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
-                        this.showResponseApi(error.response.status, message);
-                    });
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText
+                        this.showResponseApi(error.response.status, message)
+                    })
             },
 
             async getProjects(id) {
                 return await HTTP.get(`Project/getProByIdDel/${id}`)
                     .then((respone) => respone.data)
                     .catch((error) => {
-                        var message = error.response.data != '' ? error.response.data : error.response.statusText;
-                        this.showResponseApi(error.response.status, message);
-                    });
+                        var message = error.response.data != '' ? error.response.data : error.response.statusText
+                        this.showResponseApi(error.response.status, message)
+                    })
             },
 
             closeModal() {
-                this.imagesOld = [];
-                this.images = [];
+                this.imagesOld = []
+                this.images = []
                 this.$emit('closemodal')
             },
 
-            confirmPayment () {
-                this.$emit("confirmPayment", this.Datasend);
+            confirmPayment() {
+                this.$emit('confirmPayment', this.Datasend)
             },
-           
+
             showSuccess(message) {
                 this.$toast.add({ severity: 'success', summary: 'Thành công', detail: message, life: 3000 })
             },
@@ -228,70 +282,74 @@
             },
         },
 
-        async beforeUpdate() { //beforeUpdate
-            this.dataImgDetail = [];
-            this.Datasend = [];
+        async beforeUpdate() {
+            //beforeUpdate
+            this.dataImgDetail = []
+            this.Datasend = []
+            if (this.dataDetail != null) {
+                this.Datasend = this.dataDetail
 
-            if (this.dataDetail != null){
-                this.Datasend = this.dataDetail;
-
-                if(this.Datasend.personConfirm != null) {
-                    var confirmUser = await this.getUsers(parseInt(this.Datasend.personConfirm));
-                    this.Datasend.confirmNamePerson = confirmUser.fullName;
-                }
-                else {
-                    this.Datasend.confirmNamePerson = "";
-                }
-
-                var paidUser = await this.getUsers(parseInt(this.Datasend.paidPerson));
-                var customer = await this.getCustomerId(parseInt(this.Datasend.customerName));
-                var paidReason = await this.getPaidReasonId(parseInt(this.Datasend.paidReason));
-
-                this.Datasend.paidPerson = parseInt(this.Datasend.paidPerson);
-                this.Datasend.paidNamePerson = paidUser.fullName;
-
-                this.Datasend.customerName = parseInt(this.Datasend.customerName);
-                this.Datasend.customerFullName = customer.fullName;
-
-                this.Datasend.paidReason = parseInt(this.Datasend.paidReason);
-                this.Datasend.paidNameReason = paidReason.name;
-
-                if(this.Datasend.paidDate === "0001-01-01T00:00:00" || this.Datasend.paidDate === "" ){
-                    this.Datasend.paidDate = "";
-                }
-                else {
-                    this.Datasend.paidDate = DateHelper.formatDate(this.Datasend.paidDate);
+                if (this.Datasend.personConfirm != null) {
+                    var confirmUser = await this.getUsers(parseInt(this.Datasend.personConfirm))
+                    this.Datasend.confirmNamePerson = confirmUser.fullName
+                } else {
+                    this.Datasend.confirmNamePerson = ''
                 }
 
-                this.Datasend.amountPaidName = this.Datasend.amountPaid.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+                var paidUser = await this.getUsers(parseInt(this.Datasend.paidPerson))
+                var customer = await this.getCustomerId(parseInt(this.Datasend.customerName))
+                var paidReason = await this.getPaidReasonId(parseInt(this.Datasend.paidReason))
 
-                if(this.Datasend.paidImages.length > 0){
-                    this.Datasend.paidImages.forEach(item => {
+                this.Datasend.paidPerson = parseInt(this.Datasend.paidPerson)
+                this.Datasend.paidNamePerson = paidUser.fullName
+
+                this.Datasend.customerName = parseInt(this.Datasend.customerName)
+                this.Datasend.customerFullName = customer.fullName
+
+                this.Datasend.paidReason = parseInt(this.Datasend.paidReason)
+                this.Datasend.paidNameReason = paidReason.name
+
+                if (this.Datasend.paidDate === '0001-01-01T00:00:00' || this.Datasend.paidDate === '') {
+                    this.Datasend.paidDate = ''
+                } else {
+                    this.Datasend.paidDate = DateHelper.formatDate(this.Datasend.paidDate)
+                }
+
+                if (this.Datasend.createDate === '0001-01-01T00:00:00' || this.Datasend.createDate === '') {
+                    this.Datasend.createDate = ''
+                } else {
+                    this.Datasend.createDate = DateHelper.formatDate(this.Datasend.createDate)
+                }
+
+                this.Datasend.amountPaidName = this.Datasend.amountPaid.toLocaleString('it-IT', {
+                    style: 'currency',
+                    currency: 'VND',
+                })
+
+                if (this.Datasend.paidImages.length > 0) {
+                    this.Datasend.paidImages.forEach((item) => {
                         var imgObj = {
-                            "itemImageSrc": item.imagePath,
-                            "thumbnailImageSrc": item.imagePath,
-                            "alt": "Image "+item.imageId,
+                            itemImageSrc: item.imagePath,
+                            thumbnailImageSrc: item.imagePath,
+                            alt: 'Image ' + item.imageId,
                         }
-                        this.dataImgDetail.push(imgObj);
-                    });
+                        this.dataImgDetail.push(imgObj)
+                    })
                 }
-                
-                if(this.Datasend.projectId != 0 ){
-                    var project = await this.getProjects(this.Datasend.projectId);
-                    this.Datasend.nameProject = project.name;
+
+                if (this.Datasend.projectId != 0) {
+                    var project = await this.getProjects(this.Datasend.projectId)
+                    this.Datasend.nameProject = project.name
+                } else {
+                    this.Datasend.nameProject = ''
                 }
-                else {
-                    this.Datasend.nameProject = "";
-                }
-            } 
+            }
+            console.log(this.Datasend)
         },
-
-
     }
 </script>
 
 <style scoped lang="scss">
-
     .detail__content {
         display: flex;
         justify-content: space-between;
@@ -310,7 +368,7 @@
 
             .detail__content-box-items {
                 width: 100%;
-                
+
                 .detail__content-box-items-text {
                     font-size: 18px;
                 }
@@ -353,13 +411,13 @@
         .detail__content {
             flex-direction: column;
 
-            .box-left, .box-right {
+            .box-left,
+            .box-right {
                 flex: 100%;
             }
-            .box-right  {
+            .box-right {
                 margin-top: 10px;
             }
         }
     }
-
 </style>

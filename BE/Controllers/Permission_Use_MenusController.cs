@@ -1,6 +1,12 @@
 ﻿using BE.Data.Contexts;
 using BE.Data.Dtos.Permission_Use_Menus;
+using BE.Data.Dtos.UserDtos;
+using BE.Data.Enum;
 using BE.Data.Models;
+using BE.Helpers;
+using BE.Services.PaginationServices;
+using BE.Services.PermissionUserMenuServices;
+using BE.Services.UserServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,161 +17,108 @@ namespace BE.Controllers
     [ApiController]
     public class Permission_Use_MenusController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public Permission_Use_MenusController(AppDbContext context)
+
+        private readonly IPermissionUserMenuServices _permissionUserMenuServices;
+        private readonly IPaginationServices<Permission_Use_Menu> _paginationService;
+
+        public Permission_Use_MenusController(IPermissionUserMenuServices permissionUserMenuServices, IPaginationServices<Permission_Use_Menu> paginationService)
         {
-            _context = context;
+            _permissionUserMenuServices = permissionUserMenuServices;
+            _paginationService = paginationService;
         }
 
-        [HttpGet]
-        [Route("getPermissionByUser")]
-        public ActionResult<IEnumerable<getPermissionByUserModuleDto>> getPermissionByUser(int userId)
+
+        [HttpGet("getAllPermissionUserMenuAsync")]
+        public async Task<IActionResult> GetAllPermissionUserMenuAsync(int? pageIndex, PageSizeEnum pageSizeEnum)
         {
-            try
+            var response = await _permissionUserMenuServices.GetAllPermissionUserMenuAsync();
+            if (response._success)
             {
-                var getPermission = (from permission in _context.Permission_Use_Menus
-                                     join menu in _context.Menus on permission.IdMenu equals menu.id
-                                     join module in _context.modules on menu.idModule equals module.id
-                                     where (permission.IdUser == userId)
-                                     select new List<getPermissionByUserModuleDto>
-                                     {
-                                         new getPermissionByUserModuleDto
-                                         {
-                                             Id = permission.Id,
-                                             UserId = permission.IdUser,
-                                             ModuleId = menu.idModule,
-                                             Add = permission.Add,
-                                             Update = permission.Update,
-                                             Delete = permission.Delete,
-                                             Export = permission.Export
-                                         }
-                                     });
-                if (getPermission != null)
+                var pageSize = (int)pageSizeEnum;
+                var resultPage = await _paginationService.paginationListTableAsync(response._Data, pageIndex, pageSize);
+                if (resultPage._success)
                 {
-                    return Ok(getPermission);
+                    return Ok(resultPage);
                 }
-                return NoContent();
+                return BadRequest(resultPage);
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(response);
         }
-        [HttpPost("addPermissionByGroup")]
-        public async Task<IActionResult> addPermissionByGroup(int idGroup, int idUserAdd, string[][] data)
+
+        [HttpGet("getPermissionUserMenuWithUserId/{idUser}")]
+        public async Task<IActionResult> GetPermissionUserMenuWithUserId([FromRoute] int idUser)
         {
-            try
+            var response = await _permissionUserMenuServices.GetPermissionUserMenuWithUserId(idUser);
+            if (response._success)
             {
-                var query = await _context.Users.Where(x => x.IdGroup == idGroup).ToListAsync();
-                if (query.Count() != 0)
-                {
-                    foreach (var item in query)
-                    {
-                        for (int i = 0; i < data.Length; i++)
-                        {
-                            var permission = await _context.Permission_Use_Menus.SingleOrDefaultAsync(x => x.IdUser == item.id && x.idModule == int.Parse(data[i][1]));
-                            if (permission != null)
-                            {
-                                permission.IdMenu = int.Parse(data[i][0]);
-                                permission.idModule = int.Parse(data[i][1]);
-                                permission.Add = int.Parse(data[i][2]);
-                                permission.Update = int.Parse(data[i][3]);
-                                permission.Delete = int.Parse(data[i][4]);
-                                permission.Export = int.Parse(data[i][5]);
-                                permission.userModified = idUserAdd;
-                                permission.dateModified = DateTime.UtcNow;
-                                await _context.SaveChangesAsync();
-                            }
-                            else
-                            {
-                                var ps = new Permission_Use_Menu();
-                                ps.IdUser = item.id;
-                                ps.IdMenu = int.Parse(data[i][0]);
-                                ps.idModule = int.Parse(data[i][1]);
-                                ps.Add = int.Parse(data[i][2]);
-                                ps.Update = int.Parse(data[i][3]);
-                                ps.Delete = int.Parse(data[i][4]);
-                                ps.Export = int.Parse(data[i][5]);
-                                ps.userCreated = idUserAdd;
-                                ps.dateCreated = DateTime.UtcNow;
-                                ps.userModified = idUserAdd;
-                                ps.dateModified = DateTime.UtcNow;
-                                _context.Permission_Use_Menus.Add(ps);
-                                await _context.SaveChangesAsync();
-                            }
-                        }
-                    }
-                    return Ok();
-                }
-                return NotFound("No data");
+                return Ok(response);
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(response);
         }
-        [HttpPost("addPermissionByUser")]
-        public async Task<IActionResult> addPermissionByUser(int idUser, int idUserAdd, string[][] data)
+
+        [HttpGet("getPermissionUserMenuWithModuleId/{idModule}")]
+        public async Task<IActionResult> GetPermissionUserMenuWithModuleId([FromRoute] int idModule)
         {
-            try
+            var response = await _permissionUserMenuServices.GetPermissionUserMenuWithModuleId(idModule);
+            if (response._success)
             {
-                var query = await _context.Users.SingleOrDefaultAsync(x => x.id == idUser);
-                if (query != null)
-                {
-                    for (int i = 0; i < data.Length; i++)
-                    {
-                        var permission = await _context.Permission_Use_Menus.SingleOrDefaultAsync(x => x.IdUser == query.id && x.idModule == int.Parse(data[i][1]));
-                        if (permission != null)
-                        {
-                            permission.IdMenu = int.Parse(data[i][0]);
-                            permission.idModule = int.Parse(data[i][1]);
-                            permission.Add = int.Parse(data[i][2]);
-                            permission.Update = int.Parse(data[i][3]);
-                            permission.Delete = int.Parse(data[i][4]);
-                            permission.Export = int.Parse(data[i][5]);
-                            permission.userModified = idUserAdd;
-                            permission.dateModified = DateTime.UtcNow;
-                            await _context.SaveChangesAsync();
-                        }
-                        else
-                        {
-                            var ps = new Permission_Use_Menu();
-                            ps.IdUser = idUser;
-                            ps.IdMenu = int.Parse(data[i][0]);
-                            ps.idModule = int.Parse(data[i][1]);
-                            ps.Add = int.Parse(data[i][2]);
-                            ps.Update = int.Parse(data[i][3]);
-                            ps.Delete = int.Parse(data[i][4]);
-                            ps.Export = int.Parse(data[i][5]);
-                            ps.userCreated = idUserAdd;
-                            ps.dateCreated = DateTime.UtcNow;
-                            ps.userModified = idUserAdd;
-                            ps.dateModified = DateTime.UtcNow;
-                            _context.Permission_Use_Menus.Add(ps);
-                            await _context.SaveChangesAsync();
-                        }
-                    }
-                    return Ok();
-                }
-                return NotFound("No data");
+                return Ok(response);
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(response);
         }
-        [HttpGet("getPermission_Use_Menu_ByIdUser")]
-        public async Task<IActionResult> getPermission_Use_Menu_ByIdUser(int idUser)
+
+        [HttpGet("getPermissionUserMenuWithMenuId/{idMenu}")]
+        public async Task<IActionResult> GetPermissionUserMenuWithMenuId([FromRoute] int idMenu)
         {
-            try
+            var response = await _permissionUserMenuServices.GetPermissionUserMenuWithMenuId(idMenu);
+            if (response._success)
             {
-                var data = await _context.Permission_Use_Menus.Where(x=>x.IdUser == idUser).ToListAsync();
-                return Ok(data);
+                return Ok(response);
             }
-            catch(Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(response);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreatePermissionUserMenu(List<PermissionUserMenuAddDto> permissionUserMenuAddDtos)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _permissionUserMenuServices.CreatePermissionUserMenu(permissionUserMenuAddDtos);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpPut("UpdatePermissionUserMenu/{IdUser}/{idModule}/{IdMenu}")]
+        public async Task<IActionResult> UpdatePermissionUserMenu([FromRoute] PermissionUserMenuRequest permissionUserMenuRequest, PermissionUserMenuEditDto permissionUserMenuEditDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var rules = await _permissionUserMenuServices.UpdatePermissionUserMenu(permissionUserMenuRequest, permissionUserMenuEditDto);
+            if (rules._success)
+            {
+                return Ok(rules);
+            }
+            return BadRequest(rules);
+        }
+
+        [HttpDelete("DeletePermissionUserMenu/{IdUser}/{idModule}/{IdMenu}")]
+        public async Task<IActionResult> DeletePermissionUserMenu([FromRoute] PermissionUserMenuRequest permissionUserMenuRequest)
+        {
+            var response = await _permissionUserMenuServices.DeletePermissionUserMenu(permissionUserMenuRequest);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+
     }
 }

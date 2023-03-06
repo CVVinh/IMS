@@ -15,28 +15,29 @@
 
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="d-flex justify-content-start">
-                                <Export style="height: 50px;" label="Xuất Excel"  @click="exportCSV($event)" />
+                                <Export style="height: 50px" label="Xuất Excel" @click="exportCSV($event)" />
 
                                 <!-- <Button label="Đăng ký nghỉ phép" class="p-button-info" style="margin-left: 10px;" @click="toRegisterPage" /> -->
-                                <router-link  to="/leaveoff/Registerlists" 
-                                style="
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                    color: #ffffff;
-                                    background-color: #3B82F6;
-                                    border:1px solid #3B82F6;
-                                    padding: 10px;
-                                    border-radius: 5px;
-                                    margin-left: 10px;
-                                    font-weight: 600;
-                                    text-decoration: none;  
-                                "
-                                 v-if="showButton.add"
+                                <router-link
+                                    to="/leaveoff/Registerlists"
+                                    style="
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        color: #ffffff;
+                                        background-color: #3b82f6;
+                                        border: 1px solid #3b82f6;
+                                        padding: 10px;
+                                        border-radius: 5px;
+                                        margin-left: 10px;
+                                        font-weight: 600;
+                                        text-decoration: none;
+                                    "
+                                    v-if="showButton.add"
                                 >
-                                <i class="pi pi-sign-out"></i> &ensp;  <span>Đăng ký nghỉ phép</span>        
+                                    <i class="pi pi-sign-out"></i> &ensp; <span>Đăng ký nghỉ phép</span>
                                 </router-link>
-                            </div> 
+                            </div>
                             <div class="d-flex justify-content-end">
                                 <div class="input-text">
                                     <Button
@@ -178,9 +179,9 @@
                     searchLeaveOff: '',
                     idstatus: [2],
                 },
-                showButton:{
-                    add : false
-                }
+                showButton: {
+                    add: false,
+                },
             }
         },
         async created() {
@@ -191,9 +192,9 @@
                 await UserRoleHelper.isAccessModule(string)
 
                 if (UserRoleHelper.isAccess) {
-                    // Check quyền    
+                    // Check quyền
                     this.token = LocalStorage.jwtDecodeToken()
-                    if(Number(this.token.IdGroup) === 2){
+                    if (Number(this.token.IdGroup) === 2) {
                         this.showButton.add = true
                     }
 
@@ -208,7 +209,7 @@
                         setTimeout(() => {
                             this.$toast.add({
                                 severity: 'error',
-                                summary: 'Error message',
+                                summary: 'Lỗi',
                                 detail: 'Người dùng không có quyền!',
                                 life: 3000,
                             })
@@ -263,10 +264,9 @@
             getUserById(id) {
                 return HTTP.get(GET_USER_BY_ID(id)).then((res) => res.data)
             },
-            
-            toRegisterPage(){
-                router.push('/leaveoff/Registerlists')
 
+            toRegisterPage() {
+                router.push('/leaveoff/Registerlists')
             },
 
             async getLeaveOff() {

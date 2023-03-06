@@ -44,6 +44,10 @@ using BE.Data.Dtos.PaidDtos.Validator;
 using BE.Services.Customers;
 using BE.Hubs;
 using BE.Services.UserServices;
+using BE.Services.PermissionUserMenuServices;
+using BE.Services.GroupServices;
+using BE.Services.ActionModuleServices;
+using BE.Services.ModuleServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +72,12 @@ builder.Services.AddScoped<ITasksServices, TasksServices>();
 builder.Services.AddScoped<IWikiCategogyService, WikiCategogyServices>();
 builder.Services.AddScoped<IWikiPostService, WikiPostService>();
 builder.Services.AddScoped<IUserGroupServices, UserGroupServices>();
+builder.Services.AddScoped<IPermissionUserMenuServices, PermissionUserMenuServices>();
+builder.Services.AddScoped<IGroupServices, GroupServices>();
+builder.Services.AddScoped<IActionModuleServices, ActionModuleServices>();
+builder.Services.AddScoped<IModuleServices, ModuleServices>();
+builder.Services.AddScoped<IPermissionGroupServices, PermissionGroupServices>();
+builder.Services.AddScoped<IPermissionActionModuleServices, PermissionActionModuleServices>();
 
 builder.Services.AddScoped<IMemberProjectServices, MemberProjectServices>();
 builder.Services.AddScoped<IPaginationServices<GetAllTaskDto>, PaginationServices<GetAllTaskDto>>();
@@ -84,7 +94,13 @@ builder.Services.AddScoped<IPaginationServices<PaidImage>, PaginationServices<Pa
 builder.Services.AddScoped<IRulesService, RulesService>();
 builder.Services.AddScoped<IPaginationServices<Rules>, PaginationServices<Rules>>();
 builder.Services.AddScoped<IPaginationServices<User_Group>, PaginationServices<User_Group>>();
-builder.Services.AddScoped<IInfoDeviceService,InfoDeviceService>();
+builder.Services.AddScoped<IPaginationServices<Permission_Use_Menu>, PaginationServices<Permission_Use_Menu>>();
+builder.Services.AddScoped<IPaginationServices<Group>, PaginationServices<Group>>();
+builder.Services.AddScoped<IPaginationServices<Action_Module>, PaginationServices<Action_Module>>();
+builder.Services.AddScoped<IPaginationServices<Module>, PaginationServices<Module>>();
+builder.Services.AddScoped<IPaginationServices<Permission_Group>, PaginationServices<Permission_Group>>();
+builder.Services.AddScoped<IPaginationServices<Permission_Action_Module>, PaginationServices<Permission_Action_Module>>();
+builder.Services.AddScoped<IInfoDeviceService, InfoDeviceService>();
 #endregion
 
 #region Registering Validator
@@ -121,7 +137,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Configure Cors
 builder.Services.AddCors(otps =>
 {
-    otps.AddPolicy("AppCorsPolicy", policy => 
+    otps.AddPolicy("AppCorsPolicy", policy =>
     {
         //policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
         policy.WithOrigins("http://localhost:3000/").SetIsOriginAllowed((host) => true).AllowAnyMethod().AllowAnyHeader().AllowCredentials();

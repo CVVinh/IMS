@@ -204,16 +204,16 @@
             showSuccess() {
                 this.$toast.add({
                     severity: 'success',
-                    summary: 'Success Message',
-                    detail: 'Save devices success !!!',
+                    summary: 'Thành công',
+                    detail: 'Lưu thiết bị thành công!!!',
                     life: 3000,
                 })
             },
             showWarn() {
                 this.$toast.add({
                     severity: 'warn',
-                    summary: 'Warn Message',
-                    detail: 'Save Devices failed !!!',
+                    summary: 'Cảnh báo',
+                    detail: 'Lưu thiết bị không thành công !!!',
                     life: 3000,
                 })
             },

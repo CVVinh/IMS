@@ -27,8 +27,7 @@ namespace BE.Services.PaidServices
         Task<BaseResponse<List<PaidImage>>> DeleteMutilImgPaid(int idPaid, List<int>? listIdImg, string root, string local);
         Task<BaseResponse<List<Paid>>> SearchPaidByDay(SearchDayPaidDtos searchDayPaidDtos);
         Task<BaseResponse<Paid>> AccepterPayment(int idPaid, AcceptPaymentPaidDtos acceptPaymentPaidDtos);
-
-
+        Task<BaseResponse<Paid>> NotAccepterPayment(int idPaid, AcceptPaymentPaidDtos acceptPaymentPaidDtos);
         Task<BaseResponse<List<Object>>> GetAllAsync1();
         Task<BaseResponse<Object>> GetPaidWithId1(int Id);
     }
@@ -145,6 +144,7 @@ namespace BE.Services.PaidServices
 
                                           paidDate = p.PaidDate != DateTime.MinValue ? p.PaidDate.ToString("MM/dd/yyyy") : null,
 
+                                          CreateDate = p.CreateDate,
                                           projectId = p.ProjectId,
                                           nameProject = pj != null ? pj.Name : "",
                                           isDelPro = pj != null ? pj.IsDeleted : false,
@@ -237,12 +237,12 @@ namespace BE.Services.PaidServices
             try
             {
                 var listpaid = await (from x in _appContext.Paids
-                               join c in _appContext.Users on x.PaidPerson equals c.id
-                               where c.IdGroup != 2 || x.PaidPerson == sampleId
-                               select x).Include(x => x.paidImages).ToListAsync();
+                                      join c in _appContext.Users on x.PaidPerson equals c.id
+                                      where c.IdGroup != 2 || x.PaidPerson == sampleId
+                                      select x).Include(x => x.paidImages).ToListAsync();
 
                 if (listpaid is null)
-                { 
+                {
                     message = "Person do not have payment!";
                     data = null;
                     return new BaseResponse<List<Paid>>(success, message, data);
@@ -291,7 +291,7 @@ namespace BE.Services.PaidServices
 
                 if (paid != null)
                 {
-                    paid.IsPaid= false;
+                    paid.IsPaid = false;
                     await _appContext.Paids.AddAsync(paid);
                     await _appContext.SaveChangesAsync();
 
@@ -542,6 +542,42 @@ namespace BE.Services.PaidServices
                 paid.IsPaid = true;
                 paid.PersonConfirm = acceptPaymentPaidDtos.PersonConfirm;
                 paid.PaidDate = DateTime.Now;
+                paid.IsAccept = true;
+                _appContext.Paids.Update(paid);
+                await _appContext.SaveChangesAsync();
+
+                success = true;
+                message = "Accepting payment successfully";
+                data = paid;
+                return new BaseResponse<Paid>(success, message, data);
+            }
+            catch (Exception ex)
+            {
+                message = $"Accepting leave off failed! {ex.InnerException}";
+                data = null;
+                return new BaseResponse<Paid>(success, message, data);
+            }
+        }
+
+        public async Task<BaseResponse<Paid>> NotAccepterPayment(int idPaid, AcceptPaymentPaidDtos acceptPaymentPaidDtos)
+        {
+            var success = false;
+            var message = "";
+            var data = new Paid();
+            try
+            {
+                var paid = await _appContext.Paids.Where(x => x.Id == idPaid && x.IsPaid == false).FirstOrDefaultAsync();
+                if (paid is null)
+                {
+                    message = "idPaid doesn't exist or payment!";
+                    data = null;
+                    return new BaseResponse<Paid>(success, message, data);
+                }
+
+                paid.IsPaid = true;
+                paid.PersonConfirm = acceptPaymentPaidDtos.PersonConfirm;
+                paid.PaidDate = DateTime.Now;
+                paid.IsAccept = false;
                 _appContext.Paids.Update(paid);
                 await _appContext.SaveChangesAsync();
 

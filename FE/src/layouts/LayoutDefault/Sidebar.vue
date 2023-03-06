@@ -219,7 +219,7 @@
                                 <span>Nhóm quyền</span>
                             </router-link>
                         </li>
-                        <!-- 
+                        
                         <li
                             class="list-group-item-action"
                             v-if="this.token !== null ? (Number(this.token.IdGroup) === 1 ? true : false) : false"
@@ -263,7 +263,20 @@
                                 <i class="bx bx-badge-check"></i>
                                 <span>Phân quyền</span>
                             </router-link>
-                        </li> -->
+                        </li>
+                        <li class="list-group-item-action">
+                            <router-link
+                                :to="{ name: 'permissionUserGroupSub', params: {} }"
+                                class="py-2 ripple dropdown-item"
+                                aria-current="true"
+                                @click="activeTag = 'tag16'"
+                                :class="{ 'active-nav-item': activeTag === 'tag16' }"
+                                v-if="this.token !== null ? (Number(this.token.IdGroup) === 1 ? true : false) : false"
+                            >
+                                <i class="bx bx-badge-check"></i>
+                                <span>Phân quyền module_group</span>
+                            </router-link>
+                        </li>
                     </ul>
                 </div>
                 <!-- /Thiết lập -->

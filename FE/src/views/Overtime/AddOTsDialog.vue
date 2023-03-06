@@ -1,10 +1,10 @@
 <template>
-  <Dialog v-model:visible="this.display" :closable="false" :show="getData()">
-    <template #header v-if="!edit">
-        <h2> {{ !edit ? "Thêm thẻ tăng ca mới" : "Chỉnh sửa thẻ tăng ca "}} </h2>
-    </template>
-  
-    <div class="container mt-4">
+    <Dialog v-model:visible="this.display" :closable="false" :show="getData()">
+        <template #header v-if="!edit">
+            <h2>{{ !edit ? 'Thêm thẻ tăng ca mới' : 'Chỉnh sửa thẻ tăng ca ' }}</h2>
+        </template>
+
+        <div class="container mt-4">
             <div class="container text-center">
                 <div class="container text-center">
                     <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
@@ -25,7 +25,9 @@
                                             :minDate="new Date()"
                                             :showIcon="true"
                                             :date-select="changeDate"
-                                            :class="{ 'p-invalid': (v$.data.date.$invalid || !checkday()) && submitted }"
+                                            :class="{
+                                                'p-invalid': (v$.data.date.$invalid || !checkday()) && submitted,
+                                            }"
                                         />
                                     </div>
                                     <small
@@ -40,10 +42,9 @@
                                 </div>
                             </div>
                             <div class="col">
-                           <!-- Du an -->
+                                <!-- Du an -->
                                 <div class="field">
                                     <div :class="{ 'form-group--error': v$.data.idProject.$error }">
-                                        
                                         <label
                                             for="idProject"
                                             class="label"
@@ -57,25 +58,27 @@
                                             optionValue="id"
                                             :class="{ 'p-invalid': v$.data.idProject.$invalid && submitted }"
                                         />
-                                        
                                     </div>
                                     <small
-                                        v-if="(v$.data.idProject.$invalid && submitted) || v$.data.idProject.$pending.$response"
+                                        v-if="
+                                            (v$.data.idProject.$invalid && submitted) ||
+                                            v$.data.idProject.$pending.$response
+                                        "
                                         class="p-error"
                                         >Bạn chưa chon dự án OT</small
                                     >
                                 </div>
                             </div>
                             <div class="col">
-                            <!-- Edit -->
+                                <!-- Edit -->
                                 <div class="field" style="margin-bottom: 0" v-if="this.idproject !== null">
-                                    <div :class="{ 'form-group--error': v$.data.user.$error }">  
+                                    <div :class="{ 'form-group--error': v$.data.user.$error }">
                                         <label
                                             for="user"
                                             class="label"
                                             :class="{ 'p-error': v$.data.user.$invalid && submitted }"
                                             >Người tăng ca</label
-                                        >          
+                                        >
                                         <Dropdown
                                             v-model="v$.data.user.$model"
                                             :options="userDropdown"
@@ -93,18 +96,18 @@
                                 </div>
 
                                 <!-- Add -->
-                                <div class="field" style="margin-bottom: 0" v-if="this.idproject === null" >
+                                <div class="field" style="margin-bottom: 0" v-if="this.idproject === null">
                                     <div :class="{ 'form-group--error': v$.data.user.$error }">
                                         <label
                                             for="user"
                                             class="label"
                                             :class="{ 'p-error': v$.data.user.$invalid && submitted }"
                                             >Người tăng ca</label
-                                        >  
+                                        >
                                         <MultiSelect
-                                            v-model="v$.data.user.$model" 
+                                            v-model="v$.data.user.$model"
                                             :options="userDropdown"
-                                            optionLabel="name" 
+                                            optionLabel="name"
                                             optionValue="x.id"
                                             :class="{ 'p-invalid': v$.data.user.$invalid && submitted }"
                                         />
@@ -114,13 +117,12 @@
                                         class="p-error"
                                         >Bạn chưa chọn người OT</small
                                     >
-                                
                                 </div>
                             </div>
                         </div>
                         <div class="row top">
                             <div class="col">
-                            <!-- Gio bat dau -->
+                                <!-- Gio bat dau -->
                                 <div class="field" style="margin-bottom: 0">
                                     <div :class="{ 'form-group--error': v$.data.start.$error }">
                                         <label
@@ -128,7 +130,10 @@
                                             class="label"
                                             :class="{
                                                 'p-error':
-                                                    (v$.data.start.$invalid || timeError || invalidTime1 || invalidTime3) &&
+                                                    (v$.data.start.$invalid ||
+                                                        timeError ||
+                                                        invalidTime1 ||
+                                                        invalidTime3) &&
                                                     submitted,
                                             }"
                                             >Giờ bắt đầu OT*</label
@@ -147,14 +152,20 @@
                                         />
                                     </div>
                                     <span v-if="v$.data.start.$error && submitted">
-                                        <span id="start-error" v-for="(error, index) of v$.data.start.$errors" :key="index">
+                                        <span
+                                            id="start-error"
+                                            v-for="(error, index) of v$.data.start.$errors"
+                                            :key="index"
+                                        >
                                             <small class="p-error">{{
                                                 error.$message.replace('Value', 'Start Time') + '. '
                                             }}</small>
                                         </span>
                                     </span>
                                     <small
-                                        v-else-if="(v$.data.start.$invalid && submitted) || v$.data.start.$pending.$response"
+                                        v-else-if="
+                                            (v$.data.start.$invalid && submitted) || v$.data.start.$pending.$response
+                                        "
                                         class="p-error"
                                         >Bạn chưa nhập giờ bắt đầu OT</small
                                     >
@@ -164,7 +175,7 @@
                                 </div>
                             </div>
                             <div class="col">
-                             <!-- Gio ket thuc -->
+                                <!-- Gio ket thuc -->
                                 <div class="field">
                                     <div :class="{ 'form-group--error': v$.data.end.$error }">
                                         <label
@@ -172,7 +183,10 @@
                                             class="label"
                                             :class="{
                                                 'p-error':
-                                                    (v$.data.end.$invalid || timeError || invalidTime2 || invalidTime3) &&
+                                                    (v$.data.end.$invalid ||
+                                                        timeError ||
+                                                        invalidTime2 ||
+                                                        invalidTime3) &&
                                                     submitted,
                                             }"
                                             >Giờ kết thúc OT*</label
@@ -204,31 +218,34 @@
                                 </div>
                             </div>
                             <div class="col">
-                             <!-- Thoi gian thuc te -->
-                            <div class="field">
-                                <div  :class="{ 'form-group--error': v$.data.realTime.$error }">
-                                    <label
+                                <!-- Thoi gian thuc te -->
+                                <div class="field">
+                                    <div :class="{ 'form-group--error': v$.data.realTime.$error }">
+                                        <label
                                             for="realTime"
                                             class="label"
                                             :class="{ 'p-error': v$.data.realTime.$invalid && submitted }"
                                             >Thời gian OT thực tế</label
                                         >
-                                    <InputText
-                                        id="realTime"
-                                        v-model="v$.data.realTime.$model"
-                                        :disabled="true"
-                                        :class="{ 'p-invalid': v$.data.realTime.$invalid && submitted }"
-                                        :value="changeTime"
-                                    />
+                                        <InputText
+                                            id="realTime"
+                                            v-model="v$.data.realTime.$model"
+                                            :disabled="true"
+                                            :class="{ 'p-invalid': v$.data.realTime.$invalid && submitted }"
+                                            :value="changeTime"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                         </div>
                         <!-- Mota  -->
                         <div class="row top">
                             <div class="col">
                                 <div class="field">
-                                    <div class="p-float-label" :class="{ 'form-group--error': v$.data.description.$error }">
+                                    <div
+                                        class="p-float-label"
+                                        :class="{ 'form-group--error': v$.data.description.$error }"
+                                    >
                                         <Textarea
                                             id="description"
                                             v-model="v$.data.description.$model"
@@ -251,25 +268,36 @@
                                     >
                                 </div>
                             </div>
-                        </div>   
+                        </div>
                         <!--  Button -->
                         <div class="row top">
                             <div class="col"></div>
                             <div class="col"></div>
                             <div class="col">
                                 <div class="btn-right">
-                                    <button type="submit" class="btn btn-primary custom__button">Xác nhận</button>&nbsp;
-                                    <button type="button" class="btn btn-outline-secondary custom__button" v-on:click="closeForm">Quay lại</button>
+                                    <button
+                                        type="submit"
+                                        style="line-height: revert"
+                                        class="btn btn-primary custom__button"
+                                    >
+                                        Xác nhận</button
+                                    >&nbsp;
+                                    <button
+                                        type="button"
+                                        style="line-height: revert"
+                                        class="btn btn-outline-secondary custom__button"
+                                        v-on:click="closeForm"
+                                    >
+                                        Quay lại
+                                    </button>
                                 </div>
                             </div>
                         </div>
-
                     </form>
                 </div>
-
             </div>
         </div>
-</Dialog>
+    </Dialog>
 </template>
 
 <script>
@@ -284,11 +312,11 @@
     import { HTTP } from '@/http-common'
     import { DateHelper } from '@/helper/date.helper'
     import { LocalStorage } from '@/helper/local-storage.helper'
-    export default {      
+    export default {
         setup: () => ({
             v$: useVuelidate(),
         }),
-        props: ['display','idproject'],
+        props: ['display', 'idproject'],
         data() {
             return {
                 hello: true,
@@ -308,7 +336,7 @@
                     user: null,
                     idProject: null,
                 },
-                token:null,
+                token: null,
                 userDropdown: [],
                 project: [],
                 edit: false,
@@ -357,7 +385,6 @@
             }
         },
         computed: {
-            
             changeTime() {
                 if (this.data.start != null && this.data.end != null) {
                     let start_hour = parseInt(this.data.start.substring(0, 2))
@@ -420,7 +447,6 @@
             },
         },
         methods: {
-
             handleSubmit(isFormValid) {
                 this.submitted = true
                 if (!isFormValid) {
@@ -429,7 +455,7 @@
                 if (!this.valid || this.timeError || this.invalidTime1 || this.invalidTime2 || this.invalidTime3) return
                 this.addData()
             },
-            reloadform(){
+            reloadform() {
                 this.data = {
                     type: 0,
                     date: '',
@@ -446,40 +472,39 @@
                     user: null,
                     idProject: null,
                 }
-
             },
 
             addData() {
                 this.data.date = moment(new Date(this.data.date)).format('YYYY-MM-DD')
                 this.data.dateUpdate = new Date()
-                if(this.idproject){
+                if (this.idproject) {
                     HTTP.put('OTs/updateOT/' + this.idproject, this.data)
                         .then((res) => {
                             if (res.status == 200) {
-                                this.showSuccess()
+                                this.showSuccess('Cập nhật OT thành công!')
                                 this.reloadform()
                                 this.$emit('reloadData')
-                                this.$emit('close')      
-                                this.submitted = false; 
+                                this.$emit('close')
+                                this.submitted = false
                             }
                         })
                         .catch((err) => {
                             this.showWarn('Bạn không có quyền thực hiện thao tác sửa OT.')
-                            console.log(err);
+                            console.log(err)
                         })
                 }
-                if(this.idproject === null){
-                    console.log(this.idproject);
+                if (this.idproject === null) {
+                    console.log(this.idproject)
                     this.data.dateCreate = new Date()
                     this.data.leadCreate = this.token.Id
                     HTTP.post('OTs/AddOTs', this.data)
                         .then((res) => {
                             if (res.status == 200) {
-                                this.showSuccess()
+                                this.showSuccess('Thêm mới OT thành công!')
                                 this.$emit('reloadData')
                                 this.reloadform()
                                 this.$emit('close')
-                                this.submitted = false; 
+                                this.submitted = false
                             }
                         })
                         .catch(() => {
@@ -494,58 +519,55 @@
             backToOT() {
                 this.$router.push('/ots')
             },
-            showSuccess() {
+            showSuccess(mess) {
                 this.$toast.add({
-                                severity: 'success',
-                                summary: 'Thành công',
-                                detail: 'Thêm mới thành công!',
-                                life: 3000,
-                            })
+                    severity: 'success',
+                    summary: 'Thành công',
+                    detail: mess,
+                    life: 3000,
+                })
             },
             showWarn(err) {
-                this.$toast.add({ severity: 'warn', summary: 'Warn Message', detail: err, life: 3000 })
+                this.$toast.add({ severity: 'warn', summary: 'Tin nhắn cảnh báo', detail: err, life: 3000 })
             },
             checkday() {
-                    this.valid = true
-                    return true
-                
+                this.valid = true
+                return true
             },
-            getUserByProject(projectid) {   
-                if(projectid !== null){
+            getUserByProject(projectid) {
+                if (projectid !== null) {
                     HTTP.get('Project/UserInProject/' + projectid)
-                    .then((res) => {
-                        console.log(res.data);
-                        this.userDropdown = res.data
-                    })
-                    .catch((err) => console.log(err))
+                        .then((res) => {
+                            console.log(res.data)
+                            this.userDropdown = res.data
+                        })
+                        .catch((err) => console.log(err))
                 }
-                
             },
-            async closeForm(){
-                this.reloadform();
-                this.$emit('close')          
+            async closeForm() {
+                this.reloadform()
+                this.$emit('close')
             },
-            getData(){
-                if(this.idproject !== null) {
-                this.edit = true
-                HTTP.get('OTs/getOTByID/' + this.idproject).then((res) => {
-                    if (res.status == 200) {
-                        this.data = res.data
-                        this.data.date = moment(res.data.date).format('MM/DD/YYYY')
-                        this.data.date = new Date(new Date(this.data.date).toLocaleDateString('en-EU'))
-                    }
-                })
-            }
-            }
-        
+            getData() {
+                if (this.idproject !== null) {
+                    this.edit = true
+                    HTTP.get('OTs/getOTByID/' + this.idproject).then((res) => {
+                        if (res.status == 200) {
+                            this.data = res.data
+                            this.data.date = moment(res.data.date).format('MM/DD/YYYY')
+                            this.data.date = new Date(new Date(this.data.date).toLocaleDateString('en-EU'))
+                        }
+                    })
+                }
+            },
         },
- 
+
         mounted() {
             this.token = LocalStorage.jwtDecodeToken()
             // Nếu người dùng không phải là leader hay admin sẽ chuyển đến ots
-            if(Number(this.token.IdGroup) !== 3 && Number(this.token.IdGroup) !== 1){
-                  router.push('/ots')
-            } 
+            if (Number(this.token.IdGroup) !== 3 && Number(this.token.IdGroup) !== 1) {
+                router.push('/ots')
+            }
             // Kiểm tra cái này phải là edit hay không
             if (this.idproject !== null || this.idproject !== 0) {
                 this.edit = true
@@ -561,25 +583,26 @@
                 this.data.end = '00:00'
             }
 
-            HTTP.get('Project/GetProjectByIdLead/'+this.token.Id).then((res) => {
-                if (res.status == 200)
-                    var formatDate =  DateHelper.formatDate(new Date()); 
-                    res.data.forEach((element) => {
-                        if (element.isDeleted != true && element.isFinished != true && (element.endDate > formatDate || element.endDate == null)) 
-                        {
-                            this.project.push(element)
-                        }
-                    })
+            HTTP.get('Project/GetProjectByIdLead/' + this.token.Id).then((res) => {
+                if (res.status == 200) var formatDate = DateHelper.formatDate(new Date())
+                res.data.forEach((element) => {
+                    if (
+                        element.isDeleted != true &&
+                        element.isFinished != true &&
+                        (element.endDate > formatDate || element.endDate == null)
+                    ) {
+                        this.project.push(element)
+                    }
+                })
             })
         },
         watch: {
             // GET User By ID Project when change Id Data.IDProject
-            'data.idProject': function (newId, oldId) {        
-                if(newId !== null || oldId !== null){
+            'data.idProject': function (newId, oldId) {
+                if (newId !== null || oldId !== null) {
                     this.getUserByProject(newId)
                 }
             },
-       
         },
 
         components: { LayoutDefault },
@@ -587,13 +610,11 @@
 </script>
 
 <style scoped>
-    
-    .form__data{
+    .form__data {
         display: flex;
-        flex-direction: column;    
+        flex-direction: column;
     }
-    .form__data--item{
-        
+    .form__data--item {
         height: 100px;
         border: 1px solid black;
         display: flex;
@@ -601,9 +622,7 @@
         align-items: center;
     }
 
-
-
-    .top{
+    .top {
         margin-top: 25px;
     }
 

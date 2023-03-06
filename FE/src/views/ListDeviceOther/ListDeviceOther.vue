@@ -211,16 +211,16 @@
             showSuccess() {
                 this.$toast.add({
                     severity: 'success',
-                    summary: 'Success Message',
-                    detail: 'Message Content',
+                    summary: 'Thành công',
+                    detail: 'Xóa thiết bị thành công',
                     life: 3000,
                 })
             },
             showError() {
                 this.$toast.add({
                     severity: 'error',
-                    summary: 'Error Message',
-                    detail: 'You refuse to delete',
+                    summary: 'Lỗi',
+                    detail: 'Bạn từ chối xóa',
                     life: 3000,
                 })
             },

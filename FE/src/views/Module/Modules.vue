@@ -18,7 +18,7 @@
                 :globalFilterFields="['#', 'nameModule', 'note']"
                 responsiveLayout="scroll"
                 ref="dt"
-                showGridlines 
+                showGridlines
             >
                 <template #header>
                     <div>
@@ -130,7 +130,7 @@
                                 this.getAllModules()
                                 this.$toast.add({
                                     severity: 'info',
-                                    summary: 'Hoàn tất',
+                                    summary: 'Xác nhận',
                                     detail: 'Chức năng đã xóa ',
                                     life: 3000,
                                 })

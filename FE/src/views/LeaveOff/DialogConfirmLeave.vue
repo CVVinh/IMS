@@ -71,7 +71,7 @@
                             if (res.status == 200) {
                                 this.$toast.add({
                                     severity: 'success',
-                                    summary: 'Successfull',
+                                    summary: 'Thành công',
                                     detail: res.data._Message,
                                     life: 3000,
                                 })

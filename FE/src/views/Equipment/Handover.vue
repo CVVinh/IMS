@@ -399,8 +399,8 @@
                     accept: async () => {
                         this.$toast.add({
                             severity: 'info',
-                            summary: 'Confirmed',
-                            detail: 'Handover deleted',
+                            summary: 'Xác nhận',
+                            detail: 'Bàn giao đã bị xóa!',
                             life: 3000,
                         })
                         try {
@@ -418,8 +418,8 @@
                     reject: () => {
                         this.$toast.add({
                             severity: 'error',
-                            summary: 'Rejected',
-                            detail: 'You have rejected',
+                            summary: 'Từ chối',
+                            detail: 'Bạn đã từ chối',
                             life: 3000,
                         })
                     },

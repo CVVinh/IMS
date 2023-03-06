@@ -241,7 +241,7 @@
                                         <small
                                             v-if="(v$.idGroup.$invalid && submitted) || v$.idGroup.$pending.$response"
                                             class="p-error"
-                                            >{{ v$.idGroup.required.$message.replace('Value', 'Role') }}</small
+                                            >{{ v$.idGroup.required.$message.replace('Value', 'idGroup') }}</small
                                         >
                                     </div>
                                 </div>
@@ -559,7 +559,7 @@
                 messages: [{ severity: 'info', content: 'Dynamic Info Message' }],
             }
         },
-      
+
         validations() {
             return {
                 userCode: {
@@ -612,8 +612,8 @@
                 },
             }
         },
-        mounted(){
-          this.GetRole()
+        mounted() {
+            this.GetRole()
         },
         methods: {
             handleSubmit() {
@@ -624,10 +624,12 @@
                 }
             },
 
-            GetRole(){
-                HTTP.get("Group/getListGroup").then(res=>{
-                    this.optionRoles = res.data
-                }).catch(err=>console.log(err))
+            GetRole() {
+                HTTP.get('Group/getListGroup')
+                    .then((res) => {
+                        this.optionRoles = res.data
+                    })
+                    .catch((err) => console.log(err))
             },
             closeAdd() {
                 this.$emit('closeAdd')
@@ -666,8 +668,8 @@
                                 if (res.status === 200) {
                                     this.$toast.add({
                                         severity: 'success',
-                                        summary: 'Info Message',
-                                        detail: 'Add user success!',
+                                        summary: 'Thành công',
+                                        detail: 'Thêm người dùng thành công!',
                                         life: 3000,
                                     })
                                 }
@@ -731,8 +733,8 @@
                                 this.$emit('reloadpage')
                                 this.$toast.add({
                                     severity: 'success',
-                                    summary: 'Info Message',
-                                    detail: 'Add user success!',
+                                    summary: 'Thành công',
+                                    detail: 'Thêm người dùng thành công!',
                                     life: 3000,
                                 })
                                 break
@@ -749,7 +751,7 @@
                                 this.$toast.add({
                                     severity: 'error',
                                     summary: 'Lỗi',
-                                    detail: 'Save failed',
+                                    detail: 'Lưu không thành công',
                                     life: 3000,
                                 })
                         }

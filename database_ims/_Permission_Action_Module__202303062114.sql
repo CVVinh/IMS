@@ -1,0 +1,65 @@
+INSERT INTO public."Permission_Action_Module" ("idModule","idAction","isDeleted","userCreated","userUpdated","userDeleted","dateCreated","dateUpdated","dateDeleted") VALUES
+	 (3,1,false,41,41,NULL,'2023-03-06','2023-03-06',NULL),
+	 (3,2,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (3,3,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (5,1,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (5,2,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (5,3,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (5,5,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (5,6,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (5,7,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (5,9,false,41,NULL,NULL,'2023-03-06',NULL,NULL);
+INSERT INTO public."Permission_Action_Module" ("idModule","idAction","isDeleted","userCreated","userUpdated","userDeleted","dateCreated","dateUpdated","dateDeleted") VALUES
+	 (10,1,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (10,2,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (10,3,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (11,1,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (11,2,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (11,3,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (12,1,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (12,2,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (12,3,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (8,1,false,41,NULL,NULL,'2023-03-06',NULL,NULL);
+INSERT INTO public."Permission_Action_Module" ("idModule","idAction","isDeleted","userCreated","userUpdated","userDeleted","dateCreated","dateUpdated","dateDeleted") VALUES
+	 (8,2,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (8,3,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (8,4,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (8,5,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (8,6,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (15,1,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (15,2,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (15,3,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (15,9,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (16,1,false,41,NULL,NULL,'2023-03-06',NULL,NULL);
+INSERT INTO public."Permission_Action_Module" ("idModule","idAction","isDeleted","userCreated","userUpdated","userDeleted","dateCreated","dateUpdated","dateDeleted") VALUES
+	 (16,2,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (16,3,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (16,9,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (1,1,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (1,2,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (1,3,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (1,5,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (1,6,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (1,8,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (1,9,false,41,NULL,NULL,'2023-03-06',NULL,NULL);
+INSERT INTO public."Permission_Action_Module" ("idModule","idAction","isDeleted","userCreated","userUpdated","userDeleted","dateCreated","dateUpdated","dateDeleted") VALUES
+	 (2,1,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (2,2,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (2,3,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (2,9,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (13,1,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (13,2,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (13,3,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (13,5,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (13,9,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (14,1,false,41,NULL,NULL,'2023-03-06',NULL,NULL);
+INSERT INTO public."Permission_Action_Module" ("idModule","idAction","isDeleted","userCreated","userUpdated","userDeleted","dateCreated","dateUpdated","dateDeleted") VALUES
+	 (14,2,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (14,3,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (14,9,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (17,1,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (17,2,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (17,3,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (18,2,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (18,3,false,41,NULL,NULL,'2023-03-06',NULL,NULL),
+	 (18,1,false,41,41,NULL,'2023-03-06','2023-03-06',NULL);

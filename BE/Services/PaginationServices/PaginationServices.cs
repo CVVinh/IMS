@@ -32,13 +32,13 @@ namespace BE.Services.PaginationServices
                 if ((double)pageIndex > toPage || pageIndex <= 0)
                 {
                     success = false;
-                    message = "This page doesn't exist !";
+                    message = "Trang này không tồn tại!";
                     data = null;
                     var result = new PaginationResponse<ICollection<T>>(success, message, data,totalPage);
                     return Task.FromResult(result);
                 }
 
-                message = $"Get all data in page {pageIndex}";
+                message = $"Nhận tất cả dữ liệu trong trang {pageIndex}";
                 data = tasksList.Skip((pageIndex.Value - 1) * pageSize).Take(pageSize).ToList();
                 var resultPage = new PaginationResponse<ICollection<T>>(success, message, data, totalPage);
                 return Task.FromResult(resultPage);

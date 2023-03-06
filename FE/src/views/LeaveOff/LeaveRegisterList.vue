@@ -197,7 +197,7 @@
                         setTimeout(() => {
                             this.$toast.add({
                                 severity: 'error',
-                                summary: 'Error message',
+                                summary: 'Lỗi',
                                 detail: 'Người dùng không có quyền!',
                                 life: 3000,
                             })
@@ -353,7 +353,7 @@
                             this.getAllLeaveOffRegister()
                             this.$toast.add({
                                 severity: 'success',
-                                summary: 'Successfull',
+                                summary: 'Thành công',
                                 detail: res.data._Message,
                                 life: 3000,
                             })

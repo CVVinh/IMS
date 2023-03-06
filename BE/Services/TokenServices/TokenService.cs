@@ -175,6 +175,15 @@ namespace BE.Services.TokenServices
                         "confirm: " + permission.a.Confirm);
 
                     data.Add("module: " + permission.b.nameModule + " " +
+                        "confirmMulti: " + permission.a.ConfirmMulti);
+
+                    data.Add("module: " + permission.b.nameModule + " " +
+                        "refuse: " + permission.a.Refuse);
+
+                    data.Add("module: " + permission.b.nameModule + " " +
+                        "addMember: " + permission.a.AddMember);
+
+                    data.Add("module: " + permission.b.nameModule + " " +
                         "export: " + permission.a.Export);
                 }
                 return data;

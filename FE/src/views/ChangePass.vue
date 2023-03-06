@@ -150,7 +150,7 @@
                 confirmpass: {
                     minLenght: minLength(8),
                     sameAsPassword: helpers.withMessage(
-                        'Confirm password must be same new password',
+                        'Xác nhận mật khẩu phải giống mật khẩu mới',
                         sameAs(this.newpass),
                     ),
                     required,

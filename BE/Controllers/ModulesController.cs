@@ -6,105 +6,101 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using BE.Services.GroupServices;
+using BE.Services.PaginationServices;
+using BE.Services.ModuleServices;
+using BE.Data.Enum;
+using BE.Data.Dtos.GruopDtos;
 
 namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "permission_group: True module: modules")]
+    [Authorize(Roles = "permission_group: True module: modules")]
     public class ModulesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IModuleServices _moduleServices;
+        private readonly IPaginationServices<Module> _paginationService;
 
-        public ModulesController(AppDbContext context)
+        public ModulesController(IModuleServices moduleServices, IPaginationServices<Module> paginationService)
         {
-            _context = context;
+            _moduleServices = moduleServices;
+            _paginationService = paginationService;
+        }
+
+        [HttpGet("getListModule")]
+        public async Task<IActionResult> GetAllModuleAsync(int? pageIndex, PageSizeEnum pageSizeEnum)
+        {
+            var response = await _moduleServices.GetAllModuleAsync();
+            if (response._success)
+            {
+                var pageSize = (int)pageSizeEnum;
+                var resultPage = await _paginationService.paginationListTableAsync(response._Data, pageIndex, pageSize);
+                if (resultPage._success)
+                {
+                    return Ok(resultPage);
+                }
+                return BadRequest(resultPage);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpGet("GetModuleById/{id}")]
+        public async Task<IActionResult> GetModuleById([FromRoute] int id)
+        {
+            var response = await _moduleServices.GetModuleById(id);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
 
         [HttpPost("addModule")]
         [Authorize(Roles = "admin")]
-        public IActionResult Create(addModuleDtos module)
+        public async Task<IActionResult> CreateModule(ModuleDtos moduleDtos)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                var m = new Module
-                {
-
-                    nameModule = module.nameModule,
-                    note = module.note,
-                };
-
-                _context.Add(m);
-                _context.SaveChanges();
-                return Ok(m);
+                return BadRequest(ModelState);
             }
-
-            catch (Exception ex)
+            var response = await _moduleServices.CreateModule(moduleDtos);
+            if (response._success)
             {
-                return BadRequest(ex);
+                return Ok(response);
             }
+            return BadRequest(response);
         }
+
 
         [HttpPut("updateMoudel/{id}")]
-       
-        public async Task<ActionResult> updateModule(int id, addModuleDtos mod)
+        public async Task<IActionResult> UpdateModule([FromRoute] int id, ModuleDtos moduleDtos)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                var upModules = await _context.modules.Where(x => x.isDeleted == 0).FirstOrDefaultAsync(x => x.id == id);
-                if (upModules == null)
-                {
-                    return NotFound();
-                }
-                upModules.nameModule = mod.nameModule;
-                upModules.note = mod.note;
-                await _context.SaveChangesAsync();
-                return Ok(upModules);
+                return BadRequest(ModelState);
             }
+            var response = await _moduleServices.UpdateModule(id, moduleDtos);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
 
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-        [HttpGet]
-        [Route("getListModule")]
-        public async Task<IActionResult> getListModule()
-        {
-            try
-            {
-                var list = await _context.modules.Where(x => x.isDeleted == 0).OrderBy(m => m.idSort).ToListAsync();
-                return Ok(list);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
 
         [HttpPut]
-        [Route("deleteModule/{idModule}")]
-        public async Task<IActionResult> deleteModule(int idModule)
+        [Route("deleteModule/{id}")]
+        public async Task<IActionResult> DeleteModule([FromRoute] int id)
         {
-            try
+            var response = await _moduleServices.DeleteModule(id);
+            if (response._success)
             {
-                var module = await _context.modules.Where(x => x.isDeleted == 0).SingleOrDefaultAsync(p => p.id == idModule);
-                if(module == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    module.isDeleted = 1;
-                    _context.SaveChanges();
-                    return Ok();
-                }
+                return Ok(response);
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(response);
         }
+
 
     }
 }

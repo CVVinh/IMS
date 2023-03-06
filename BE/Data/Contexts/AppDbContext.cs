@@ -335,6 +335,7 @@ namespace BE.Data.Contexts
                 e.ToTable("Action_Module");
                 e.HasKey(e => e.id);
                 e.Property(e => e.name).IsRequired().HasMaxLength(255).HasColumnType("varchar");
+                e.Property(e => e.description).IsRequired().HasMaxLength(255).HasColumnType("varchar");
                 e.Property(e => e.isDeleted).HasDefaultValue(false);
                 e.Property(e => e.dateCreated).HasColumnType("date");
                 e.Property(e => e.dateUpdated).HasColumnType("date");
@@ -345,7 +346,7 @@ namespace BE.Data.Contexts
             {
                 e.ToTable("Permission_Action_Module");
                 e.HasKey(e => e.id);
-                e.Property(e => e.idModul).IsRequired();
+                e.Property(e => e.idModule).IsRequired();
                 e.Property(e => e.idAction).IsRequired();
                 e.Property(e => e.isDeleted).HasDefaultValue(false);
                 e.Property(e => e.dateCreated).HasColumnType("date");
