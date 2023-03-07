@@ -15,8 +15,9 @@ namespace BE.Services.ActionModuleServices
         Task<BaseResponse<List<Permission_Action_Module>>> GetPermissionActionModuleWithModuleId(int moduleId);
         Task<BaseResponse<List<Permission_Action_Module>>> GetPermissionActionModuleWithActionId(int actionId);
         Task<BaseResponse<List<Permission_Action_Module>>> CreatePermissionActionModule(List<AddPermissionActionModuleDto> addPermissionActionModuleDtos);
-        Task<BaseResponse<Permission_Action_Module>> UpdateUPermissionActionModule(int idModule, int idAction, UpdatePermissionActionModuleDto updatePermissionActionModuleDto);
-        Task<BaseResponse<Permission_Action_Module>> DeletePermissionActionModule(int idModule, int idAction, DeletePermissionActionModuleDto deletePermissionActionModuleDto);
+        Task<BaseResponse<Permission_Action_Module>> UpdateUPermissionActionModule(RequestPermissionActionModuleDto requestPermissionActionModuleDto, UpdatePermissionActionModuleDto updatePermissionActionModuleDto);
+        Task<BaseResponse<Permission_Action_Module>> DeletePermissionActionModule(RequestPermissionActionModuleDto requestPermissionActionModuleDto, DeletePermissionActionModuleDto deletePermissionActionModuleDto);
+        Task<BaseResponse<List<Permission_Action_Module>>> DeleteMultiPermissionActionModule(List<RequestPermissionActionModuleDto> requestPermissionActionModuleDto, DeletePermissionActionModuleDto deletePermissionActionModuleDto);
     }
 
     public class PermissionActionModuleServices : IPermissionActionModuleServices
@@ -122,14 +123,14 @@ namespace BE.Services.ActionModuleServices
             }
         }
 
-        public async Task<BaseResponse<Permission_Action_Module>> UpdateUPermissionActionModule(int idModule, int idAction, UpdatePermissionActionModuleDto updatePermissionActionModuleDto)
+        public async Task<BaseResponse<Permission_Action_Module>> UpdateUPermissionActionModule(RequestPermissionActionModuleDto requestPermissionActionModuleDto, UpdatePermissionActionModuleDto updatePermissionActionModuleDto)
         {
             var success = false;
             var message = "";
             var data = new Permission_Action_Module();
             try
             {
-                var permissionActionModule = await _db.PermissionActionModules.Where(s => s.isDeleted == false && s.idModule.Equals(idModule) && s.idAction.Equals(idAction)).FirstOrDefaultAsync();
+                var permissionActionModule = await _db.PermissionActionModules.Where(s => s.isDeleted == false && s.idModule.Equals(requestPermissionActionModuleDto.idModule) && s.idAction.Equals(requestPermissionActionModuleDto.idAction)).FirstOrDefaultAsync();
                 if (permissionActionModule is null)
                 {
                     message = "Permission_Action_Module doesn't exist !";
@@ -155,14 +156,14 @@ namespace BE.Services.ActionModuleServices
             }
         }
 
-        public async Task<BaseResponse<Permission_Action_Module>> DeletePermissionActionModule(int idModule, int idAction, DeletePermissionActionModuleDto deletePermissionActionModuleDto)
+        public async Task<BaseResponse<Permission_Action_Module>> DeletePermissionActionModule(RequestPermissionActionModuleDto requestPermissionActionModuleDto, DeletePermissionActionModuleDto deletePermissionActionModuleDto)
         {
             var success = false;
             var message = "";
             var data = new Permission_Action_Module();
             try
             {
-                var permissionActionModule = await _db.PermissionActionModules.Where(s => s.isDeleted == false && s.idModule.Equals(idModule) && s.idAction.Equals(idAction)).FirstOrDefaultAsync();
+                var permissionActionModule = await _db.PermissionActionModules.Where(s => s.isDeleted == false && s.idModule.Equals(requestPermissionActionModuleDto.idModule) && s.idAction.Equals(requestPermissionActionModuleDto.idAction)).FirstOrDefaultAsync();
                 if (permissionActionModule is null)
                 {
                     success = false;
@@ -188,6 +189,37 @@ namespace BE.Services.ActionModuleServices
             }
         }
 
-        
+        public async Task<BaseResponse<List<Permission_Action_Module>>> DeleteMultiPermissionActionModule(List<RequestPermissionActionModuleDto> requestPermissionActionModuleDto, DeletePermissionActionModuleDto deletePermissionActionModuleDto)
+        {
+            var success = false;
+            var message = "";
+            var data = new List<Permission_Action_Module>();
+            try
+            {
+                foreach (var item in requestPermissionActionModuleDto)
+                {
+                    var result = await DeletePermissionActionModule(item, deletePermissionActionModuleDto);
+                    if (result._success)
+                    {
+                        data.Add(result._Data);
+                    }
+                    else
+                    {
+                        return new BaseResponse<List<Permission_Action_Module>>(success, result._Message, data = null);
+                    }
+                }
+                success = true;
+                message = "Deleting Multi Permission_Action_Module successfully";
+                return new BaseResponse<List<Permission_Action_Module>>(success, message, data);
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                message = $"Deleting Multi Permission_Action_Module failed! {ex.InnerException}";
+                return new BaseResponse<List<Permission_Action_Module>>(success, message, data = null);
+            }
+        }
+
+
     }
 }

@@ -93,7 +93,7 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-        [HttpPut("UpdatePermissionUserMenu/{IdUser}/{idModule}/{IdMenu}")]
+        [HttpPut("updatePermissionUserMenu/{IdUser}/{idModule}/{IdMenu}")]
         public async Task<IActionResult> UpdatePermissionUserMenu([FromRoute] PermissionUserMenuRequest permissionUserMenuRequest, PermissionUserMenuEditDto permissionUserMenuEditDto)
         {
             if (!ModelState.IsValid)
@@ -108,7 +108,7 @@ namespace BE.Controllers
             return BadRequest(rules);
         }
 
-        [HttpDelete("DeletePermissionUserMenu/{IdUser}/{idModule}/{IdMenu}")]
+        [HttpDelete("deletePermissionUserMenu/{IdUser}/{idModule}/{IdMenu}")]
         public async Task<IActionResult> DeletePermissionUserMenu([FromRoute] PermissionUserMenuRequest permissionUserMenuRequest)
         {
             var response = await _permissionUserMenuServices.DeletePermissionUserMenu(permissionUserMenuRequest);
@@ -119,6 +119,16 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
+        [HttpPost("deleteMultiPermissionUserMenu")]
+        public async Task<IActionResult> DeleteMultiPermissionUserMenu(List<PermissionUserMenuRequest> permissionUserMenuRequest)
+        {
+            var response = await _permissionUserMenuServices.DeleteMultiPermissionUserMenu(permissionUserMenuRequest);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
 
     }
 }

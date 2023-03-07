@@ -84,13 +84,13 @@ namespace BE.Controllers
         }
 
         [HttpPut("UpdatePermissionGroup/{idGroup}/{idModule}")]
-        public async Task<IActionResult> UpdatePermissionGroup([FromRoute] int idGroup, [FromRoute] int idModule, PermissionGroupDto permissionGroupDtos)
+        public async Task<IActionResult> UpdatePermissionGroup(PermissionGroupRequestDto permissionGroupRequestDto, PermissionGroupDto permissionGroupDtos)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var response = await _permissionGroupServices.UpdatePermissionGroup(idGroup, idModule, permissionGroupDtos);
+            var response = await _permissionGroupServices.UpdatePermissionGroup(permissionGroupRequestDto, permissionGroupDtos);
             if (response._success)
             {
                 return Ok(response);
@@ -99,9 +99,9 @@ namespace BE.Controllers
         }
 
         [HttpDelete("deletePermissionGroup/{idGroup}/{idModule}")]
-        public async Task<IActionResult> DeletePermissionGroup([FromRoute] int idGroup, [FromRoute] int idModule)
+        public async Task<IActionResult> DeletePermissionGroup([FromRoute] PermissionGroupRequestDto permissionGroupRequestDto)
         {
-            var response = await _permissionGroupServices.DeletePermissionGroup(idGroup, idModule);
+            var response = await _permissionGroupServices.DeletePermissionGroup(permissionGroupRequestDto);
             if (response._success)
             {
                 return Ok(response);
@@ -109,6 +109,16 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
+        [HttpDelete("deleteMultiPermissionGroup")]
+        public async Task<IActionResult> DeleteMultiPermissionGroup(List<PermissionGroupRequestDto> permissionGroupRequestDto)
+        {
+            var response = await _permissionGroupServices.DeleteMultiPermissionGroup(permissionGroupRequestDto);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
 
 
     }

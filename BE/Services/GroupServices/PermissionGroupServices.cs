@@ -14,8 +14,9 @@ namespace BE.Services.GroupServices
         Task<BaseResponse<List<Permission_Group>>> GetPermissionGroupWithModuleId(int moduleId);
         Task<BaseResponse<List<Permission_Group>>> GetPermissionGroupWithGroupId(int groupId);
         Task<BaseResponse<List<Permission_Group>>> CreatePermissionGroup(List<PermissionGroupDto> permissionGroupDtos);
-        Task<BaseResponse<Permission_Group>> UpdatePermissionGroup(int idGroup, int idModule, PermissionGroupDto permissionGroupDtos);
-        Task<BaseResponse<Permission_Group>> DeletePermissionGroup(int idGroup, int idModule);
+        Task<BaseResponse<Permission_Group>> UpdatePermissionGroup(PermissionGroupRequestDto permissionGroupRequestDto, PermissionGroupDto permissionGroupDtos);
+        Task<BaseResponse<Permission_Group>> DeletePermissionGroup(PermissionGroupRequestDto permissionGroupRequestDto);
+        Task<BaseResponse<List<Permission_Group>>> DeleteMultiPermissionGroup(List<PermissionGroupRequestDto> permissionGroupRequestDto);
     }
 
     public class PermissionGroupServices : IPermissionGroupServices
@@ -120,14 +121,14 @@ namespace BE.Services.GroupServices
             }
         }
 
-        public async Task<BaseResponse<Permission_Group>> UpdatePermissionGroup(int idGroup, int idModule, PermissionGroupDto permissionGroupDtos)
+        public async Task<BaseResponse<Permission_Group>> UpdatePermissionGroup(PermissionGroupRequestDto permissionGroupRequestDto, PermissionGroupDto permissionGroupDtos)
         {
             var success = false;
             var message = "";
             var data = new Permission_Group();
             try
             {
-                var permissionGroup = await _db.Permission_Groups.Where(s => s.IdGroup.Equals(idGroup) && s.IdModule.Equals(idModule)).FirstOrDefaultAsync();
+                var permissionGroup = await _db.Permission_Groups.Where(s => s.IdGroup.Equals(permissionGroupRequestDto.IdGroup) && s.IdModule.Equals(permissionGroupRequestDto.IdModule)).FirstOrDefaultAsync();
                 if (permissionGroup is null)
                 {
                     message = "Permission_Group doesn't exist !";
@@ -152,14 +153,14 @@ namespace BE.Services.GroupServices
             }
         }
 
-        public async Task<BaseResponse<Permission_Group>> DeletePermissionGroup(int idGroup, int idModule)
+        public async Task<BaseResponse<Permission_Group>> DeletePermissionGroup(PermissionGroupRequestDto permissionGroupRequestDto)
         {
             var success = false;
             var message = "";
             var data = new Permission_Group();
             try
             {
-                var permissionGroup = await _db.Permission_Groups.Where(s => s.IdModule.Equals(idModule) && s.IdGroup.Equals(idGroup)).FirstOrDefaultAsync();
+                var permissionGroup = await _db.Permission_Groups.Where(s => s.IdModule.Equals(permissionGroupRequestDto.IdModule) && s.IdGroup.Equals(permissionGroupRequestDto.IdGroup)).FirstOrDefaultAsync();
                 if (permissionGroup is null)
                 {
                     success = false;
@@ -182,6 +183,37 @@ namespace BE.Services.GroupServices
             }
         }
 
-       
+        public async Task<BaseResponse<List<Permission_Group>>> DeleteMultiPermissionGroup(List<PermissionGroupRequestDto> permissionGroupRequestDto)
+        {
+            var success = false;
+            var message = "";
+            var data = new List<Permission_Group>();
+            try
+            {
+                foreach (var item in permissionGroupRequestDto)
+                {
+                    var result = await DeletePermissionGroup(item);
+                    if (result._success)
+                    {
+                        data.Add(result._Data);
+                    }
+                    else
+                    {
+                        return new BaseResponse<List<Permission_Group>>(success, result._Message, data = null);
+                    }
+                }
+                success = true;
+                message = "Deleting Multi Permission_Group successfully";
+                return new BaseResponse<List<Permission_Group>>(success, message, data);
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                message = $"Deleting Multi Permission_Group failed! {ex.InnerException}";
+                return new BaseResponse<List<Permission_Group>>(success, message, data = null);
+            }
+        }
+
+
     }
 }

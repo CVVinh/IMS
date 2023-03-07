@@ -2,6 +2,7 @@
 using BE.Data.Contexts;
 using BE.Data.Dtos.GruopDtos;
 using BE.Data.Dtos.ModuleDtos;
+using BE.Data.Dtos.UserDtos;
 using BE.Data.Models;
 using BE.Response;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ namespace BE.Services.ModuleServices
         Task<BaseResponse<Module>> CreateModule(ModuleDtos moduleDtos);
         Task<BaseResponse<Module>> UpdateModule(int id, ModuleDtos moduleDtos);
         Task<BaseResponse<Module>> DeleteModule(int id);
+        Task<BaseResponse<List<Module>>> DeleteMultiModule(List<int> listId);
     }
 
     public class ModuleServices : IModuleServices
@@ -146,6 +148,37 @@ namespace BE.Services.ModuleServices
                 success = false;
                 message = $"Deleting UserGroup failed! {ex.InnerException}";
                 return new BaseResponse<Module>(success, message, new Module());
+            }
+        }
+
+        public async Task<BaseResponse<List<Module>>> DeleteMultiModule(List<int> listId)
+        {
+            var success = false;
+            var message = "";
+            var data = new List<Module>();
+            try
+            {
+                foreach (var item in listId)
+                {
+                    var result = await DeleteModule(item);
+                    if (result._success)
+                    {
+                        data.Add(result._Data);
+                    }
+                    else
+                    {
+                        return new BaseResponse<List<Module>>(success, result._Message, data = null);
+                    }
+                }
+                success = true;
+                message = "Deleting Multi Module successfully";
+                return new BaseResponse<List<Module>>(success, message, data);
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                message = $"Deleting Multi Module failed! {ex.InnerException}";
+                return new BaseResponse<List<Module>>(success, message, data = null);
             }
         }
 

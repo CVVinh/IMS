@@ -19,6 +19,7 @@ namespace BE.Services.GroupServices
         Task<BaseResponse<Group>> CreateGroup(AddGroupDtos addGroupDtos);
         Task<BaseResponse<Group>> UpdateGroup(int idGroup, UpdateGroupDtos updateGroupDtos);
         Task<BaseResponse<Group>> DeleteGroup(int idGroup);
+        Task<BaseResponse<List<Group>>> DeleteMultiGroup(List<int> idGroup);
         Task<BaseResponse<Group>> DownloadFile();
     }
 
@@ -168,6 +169,42 @@ namespace BE.Services.GroupServices
                 success = false;
                 message = $"Deleting UserGroup failed! {ex.InnerException}";
                 return new BaseResponse<Group>(success, message, new Group());
+            }
+        }
+
+        public async Task<BaseResponse<List<Group>>> DeleteMultiGroup(List<int> listIdGroup)
+        {
+            var success = false;
+            var message = "";
+            var data = new List<Group>();
+            try
+            {
+                foreach(var item in listIdGroup)
+                {
+                    var group = await _db.Groups.Where(s => s.IsDeleted == 0 && s.Id.Equals(item)).FirstOrDefaultAsync();
+                    if (group != null)
+                    {
+                        group.IsDeleted = 1;
+                        _db.Groups.Update(group);
+                        data.Add(group);
+                    }
+                    else
+                    {
+                        message = item + " group doesn't exist !";
+                        return new BaseResponse<List<Group>>(success, message, data = null);
+                    }
+                }
+                await _db.SaveChangesAsync();
+
+                success = true;
+                message = "Deleting GroupMulti successfully";
+                return new BaseResponse<List<Group>>(success, message, data);
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                message = $"Deleting GroupMulti failed! {ex.InnerException}";
+                return new BaseResponse<List<Group>>(success, message, data);
             }
         }
 

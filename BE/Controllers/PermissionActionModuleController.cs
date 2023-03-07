@@ -78,13 +78,13 @@ namespace BE.Controllers
         }
 
         [HttpPut("updateUPermissionActionModule/{idModule}/{idAction}")]
-        public async Task<IActionResult> UpdateUPermissionActionModule([FromRoute] int idModule, [FromRoute] int idAction, UpdatePermissionActionModuleDto updatePermissionActionModuleDto)
+        public async Task<IActionResult> UpdateUPermissionActionModule([FromRoute] RequestPermissionActionModuleDto requestPermissionActionModuleDto, UpdatePermissionActionModuleDto updatePermissionActionModuleDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var response = await _permissionActionModuleServices.UpdateUPermissionActionModule(idModule, idAction, updatePermissionActionModuleDto);
+            var response = await _permissionActionModuleServices.UpdateUPermissionActionModule(requestPermissionActionModuleDto, updatePermissionActionModuleDto);
             if (response._success)
             {
                 return Ok(response);
@@ -93,9 +93,20 @@ namespace BE.Controllers
         }
 
         [HttpPut("deletePermissionActionModule/{idModule}/{idAction}")]
-        public async Task<IActionResult> DeletePermissionActionModule([FromRoute] int idModule, [FromRoute] int idAction, DeletePermissionActionModuleDto deletePermissionActionModuleDto)
+        public async Task<IActionResult> DeletePermissionActionModule([FromRoute] RequestPermissionActionModuleDto requestPermissionActionModuleDto, DeletePermissionActionModuleDto deletePermissionActionModuleDto)
         {
-            var response = await _permissionActionModuleServices.DeletePermissionActionModule(idModule, idAction, deletePermissionActionModuleDto);
+            var response = await _permissionActionModuleServices.DeletePermissionActionModule(requestPermissionActionModuleDto, deletePermissionActionModuleDto);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpPut("deleteMultiPermissionActionModule")]
+        public async Task<IActionResult> DeleteMultiPermissionActionModule(List<RequestPermissionActionModuleDto> requestPermissionActionModuleDto, DeletePermissionActionModuleDto deletePermissionActionModuleDto)
+        {
+            var response = await _permissionActionModuleServices.DeleteMultiPermissionActionModule(requestPermissionActionModuleDto, deletePermissionActionModuleDto);
             if (response._success)
             {
                 return Ok(response);

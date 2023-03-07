@@ -20,6 +20,7 @@ namespace BE.Services.PermissionUserMenuServices
         Task<BaseResponse<List<Permission_Use_Menu>>> CreatePermissionUserMenu(List<PermissionUserMenuAddDto> permissionUserMenuAddDtos);
         Task<BaseResponse<Permission_Use_Menu>> UpdatePermissionUserMenu(PermissionUserMenuRequest permissionUserMenuRequest, PermissionUserMenuEditDto permissionUserMenuEditDto);
         Task<BaseResponse<Permission_Use_Menu>> DeletePermissionUserMenu(PermissionUserMenuRequest permissionUserMenuRequest);
+        Task<BaseResponse<List<Permission_Use_Menu>>> DeleteMultiPermissionUserMenu(List<PermissionUserMenuRequest> permissionUserMenuRequest);
     }
 
     public class PermissionUserMenuServices : IPermissionUserMenuServices
@@ -215,6 +216,36 @@ namespace BE.Services.PermissionUserMenuServices
             }
         }
 
-        
+        public async Task<BaseResponse<List<Permission_Use_Menu>>> DeleteMultiPermissionUserMenu(List<PermissionUserMenuRequest> permissionUserMenuRequest)
+        {
+            var success = false;
+            var message = "";
+            var data = new List<Permission_Use_Menu>();
+            try
+            {
+                foreach (var item in permissionUserMenuRequest)
+                {
+                    var result = await DeletePermissionUserMenu(item);
+                    if (result._success)
+                    {
+                        data.Add(result._Data);
+                    }
+                    else
+                    {
+                        return new BaseResponse<List<Permission_Use_Menu>>(success, result._Message, data = null);
+                    }
+                }
+                success = true;
+                message = "Deleting Multi Permission_Use_Menu successfully";
+                return new BaseResponse<List<Permission_Use_Menu>>(success, message, data);
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                message = $"Deleting Multi Permission_Use_Menu failed! {ex.InnerException}";
+                return new BaseResponse<List<Permission_Use_Menu>>(success, message, data = null);
+            }
+        }
+
     }
 }

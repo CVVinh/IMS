@@ -110,6 +110,19 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
+        [HttpPut("deleteMultiGroup")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: groups deleteMulti: 1")]
+        public async Task<IActionResult> DeleteMultiGroup(List<int> listIdGroup)
+        {
+            var response = await _groupServices.DeleteMultiGroup(listIdGroup);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
         [HttpGet]
         [Route("exportExcel")]
         [Authorize(Roles = "admin")]

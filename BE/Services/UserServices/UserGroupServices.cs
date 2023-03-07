@@ -18,6 +18,7 @@ namespace BE.Services.UserServices
         Task<BaseResponse<List<User_Group>>> CreateUserGroup(List<UserGroupCreatedDto> userGroupCreatedDto);
         Task<BaseResponse<User_Group>> UpdateUserGroup(int idUser, int idGroup, UserGroupUpdatedDto userGroupUpdatedDto);
         Task<BaseResponse<User_Group>> DeleteUserGroup(UserGroupDeletedDto userGroupDeletedDto);
+        Task<BaseResponse<List<User_Group>>> DeleteMultiUserGroup(List<UserGroupDeletedDto> userGroupDeletedDto);
     }
 
     public class UserGroupServices : IUserGroupServices
@@ -201,6 +202,36 @@ namespace BE.Services.UserServices
             }
         }
 
-        
+        public async Task<BaseResponse<List<User_Group>>> DeleteMultiUserGroup(List<UserGroupDeletedDto> userGroupDeletedDto)
+        {
+            var success = false;
+            var message = "";
+            var data = new List<User_Group>();
+            try
+            {
+                foreach(var item in userGroupDeletedDto)
+                {
+                    var result = await DeleteUserGroup(item);
+                    if (result._success)
+                    {
+                        data.Add(result._Data);
+                    }
+                    else
+                    {
+                        return new BaseResponse<List<User_Group>>(success, result._Message, data = null);
+                    }
+                }
+                success = true;
+                message = "Deleting Multi UserGroup successfully";
+                return new BaseResponse<List<User_Group>>(success, message, data);
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                message = $"Deleting Multi UserGroup failed! {ex.InnerException}";
+                return new BaseResponse<List<User_Group>>(success, message, data = null);
+            }
+        }
+
     }
 }

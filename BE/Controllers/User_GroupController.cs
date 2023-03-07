@@ -109,6 +109,17 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
+        [HttpPut("deleteMultiUserGroup")]
+        public async Task<IActionResult> DeleteMultiUserGroup(List<UserGroupDeletedDto> userGroupDeletedDto)
+        {
+            var response = await _userGroupServices.DeleteMultiUserGroup(userGroupDeletedDto);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
 
     }
 }

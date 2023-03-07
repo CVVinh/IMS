@@ -101,6 +101,17 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
+        [HttpPut]
+        [Route("deleteMultiModule")]
+        public async Task<IActionResult> DeleteMultiModule(List<int> listId)
+        {
+            var response = await _moduleServices.DeleteMultiModule(listId);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
 
     }
 }

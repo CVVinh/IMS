@@ -45,10 +45,12 @@ namespace BE.Mapper
             CreateMap<ModuleDtos, Module>().ReverseMap();
 
             CreateMap<PermissionGroupDto, Permission_Group>().ReverseMap();
+            CreateMap<PermissionGroupRequestDto, Permission_Group>().ReverseMap();
 
             CreateMap<AddPermissionActionModuleDto, Permission_Action_Module>().ReverseMap();
             CreateMap<UpdatePermissionActionModuleDto, Permission_Action_Module>().ReverseMap();
             CreateMap<DeletePermissionActionModuleDto, Permission_Action_Module>().ReverseMap();
+            CreateMap<RequestPermissionActionModuleDto, Permission_Action_Module>().ReverseMap();
         }
     }
 }
