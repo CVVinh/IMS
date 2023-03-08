@@ -48,6 +48,8 @@ using BE.Services.PermissionUserMenuServices;
 using BE.Services.GroupServices;
 using BE.Services.ActionModuleServices;
 using BE.Services.ModuleServices;
+using BE.Data.DataRoles;
+using BE.Services.BlockingWebService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,6 +81,12 @@ builder.Services.AddScoped<IModuleServices, ModuleServices>();
 builder.Services.AddScoped<IPermissionGroupServices, PermissionGroupServices>();
 builder.Services.AddScoped<IPermissionActionModuleServices, PermissionActionModuleServices>();
 
+builder.Services.AddScoped<IDataAdmin, DataAdmin>();
+builder.Services.AddScoped<IDataPm, DataPm>();
+builder.Services.AddScoped<IDataLead, DataLead>();
+builder.Services.AddScoped<IDataSample, DataSample>();
+builder.Services.AddScoped<IDataStaff, DataStaff>();
+
 builder.Services.AddScoped<IMemberProjectServices, MemberProjectServices>();
 builder.Services.AddScoped<IPaginationServices<GetAllTaskDto>, PaginationServices<GetAllTaskDto>>();
 builder.Services.AddScoped<IPaginationServices<LeaveOff>, PaginationServices<LeaveOff>>();
@@ -101,6 +109,9 @@ builder.Services.AddScoped<IPaginationServices<Module>, PaginationServices<Modul
 builder.Services.AddScoped<IPaginationServices<Permission_Group>, PaginationServices<Permission_Group>>();
 builder.Services.AddScoped<IPaginationServices<Permission_Action_Module>, PaginationServices<Permission_Action_Module>>();
 builder.Services.AddScoped<IInfoDeviceService, InfoDeviceService>();
+builder.Services.AddScoped<IInfoDeviceService, InfoDeviceService>();
+builder.Services.AddScoped<IBlockingWebService, BlockingWebService>();
+builder.Services.AddScoped<IPaginationServices<BlockingWeb>, PaginationServices<BlockingWeb>>();
 #endregion
 
 #region Registering Validator

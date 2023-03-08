@@ -344,7 +344,6 @@
                     this.Datasend.nameProject = ''
                 }
             }
-            console.log(this.Datasend)
         },
     }
 </script>

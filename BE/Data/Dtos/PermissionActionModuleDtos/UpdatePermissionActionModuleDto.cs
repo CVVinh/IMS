@@ -5,9 +5,7 @@ namespace BE.Data.Dtos.PermissionActionModuleDtos
     public class UpdatePermissionActionModuleDto
     {
         [Required]
-        public int idModule { get; set; }
-        [Required]
-        public int idAction { get; set; }
+        public int actionModuleId { get; set; }
         [Required]
         public int userUpdated { get; set; }
     }

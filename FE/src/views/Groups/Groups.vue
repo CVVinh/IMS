@@ -125,7 +125,7 @@
                 this.groups = []
                 HTTP.get('Group/getListGroup').then((res) => {
                     if (res.status == 200) {
-                        this.groups = res.data
+                        this.groups = res.data._Data
                     }
                 })
             },

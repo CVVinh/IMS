@@ -6,5 +6,5 @@ export class LeaveOffDto {
     reasonNotAccept: string
     reason: string
     status: number
-    idCompanyBranh: any = 1
+    idCompanyBranh: any = null
 }

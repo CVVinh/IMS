@@ -61,8 +61,18 @@ namespace BE.Controllers
 			return BadRequest(response);
 		}
 
-		[HttpPost]
-        //[Authorize(Roles = "Listgroup: sample")]
+        [HttpGet("searchRulesByTitle/{searchTitle}")]
+        public async Task<IActionResult> FindRulesByTitleName(string searchTitle)
+        {
+            var response = await _rulesService.FindRulesByTitle(searchTitle);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpPost]
         [Authorize(Roles = "sample")]
         [Authorize(Roles = "module: rules add: 1")]
         public async Task<IActionResult> CreateRules([FromForm] AddOrUpdateRulesDTO createRules)
@@ -109,18 +119,7 @@ namespace BE.Controllers
 				return Ok(response);
 			}
 			return BadRequest(response);
-		}
-
-		[HttpGet("searchRulesByTitle/{searchTitle}")]
-		public async Task<IActionResult> FindRulesByTitleName(string searchTitle)
-		{
-			var response = await _rulesService.FindRulesByTitle(searchTitle);
-			if (response._success)
-			{
-				return Ok(response);
-			}
-			return BadRequest(response);
-		}
+		}		
 
 	}
 }

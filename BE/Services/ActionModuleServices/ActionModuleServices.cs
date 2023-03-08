@@ -2,8 +2,10 @@
 using BE.Data.Contexts;
 using BE.Data.Dtos.ActionModuleDtos;
 using BE.Data.Dtos.GruopDtos;
+using BE.Data.Dtos.UserDtos;
 using BE.Data.Models;
 using BE.Response;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
 
@@ -36,7 +38,7 @@ namespace BE.Services.ActionModuleServices
             var data = new List<Action_Module>();
             try
             {
-                var actionModule = await _db.ActionModules.Where(s => s.isDeleted == false).OrderByDescending(s => s.dateCreated).ToListAsync();
+                var actionModule = await _db.ActionModules.Where(s => s.isDeleted == false).OrderBy(s => s.id).ToListAsync();
 
                 success = true;
                 message = "Get all data successfully";
@@ -57,7 +59,7 @@ namespace BE.Services.ActionModuleServices
             var message = "";
             try
             {
-                var actionModule = await _db.ActionModules.OrderByDescending(s => s.dateCreated).Where(s => s.isDeleted == false && s.id.Equals(idAction)).FirstOrDefaultAsync();
+                var actionModule = await _db.ActionModules.OrderBy(s => s.id).Where(s => s.isDeleted == false && s.id.Equals(idAction)).FirstOrDefaultAsync();
                 success = true;
                 message = "Get data successfully";
                 return (new BaseResponse<Action_Module>(success, message, actionModule));
@@ -157,6 +159,6 @@ namespace BE.Services.ActionModuleServices
             }
         }
 
-       
+
     }
 }

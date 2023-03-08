@@ -215,7 +215,7 @@
                 </div>
                 <div class="row">
                     <div class="bottom-button">
-                        <Button style="margin-right: 10px" type="submit">Lưu</Button>
+                        <Button style="margin-right: 10px" type="submit" @click="submit">Lưu</Button>
                         <Button class="p-button-secondary" @click="handleReset">Đặt lại</Button>
                     </div>
                 </div>

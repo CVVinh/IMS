@@ -8,4 +8,7 @@ export class NotificationService {
     public static isWatchNotification(id: number) {
         return HTTP.put(ApiApplication.NOTIFICATION.IS_WATCH_NOTIFICATION(id))
     }
+    public static handlerRequireDelete(object: any) {
+        return HTTP.post(ApiApplication.NOTIFICATION.REQUIRE_DELETE_APPLICATION, object)
+    }
 }

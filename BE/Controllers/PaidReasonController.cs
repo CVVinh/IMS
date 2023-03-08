@@ -11,6 +11,7 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "permission_group: True module: paidResons")]
     public class PaidReasonController : ControllerBase
     {
         private readonly IPaidReasonsService _paidReasonService;

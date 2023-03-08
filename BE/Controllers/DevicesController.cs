@@ -10,9 +10,9 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "permission_group: True module: devices")]
     public class DevicesController : ControllerBase
     {
-
         private readonly AppDbContext _context;
         
         public DevicesController(AppDbContext context)
@@ -36,6 +36,8 @@ namespace BE.Controllers
             }
         }
         [HttpPost("addDevices")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: devices add: 1")]
         public async Task<IActionResult> addDevices(AddDeviceDto req)
         {
             try
@@ -64,6 +66,8 @@ namespace BE.Controllers
 
         [HttpPut]
         [Route("updateDevices")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: devices update: 1")]
         public async Task<ActionResult> updateDevices(Devices requests)
         {
             var Devices = await _context.Devices.FindAsync(requests.IdDevice);
@@ -82,6 +86,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("DeleteDevices/{id}")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: devices delete: 1")]
         public async Task<ActionResult> DeleteDevices(int id, IdUserChangeDeviceDto request)
         {
             try

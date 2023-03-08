@@ -164,7 +164,7 @@
     </LayoutDefaultDynamic>
 </template>
 <script>
-    import { HTTP, ENDPIONTS, GET_USER_BY_ID, ACCEPT_LEAVE_OFF } from '@/http-common'
+    import { HTTP, ENDPIONTS, GET_USER_NAME_BY_ID, ACCEPT_LEAVE_OFF } from '@/http-common'
     import dayjs from 'dayjs'
     import DialogConfirmLeave from './DialogConfirmLeave.vue'
     import jwtDecode from 'jwt-decode'
@@ -250,7 +250,6 @@
         watch: {
             fillterLeaveOff: {
                 handler: function change(newVal) {
-                    console.log(newVal)
                     this.handlerFillterLeaveOff()
                 },
                 deep: true,
@@ -317,7 +316,6 @@
                 }
 
                 const totalWorkingHours = count
-                console.log(totalWorkingHours)
 
                 let days = Math.floor(diff / millisecondsPerDay)
                 diff -= days * millisecondsPerDay
@@ -346,7 +344,6 @@
                 var idAcceptUser = this.userAccept.Id
                 await HTTP.put(ACCEPT_LEAVE_OFF(item.id), { idAcceptUser: idAcceptUser })
                     .then((res) => {
-                        console.log(res)
                         if (res.status == 200) {
                             this.dataLeaveOff = []
                             this.loading = true
@@ -410,7 +407,7 @@
                 }
             },
             getUserByIdLeaveOff(id) {
-                return HTTP.get(GET_USER_BY_ID(id)).then((res) => res.data)
+                return HTTP.get(GET_USER_NAME_BY_ID(id)).then((res) => res.data)
             },
             async getAllLeaveOffRegister() {
                 await HTTP.get(ENDPIONTS.LEAVEOFF_REGISTER_LIST).then((res) => {
@@ -432,7 +429,6 @@
                         })
                     })
                 })
-                console.log(this.dataLeaveOff)
                 await this.handlerLoadData()
                 this.loading = false
             },
@@ -444,13 +440,11 @@
                 ) {
                     this.loading = true
                     this.dataLeaveOff = []
-                    console.log(this.fillterLeaveOff.selectedDate)
                     var findByNameStatusDateDtos = {
                         fullName: this.fillterLeaveOff.searchLeaveOff,
                         date: DateHelper.convertUTC(this.fillterLeaveOff.selectedDate),
                         status: this.fillterLeaveOff.selectedLeaveOff,
                     }
-                    console.log('data', findByNameStatusDateDtos)
 
                     await HTTP.post(ENDPIONTS.SEARCH_REGISTER_LIST, findByNameStatusDateDtos)
                         .then((res) => {

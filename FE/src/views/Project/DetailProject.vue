@@ -51,6 +51,7 @@
                             :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
                             :style="{ width: '30vw' }"
                             :modal="true"
+                            :closable="false"
                         >
                             <MultiSelect
                                 v-model="selectedMember"
@@ -62,7 +63,7 @@
                             />
                             <template #footer>
                                 <Button label="Lưu" icon="pi pi-check" @click="submit" autofocus />
-                                <Button label="Quay về" icon="pi pi-times" @click="closeBasic" class="p-button-text" />                             
+                                <Button label="Quay về" icon="pi pi-times" @click="closeBasic" class="p-button-text" />
                             </template>
                         </Dialog>
                     </div>
@@ -89,7 +90,11 @@
                     </template>
                 </Column>
             </DataTable>
-            <confirmDelete :display="this.display"  @close="closeDeleteconfirm" @delete="deleteMember(this.iduser,this.idproject)"  />
+            <confirmDelete
+                :display="this.display"
+                @close="closeDeleteconfirm"
+                @delete="deleteMember(this.iduser, this.idproject)"
+            />
         </div>
     </LayoutDefaultDynamic>
 </template>
@@ -117,9 +122,9 @@
                     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
                 },
                 selectedCustomers: null,
-                display:false,
-                iduser : null,
-                idproject : null,
+                display: false,
+                iduser: null,
+                idproject: null,
             }
         },
         mounted() {
@@ -132,16 +137,12 @@
             this.getData()
         },
         methods: {
-
-            openDeleteconfirm(iduser,idproject){
-                this.display = true,
-                this.iduser = iduser,
-                this.idproject = idproject
+            openDeleteconfirm(iduser, idproject) {
+                ;(this.display = true), (this.iduser = iduser), (this.idproject = idproject)
             },
-            closeDeleteconfirm(){
+            closeDeleteconfirm() {
                 this.display = false
-                this.iduser = null,
-                this.idproject = null
+                ;(this.iduser = null), (this.idproject = null)
             },
 
             async isPM() {
@@ -157,14 +158,14 @@
             toEditUserPage(id) {
                 this.$router.push({ name: 'edituser', params: { id: id } })
             },
-            confirmDelete(id,idproject) {
+            confirmDelete(id, idproject) {
                 this.$confirm.require({
                     message: 'Bạn có chắc chắn muốn xóa?',
                     header: 'Xóa',
                     icon: 'pi pi-info-circle',
                     acceptClass: 'p-button-danger',
                     accept: () => {
-                        this.deleteMember(id,idproject)
+                        this.deleteMember(id, idproject)
                     },
                     reject: () => {
                         return
@@ -257,7 +258,7 @@
                     }
                 })
             },
-            
+
             showSuccess(mess) {
                 this.$toast.add({ severity: 'success', summary: 'Thành công', detail: mess, life: 3000 })
             },
@@ -268,7 +269,7 @@
                 return str1 + ' ' + str2
             },
         },
-        components: { Add, Delete,confirmDelete },
+        components: { Add, Delete, confirmDelete },
     }
 </script>
 <style lang="scss" scoped>

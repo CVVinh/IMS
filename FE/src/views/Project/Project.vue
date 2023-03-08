@@ -99,8 +99,8 @@
                 <Column field="endDate" header="Ngày kết thúc " sortable style="min-width: 8rem">
                     <template #body="{ data }">
                         {{
-                            data.endDate == '1970-01-01'
-                                ? 'Chưa giải quyết..'
+                            getFormattedDate(new Date(data.endDate)) == '01-01-1970'
+                                ? 'Đang cập nhật...'
                                 : getFormattedDate(new Date(data.endDate))
                         }}
                     </template>
@@ -113,7 +113,7 @@
                     :header="col.header"
                     :key="col.field + '_' + index"
                 ></Column>
-                <Column header="&emsp;&emsp;&emsp;Thực thi" style="min-width: 15rem">
+                <Column header="&emsp;&emsp;&emsp;Thực thi" style="min-width: 15rem" v-if="this.showButton.sample">
                     <template #body="{ data }">
                         <Member
                             @click="toDetailProject(data.id)"
@@ -195,7 +195,7 @@
 
 <script>
     import router from '@/router/index'
-    import { GET_USER_BY_ID, HTTP } from '@/http-common'
+    import { GET_USER_NAME_BY_ID, HTTP } from '@/http-common'
     import { FilterMatchMode } from 'primevue/api'
     import jwtDecode from 'jwt-decode'
     import Add from '../../components/buttons/Add.vue'
@@ -238,6 +238,7 @@
                     delete: false,
                     edit: false,
                     member: false,
+                    sample: false,
                 },
                 acceptRole: ['pm', 'admin', 'director', 'leader'],
                 dataProjects: [],
@@ -252,7 +253,6 @@
 
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
                 if (await UserRoleHelper.isAccess) {
-                    console.log('hello')
                     this.Permission(Number(this.token.IdGroup), this.token.Id)
                 } else {
                     this.countTime()
@@ -263,10 +263,6 @@
                 this.countTime()
                 this.displayBasic = true
             }
-            this.dataProjects.map((ele) => {
-                console.log(ele)
-            })
-
             this.columns = [
                 { field: 'description', header: 'Mô tả' },
                 { field: 'userId', header: 'PM' },
@@ -374,7 +370,6 @@
                     .then((res) => {
                         if (res.data) {
                             this.data = res.data
-                            console.log(res)
                         }
                     })
                     .catch((err) => {
@@ -383,7 +378,6 @@
                 this.getPMName()
                 this.getUserCreated()
                 this.getUserEdited()
-                console.log(this.data)
                 this.loading = false
             },
             async getPMName() {
@@ -394,7 +388,7 @@
                         this.data[i].dateUpdate = this.formatDate(this.data[i].dateUpdate)
                         this.data[i].dateCreated = this.formatDate(this.data[i].dateCreated)
                     } else {
-                        this.data[i].PMName = ''
+                        this.data[i].PMName = 'Đang cập nhật...'
                     }
                 }
             },
@@ -404,7 +398,7 @@
                         var usercreate = await this.getUserById(this.data[i].userCreated)
                         this.data[i].userCreated = usercreate.fullName
                     } else {
-                        this.data[i].userCreated = ''
+                        this.data[i].userCreated = 'Đang cập nhật...'
                     }
                 }
             },
@@ -414,7 +408,7 @@
                         var userEdited = await this.getUserById(this.data[i].userUpdate)
                         this.data[i].userUpdate = userEdited.fullName
                     } else {
-                        this.data[i].userEdited = ''
+                        this.data[i].userEdited = 'Đang cập nhật...'
                     }
                 }
             },
@@ -462,7 +456,6 @@
                 HTTP.get(`/Project/getAllProjectByStaff/${idstaff}`)
                     .then((res) => {
                         this.data = res.data
-                        console.log(res.data)
                         this.loading = false
                     })
                     .catch((err) => console.log(err))
@@ -477,6 +470,7 @@
                         this.showButton.finish = true
                         this.showButton.finishMulti = true
                         this.showButton.member = true
+                        this.showButton.sample = true
                         this.getAllProject()
                     }
 
@@ -502,6 +496,7 @@
                         this.showButton.finish = true
                         this.showButton.finishMulti = true
                         this.showButton.member = true
+                        this.showButton.sample = true
                         this.getAllProject()
                     }
                 }
@@ -607,10 +602,13 @@
                     this.dataProjects.push(...newResultsPr)
                     resultCountPr = newResultsPr.length
                     resultPr = resultPr.concat(newResultsPr)
+                    newResultsPr.map((el) => {
+                        return (el.name = `${el.name} (${el.name_with_namespace})`)
+                    })
                 }
             },
             getUserById(id) {
-                return HTTP.get(GET_USER_BY_ID(id)).then((res) => res.data)
+                return HTTP.get(GET_USER_NAME_BY_ID(id)).then((res) => res.data)
             },
         },
         components: { Add, Edit, Delete, Member, Export, DialogAddEdit },

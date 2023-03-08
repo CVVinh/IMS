@@ -13,5 +13,10 @@ namespace BE.Data.Models
         public bool? isWatched { get; set; } = false;
         public int? categoryModule { get; set; }
         public string? link { get; set; }
+
+        //Date: 7/3/2023
+        //Modifile: add field userCode and isRequireDelete in table Notification
+        public string? usercode { get; set; }
+        public bool isRequireDelete { get; set; } = false;
     }
 }

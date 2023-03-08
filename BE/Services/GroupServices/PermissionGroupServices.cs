@@ -5,6 +5,7 @@ using BE.Data.Dtos.UserDtos;
 using BE.Data.Models;
 using BE.Response;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace BE.Services.GroupServices
 {
@@ -13,9 +14,11 @@ namespace BE.Services.GroupServices
         Task<BaseResponse<List<Permission_Group>>> GetAllPermissionGroupAsync();
         Task<BaseResponse<List<Permission_Group>>> GetPermissionGroupWithModuleId(int moduleId);
         Task<BaseResponse<List<Permission_Group>>> GetPermissionGroupWithGroupId(int groupId);
+        Task<BaseResponse<List<Permission_Group>>> GetPermissionGroupWithGroupIdAcess(int groupId);
         Task<BaseResponse<List<Permission_Group>>> CreatePermissionGroup(List<PermissionGroupDto> permissionGroupDtos);
-        Task<BaseResponse<Permission_Group>> UpdatePermissionGroup(PermissionGroupRequestDto permissionGroupRequestDto, PermissionGroupDto permissionGroupDtos);
-        Task<BaseResponse<Permission_Group>> DeletePermissionGroup(PermissionGroupRequestDto permissionGroupRequestDto);
+        Task<BaseResponse<Permission_Group>> UpdatePermissionGroup(int idGroup, int idModule, PermissionGroupDto permissionGroupDtos);
+        Task<BaseResponse<List<Permission_Group>>> UpdateMultiPermissionGroup(int idGroup, List<ChangePermissionGroupDto> changePermissionGroupDtos);
+        Task<BaseResponse<Permission_Group>> DeletePermissionGroup(int idGroup, int idModule);
         Task<BaseResponse<List<Permission_Group>>> DeleteMultiPermissionGroup(List<PermissionGroupRequestDto> permissionGroupRequestDto);
     }
 
@@ -94,6 +97,27 @@ namespace BE.Services.GroupServices
             }
         }
 
+        public async Task<BaseResponse<List<Permission_Group>>> GetPermissionGroupWithGroupIdAcess(int groupId)
+        {
+            var success = false;
+            var message = "";
+            var data = new List<Permission_Group>();
+            try
+            {
+                var permissionGroup = await _db.Permission_Groups.Where(s => s.IdModule.Equals(groupId) && s.Access == true).ToListAsync();
+                success = true;
+                message = "Get data successfully";
+                data.AddRange(permissionGroup);
+                return (new BaseResponse<List<Permission_Group>>(success, message, data));
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                message = ex.Message;
+                return (new BaseResponse<List<Permission_Group>>(success, message, data));
+            }
+        }
+
         public async Task<BaseResponse<List<Permission_Group>>> CreatePermissionGroup(List<PermissionGroupDto> permissionGroupDtos)
         {
             var success = false;
@@ -103,11 +127,19 @@ namespace BE.Services.GroupServices
             {
                 foreach (var item in permissionGroupDtos)
                 {
-                    var permissionGroup = _mapper.Map<Permission_Group>(item);
-                    await _db.Permission_Groups.AddAsync(permissionGroup);
-                    data.Add(permissionGroup);
+                    var permissionGroup = await _db.Permission_Groups.Where(s => s.IdGroup.Equals(item.IdGroup) && s.IdModule.Equals(item.IdModule)).FirstOrDefaultAsync();
+                    if(permissionGroup == null)
+                    {
+                        var permissionGroupMapData = _mapper.Map<Permission_Group>(item);
+                        await _db.Permission_Groups.AddAsync(permissionGroupMapData);
+                        data.Add(permissionGroupMapData);
+                    }
+                    else
+                    {
+                        message = "Permission_Group have been existed !";
+                        return new BaseResponse<List<Permission_Group>>(success, message, data = null);
+                    }
                 }
-
                 await _db.SaveChangesAsync();
                 success = true;
                 message = "Add new Permission_Group successfully";
@@ -121,14 +153,14 @@ namespace BE.Services.GroupServices
             }
         }
 
-        public async Task<BaseResponse<Permission_Group>> UpdatePermissionGroup(PermissionGroupRequestDto permissionGroupRequestDto, PermissionGroupDto permissionGroupDtos)
+        public async Task<BaseResponse<Permission_Group>> UpdatePermissionGroup(int idGroup, int idModule, PermissionGroupDto permissionGroupDtos)
         {
             var success = false;
             var message = "";
             var data = new Permission_Group();
             try
             {
-                var permissionGroup = await _db.Permission_Groups.Where(s => s.IdGroup.Equals(permissionGroupRequestDto.IdGroup) && s.IdModule.Equals(permissionGroupRequestDto.IdModule)).FirstOrDefaultAsync();
+                var permissionGroup = await _db.Permission_Groups.Where(s => s.IdGroup.Equals(idGroup) && s.IdModule.Equals(idModule)).FirstOrDefaultAsync();
                 if (permissionGroup is null)
                 {
                     message = "Permission_Group doesn't exist !";
@@ -153,14 +185,52 @@ namespace BE.Services.GroupServices
             }
         }
 
-        public async Task<BaseResponse<Permission_Group>> DeletePermissionGroup(PermissionGroupRequestDto permissionGroupRequestDto)
+        public async Task<BaseResponse<List<Permission_Group>>> UpdateMultiPermissionGroup(int idGroup, List<ChangePermissionGroupDto> changePermissionGroupDtos)
+        {
+            var success = false;       
+            var message = "";          
+            var data = new List<Permission_Group>();
+            try
+            {
+                foreach (var item in changePermissionGroupDtos)
+                {
+                    var permissionGroup = await _db.Permission_Groups.Where(s => s.IdGroup.Equals(idGroup) && s.IdModule.Equals(item.IdModule)).FirstOrDefaultAsync();
+                    if (permissionGroup is null)
+                    {
+                        var permissionGroupAddMapData = _mapper.Map<Permission_Group>(item);
+                        permissionGroupAddMapData.IdGroup = idGroup;
+                        await _db.Permission_Groups.AddAsync(permissionGroupAddMapData);
+                        data.Add(permissionGroupAddMapData);
+                    }
+                    else
+                    {
+                        var permissionGroupEditMapData = _mapper.Map<ChangePermissionGroupDto, Permission_Group>(item, permissionGroup);
+                        _db.Permission_Groups.Update(permissionGroupEditMapData);
+                        data.Add(permissionGroupEditMapData);
+                    }
+                }
+
+                await _db.SaveChangesAsync();
+                success = true;
+                message = "Updating Multi Permission_Groups successfully";
+                return new BaseResponse<List<Permission_Group>>(success, message, data);
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                message = $"Updating Multi Permission_Groups failed! {ex.InnerException}";
+                return new BaseResponse<List<Permission_Group>>(success, message, data = null);
+            }
+        }
+
+        public async Task<BaseResponse<Permission_Group>> DeletePermissionGroup(int idGroup, int idModule)
         {
             var success = false;
             var message = "";
             var data = new Permission_Group();
             try
             {
-                var permissionGroup = await _db.Permission_Groups.Where(s => s.IdModule.Equals(permissionGroupRequestDto.IdModule) && s.IdGroup.Equals(permissionGroupRequestDto.IdGroup)).FirstOrDefaultAsync();
+                var permissionGroup = await _db.Permission_Groups.Where(s => s.IdModule.Equals(idModule) && s.IdGroup.Equals(idGroup)).FirstOrDefaultAsync();
                 if (permissionGroup is null)
                 {
                     success = false;
@@ -192,7 +262,7 @@ namespace BE.Services.GroupServices
             {
                 foreach (var item in permissionGroupRequestDto)
                 {
-                    var result = await DeletePermissionGroup(item);
+                    var result = await DeletePermissionGroup(item.IdGroup, item.IdModule);
                     if (result._success)
                     {
                         data.Add(result._Data);

@@ -18,6 +18,7 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "permission_group: True module: userGroups")]
     public class User_GroupController : ControllerBase
     {
         private readonly IUserGroupServices _userGroupServices;
@@ -68,7 +69,9 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-        [HttpPost]
+        [HttpPost("createUserGroup")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: userGroups add: 1")]
         public async Task<IActionResult> CreateUserGroup(List<UserGroupCreatedDto> userGroupCreatedDto)
         {
             if (!ModelState.IsValid)
@@ -84,6 +87,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("updateUserGroup/{idUser}/{idGroup}")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: userGroups update: 1")]
         public async Task<IActionResult> UpdateUserGroup([FromRoute] int idUser, [FromRoute] int idGroup, UserGroupUpdatedDto userGroupUpdatedDto)
         {
             if (!ModelState.IsValid)
@@ -99,6 +104,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("deleteUserGroup")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: userGroups delete: 1")]
         public async Task<IActionResult> DeleteUserGroup([FromQuery] UserGroupDeletedDto userGroupDeletedDto)
         {
             var response = await _userGroupServices.DeleteUserGroup(userGroupDeletedDto);
@@ -109,7 +116,10 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
+
         [HttpPut("deleteMultiUserGroup")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: userGroups confirmMulti: 1")]
         public async Task<IActionResult> DeleteMultiUserGroup(List<UserGroupDeletedDto> userGroupDeletedDto)
         {
             var response = await _userGroupServices.DeleteMultiUserGroup(userGroupDeletedDto);

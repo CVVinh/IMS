@@ -17,6 +17,7 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "permission_group: True module: permissionGroups")]
     public class Permission_GroupsController : ControllerBase
     {
         private readonly IPermissionGroupServices _permissionGroupServices;
@@ -44,7 +45,6 @@ namespace BE.Controllers
             }
             return BadRequest(response);
         }
-        
 
         [HttpGet("getPermissionGroup_By_IdGroup/{groupId}")]
         public async Task<IActionResult> GetPermissionGroupWithGroupId([FromRoute] int groupId)
@@ -68,7 +68,20 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-        [HttpPost("decentralization_Group")]
+        [HttpGet("getPermissionGroupWithGroupIdAcess/{groupId}")]
+        public async Task<IActionResult> GetPermissionGroupWithGroupIdAcess([FromRoute] int groupId)
+        {
+            var response = await _permissionGroupServices.GetPermissionGroupWithGroupIdAcess(groupId);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpPost("createPermissionGroup")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: permissionGroups add: 1")]
         public async Task<IActionResult> CreatePermissionGroup(List<PermissionGroupDto> permissionGroupDtos)
         {
             if (!ModelState.IsValid)
@@ -83,25 +96,47 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-        [HttpPut("UpdatePermissionGroup/{idGroup}/{idModule}")]
-        public async Task<IActionResult> UpdatePermissionGroup(PermissionGroupRequestDto permissionGroupRequestDto, PermissionGroupDto permissionGroupDtos)
+        [HttpPut("updatePermissionGroup/{idGroup}/{idModule}")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: permissionGroups update: 1")]
+        public async Task<IActionResult> UpdatePermissionGroup([FromRoute] int idGroup, [FromRoute] int idModule, PermissionGroupDto permissionGroupDtos)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var response = await _permissionGroupServices.UpdatePermissionGroup(permissionGroupRequestDto, permissionGroupDtos);
+            var response = await _permissionGroupServices.UpdatePermissionGroup(idGroup, idModule, permissionGroupDtos);
             if (response._success)
             {
                 return Ok(response);
             }
             return BadRequest(response);
         }
+
+        [HttpPut("updateMultiPermissionGroup/{idGroup}")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: permissionGroups update: 1")]
+        public async Task<IActionResult> UpdateMultiPermissionGroup([FromRoute] int idGroup, List<ChangePermissionGroupDto> changePermissionGroupDtos)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _permissionGroupServices.UpdateMultiPermissionGroup(idGroup, changePermissionGroupDtos);
+            if (response._success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
 
         [HttpDelete("deletePermissionGroup/{idGroup}/{idModule}")]
-        public async Task<IActionResult> DeletePermissionGroup([FromRoute] PermissionGroupRequestDto permissionGroupRequestDto)
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: permissionGroups delete: 1")]
+        public async Task<IActionResult> DeletePermissionGroup([FromRoute] int idGroup, [FromRoute] int idModule)
         {
-            var response = await _permissionGroupServices.DeletePermissionGroup(permissionGroupRequestDto);
+            var response = await _permissionGroupServices.DeletePermissionGroup(idGroup, idModule);
             if (response._success)
             {
                 return Ok(response);
@@ -109,7 +144,9 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-        [HttpDelete("deleteMultiPermissionGroup")]
+        [HttpPost("deleteMultiPermissionGroup")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: permissionGroups updateMulti: 1")]
         public async Task<IActionResult> DeleteMultiPermissionGroup(List<PermissionGroupRequestDto> permissionGroupRequestDto)
         {
             var response = await _permissionGroupServices.DeleteMultiPermissionGroup(permissionGroupRequestDto);

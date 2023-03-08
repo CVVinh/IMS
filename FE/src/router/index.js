@@ -564,6 +564,24 @@ const router = createRouter({
             props: true,
             component: () => import('@/views/EquipmentAndDevices/Equipment_Device.vue'),
         },
+        {
+            path: '/action',
+            name: 'Action-list',
+            meta: {
+                title: 'Action-list',
+            },
+            props: true,
+            component: () => import('@/views/Actions/Actions.vue'),
+        },
+        {
+            path: '/permissionActionModule',
+            name: 'perrmission-action-module',
+            meta: {
+                title: 'permission-action-module-list',
+            },
+            props: true,
+            component: () => import('@/views/Permission_Action_Module/perrmissionActionModule.vue'),
+        },
 
         /* #endregion */
     ],

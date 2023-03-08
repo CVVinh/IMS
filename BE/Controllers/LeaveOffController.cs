@@ -14,7 +14,7 @@ namespace BE.Controllers
 {
     [ApiController]
     [Route("api/leaveOff")]
-    //[Authorize(Roles = "permission_group: True module: leaveoff")]
+    [Authorize(Roles = "permission_group: True module: leaveOffs")]
     public class LeaveOffController : Controller
     {
         private readonly ILeaveOffServices _leaveOffServices;
@@ -96,6 +96,8 @@ namespace BE.Controllers
 
         //POST: add a new leave off
         [HttpPost("addNewLeaveOff")]
+        [Authorize(Roles = "admin,lead,sample,staff")]
+        [Authorize(Roles = "module: leaveOffs add: 1")]
         public async Task<IActionResult> addNewLeaveOff(AddNewLeaveOffDto addNewLeaveOffDto)
         {
             if(!ModelState.IsValid)
@@ -114,6 +116,8 @@ namespace BE.Controllers
 
         //PUT: edit form leave off of registering
         [HttpPut("editRegisterLeaveOff/{id}")]
+        [Authorize(Roles = "admin,lead,sample,staff")]
+        [Authorize(Roles = "module: leaveOffs update: 1")]
         public async Task<IActionResult> editRegisterLeaveOff(int id, EditRegisterLeaveOffDtos editRegisterLeaveOffDtos)
         {
             if (!ModelState.IsValid)
@@ -132,6 +136,8 @@ namespace BE.Controllers
 
         //PUT: accept form leave off 
         [HttpPut("accceptLeaveOff/{idLeaveOff}")]
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: leaveOffs confirm: 1")]
         public async Task<IActionResult> acceptRegisterLeaveOff(int idLeaveOff, AccepterLeaveOffDto accepterLeaveOffDto)
         {
             if (!ModelState.IsValid)
@@ -149,6 +155,8 @@ namespace BE.Controllers
 
         //PUT: not accept form leave off 
         [HttpPut("notAcceptLeaveOff/{idLeaveOff}")]
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: leaveOffs refuse: 1")]
         public async Task<IActionResult> notAcceptRegisterLeaveOff(int idLeaveOff, NotAcceptLeaveOffDto notAcceptLeaveOffDto)
         {
             if (!ModelState.IsValid)
@@ -167,6 +175,8 @@ namespace BE.Controllers
 
         //DELETE: delete leave off by idLeaveOff
         [HttpDelete("deleteLeaveOffById/{idLeaveOff}")]
+        [Authorize(Roles = "admin,lead,sample,staff")]
+        [Authorize(Roles = "module: leaveOffs delete: 1")]
         public async Task<IActionResult> deleteLeaveOffById(int idLeaveOff)
         {
             var response = await _leaveOffServices.DeleteLeaveOffByIdAsync(idLeaveOff);

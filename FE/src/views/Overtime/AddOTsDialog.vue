@@ -274,18 +274,14 @@
                             <div class="col"></div>
                             <div class="col"></div>
                             <div class="col">
-                                <div class="btn-right">
-                                    <button
-                                        type="submit"
-                                        style="line-height: revert"
-                                        class="btn btn-primary custom__button"
-                                    >
+                                <div class="btn-right justify-content-end">
+                                    <button type="submit" style="line-height: revert" class="btn btn-primary">
                                         Xác nhận</button
                                     >&nbsp;
                                     <button
                                         type="button"
                                         style="line-height: revert"
-                                        class="btn btn-outline-secondary custom__button"
+                                        class="btn btn-outline-secondary"
                                         v-on:click="closeForm"
                                     >
                                         Quay lại
@@ -494,7 +490,6 @@
                         })
                 }
                 if (this.idproject === null) {
-                    console.log(this.idproject)
                     this.data.dateCreate = new Date()
                     this.data.leadCreate = this.token.Id
                     HTTP.post('OTs/AddOTs', this.data)
@@ -538,7 +533,6 @@
                 if (projectid !== null) {
                     HTTP.get('Project/UserInProject/' + projectid)
                         .then((res) => {
-                            console.log(res.data)
                             this.userDropdown = res.data
                         })
                         .catch((err) => console.log(err))
@@ -628,5 +622,12 @@
 
     .custom__button {
         font-size: 20px;
+    }
+</style>
+
+<style>
+    .p-dropdown-panel {
+        width: 14%;
+        min-width: 9.3%;
     }
 </style>

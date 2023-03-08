@@ -118,7 +118,6 @@
             searchtext: {
                 handler: function Change(newText) {
                     if (newText != '') {
-                        console.log('arr', this.arr)
                         this.search(newText)
                     } else {
                         this.arr = []
@@ -183,7 +182,6 @@
             async getProjectByDate(month) {
                 this.arr = []
                 let thang = this.currentDate(month)
-                console.log(thang)
 
                 HTTP.get(GET_GITLAB_PROJECT_BY_DATE(thang)).then((res) => {
                     if (res.data) {
@@ -209,7 +207,6 @@
             search(text) {
                 var search = new RegExp(text, 'i')
                 const data = this.arr.filter((el) => search.test(el.name))
-                console.log('el.name', data)
                 this.arr = data
             },
             toDetailProject(id) {

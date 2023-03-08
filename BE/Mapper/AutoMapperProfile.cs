@@ -3,6 +3,7 @@ using BE.Data.Dtos.ActionModuleDtos;
 using BE.Data.Dtos.GruopDtos;
 using BE.Data.Dtos.InfoDeviceDtos;
 using BE.Data.Dtos.ModuleDtos;
+using BE.Data.Dtos.NotificationDtos;
 using BE.Data.Dtos.PaidDtos;
 using BE.Data.Dtos.Permission_Use_Menus;
 using BE.Data.Dtos.PermissionActionModuleDtos;
@@ -45,12 +46,18 @@ namespace BE.Mapper
             CreateMap<ModuleDtos, Module>().ReverseMap();
 
             CreateMap<PermissionGroupDto, Permission_Group>().ReverseMap();
+            CreateMap<ChangePermissionGroupDto, Permission_Group>().ReverseMap();
             CreateMap<PermissionGroupRequestDto, Permission_Group>().ReverseMap();
 
             CreateMap<AddPermissionActionModuleDto, Permission_Action_Module>().ReverseMap();
             CreateMap<UpdatePermissionActionModuleDto, Permission_Action_Module>().ReverseMap();
             CreateMap<DeletePermissionActionModuleDto, Permission_Action_Module>().ReverseMap();
             CreateMap<RequestPermissionActionModuleDto, Permission_Action_Module>().ReverseMap();
+            CreateMap<DeleteMultiPermissionActionModuleDto, Permission_Action_Module>().ReverseMap();
+            
+            CreateMap<Notification, CreateRequireDeleteApplicationDTO>().ReverseMap();
+            CreateMap<Users, UserDto>().ReverseMap();
+            CreateMap<Users, UserWithNameDto>().ReverseMap();
         }
     }
 }

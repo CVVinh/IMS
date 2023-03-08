@@ -11,6 +11,7 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "permission_group: True module: handovers")]
     public class HandoversController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -18,7 +19,10 @@ namespace BE.Controllers
         {
             _context = context;
         }
+
         [HttpPost("addHandover")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: handovers add: 1")]
         public async Task<IActionResult> addHandover(AddHandover request)
         {
             try
@@ -43,6 +47,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("updateHandover")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: handovers update: 1")]
         public async Task<IActionResult> updateHandover(UpdateHandover request)
         {
             try
@@ -68,6 +74,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("ConfirmHandover")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: handovers confirm: 1")]
         public async Task<IActionResult> confirmHandover(string[] idHandover)
         {
             try
@@ -114,6 +122,8 @@ namespace BE.Controllers
 
         [HttpPut]
         [Route("deleteHandover/{idhand}")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: handovers delete: 1")]
         public async Task<IActionResult> deleteHandover(int idhand, IdUserChangeHandoverDto request)
         {
             try

@@ -11,6 +11,7 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "permission_group: True module: infoDevices")]
     public class InfoDevicesController : ControllerBase
     {
         private readonly IInfoDeviceService _infoDeviceService;
@@ -30,7 +31,10 @@ namespace BE.Controllers
             }
             return BadRequest(response);
         }
+
         [HttpPost("CreateDeviceWithListApplication")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: infoDevices add: 1")]
         public async Task<IActionResult> CreateInfoDevice(CreateInfoDeviceDto createInfoDeviceDto)
         {
             if (!ModelState.IsValid)
@@ -46,7 +50,10 @@ namespace BE.Controllers
             }
             return BadRequest(response);
         }
+
         [HttpPut("EditDeviceWithListApplicationByDeviceId/{id}")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: infoDevices update: 1")]
         public async Task<IActionResult> EditInfoDevice(int id , CreateInfoDeviceDto createInfoDeviceDto)
         {
             if (!ModelState.IsValid)
@@ -60,6 +67,7 @@ namespace BE.Controllers
             }
             return BadRequest(response);
         }
+
         [HttpGet("FindWithUserName/{name}")]
         public async Task<IActionResult> GetWithName(string name)
         {
@@ -74,6 +82,7 @@ namespace BE.Controllers
             }
             return BadRequest(response);
         }
+
         [HttpGet("FindWithOperatingSystem/{operatingSystem}")]
         public async Task<IActionResult> GetWithOperatingSystem(int operatingSystem)
         {
@@ -88,6 +97,7 @@ namespace BE.Controllers
             }
             return BadRequest(response);
         }
+
         [HttpGet("FindWithUserCode/{userCode}")]
         public async Task<IActionResult> GetWithUserCode(string userCode)
         {
@@ -102,6 +112,7 @@ namespace BE.Controllers
             }
             return BadRequest(response);
         }
+
         [HttpGet("FindWithUserId/{userId}")]
         public async Task<IActionResult> GetWithUserId(int userId)
         {
@@ -116,7 +127,10 @@ namespace BE.Controllers
             }
             return BadRequest(response);
         }
+
         [HttpPut("EditDeviceWithListApplicationByUserId/{id}")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: infoDevices update: 1")]
         public async Task<IActionResult> EditInfoDeviceWithUserId(int id, CreateInfoDeviceDto createInfoDeviceDto)
         {
             if (!ModelState.IsValid)

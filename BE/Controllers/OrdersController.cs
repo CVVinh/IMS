@@ -11,6 +11,7 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "permission_group: True module: orders")]
     public class OrdersController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -55,14 +56,14 @@ namespace BE.Controllers
         }
 
         [HttpPost("addOrders")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: orders add: 1")]
         public IActionResult Create(AddDtos order_Model)
         {
-
             try
             {
                 var p = new Orders
                 {
-                   
                     idBranch = order_Model.idBranch,
                     idDevice = order_Model.idDevice,
                     amount = order_Model.amount,
@@ -88,6 +89,8 @@ namespace BE.Controllers
         }
         
         [HttpPut("updateOrder")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: orders update: 1")]
         public IActionResult updateOrder(EditDtos req)
         {
             try
@@ -113,6 +116,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("deleteOrder/{id}")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: orders delete: 1")]
         public IActionResult deleteOrder(int id, IdUserChangeOrderDto request)
         {
             try

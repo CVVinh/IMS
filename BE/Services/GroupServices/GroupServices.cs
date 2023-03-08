@@ -19,8 +19,8 @@ namespace BE.Services.GroupServices
         Task<BaseResponse<Group>> CreateGroup(AddGroupDtos addGroupDtos);
         Task<BaseResponse<Group>> UpdateGroup(int idGroup, UpdateGroupDtos updateGroupDtos);
         Task<BaseResponse<Group>> DeleteGroup(int idGroup);
-        Task<BaseResponse<List<Group>>> DeleteMultiGroup(List<int> idGroup);
         Task<BaseResponse<Group>> DownloadFile();
+        Task<BaseResponse<List<Group>>> DeleteMultiGroup(List<int> idGroup);
     }
 
     public class GroupServices : IGroupServices
@@ -179,7 +179,7 @@ namespace BE.Services.GroupServices
             var data = new List<Group>();
             try
             {
-                foreach(var item in listIdGroup)
+                foreach (var item in listIdGroup)
                 {
                     var group = await _db.Groups.Where(s => s.IsDeleted == 0 && s.Id.Equals(item)).FirstOrDefaultAsync();
                     if (group != null)
@@ -243,7 +243,7 @@ namespace BE.Services.GroupServices
                 wb.SaveAs("..\\FE\\Excel\\Group_Table.xlsx");
 
                 success = true;
-                message =  "Excel\\Group_Table.xlsx";
+                message = "Excel\\Group_Table.xlsx";
                 return new BaseResponse<Group>(success, message, new Group());
             }
             catch (Exception ex)

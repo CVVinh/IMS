@@ -13,5 +13,10 @@
             public const string TABLE_NAME = "Notification";
 			public const int MAX_LENGTH_MESSAGE = 500;
         }
+
+        public static class BlockingWeb
+        {
+            public const string TABLE_NAME = "BlockingWeb";
+        }
     }
 }

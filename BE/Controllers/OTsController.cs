@@ -15,7 +15,7 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "permission_group: True module: ots")]
+    [Authorize(Roles = "permission_group: True module: ots")]
     public class OTsController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -26,7 +26,6 @@ namespace BE.Controllers
             _context = context;
             _tokenService = tokenService;
         }
-
 
         private async Task<bool> checkToken(HttpContext httpContext)
         {
@@ -171,6 +170,8 @@ namespace BE.Controllers
 
         [HttpPost]
         [Route("createOT")]
+        [Authorize(Roles = "admin,lead")]
+        [Authorize(Roles = "module: ots add: 1")]
         public async Task<IActionResult> Create(OTs OTs)
         {
             var ots = await _context.OTs.Where(ot => ot.Date == OTs.Date && ot.user == OTs.user).SingleOrDefaultAsync();
@@ -196,6 +197,8 @@ namespace BE.Controllers
 
         [HttpPut]
         [Route("acceptOT")]
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: ots confirm: 1")]
         public async Task<IActionResult> Update(AcceptOTDto dto)
         {
             var ot = await _context.OTs.Where(o => o.id == dto.id).SingleOrDefaultAsync();
@@ -213,7 +216,8 @@ namespace BE.Controllers
 
         [HttpPut]
         [Route("updateOT/{id}")]
-        [Authorize(Roles = "permission_group: True module: ots")]
+        [Authorize(Roles = "admin,lead")]
+        [Authorize(Roles = "module: ots update: 1")]
         public async Task<IActionResult> Update(int id, EditOTDto dto)
         {
             try
@@ -246,6 +250,8 @@ namespace BE.Controllers
 
         [HttpPut]
         [Route("deleteOT")]
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: ots delete: 1")]
         public async Task<IActionResult> Accept(int idOT, int PM)
         {
             var ot = await _context.OTs.Where(o => o.id == idOT).SingleOrDefaultAsync();
@@ -268,6 +274,8 @@ namespace BE.Controllers
 
 
         [HttpGet("exportExcelFollowRole/{month}/{year}/{idproject}/{idrole}/{iduser}")]
+        [Authorize(Roles = "admin,pm,lead,sample,staff")]
+        [Authorize(Roles = "module: ots export: 1")]
         public async Task<IActionResult> exportExcelFollowRole(int? month = 0,int? year = 0,int? idproject = 0,int? idrole = 0,int? iduser = 0)
         {
             var wb = new XLWorkbook();
@@ -914,8 +922,6 @@ namespace BE.Controllers
                         return Ok("Excel\\OTs_Table.xlsx");
                     }
 
-
-
                     if (month == 0)
                     {
                         var list = from x in _context.OTs
@@ -1211,6 +1217,8 @@ namespace BE.Controllers
         
         [HttpGet]
         [Route("exportExcel/month={month}&year={year}&idProject={idProject}")]
+        [Authorize(Roles = "admin,pm,lead,sample,staff")]
+        [Authorize(Roles = "module: ots export: 1")]
         public async Task<string> DownloadFile(int? month = 0, int? year = 0, int? idProject = 0)
         {
             var wb = new XLWorkbook();
@@ -1496,8 +1504,6 @@ namespace BE.Controllers
                 return NoContent();
             return Ok(list);
         }
-
-
 
         [HttpGet("filterByRole/{month}/{year}/{idproject}/{idrole}")]
         public async Task<ActionResult> filterByRole(int? month = 0,int? year = 0,int? idproject = 0,int? idrole = 0,int? iduser =0)
@@ -1904,6 +1910,8 @@ namespace BE.Controllers
 
 
         [HttpPost("AddOTs")]
+        [Authorize(Roles = "admin,lead")]
+        [Authorize(Roles = "module: ots add: 1")]
         public async Task<IActionResult> AddOTs(AddRangeOTs OTs)
         {
             try
@@ -1939,9 +1947,7 @@ namespace BE.Controllers
             {
                 return BadRequest("failed");
             }
-
         }
-
       
 
     }

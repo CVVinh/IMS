@@ -28,12 +28,12 @@ export const ApiApplication = {
     },
     PERMISSION_GROUP_MENU: {
         GET_PERMISSION_GROUP: 'Permission_Groups/decentralization_Group',
-        GET_BY_USER_GROUP: 'Permission_Groups/getPermissionGroup_By_IdGroup',
+        GET_BY_USER_GROUP: 'Permission_Groups/getPermissionGroup_By_IdModule/',
     },
     PERMISSION_USER_MENU: {
         GET_ALL: 'Group/getListGroup',
         GET_USER_BY_GROUP: 'Group/getUserByGroup',
-        GET_USER_MENU: 'Permission_Use_Menus/getPermission_Use_Menu_ByIdUser',
+        GET_USER_MENU: 'Permission_Use_Menus/getPermissionUserMenuWithUserId/',
         ADD_BY_USER: 'Permission_Use_Menus/addPermissionByUser',
         ADD_BY_GROUP: 'Permission_Use_Menus/addPermissionByGroup',
     },
@@ -55,5 +55,9 @@ export const ApiApplication = {
     NOTIFICATION: {
         GET_ALL_NOTIFICATION: 'Notification/GetAllListNotification',
         IS_WATCH_NOTIFICATION: (id: number) => `Notification/WatchNotification/${id}`,
+        REQUIRE_DELETE_APPLICATION: 'Notification/RequireDeleteApplication',
+    },
+    BLOCKINGWEB: {
+        ADD_BLOCKING_WEB: 'BlockingWeb/AddBlockingWeb',
     },
 }

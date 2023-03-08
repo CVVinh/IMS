@@ -254,7 +254,6 @@
                     this.data.dateUpdate = new Date()
                     let userlogin = jwtDecode(localStorage.getItem('token'))
                     this.data.userUpdate = userlogin.Id
-                    console.log(data)
                     data.startDate = new Date(this.data.startDate).toLocaleString()
                     data.endDate = new Date(this.data.endDate).toLocaleString()
 

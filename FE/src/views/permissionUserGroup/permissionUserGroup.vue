@@ -33,7 +33,7 @@
                         <button
                             label="SAVE"
                             class="btn btn-primary"
-                            @click="PermissionGroup()"
+                            @click="confirmSave()"
                             :disabled="!this.selectedGroupId"
                         >
                             Lưu
@@ -64,7 +64,7 @@
                                         :value="module.id"
                                         v-bind:checked="module.access"
                                         :disabled="!this.selectedGroupId"
-                                        @change="isSelectedCheck(module.id, $event.target.checked)"
+                                        @change="isSelectedCheck(module, $event.target.checked)"
                                     />
                                     <label :for="module.id" class="ms-3">Quyền truy cập</label>
                                 </div>
@@ -74,7 +74,6 @@
                 </div>
             </div>
         </div>
-        {{ selectedAccess }}
         <Dialog
             header="Truy cập bị từ chối!"
             :visible="displayBasic"
@@ -91,7 +90,6 @@
                 <Button label="Lưu" icon="pi pi-check" @click="submit" autofocus />
             </template>
         </Dialog>
-       
     </LayoutDefaultDynamic>
 </template>
 
@@ -119,6 +117,8 @@
                 arrModuleAccess: [],
                 arrModulePermissionAll: [],
                 num: 5,
+                arraySend : [],
+                arraycompare : [],
             }
         },
         async mounted() {
@@ -148,60 +148,94 @@
                 this.userGroup = []
                 HTTP.get(ApiApplication.PERMISSION_USER_MENU.GET_ALL).then((res) => {
                     if (res.data) {
-                        this.userGroup = res.data
+                        this.userGroup = res.data._Data
                     }
                 })
             },
+            
             async selectedGroup(data) {
-                this.loading = true
-                this.selectedGroupId = data.item.id
+                // this.loading = true
+                // this.selectedGroupId = data.item.id
+                // await this.getListModule()
+                // const listModuleAccess = await HTTP.get(
+                //     ApiApplication.PERMISSION_GROUP_MENU.GET_BY_USER_GROUP+ this.selectedGroupId,
+                // )
+                // if (listModuleAccess.status === HttpStatus.OK) {
+                //     this.getUserMenuModule()
+                //     this.listModule.map((module) => {
+                //         listModuleAccess.data._Data.forEach((item) => {
+                //             if (item.idModule === module.id && item.access) {
+                //                 module['access'] = item.access
+                //                 this.selectedAccess.push(module.id)
+                //             }
+                //         })
+                //     })
+                //     this.loading = false
+                // } else {
+                //     this.selectedAccess = []
+                //     this.listModule = []
+                //     this.loading = false
+                // }
+                this.arraycompare = []
                 await this.getListModule()
-                const listModuleAccess = await HTTP.get(
-                    ApiApplication.PERMISSION_GROUP_MENU.GET_BY_USER_GROUP + '?idGroup=' + this.selectedGroupId,
-                )
-                if (listModuleAccess.status === HttpStatus.OK) {
-                    this.getUserMenuModule()
-                    this.listModule.map((module) => {
-                        listModuleAccess.data.forEach((item) => {
-                            if (item.idModule === module.id && item.access) {
-                                module['access'] = item.access
-                                this.selectedAccess.push([module.id, 1])
-                            }
-                        })
-                    })
-                    this.loading = false
-                } else {
-                    this.selectedAccess = []
-                    this.listModule = []
-                    this.loading = false
-                }
+                this.loading = true;
+                this.selectedGroupId = data.item.id
+                await HTTP.get("Permission_Groups/getPermissionGroup_By_IdGroup/"+this.selectedGroupId).then(res=>{
+                       this.arraycompare = res.data._Data 
+                       this.loading = false
+                      }).catch(err=>console.log(err))
+
+                      console.log(this.arraycompare);
+                      
+                        this.listModule.map(ele=>{
+                            this.arraycompare.map(element=>{
+                                    if(element.idModule === ele.id && element.access === true ){
+                                    ele.access = true
+                                    }
+                                    if(element.idModule === ele.id && element.access === false){
+                                        ele.access = false
+                                    }
+                             })
+                            })
+                
+                    
             },
+            // keep
             async getListModule() {
                 this.listModule = []
                 this.selectedAccess = []
+                this.arraySend = []
                 await HTTP.get(ApiApplication.MODULE.GET_ALL).then((res) => {
                     if (res.data) {
-                        res.data.forEach((item) => {
-                            if (item.isDeleted === 0) {
-                                item['add'] = 0
-                                item['edit'] = 0
-                                item['delete'] = 0
-                                item['export'] = 0
-                                this.listModule.push(item)
+                        res.data._Data.map(ele=>{
+                            const object = {
+                                id : ele.id,
+                                nameModule : ele.nameModule,
+                                access : false, 
                             }
+                            this.listModule.push(object)
                         })
                     }
                 })
+                
             },
+
+            getPermissionModuleByIdGroup(){
+                HTTP.get('Permission_Groups/getPermissionGroup_By_IdGroup/'+this.selectedGroupId).then(res=>{
+                        this.arraycompare = res.data._Data
+                    }).catch(err=>console.log(err))
+            },
+
+
             getUserMenuModule() {
                 this.arrModulePermissionAll = []
                 if (this.selectedGroupId) {
                     HTTP.get(
-                        ApiApplication.PERMISSION_USER_MENU.GET_USER_MENU + '?idUser=' + this.selectedGroupId,
+                        ApiApplication.PERMISSION_USER_MENU.GET_USER_MENU  + this.selectedGroupId,
                     ).then((res) => {
                         if (res) {
                             this.listModule.map((module) => {
-                                res.data.forEach((item) => {
+                                res.data._Data.forEach((item) => {
                                     if (item.idModule === module.id) {
                                         module['add'] = item.add
                                         module['edit'] = item.update
@@ -269,31 +303,28 @@
                     })
                 }
             },
-            PermissionGroup(){
-                HTTP.post(`Permission_Groups/PermissionGroupModule/${this.selectedGroupId}`,this.selectedAccess)
-                .then(res=>
-                {
-                    console.log(res.data)
-                }).catch(err=>
-                {
-                    console.log(err.request.response);
-                })
-
-            },
             save() {
                 if (this.selectedGroupId) {
                     this.loading = true
                     const token = LocalStorage.jwtDecodeToken()
-                    HTTP.post(
-                        ApiApplication.PERMISSION_GROUP_MENU.GET_PERMISSION_GROUP +
-                            '?idGroup=' +
-                            this.selectedGroupId +
-                            '&idUserAdd=' +
-                            token.Id,
-                        this.selectedAccess,
-                    ).then((res) => {
+                    this.listModule.map(ele=>{
+                        const item = {
+                            "idModule": ele.id,
+                            "access": ele.access
+                        }
+                        this.arraySend.push(item);
+                })
+
+                    HTTP.put(`Permission_Groups/updateMultiPermissionGroup/${this.selectedGroupId}`,this.arraySend)
+                    .then((res) => {
                         if (res) {
-                            this.acceptPermissionUserMenu()
+                            this.$toast.add({
+                            severity: 'success',
+                            summary: 'Thành công',
+                            detail: 'Sửa thành công!',
+                            life: 3000,
+                            })
+                            this.loading = false
                         } else {
                             this.$toast.add({
                                 severity: 'error',
@@ -308,7 +339,10 @@
                             this.selectedAccess = null
                             this.arrModuleAccess = []
                         }
-                    }).catch(err=>console.log(err))
+                    }).catch(err=>{
+                        console.log(err);
+                    })
+                    
                 } else {
                     this.$toast.add({
                         severity: 'error',
@@ -359,65 +393,18 @@
                 this.arrModuleAccess = []
                 this.arrModuleAccess = this.selectedAccess
             },
-            isSelectedCheck(id, isChecked) {
+            isSelectedCheck(module, isChecked) {
+                    
                 if (isChecked) {
-                    this.selectedAccess.push([id, 1])
-                    this.arrModulePermissionAll.map((item) => {
-                        if (item[1] === id) {
-                            item[2] = 1
-                            item[3] = 1
-                            item[4] = 1
-                            item[5] = 1
-                        }
-                    })
+                    module.access = true;
                 } else {
-                    this.selectedAccess.map((item) => {
-                        if (item[0] === id) {
-                            item[1] = 0
-                        }
-                    })
-                    this.arrModulePermissionAll.map((item) => {
-                        if (item[1] === id) {
-                            item[2] = 0
-                            item[3] = 0
-                            item[4] = 0
-                            item[5] = 0
-                        }
-                    })
+                    module.access = false
                 }
+
+                const index = this.listModule.findIndex(({id})=> id === module.id)
+                this.listModule[index].access = module.access
             },
-            isSelectedCheck(id, isChecked) {
-               if(isChecked){
-                this.selectedAccess.push(id)
-               }
-               
-               
-                // if (isChecked) {
-                //     this.selectedAccess.push([id, 1])
-                //     this.arrModulePermissionAll.map((item) => {
-                //         if (item[1] === id) {
-                //             item[2] = 1
-                //             item[3] = 1
-                //             item[4] = 1
-                //             item[5] = 1
-                //         }
-                //     })
-                // } else {
-                //     this.selectedAccess.map((item) => {
-                //         if (item[0] === id) {
-                //             item[1] = 0
-                //         }
-                //     })
-                //     this.arrModulePermissionAll.map((item) => {
-                //         if (item[1] === id) {
-                //             item[2] = 0
-                //             item[3] = 0
-                //             item[4] = 0
-                //             item[5] = 0
-                //         }
-                //     })
-                // }
-            },
+
         },
     }
 </script>

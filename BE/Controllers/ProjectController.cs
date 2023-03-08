@@ -2,6 +2,7 @@ using AutoMapper;
 using BE.Data.Contexts;
 using BE.Data.Dtos;
 using BE.Data.Dtos.ProjectDtos;
+using BE.Data.Dtos.UserDtos;
 using BE.Data.Models;
 using BE.Services.PaginationServices;
 using BE.Services.TokenServices;
@@ -19,7 +20,7 @@ namespace BE.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-    //[Authorize(Roles = "permission_group: True module: project")]
+    [Authorize(Roles = "permission_group: True module: projects")]
     public class ProjectController : ControllerBase
 	{
 
@@ -189,7 +190,8 @@ namespace BE.Controllers
 			try
 			{
                 var list = _context.Users.Where(x => x.IdGroup == 3);
-                return Ok(list);
+				var map = _mapper.ProjectTo<UserWithNameDto>(list);
+                return Ok(map);
             }
             catch(Exception ex)
 			{
@@ -199,6 +201,8 @@ namespace BE.Controllers
 		}
 
         [HttpPost("addProject")]
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: projects add: 1")]
         public async Task<IActionResult> Create(AddNewProjectDto project_Model)
 		{
 			try
@@ -248,6 +252,8 @@ namespace BE.Controllers
 
 		}
 		[HttpPut("DeleteProject/{id}")]
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: projects delete: 1")]
         public IActionResult DeleteProject(int id, IdUserChangeProjectDto request)
 		{
 			try
@@ -396,7 +402,6 @@ namespace BE.Controllers
 		}
 
 
-
 		[HttpGet("getLengthOfProject/{name}")]
 		public IActionResult getLengthOfProject(string name)
 		{
@@ -435,7 +440,9 @@ namespace BE.Controllers
 
 		[HttpPut]
         [Route("updateProject/{id}")]
-		public async Task<ActionResult> updateProject(EditProjectDto requests, int id)
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: projects update: 1")]
+        public async Task<ActionResult> updateProject(EditProjectDto requests, int id)
 		{
 
 			var acc = await _context.Projects.FindAsync(id);
@@ -548,7 +555,9 @@ namespace BE.Controllers
 		}
 		[HttpGet]
 		[Route("exportExcel")]
-		public async Task<string> DownloadFile()
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: projects export: 1")]
+        public async Task<string> DownloadFile()
 		{
 			var wb = new XLWorkbook();
 			var ws = wb.Worksheets.Add("Sheet1");

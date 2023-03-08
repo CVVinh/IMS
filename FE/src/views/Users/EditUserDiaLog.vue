@@ -555,7 +555,7 @@
     import LayoutDefault from '../../layouts/LayoutDefault/LayoutDefault.vue'
     import { UserRoleHelper } from '@/helper/user-role.helper'
     import { HttpStatus } from '@/config/app.config'
-import { LocalStorage } from '@/helper/local-storage.helper'
+    import { LocalStorage } from '@/helper/local-storage.helper'
     export default {
         props: ['statusopen', 'iduser', 'roleoption'],
         setup: () => ({
@@ -564,7 +564,7 @@ import { LocalStorage } from '@/helper/local-storage.helper'
         name: 'edituser',
         data() {
             return {
-                token : null,
+                token: null,
                 form: {
                     userCode: null,
                     password: null,
@@ -716,17 +716,17 @@ import { LocalStorage } from '@/helper/local-storage.helper'
             },
         },
         mounted() {
-            this.token = LocalStorage.jwtDecodeToken();
+            this.token = LocalStorage.jwtDecodeToken()
             this.getAllGroup()
         },
-        
+
         methods: {
-            checkRoleEditGroup(){
-                if(this.token){
-                    if(Number(this.token.IdGroup) === 1){
+            checkRoleEditGroup() {
+                if (this.token) {
+                    if (Number(this.token.IdGroup) === 1) {
                         return false
                     }
-                    if(Number(this.token.IdGroup) !== 1){
+                    if (Number(this.token.IdGroup) !== 1) {
                         return true
                     }
                 }
@@ -929,10 +929,6 @@ import { LocalStorage } from '@/helper/local-storage.helper'
         .field-checkbox-items {
             margin-right: 5px;
         }
-
-        .cardrelax {
-        }
-
         @media screen and (max-width: 960px) {
         }
     }

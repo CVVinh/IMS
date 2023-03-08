@@ -1,7 +1,9 @@
 ﻿using BE.Data.Contexts;
 using BE.Data.Dtos.WikiPost;
+using BE.Data.Models;
 using BE.Services.Wiki;
 using BE.Services.WikiPost;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +11,7 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "permission_group: True module: wikiPosts")]
     public class Wiki_PostController : ControllerBase
     {
 
@@ -16,6 +19,7 @@ namespace BE.Controllers
         private readonly AppDbContext _appContext;
         private readonly IWikiPostService _WikiPostServices;
         #endregion
+
         #region Constructor
         public Wiki_PostController(AppDbContext appContext, IWikiPostService wikiPostService)
         {
@@ -26,6 +30,8 @@ namespace BE.Controllers
 
         //POST add new wiki post
         [HttpPost("addNewWikiPost")]
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: wikiPosts add: 1")]
         public async Task<IActionResult> addNewWikiPost(addWikiPost addWikiPost)
         {
             try
@@ -114,6 +120,8 @@ namespace BE.Controllers
 
         //PUT put WikiPost
         [HttpPut("editWikiPost/{ID}")]
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: wikiPosts update: 1")]
         public async Task<IActionResult> editWikiPost(editWikiPost editWikiPost, int ID)
         {
             try
@@ -140,6 +148,8 @@ namespace BE.Controllers
 
         //DELETE delete WikiPost
         [HttpDelete("deleteWikiPost/{ID}")]
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: wikiPosts delete: 1")]
         public async Task<IActionResult> deleteWikiPost(int ID)
         {
             try

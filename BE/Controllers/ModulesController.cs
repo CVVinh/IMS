@@ -45,7 +45,7 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-        [HttpGet("GetModuleById/{id}")]
+        [HttpGet("getModuleById/{id}")]
         public async Task<IActionResult> GetModuleById([FromRoute] int id)
         {
             var response = await _moduleServices.GetModuleById(id);
@@ -56,8 +56,9 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-        [HttpPost("addModule")]
+        [HttpPost("createModule")]
         [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: modules add: 1")]
         public async Task<IActionResult> CreateModule(ModuleDtos moduleDtos)
         {
             if (!ModelState.IsValid)
@@ -72,8 +73,9 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-
-        [HttpPut("updateMoudel/{id}")]
+        [HttpPut("updateModule/{id}")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: modules update: 1")]
         public async Task<IActionResult> UpdateModule([FromRoute] int id, ModuleDtos moduleDtos)
         {
             if (!ModelState.IsValid)
@@ -88,9 +90,9 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-
-        [HttpPut]
-        [Route("deleteModule/{id}")]
+        [HttpPut("deleteModule/{id}")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: modules delete: 1")]
         public async Task<IActionResult> DeleteModule([FromRoute] int id)
         {
             var response = await _moduleServices.DeleteModule(id);
@@ -101,11 +103,12 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-        [HttpPut]
-        [Route("deleteMultiModule")]
-        public async Task<IActionResult> DeleteMultiModule(List<int> listId)
+        [HttpPut("deleteMultiModule")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: modules deleteMulti: 1")]
+        public async Task<IActionResult> DeleteMultiModule(List<int> listIdModule)
         {
-            var response = await _moduleServices.DeleteMultiModule(listId);
+            var response = await _moduleServices.DeleteMultiModule(listIdModule);
             if (response._success)
             {
                 return Ok(response);
@@ -115,5 +118,5 @@ namespace BE.Controllers
 
     }
 }
-            
+
 

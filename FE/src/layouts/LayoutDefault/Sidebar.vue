@@ -274,9 +274,37 @@
                                 v-if="this.token !== null ? (Number(this.token.IdGroup) === 1 ? true : false) : false"
                             >
                                 <i class="bx bx-badge-check"></i>
-                                <span>Phân quyền module_group</span>
+                                <span>module_group</span>
                             </router-link>
                         </li>
+                        <li class="list-group-item-action">
+                            <router-link
+                                :to="{ name: 'Action-list', params: {} }"
+                                class="py-2 ripple dropdown-item"
+                                aria-current="true"
+                                @click="activeTag = 'tag17'"
+                                :class="{ 'active-nav-item': activeTag === 'tag17' }"
+                                v-if="this.token !== null ? (Number(this.token.IdGroup) === 1 ? true : false) : false"
+                            >
+                                <i class="bx bx-badge-check"></i>
+                                <span>QL Thao tác</span>
+                            </router-link>
+                        </li>
+                        <li class="list-group-item-action">
+                            <router-link
+                                :to="{ name: 'perrmission-action-module', params: {} }"
+                                class="py-2 ripple dropdown-item"
+                                aria-current="true"
+                                @click="activeTag = 'tag18'"
+                                :class="{ 'active-nav-item': activeTag === 'tag18' }"
+                                v-if="this.token !== null ? (Number(this.token.IdGroup) === 1 ? true : false) : false"
+                            >
+                                <i class="bx bx-badge-check"></i>
+                                <span>QL Action_Module</span>
+                            </router-link>
+                        </li>
+
+                        
                     </ul>
                 </div>
                 <!-- /Thiết lập -->

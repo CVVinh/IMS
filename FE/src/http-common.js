@@ -74,3 +74,5 @@ export const GET_PROJECT_BY_ID = (id) => `Project/getById/${id}`
 export const GET_GROUP_BY_ID = (id) => `/Group/getUserByGroup/${id}`
 
 export const HTTP_SINGNALRHUB = 'http://localhost:5001/NotificationHub'
+
+export const GET_USER_NAME_BY_ID = (id) => `Users/GetNameOfUserById/${id}`

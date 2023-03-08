@@ -4,8 +4,11 @@ namespace BE.Data.Models
 {
     public class Permission_Action_Module : BaseEntity
     {
-        public int idModule { get; set; }
+        public int moduleId { get; set; }
+        public Module module { get; set; }
 
-        public int idAction { get; set; }
+        public int actionModuleId { get; set; }
+
+        public Action_Module actionModule { get; set; }
     }
 }

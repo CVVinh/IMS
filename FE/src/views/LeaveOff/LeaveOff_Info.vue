@@ -143,7 +143,7 @@
 </template>
 
 <script>
-    import { HTTP, GET_USER_BY_ID, GET_BY_YEAR, GET_LEAVEOFF_BY_STATUS, HTTP_LOCAL } from '@/http-common'
+    import { HTTP, GET_USER_NAME_BY_ID, GET_BY_YEAR, GET_LEAVEOFF_BY_STATUS, HTTP_LOCAL } from '@/http-common'
     import View from '../../components/buttons/View.vue'
     import Export from '../../components/buttons/Export.vue'
     import { DateHelper } from '@/helper/date.helper'
@@ -229,7 +229,6 @@
         watch: {
             fillterLeaveOff: {
                 handler: function change(newVal) {
-                    console.log(newVal)
                     this.handlerFillterLeaveOff()
                 },
                 deep: true,
@@ -262,7 +261,7 @@
                 await this.getLeaveOff()
             },
             getUserById(id) {
-                return HTTP.get(GET_USER_BY_ID(id)).then((res) => res.data)
+                return HTTP.get(GET_USER_NAME_BY_ID(id)).then((res) => res.data)
             },
 
             toRegisterPage() {
@@ -314,7 +313,6 @@
                         date: DateHelper.convertUTC(theFirst),
                         status: this.fillterLeaveOff.idstatus,
                     }
-                    console.log('input', findByNameStatusDateDtos)
 
                     await HTTP.post(GET_BY_YEAR, findByNameStatusDateDtos).then((res) => {
                         this.arr = []
@@ -425,7 +423,6 @@
                 }
 
                 const totalWorkingHours = count
-                console.log(totalWorkingHours)
 
                 let days = Math.floor(diff / millisecondsPerDay)
                 diff -= days * millisecondsPerDay

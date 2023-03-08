@@ -1,4 +1,4 @@
-﻿ using BE.Data.Contexts;
+﻿using BE.Data.Contexts;
 using BE.Data.Dtos.GruopDtos;
 using BE.Data.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -23,7 +23,7 @@ namespace BE.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "permission_group: True module: groups")]
-    public class GroupController: ControllerBase
+    public class GroupController : ControllerBase
     {
         private readonly IGroupServices _groupServices;
         private readonly IPaginationServices<Group> _paginationService;
@@ -33,7 +33,7 @@ namespace BE.Controllers
             _groupServices = groupServices;
             _paginationService = paginationService;
         }
-       
+
         [HttpGet("getListGroup")]
         public async Task<IActionResult> GetAllGroupAsync(int? pageIndex, PageSizeEnum pageSizeEnum)
         {

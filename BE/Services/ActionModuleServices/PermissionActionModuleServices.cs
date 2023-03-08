@@ -17,7 +17,8 @@ namespace BE.Services.ActionModuleServices
         Task<BaseResponse<List<Permission_Action_Module>>> CreatePermissionActionModule(List<AddPermissionActionModuleDto> addPermissionActionModuleDtos);
         Task<BaseResponse<Permission_Action_Module>> UpdateUPermissionActionModule(RequestPermissionActionModuleDto requestPermissionActionModuleDto, UpdatePermissionActionModuleDto updatePermissionActionModuleDto);
         Task<BaseResponse<Permission_Action_Module>> DeletePermissionActionModule(RequestPermissionActionModuleDto requestPermissionActionModuleDto, DeletePermissionActionModuleDto deletePermissionActionModuleDto);
-        Task<BaseResponse<List<Permission_Action_Module>>> DeleteMultiPermissionActionModule(List<RequestPermissionActionModuleDto> requestPermissionActionModuleDto, DeletePermissionActionModuleDto deletePermissionActionModuleDto);
+        Task<BaseResponse<List<Permission_Action_Module>>> DeleteMultiPermissionActionModule(List<DeleteMultiPermissionActionModuleDto> deleteMultiPermissionActionModuleDtos);
+    
     }
 
     public class PermissionActionModuleServices : IPermissionActionModuleServices
@@ -38,7 +39,15 @@ namespace BE.Services.ActionModuleServices
             var data = new List<Permission_Action_Module>();
             try
             {
-                var permissionActionModule = await _db.PermissionActionModules.Where(s => s.isDeleted == false).OrderByDescending(s => s.dateCreated).ToListAsync();
+                var permissionActionModule = await _db.PermissionActionModules.Where(s => s.isDeleted == false).OrderBy(s => s.actionModule.id).Include(s => s.module).Select(s => new Permission_Action_Module
+                {
+                    id = s.id,
+                    moduleId= s.moduleId,
+                    actionModuleId= s.actionModuleId,
+                    module = s.module,
+                    actionModule= s.actionModule,
+                    
+                }).ToListAsync();
                 success = true;
                 message = "Get all data successfully";
                 data.AddRange(permissionActionModule);
@@ -59,7 +68,15 @@ namespace BE.Services.ActionModuleServices
             var data = new List<Permission_Action_Module>();
             try
             {
-                var permissionActionModule = await _db.PermissionActionModules.OrderByDescending(s => s.dateCreated).Where(s => s.isDeleted == false && s.idModule.Equals(moduleId)).ToListAsync();
+                var permissionActionModule = await _db.PermissionActionModules.OrderBy(s => s.actionModule.id).Where(s => s.isDeleted == false && s.moduleId.Equals(moduleId)).Include(s => s.module).Select(s => new Permission_Action_Module
+                {
+                    id = s.id,
+                    moduleId = s.moduleId,
+                    actionModuleId = s.actionModuleId,
+                    module = s.module,
+                    actionModule = s.actionModule,
+
+                }).ToListAsync();
                 success = true;
                 message = "Get data successfully";
                 data.AddRange(permissionActionModule);
@@ -80,7 +97,15 @@ namespace BE.Services.ActionModuleServices
             var data = new List<Permission_Action_Module>();
             try
             {
-                var permissionActionModule = await _db.PermissionActionModules.OrderByDescending(s => s.dateCreated).Where(s => s.isDeleted == false && s.idAction.Equals(actionId)).ToListAsync();
+                var permissionActionModule = await _db.PermissionActionModules.OrderBy(s => s.actionModule.id).Where(s => s.isDeleted == false && s.actionModuleId.Equals(actionId)).Include(s => s.module).Select(s => new Permission_Action_Module
+                {
+                    id = s.id,
+                    moduleId = s.moduleId,
+                    actionModuleId = s.actionModuleId,
+                    module = s.module,
+                    actionModule = s.actionModule,
+
+                }).ToListAsync(); ;
                 success = true;
                 message = "Get data successfully";
                 data.AddRange(permissionActionModule);
@@ -103,11 +128,20 @@ namespace BE.Services.ActionModuleServices
             {
                 foreach (var item in addPermissionActionModuleDtos)
                 {
-                    var permissionActionModule = _mapper.Map<Permission_Action_Module>(item);
-                    permissionActionModule.dateCreated = DateTime.Now;
-                    permissionActionModule.isDeleted = false;
-                    await _db.PermissionActionModules.AddAsync(permissionActionModule);
-                    data.Add(permissionActionModule);
+                    var permissionActionModule = await _db.PermissionActionModules.Where(s => s.isDeleted == false && s.moduleId.Equals(item.moduleId) && s.actionModuleId.Equals(item.actionModuleId)).FirstOrDefaultAsync();
+                    if (permissionActionModule is null)
+                    {
+                        var permissionActionModuleMapData = _mapper.Map<Permission_Action_Module>(item);
+                        permissionActionModuleMapData.dateCreated = DateTime.Now;
+                        permissionActionModuleMapData.isDeleted = false;
+                        await _db.PermissionActionModules.AddAsync(permissionActionModuleMapData);
+                        data.Add(permissionActionModuleMapData);
+                    }
+                    else
+                    {
+                        message = "Permission_Action_Module have been existed !";
+                        return new BaseResponse<List<Permission_Action_Module>>(success, message, data = null);
+                    }
                 }
 
                 await _db.SaveChangesAsync();
@@ -130,12 +164,20 @@ namespace BE.Services.ActionModuleServices
             var data = new Permission_Action_Module();
             try
             {
-                var permissionActionModule = await _db.PermissionActionModules.Where(s => s.isDeleted == false && s.idModule.Equals(requestPermissionActionModuleDto.idModule) && s.idAction.Equals(requestPermissionActionModuleDto.idAction)).FirstOrDefaultAsync();
+                var permissionActionModule = await _db.PermissionActionModules.Where(s => s.isDeleted == false && s.moduleId.Equals(requestPermissionActionModuleDto.moduleId) && s.actionModuleId.Equals(requestPermissionActionModuleDto.actionModuleId)).FirstOrDefaultAsync();
+                
                 if (permissionActionModule is null)
                 {
                     message = "Permission_Action_Module doesn't exist !";
-                    data = null;
-                    return new BaseResponse<Permission_Action_Module>(success, message, data);
+                    return new BaseResponse<Permission_Action_Module>(success, message, data = null);
+                }
+
+                var permissionActionModuleTest = await _db.PermissionActionModules.Where(s => s.isDeleted == false && s.moduleId.Equals(requestPermissionActionModuleDto.moduleId) && s.actionModuleId.Equals(updatePermissionActionModuleDto.actionModuleId)).FirstOrDefaultAsync();
+
+                if (permissionActionModuleTest != null)
+                {
+                    message = "Permission_Action_Module have been existed !";
+                    return new BaseResponse<Permission_Action_Module>(success, message, data = null);
                 }
                 var permissionActionModuleMapData = _mapper.Map<UpdatePermissionActionModuleDto, Permission_Action_Module>(updatePermissionActionModuleDto, permissionActionModule);
 
@@ -163,10 +205,9 @@ namespace BE.Services.ActionModuleServices
             var data = new Permission_Action_Module();
             try
             {
-                var permissionActionModule = await _db.PermissionActionModules.Where(s => s.isDeleted == false && s.idModule.Equals(requestPermissionActionModuleDto.idModule) && s.idAction.Equals(requestPermissionActionModuleDto.idAction)).FirstOrDefaultAsync();
+                var permissionActionModule = await _db.PermissionActionModules.Where(s => s.isDeleted == false && s.moduleId.Equals(requestPermissionActionModuleDto.moduleId) && s.actionModuleId.Equals(requestPermissionActionModuleDto.actionModuleId)).FirstOrDefaultAsync();
                 if (permissionActionModule is null)
                 {
-                    success = false;
                     message = "Permission_Action_Module doesn't exist !";
                     return new BaseResponse<Permission_Action_Module>(success, message, data = null);
                 }
@@ -189,25 +230,31 @@ namespace BE.Services.ActionModuleServices
             }
         }
 
-        public async Task<BaseResponse<List<Permission_Action_Module>>> DeleteMultiPermissionActionModule(List<RequestPermissionActionModuleDto> requestPermissionActionModuleDto, DeletePermissionActionModuleDto deletePermissionActionModuleDto)
+        public async Task<BaseResponse<List<Permission_Action_Module>>> DeleteMultiPermissionActionModule(List<DeleteMultiPermissionActionModuleDto> deleteMultiPermissionActionModuleDtos)
         {
             var success = false;
             var message = "";
             var data = new List<Permission_Action_Module>();
             try
             {
-                foreach (var item in requestPermissionActionModuleDto)
+                foreach (var item in deleteMultiPermissionActionModuleDtos)
                 {
-                    var result = await DeletePermissionActionModule(item, deletePermissionActionModuleDto);
-                    if (result._success)
+                    var result = await _db.PermissionActionModules.Where(s => s.isDeleted == false && s.moduleId.Equals(item.moduleId) && s.actionModuleId.Equals(item.actionModuleId)).FirstOrDefaultAsync();
+                    if (result is null)
                     {
-                        data.Add(result._Data);
+                        message = "Permission_Action_Module doesn't exist !";
+                        return new BaseResponse<List<Permission_Action_Module>>(success, message, data = null);
                     }
                     else
                     {
-                        return new BaseResponse<List<Permission_Action_Module>>(success, result._Message, data = null);
+                        var permissionActionModuleMapData = _mapper.Map<DeleteMultiPermissionActionModuleDto, Permission_Action_Module>(item, result);
+                        permissionActionModuleMapData.dateDeleted = DateTime.Now;
+                        permissionActionModuleMapData.isDeleted = true;
+                        _db.PermissionActionModules.Update(permissionActionModuleMapData);
+                        data.Add(result);
                     }
                 }
+                await _db.SaveChangesAsync();
                 success = true;
                 message = "Deleting Multi Permission_Action_Module successfully";
                 return new BaseResponse<List<Permission_Action_Module>>(success, message, data);

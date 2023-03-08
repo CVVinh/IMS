@@ -8,7 +8,7 @@ namespace BE.Data.Dtos.Permission_Use_Menus
         public int idModule { get; set; }
         [Required]
         public int IdUser { get; set; }
-        [Required]
-        public int IdMenu { get; set; }
+        //[Required]
+        //public int IdMenu { get; set; }
     }
 }

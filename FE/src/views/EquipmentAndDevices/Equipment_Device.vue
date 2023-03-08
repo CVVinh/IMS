@@ -11,25 +11,36 @@
                                 <h5 style="color: White">Thiết bị</h5>
                             </div>
                         </div>
-
-                        <div class="d-flex align-items-center justify-content-end">
-                            <div class="d-flex justify-content-start">
-                                <div class="input-text">
-                                    <InputText
-                                        style="width: 100%"
-                                        type="text"
-                                        v-model="name"
-                                        placeholder="Nhập tên nhân viên..."
+                        <div class="row">
+                            <div class="col-md-6 d-flex">
+                                <div class="ms-2">
+                                    <Button
+                                        @click="handlerAddBlockingWeb()"
+                                        class="p-button-sm p-button-info me-2"
+                                        icon="pi pi-plus"
+                                        style="height: 100%"
+                                        label="Thêm website vào danh sách bị chặn"
                                     />
                                 </div>
-                                <Button
-                                    type="button"
-                                    style="background-color: antiquewhite"
-                                    icon="pi pi-filter-slash"
-                                    class="p-button p-button-outlined ms-2"
-                                    @click="handlerReload()"
-                                />
-                                <!-- <div class="ms-2">
+                            </div>
+                            <div class="d-flex align-items-center justify-content-end col-md-6">
+                                <div class="d-flex justify-content-start">
+                                    <div class="input-text">
+                                        <InputText
+                                            style="width: 100%"
+                                            type="text"
+                                            v-model="name"
+                                            placeholder="Nhập tên nhân viên..."
+                                        />
+                                    </div>
+                                    <Button
+                                        type="button"
+                                        style="background-color: antiquewhite"
+                                        icon="pi pi-filter-slash"
+                                        class="p-button p-button-outlined ms-2"
+                                        @click="handlerReload()"
+                                    />
+                                    <!-- <div class="ms-2">
                                     <Dropdown
                                         v-model="operatingSystem"
                                         :options="arrOperatingSystem"
@@ -38,13 +49,14 @@
                                         optionValue="value"
                                     />
                                 </div> -->
-                                <!-- <Button
+                                    <!-- <Button
                                     type="button"
                                     icon="pi pi-search"
                                     class="p-button p-button-info ms-2"
                                     label="Search"
                                     @click="handlerSearch()"
                                 /> -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -98,11 +110,11 @@
                                         class="p-button-sm mt-1 me-2 p-button-info"
                                         icon="pi pi-eye"
                                     />
-                                    <Button
+                                    <!-- <Button
                                         @click="handlerRequesDevice(data)"
                                         class="p-button-sm p-button-success mt-1 me-2"
                                         icon="pi pi-send"
-                                    />
+                                    /> -->
                                 </div>
                             </template>
                         </Column>
@@ -115,11 +127,16 @@
             :selectedDevice="{ ...deviceDetail }"
             @closeDialogDevice="closeDialogDetailDevice()"
         />
+        <DialogAddBlockingWeb
+            :isOpen="this.isOpenDialogBlockingWeb"
+            @closeDialogBlocking="closeDialogAddBlockingWeb()"
+        />
     </LayoutDefaultDynamic>
 </template>
 <script>
     import dayjs from 'dayjs'
     import DialogDetailDevice from './DialogDetailDevice.vue'
+    import DialogAddBlockingWeb from './DialogAddBlockingWeb.vue'
     import { DeviceService } from '@/service/device.service'
     import { HTTP, GET_USER_BY_ID } from '@/http-common'
     import { OperatingSystem } from './OperatingSystem'
@@ -221,12 +238,13 @@
                 name: null,
                 operatingSystem: 19000,
                 arrOperatingSystem: OperatingSystem,
+                tagsDevice: [],
+                isOpenDialogBlockingWeb: false,
             }
         },
         watch: {
             name: {
                 handler: async function Change(newText) {
-                    console.log(typeof newText)
                     await this.handlerSearchByName()
                 },
             },
@@ -240,6 +258,9 @@
             getUserById(id) {
                 return HTTP.get(GET_USER_BY_ID(id)).then((res) => res.data)
             },
+            // handlerRequesDevice() {
+            //     console.log(this.tagsDevice)
+            // },
             async handlerLoadData() {
                 for (let i = 0; i < this.dataEquipment.length; i++) {
                     const user = await this.getUserById(Number(this.dataEquipment[i].idUser))
@@ -252,7 +273,6 @@
             async getAllDevice() {
                 await DeviceService.getAllEquipmentDevice()
                     .then((res) => {
-                        console.log(res.data._Data)
                         res.data._Data.forEach((el) => {
                             this.dataEquipment.push({
                                 name: null,
@@ -279,14 +299,10 @@
                 await this.handlerLoadData()
                 this.loading = false
             },
-            handlerRequesDevice() {
-                console.log('vô reqeust device')
-            },
             async handlerSearchByName() {
                 this.loading = true
                 await DeviceService.searchDeviceByName(this.name)
                     .then((res) => {
-                        console.log(res.data)
                         this.dataEquipment = []
                         res.data._Data.forEach((el) => {
                             this.dataEquipment.push({
@@ -317,11 +333,16 @@
             handlerDetailsDevice(data) {
                 this.isOpenDialogDevice = true
                 this.deviceDetail = { ...data }
-                console.log(data)
             },
             closeDialogDetailDevice() {
                 this.isOpenDialogDevice = false
                 this.deviceDetail = []
+            },
+            handlerAddBlockingWeb() {
+                this.isOpenDialogBlockingWeb = true
+            },
+            closeDialogAddBlockingWeb() {
+                this.isOpenDialogBlockingWeb = false
             },
             async handlerReload() {
                 this.loading = true
@@ -333,6 +354,7 @@
         },
         components: {
             DialogDetailDevice,
+            DialogAddBlockingWeb,
         },
     }
 </script>
@@ -345,5 +367,19 @@
     }
     .p-card .p-card-content {
         padding: 0px 0px 1.25rem 0px;
+    }
+    .v3ti {
+        height: 100%;
+    }
+    .v3ti > .v3ti-content > input {
+        width: 100%;
+    }
+    .v3ti:focus-visible {
+        border: none;
+        box-shadow: none;
+    }
+    .v3ti:focus {
+        border: none;
+        box-shadow: none;
     }
 </style>

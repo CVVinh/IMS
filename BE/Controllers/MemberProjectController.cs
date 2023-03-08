@@ -8,7 +8,7 @@ namespace BE.Controllers
 {
     [ApiController]
     [Route("api/memberProject")]
-    //[Authorize(Roles = "permission_group: True module: member")]
+    [Authorize(Roles = "permission_group: True module: memberProjects")]
     public class MemberProjectController : Controller
     {
         private readonly IMemberProjectServices _memberProjectServices;
@@ -56,6 +56,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("addMemberAtProject")]
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: memberProjects add: 1")]
         public async Task<IActionResult> addNewMember(AddMemberDto addMemberDto)
         {
             if(!ModelState.IsValid)
@@ -72,6 +74,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("deleteMemberById/{id}")]
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: memberProjects delete: 1")]
         public async Task<IActionResult> deleteMemberById(int id)
         {
             var result = await _memberProjectServices.DeleteMemberAsync(id);
@@ -84,6 +88,8 @@ namespace BE.Controllers
         }
 
         [HttpDelete("deleteMemberInProject/{idMember}/{idProject}")]
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: memberProjects delete: 1")]
         public async Task<IActionResult> deleteMemberByIdProject(int idMember,int idProject)
         {
             var result = await _memberProjectServices.DeleteMemberInProjectAsync(idMember,idProject);

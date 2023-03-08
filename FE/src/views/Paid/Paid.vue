@@ -211,7 +211,14 @@
     </LayoutDefaultDynamic>
 </template>
 <script>
-    import { GET_LIST_PAID, HTTP, HTTP_LOCAL, GET_PROJECT_BY_ID, GET_USER_BY_ID, HTTP_API_GITLAB } from '@/http-common'
+    import {
+        GET_LIST_PAID,
+        HTTP,
+        HTTP_LOCAL,
+        GET_PROJECT_BY_ID,
+        GET_USER_NAME_BY_ID,
+        HTTP_API_GITLAB,
+    } from '@/http-common'
     import Add from '../../components/buttons/Add.vue'
     import Delete from '../../components/buttons/Delete.vue'
     import Edit from '../../components/buttons/Edit.vue'
@@ -327,7 +334,7 @@
             },
 
             async getUsers(id) {
-                return await HTTP.get(GET_USER_BY_ID(id))
+                return await HTTP.get(GET_USER_NAME_BY_ID(id))
                     .then((respone) => respone.data)
                     .catch((error) => {
                         var message = error.response.data != '' ? error.response.data : error.response.statusText

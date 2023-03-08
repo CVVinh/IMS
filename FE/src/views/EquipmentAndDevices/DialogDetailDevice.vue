@@ -12,7 +12,7 @@
     >
         <div class="row">
             <div class="col-md-4 border-end" style="padding: 0px 25px">
-                <h6 class="text-center">Thông tin phần cứng</h6>
+                <h5 class="text-center">Thông tin phần cứng</h5>
                 <fieldset class="border p-2 mt-2">
                     <legend class="float-none w-auto p-2-custom">Thông tin máy tính</legend>
                     <div class="m-2-custom">
@@ -74,10 +74,18 @@
                 </fieldset>
             </div>
             <div class="col-md-8" style="padding: 0px 25px">
-                <h6 class="text-center">Thông tin phần mềm</h6>
+                <h5 class="text-center">Thông tin phần mềm</h5>
                 <div class="mt-2">
                     <div class="mb-2" style="padding: 10px 0px 0px 10px">
                         <Export label="Xuất Excel" @click="exportCSV($event)" />
+                        <div style="float: right">
+                            <Button
+                                @click="handlerRequesDevice(data)"
+                                class="p-button-sm p-button-primary mt-1 me-2"
+                                icon="pi pi-send"
+                                label="Gửi yêu cầu gỡ ứng dụng"
+                            />
+                        </div>
                     </div>
                     <ScrollPanel style="width: 100%; height: 36rem; padding: 0px 10px 0px 0px">
                         <Card class="border-1">
@@ -98,7 +106,11 @@
                                     currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} dữ liệu"
                                     :sortOrder="1"
                                     :sortField="'applicationName'"
+                                    dataKey="applicationId"
+                                    :rowHover="true"
+                                    v-model:selection="selectedDeviceExits"
                                 >
+                                    <Column selectionMode="multiple" headerStyle="width: 2rem"></Column>
                                     <Column header="No.">
                                         <template #body="{ index }">
                                             {{ index + 1 }}
@@ -134,6 +146,8 @@
 </template>
 <script>
     import Export from '../../components/buttons/Export.vue'
+    import { NotificationService } from '@/service/notification.service'
+    import jwtDecode from 'jwt-decode'
     export default {
         props: ['isOpen', 'selectedDevice'],
         data() {
@@ -142,6 +156,8 @@
                 arraySoftware: null,
                 infoDevice: null,
                 loading: false,
+                selectedDeviceExits: [],
+                userRequest: jwtDecode(localStorage.getItem('token')),
             }
         },
         beforeUpdate() {
@@ -155,6 +171,51 @@
                 this.detailDevice = this.selectedDevice
                 this.infoDevice = this.selectedDevice.infoDevice
                 this.arraySoftware = this.selectedDevice.infoInstallSoftware
+            },
+            handlerRequesDevice() {
+                if (this.selectedDeviceExits.length > 0) {
+                    var obj = {
+                        requestUser: this.userRequest.Id,
+                        usercode: this.infoDevice.userName,
+                        message: `Ứng dụng ${this.selectedDeviceExits
+                            .map((el) => el.applicationName)
+                            .join(', ')} không được phép sử dụng, yêu cầu xóa ngay!`,
+                        title: 'Yêu cầu xóa ứng dụng',
+                    }
+                    NotificationService.handlerRequireDelete(obj)
+                        .then((res) => {
+                            if (res.status == 200) {
+                                this.successMessage(
+                                    'Gửi phản hồi thành công đến người dùng có tài khoản ' +
+                                        `'${this.infoDevice.userName ?? 'Ẩn danh'}'`,
+                                )
+                            } else {
+                                this.WarningMessage('Có lỗi trong quá trình gửi yêu cầu !')
+                            }
+                        })
+                        .catch(() => {
+                            this.WarningMessage('Có lỗi trong quá trình gửi yêu cầu !')
+                        })
+                } else {
+                    this.WarningMessage('Xin lỗi bạn chưa chọn ứng dụng để gửi phản hồi !')
+                }
+                this.selectedDeviceExits = []
+            },
+            successMessage(mess) {
+                this.$toast.add({
+                    severity: 'success',
+                    summary: 'Thành công',
+                    detail: mess,
+                    life: 3000,
+                })
+            },
+            WarningMessage(mess) {
+                this.$toast.add({
+                    severity: 'warn',
+                    summary: 'Cảnh báo',
+                    detail: mess,
+                    life: 2000,
+                })
             },
             closeDialog() {
                 this.$emit('closeDialogDevice')

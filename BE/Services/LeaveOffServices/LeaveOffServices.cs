@@ -203,7 +203,7 @@ namespace BE.Services.LeaveOffServices
                 var listLeaveOff = await _appContext.leaveOffs.OrderByDescending(t => t.createTime)
                                                               .ToListAsync();
                 success = true;
-                message = "Nhận tất cả dữ liệu thành công";
+                message = "Lấy tất cả dữ liệu thành công";
                 data.AddRange(listLeaveOff);
                 return (new BaseResponse<List<LeaveOff>>(success, message, data));
             }
@@ -225,7 +225,7 @@ namespace BE.Services.LeaveOffServices
                                                               .OrderByDescending(t => t.createTime)
                                                               .ToListAsync();
                 success = true;
-                message = "Nhận tất cả dữ liệu thành công";
+                message = "Lấy tất cả dữ liệu thành công";
                 data.AddRange(listLeaveOff);
                 return (new BaseResponse<List<LeaveOff>>(success, message, data));
             }
@@ -250,7 +250,7 @@ namespace BE.Services.LeaveOffServices
                                                               .OrderByDescending(t => t.createTime)
                                                               .ToListAsync();
                     success = true;
-                    message = "Nhận tất cả dữ liệu thành công";
+                    message = "Lấy tất cả dữ liệu thành công";
                     data.AddRange(listAllLeaveOff);
                     return (new BaseResponse<List<LeaveOff>>(success, message, data));
                 }
@@ -259,7 +259,7 @@ namespace BE.Services.LeaveOffServices
                                                               .OrderByDescending(t => t.createTime)
                                                               .ToListAsync();
                 success = true;
-                message = "Nhận tất cả dữ liệu thành công";
+                message = "Lấy tất cả dữ liệu thành công";
                 data.AddRange(listLeaveOff);
                 return (new BaseResponse<List<LeaveOff>>(success, message, data));
             }
@@ -284,17 +284,18 @@ namespace BE.Services.LeaveOffServices
                 {
                     message = "idLeaveOff không tồn tại!";
                     data = null;
+                    success = false;
                     return new BaseResponse<LeaveOff>(success, message, data);
                 }
 
                 success = true;
-                message = "Nghỉ phép thành công";
+                message = "Lấy thẻ nghĩ phép thành công";
                 data = leaveOff;
                 return new BaseResponse<LeaveOff>(success, message, data);
             }
             catch (Exception ex)
             {
-                message = $"Nghỉ phép không thành công! {ex.Message}";
+                message = $"Lấy thẻ nghĩ phép không thành công! {ex.Message}";
                 data = null;
                 return new BaseResponse<LeaveOff>(success, message, data);
             }
@@ -313,6 +314,7 @@ namespace BE.Services.LeaveOffServices
                 {
                     message = "idLeaveOff không tồn tại!";
                     data = null;
+                    success= false;
                     return new BaseResponse<LeaveOff>(success, message, data);
                 }
 
@@ -372,7 +374,7 @@ namespace BE.Services.LeaveOffServices
 
                 data = await query.ToListAsync();
                 success = true;
-                message = "Nhận tất cả dữ liệu thành công";
+                message = "Lấy tất cả dữ liệu thành công";
                 return (new BaseResponse<List<LeaveOff>>(success, message, data));
             }
             catch (Exception ex)
@@ -422,7 +424,7 @@ namespace BE.Services.LeaveOffServices
 
                 data = await query.ToListAsync();
                 success = true;
-                message = "Nhận tất cả dữ liệu thành công";
+                message = "Lấy tất cả dữ liệu thành công";
                 return (new BaseResponse<List<LeaveOff>>(success, message, data));
             }
             catch (Exception ex)

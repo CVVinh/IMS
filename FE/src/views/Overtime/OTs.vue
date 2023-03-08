@@ -51,21 +51,21 @@
                                 @click="exportToExcelFollowRole()"
                                 label="Xuất Excel"
                                 icon="pi pi-file-excel"
-                                class="size__Button"
+                                class="p-button p-component p-button-sm me-2"
                                 v-if="showButton.ExportButton"
                             />
                             <Button
                                 label="Thêm"
                                 icon="pi pi-plus"
                                 @click="openFormAddEdit(null)"
-                                class="size__Button left"
+                                class="p-button p-component p-button-sm me-2"
                                 v-if="showButton.addButton"
                             />
                             <Button
                                 label="Phê duyệt"
                                 icon="pi pi-check-square"
                                 @click="acceptMulti()"
-                                class="size__Button left"
+                                class="p-button p-component p-button-sm me-2"
                                 v-if="showButton.confirmButton"
                             />
                             <div class="p-input-icon-left left" style="display: inline">
@@ -80,7 +80,7 @@
                                         type="button"
                                         style="background-color: antiquewhite"
                                         icon="pi pi-filter-slash"
-                                        class="p-button-outlined right me-2"
+                                        class="p-button-outlined p-button p-button-sm me-2"
                                         @click="clearFilter()"
                                     />
                                 </div>
@@ -382,7 +382,6 @@
             try {
                 this.token = LocalStorage.jwtDecodeToken()
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
-                console.log(UserRoleHelper.isAccess)
                 if (await UserRoleHelper.isAccess) {
                     this.getAllOT()
                 } else {
@@ -875,7 +874,7 @@
         }
 
         .p-dropdown-label.p-placeholder {
-            padding-top: 6px;
+            // padding-top: 6px;
         }
 
         .p-dropdown-label.p-inputtext {
@@ -883,16 +882,16 @@
         }
 
         .p-dropdown-label:not(.p-placeholder) {
-            text-transform: uppercase;
-            padding-top: 6px;
+            // text-transform: uppercase;
+            // padding-top: 6px;
         }
 
         .p-multiselect {
-            height: 40px;
+            height: 44px;
 
             .p-multiselect-label {
                 height: 100%;
-                padding: 0.41rem 0.41rem;
+                line-height: normal;
             }
         }
 
@@ -912,15 +911,15 @@
     }
 
     ::v-deep(.p-dropdown) {
-        height: 40px;
-        position: static;
+        height: 44px;
+        // position: static;
     }
     ::v-deep(.p-inputtext.p-component) {
-        height: 38px;
+        height: 44px;
     }
-    .p-button-outlined {
-        height: 40px;
-    }
+    // .p-button-outlined {
+    //     height: 40px;
+    // }
 
     .flex {
         display: flex;
@@ -934,7 +933,7 @@
     }
 
     .filter-pro-item {
-        width: 190px;
+        width: 200px;
     }
 
     .header-left {
@@ -948,11 +947,11 @@
     }
 
     .right {
-        margin-right: 10px;
+        margin-right: 12px;
     }
-    .left {
-        margin-left: 10px;
-    }
+    // .left {
+    //     margin-left: 10px;
+    // }
 
     .size__Button {
         padding: 0.4rem;

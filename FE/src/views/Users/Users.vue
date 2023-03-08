@@ -200,7 +200,7 @@
                 columns: [
                     { field: 'dOB', header: 'Ngày sinh' },
                     { field: 'gender', header: 'Giới tính' },
-                    { field: 'identitycard', header: 'Căn cước công dân' },
+                    { field: 'identityCard', header: 'Căn cước công dân' },
                     { field: 'phoneNumber', header: 'Số điện thoại' },
                     { field: 'address', header: 'Địa chỉ' },
                     { field: 'dateStartWork', header: 'Ngày bắt đầu làm việc' },
@@ -304,6 +304,17 @@
                                 element.workStatus = this.getWorkStatus(element.workStatus)
                                 element.gender = this.getGender(element.gender)
                                 element.maritalStatus = this.getMaritalStatus(element.maritalStatus)
+                                element.identitycard =
+                                    element.identitycard === '' ? 'Không có dữ liệu' : element.identitycard
+                                element.skype = element.skype === '' ? 'Không có dữ liệu' : element.skype
+                                element.university = element.university === '' ? 'Không có dữ liệu' : element.university
+                                element.yearGraduated =
+                                    element.yearGraduated === null ? 'Không có dữ liệu' : element.yearGraduated
+                                element.dateLeave = element.dateLeave === null ? 'Chưa thôi việc' : element.dateLeave
+                                element.userModified =
+                                    element.userModified === null ? 'Không có dữ liệu' : element.userModified
+                                element.dateModified =
+                                    element.dateModified === null ? 'Không có dữ liệu' : element.dateModified
                                 temp.forEach((user) => {
                                     if (user.id === element.userCreated)
                                         element.userCreated = user.lastName + ' ' + user.firstName
@@ -362,7 +373,6 @@
                                 this.data.push({ ...element, fullName: '' })
                             }
                         })
-                        console.log(this.data)
                         this.data.forEach((element) => {
                             element.fullName = this.mergeString(element.lastName, element.firstName)
                             element.dateStartWork = this.formatDate(element.dateStartWork)
@@ -373,6 +383,18 @@
                             element.workStatus = this.getWorkStatus(element.workStatus)
                             element.gender = this.getGender(element.gender)
                             element.maritalStatus = this.getMaritalStatus(element.maritalStatus)
+                            element.identitycard =
+                                element.identitycard === '' ? 'Không có dữ liệu' : element.identitycard
+                            element.skype = element.skype === '' ? 'Không có dữ liệu' : element.skype
+                            element.university = element.university === '' ? 'Không có dữ liệu' : element.university
+                            element.yearGraduated =
+                                element.yearGraduated === null ? 'Không có dữ liệu' : element.yearGraduated
+                            element.dateLeave = element.dateLeave === null ? 'Chưa thôi việc' : element.dateLeave
+                            element.userModified =
+                                element.userModified === null ? 'Không có dữ liệu' : element.userModified
+                            element.dateModified =
+                                element.dateModified === null ? 'Không có dữ liệu' : element.dateModified
+                            element.phoneNumber = element.phoneNumber === '' ? 'Không có dữ liệu' : element.phoneNumber
                             temp.forEach((user) => {
                                 if (user.id === element.userCreated)
                                     element.userCreated = user.lastName + ' ' + user.firstName
@@ -441,7 +463,6 @@
                     })
             },
             CheckEdit(id) {
-                console.log(this.decode.IdGroup)
                 if (Number(this.decode.IdGroup) === 1) {
                     return false
                 } else {
@@ -481,6 +502,41 @@
             },
             mergeString(str1, str2) {
                 return str1 + ' ' + str2
+            },
+            reloadData() {
+                this.data = []
+                if (Number(this.decode.IdGroup) === 1) {
+                    HTTP.get('Users/getAll').then((res) => {
+                        if (res.status == 200) {
+                            const temp = res.data
+                            temp.forEach((element) => {
+                                if (element.isDeleted == 0) {
+                                    this.data.push({ ...element, fullName: '' })
+                                }
+                            })
+                            this.data.forEach((element) => {
+                                element.fullName = this.mergeString(element.lastName, element.firstName)
+                                element.dateStartWork = this.formatDate(element.dateStartWork)
+                                element.dateLeave = this.formatDate(element.dateLeave)
+                                element.dateCreated = this.formatDate(element.dateCreated)
+                                element.dateModified = this.formatDate(element.dateModified)
+                                element.dOB = this.formatDate(element.dOB)
+                                element.workStatus = this.getWorkStatus(element.workStatus)
+                                element.gender = this.getGender(element.gender)
+                                element.maritalStatus = this.getMaritalStatus(element.maritalStatus)
+                                temp.forEach((user) => {
+                                    if (user.id === element.userCreated)
+                                        element.userCreated = user.lastName + ' ' + user.firstName
+                                    if (user.id === element.userModified)
+                                        element.userModified = user.lastName + ' ' + user.firstName
+                                })
+                            })
+                            this.isLoading = false
+                        }
+                    })
+                } else {
+                    this.getDataByRole(this.decode.Id)
+                }
             },
         },
         components: { Export, Add, Edit, Delete, AddUserDiaLog, EditUserDiaLog },

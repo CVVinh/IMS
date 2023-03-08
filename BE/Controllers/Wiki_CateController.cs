@@ -1,7 +1,9 @@
 ﻿using BE.Data.Contexts;
 using BE.Data.Dtos.WikiCateDtos;
 using BE.Data.Dtos.WikiDtos;
+using BE.Data.Models;
 using BE.Services.Wiki;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +11,7 @@ namespace BE.Controllers
 {
     [ApiController]
     [Route("api/Wiki_Categories")]
-
+    [Authorize(Roles = "permission_group: True module: wikiCates")]
     public class Wiki_CateController : Controller
     {
         #region Property
@@ -26,6 +28,8 @@ namespace BE.Controllers
 
         //POST add new wiki categogy
         [HttpPost("addNewWikiCate")]
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: wikiCates add: 1")]
         public async Task<IActionResult> addNewWikiCate(addWiki_Categogy addWiki_Categogy)
         {
             try
@@ -93,6 +97,8 @@ namespace BE.Controllers
 
         //PUT put WikiCate
         [HttpPut("editWikiCate/{ID}")]
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: wikiCates update: 1")]
         public async Task<IActionResult> editWikiCate(editWikiCate editWikiCate, int ID)
         {
             try
@@ -119,6 +125,8 @@ namespace BE.Controllers
 
         //DELETE delete WikiCate
         [HttpDelete("deleteWikiCate/{ID}")]
+        [Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "module: wikiCates delete: 1")]
         public async Task<IActionResult> deleteWikiCate(int ID)
         {
             try

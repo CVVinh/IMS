@@ -14,15 +14,14 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "permission_group: True module: menus")]
     public class MenuController : ControllerBase
     {
-      
         private readonly AppDbContext _context;
        
         public MenuController(AppDbContext context)
         {
             _context = context;
-          
         }
 
         [HttpGet]
@@ -69,9 +68,6 @@ namespace BE.Controllers
             }
         }
 
-        
-
-
         [HttpGet("getListMenu")]
         public async Task<ActionResult> getListMenu()
         {
@@ -99,6 +95,21 @@ namespace BE.Controllers
                 return BadRequest(ex);
             }
         }
+
+        [HttpGet]
+        [Route("getMenuByModule")]
+        public async Task<IActionResult> GetMenuByModule(int moduleId)
+        {
+            try
+            {
+                return Ok(await _context.Menus.AsNoTracking().Where(u => u.idModule == moduleId).ToListAsync());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("getlistMenubyIdModoule/{ad}")]
         public async Task<ActionResult> getlistMenubyIdModoule(int ad)
         {
@@ -108,39 +119,6 @@ namespace BE.Controllers
 
                 return Ok(menuParent);
 
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-
-        [HttpPost("addMenu")]
-        public async Task<IActionResult> addMenu(addMenuDtos request)
-        {
-            try
-            {
-               
-                var menu = new Menu();
-                //menu.id = request.id;
-                menu.title = request.title;
-                menu.idModule = request.idModule;
-                menu.controller = request.controller;
-                menu.view = request.view;
-                menu.icon = request.icon;
-                menu.action = request.action;
-                menu.parent = request.parent;
-                menu.isDeleted = 0;
-                _context.Menus.Add(menu);
-                await _context.SaveChangesAsync();
-
-               
-
-                return Ok("Sucess");
-
-                
-                //return BadRequest();
             }
             catch (Exception ex)
             {
@@ -196,8 +174,37 @@ namespace BE.Controllers
             }
         }
 
+        [HttpPost("addMenu")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: menus add: 1")]
+        public async Task<IActionResult> addMenu(addMenuDtos request)
+        {
+            try
+            {
+                var menu = new Menu();
+                //menu.id = request.id;
+                menu.title = request.title;
+                menu.idModule = request.idModule;
+                menu.controller = request.controller;
+                menu.view = request.view;
+                menu.icon = request.icon;
+                menu.action = request.action;
+                menu.parent = request.parent;
+                menu.isDeleted = 0;
+                _context.Menus.Add(menu);
+                await _context.SaveChangesAsync();
+
+                return Ok("Sucess");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
 
         [HttpPut("updateMenu")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: menus update: 1")]
         public async Task<ActionResult> updateMenu(updateMenuDtos requests)
         {
             try
@@ -225,11 +232,12 @@ namespace BE.Controllers
 
         [HttpPut]
         [Route("deleteMenu/{idmenu}")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: menus delete: 1")]
         public async Task<IActionResult> deleteMenu(int idmenu)
         {
             try
             {
-
                 var menu = await _context.Menus.SingleOrDefaultAsync(p => p.id == idmenu);
               
                 if (menu == null)
@@ -249,7 +257,6 @@ namespace BE.Controllers
                         _context.SaveChanges();
                         return Ok("success");
                     }
-                   
                 }
             }
             catch (Exception ex)
@@ -258,22 +265,6 @@ namespace BE.Controllers
             }
         }
 
-        
-
-        [HttpGet]
-        [Route("getMenuByModule")]
-        // Authorize
-        public async Task<IActionResult> GetMenuByModule(int moduleId)
-        {
-            try
-            {
-                return Ok(await _context.Menus.AsNoTracking().Where(u => u.idModule == moduleId).ToListAsync());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
 
     }
 }

@@ -37,5 +37,23 @@ namespace BE.Data.Models
         public int? userModified { get; set; }
         public DateTime? dateModified { get; set; }
 
+        public Permission_Use_Menu() { }
+
+        public Permission_Use_Menu(int idModule, int IdUser, int IdMenu, int Add, int Update, int Delete, int DeleteMulti, int Confirm, int ConfirmMulti, int Refuse, int AddMember, int Export, int? userCreated=0)
+        {
+            this.idModule= idModule;
+            this.IdUser = IdUser;
+            this.IdMenu = IdMenu;
+            this.Add = Add;
+            this.Update = Update;
+            this.Delete = Delete;
+            this.Confirm = Confirm;
+            this.ConfirmMulti = ConfirmMulti;
+            this.Refuse = Refuse;
+            this.AddMember = AddMember;
+            this.Export = Export;
+            this.userCreated = userCreated;
+            this.dateCreated = DateTime.Now;
+        }
     }
 }

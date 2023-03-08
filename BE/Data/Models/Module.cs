@@ -9,5 +9,6 @@ namespace BE.Data.Models
         public int isDeleted { get; set; }
         public int idSort { get; set; }
 
+        public ICollection<Permission_Action_Module> permissionActions { get; set; }
     }
 }

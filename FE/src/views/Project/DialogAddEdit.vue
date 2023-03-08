@@ -18,7 +18,7 @@
                         </div>
                     </div>
                     <div class="col-12 row">
-                        <div class="col-6">
+                        <div class="col-9">
                             <div v-if="isOnGitlab == true" class="field mb-4">
                                 <label
                                     class="mb-2"
@@ -36,7 +36,7 @@
                                         :options="projectGit"
                                         optionLabel="name"
                                         optionValue="id"
-                                        placeholder="Nhập dự án"
+                                        placeholder="Chọn dự án"
                                         :filter="true"
                                         :showClear="true"
                                         :class="{ 'p-invalid': v$.dataProject.projectCode.$invalid && submitted }"
@@ -95,7 +95,7 @@
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-3">
                             <div class="field mb-4">
                                 <label
                                     class="mb-2"
@@ -273,7 +273,7 @@
                                     class="p-error"
                                     >{{ v$.dataProject.endDate.required.$message.replace('Value', 'End date') }}</small
                                 >
-                                <small
+                                <!-- <small
                                     v-if="
                                         !v$.dataProject.endDate.$invalid &&
                                         !checkEndDate() &&
@@ -283,7 +283,7 @@
                                     class="p-error"
                                 >
                                     Ngày kết thúc phải lớn hơn ngày bắt đầu!
-                                </small>
+                                </small> -->
                             </div>
                         </div>
                     </div>
@@ -359,7 +359,6 @@
             if (this.projectSelected.id) {
                 HTTP.get('Project/getProjectById/' + this.projectSelected.id).then((res) => {
                     if (res.status === HttpStatus.OK) {
-                        console.log(res.data)
                         this.dataProject = res.data
                         this.dataProject.startDate = new Date(res.data.startDate)
                         this.dataProject.endDate = new Date(res.data.endDate)
@@ -411,7 +410,6 @@
                 HTTP.get('/Project/getListLead')
                     .then((res) => {
                         this.Optionleader = res.data
-                        console.log(res.data)
                     })
                     .catch((err) => console.log(err))
             },
@@ -435,7 +433,6 @@
                 } else {
                     this.AddData()
                 }
-                console.log(this.projectSelected.id)
             },
             AddData() {
                 let userLogin = LocalStorage.jwtDecodeToken()
@@ -462,7 +459,6 @@
                 if (dataSave) {
                     HTTP.post('Project/addProject', dataSave)
                         .then((res) => {
-                            console.log(res.data)
                             if (res.status == 200) {
                                 this.showSuccess()
                                 this.onClickCancel()
@@ -478,7 +474,6 @@
                 }
             },
             editData() {
-                console.log('edit')
                 let userLogin = LocalStorage.jwtDecodeToken()
                 let data = {
                     id: this.dataProject.id,
@@ -498,7 +493,6 @@
                 if (this.isOnGitlab) {
                     data.endDate = new Date()
                 }
-                console.log(data)
                 if (data) {
                     HTTP.put(`Project/updateProject/${data.id}`, data)
                         .then((res) => {
@@ -555,7 +549,8 @@
             },
             checkStartDate() {
                 if (this.dataProject.startDate < new Date(new Date().toLocaleDateString('en-EU'))) {
-                    return (this.valid = false)
+                    // return (this.valid = false)
+                    return (this.valid = true)
                 } else {
                     return (this.valid = true)
                 }
@@ -594,5 +589,9 @@
     }
     .p-multiselect.p-component.p-inputwrapper {
         width: 100%;
+    }
+    .p-dropdown-panel {
+        width: 33.3%;
+        min-width: 33.3%;
     }
 </style>

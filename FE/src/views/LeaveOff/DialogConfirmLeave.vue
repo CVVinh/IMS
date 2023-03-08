@@ -59,15 +59,12 @@
             submitLeaveOff() {
                 this.isSubmit = true
                 if (!this.v$.$invalid) {
-                    console.log(this.idLeaveOff)
-                    console.log(this.leaveOff.reason)
                     var notAcceptLeaveOffDto = {
                         idAcceptUser: this.userAccept.Id,
                         ReasonNotAccept: this.leaveOff.reason,
                     }
                     HTTP.put(NOT_ACCEPT_LEAVE_OFF(this.idLeaveOff), notAcceptLeaveOffDto)
                         .then((res) => {
-                            console.log(res)
                             if (res.status == 200) {
                                 this.$toast.add({
                                     severity: 'success',

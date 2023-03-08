@@ -2,12 +2,14 @@ using BE.Data.Contexts;
 using BE.Data.Models;
 using BE.Services.PaginationServices;
 using BE.Services.TokenServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "permission_group: True module: branchs")]
     public class BranchsController : Controller
     {
         private readonly AppDbContext _context;

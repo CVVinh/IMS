@@ -192,7 +192,6 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-
         //PUT: not accept payment
         [HttpPut("NotAcceptPayment/{idPaid}")]
         [Authorize(Roles = "admin,pm,sample")]

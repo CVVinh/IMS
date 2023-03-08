@@ -281,7 +281,6 @@
                 })
             },
             async handlerFillterProject() {
-                console.log(this.fillterProject)
                 if (
                     this.fillterProject.selectedProject !== null &&
                     this.fillterProject.startDate !== null &&
@@ -369,7 +368,6 @@
                     return el.assignee.id === item.id
                 })
                 this.dataDetail = IssueDetails
-                console.log(this.dataDetail)
             },
             async handlerGetAllIssue(id) {
                 let resultCount = 100

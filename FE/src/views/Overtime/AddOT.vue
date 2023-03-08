@@ -399,7 +399,6 @@
                             if (res.status == 200) {
                                 this.showSuccess('Thêm mới OT thành công!')
                                 this.$router.push('/ots')
-                                console.log(res.data)
                             }
                         })
                         .catch(() => {
@@ -444,7 +443,6 @@
         },
         mounted() {
             this.token = LocalStorage.jwtDecodeToken()
-            console.log(this.token.IdGroup)
             // Nếu người dùng không phải là leader hay admin sẽ chuyển đến ots
             if (Number(this.token.IdGroup) !== 3 && Number(this.token.IdGroup) !== 1) {
                 router.push('/ots')

@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using BE.Data.Contexts;
+using BE.Data.DataRoles;
 using BE.Data.Dtos.Permission_Use_Menus;
 using BE.Data.Dtos.UserDtos;
 using BE.Data.Models;
 using BE.Response;
+using BE.Services.GroupServices;
 using BE.Services.UserServices;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -21,6 +24,8 @@ namespace BE.Services.PermissionUserMenuServices
         Task<BaseResponse<Permission_Use_Menu>> UpdatePermissionUserMenu(PermissionUserMenuRequest permissionUserMenuRequest, PermissionUserMenuEditDto permissionUserMenuEditDto);
         Task<BaseResponse<Permission_Use_Menu>> DeletePermissionUserMenu(PermissionUserMenuRequest permissionUserMenuRequest);
         Task<BaseResponse<List<Permission_Use_Menu>>> DeleteMultiPermissionUserMenu(List<PermissionUserMenuRequest> permissionUserMenuRequest);
+        Task<BaseResponse<List<Permission_Use_Menu>>> AddPermissionRoleUserMenu(int idUser, int idUserCreated, List<int> listIdGroup);
+        Task<BaseResponse<List<Permission_Use_Menu>>> DeletePermissionRoleUserMenu(int idUser, List<int> listIdGroup);
     }
 
     public class PermissionUserMenuServices : IPermissionUserMenuServices
@@ -28,11 +33,21 @@ namespace BE.Services.PermissionUserMenuServices
 
         private readonly AppDbContext _db;
         private readonly IMapper _mapper;
+        private readonly IDataAdmin _dataAdmin;
+        private readonly IDataPm _dataPm;
+        private readonly IDataLead _dataLead;
+        private readonly IDataSample _dataSample;
+        private readonly IDataStaff _dataStaff;
 
-        public PermissionUserMenuServices(AppDbContext db, IMapper mapper)
+        public PermissionUserMenuServices(AppDbContext db, IMapper mapper, IDataAdmin dataAdmin, IDataPm dataPm, IDataLead dataLead, IDataSample dataSample, IDataStaff dataStaff)
         {
             _db = db;
             _mapper = mapper;
+            _dataAdmin = dataAdmin;
+            _dataPm = dataPm;
+            _dataLead = dataLead;
+            _dataSample = dataSample;
+            _dataStaff = dataStaff;
         }
 
         public async Task<BaseResponse<List<Permission_Use_Menu>>> GetAllPermissionUserMenuAsync()
@@ -129,12 +144,21 @@ namespace BE.Services.PermissionUserMenuServices
             {
                 foreach (var item in permissionUserMenuAddDtos)
                 {
-                    var permissionUserMenu = _mapper.Map<Permission_Use_Menu>(item);
-                    permissionUserMenu.dateCreated = DateTime.Now;
-                    await _db.Permission_Use_Menus.AddAsync(permissionUserMenu);
-                    data.Add(permissionUserMenu);
+                    var permissionUserMenu = await _db.Permission_Use_Menus.Where(s => s.IdUser.Equals(item.IdUser)
+                                && s.idModule.Equals(item.idModule)).FirstOrDefaultAsync();
+                    if(permissionUserMenu == null)
+                    {
+                        var permissionUserMenuMapData = _mapper.Map<Permission_Use_Menu>(item);
+                        permissionUserMenuMapData.dateCreated = DateTime.Now;
+                        await _db.Permission_Use_Menus.AddAsync(permissionUserMenuMapData);
+                        data.Add(permissionUserMenuMapData);
+                    }
+                    else
+                    {
+                        message = "Permission_Use_Menu have been existed !";
+                        return new BaseResponse<List<Permission_Use_Menu>>(success, message, data = null);
+                    }
                 }
-
                 await _db.SaveChangesAsync();
                 success = true;
                 message = "Add new Permission_Use_Menu successfully";
@@ -155,9 +179,8 @@ namespace BE.Services.PermissionUserMenuServices
             var data = new Permission_Use_Menu();
             try
             {
-                var permissionUserMenu = await _db.Permission_Use_Menus.Where(s => s.IdUser.Equals(permissionUserMenuRequest.IdUser) 
-                                && s.idModule.Equals(permissionUserMenuRequest.idModule) 
-                                && s.IdMenu.Equals(permissionUserMenuRequest.IdMenu)).FirstOrDefaultAsync();
+                var permissionUserMenu = await _db.Permission_Use_Menus.Where(s => s.IdUser.Equals(permissionUserMenuRequest.IdUser)
+                                && s.idModule.Equals(permissionUserMenuRequest.idModule)).FirstOrDefaultAsync();
                 if (permissionUserMenu is null)
                 {
                     message = "Permission_Use_Menu doesn't exist !";
@@ -191,8 +214,7 @@ namespace BE.Services.PermissionUserMenuServices
             try
             {
                 var permissionUserMenu = await _db.Permission_Use_Menus.Where(s => s.IdUser.Equals(permissionUserMenuRequest.IdUser)
-                                && s.idModule.Equals(permissionUserMenuRequest.idModule)
-                                && s.IdMenu.Equals(permissionUserMenuRequest.IdMenu)).FirstOrDefaultAsync();
+                                && s.idModule.Equals(permissionUserMenuRequest.idModule)).FirstOrDefaultAsync();
 
                 if (permissionUserMenu is null)
                 {
@@ -246,6 +268,145 @@ namespace BE.Services.PermissionUserMenuServices
                 return new BaseResponse<List<Permission_Use_Menu>>(success, message, data = null);
             }
         }
+
+        public async Task<BaseResponse<List<Permission_Use_Menu>>> AddPermissionRoleUserMenu(int idUser, int idUserCreated, List<int> listIdGroup)
+        {
+            var success = false;
+            var message = "";
+            var arrPerUser = new List<Permission_Use_Menu>();
+            var data = new List<Permission_Use_Menu>();
+            try
+            {
+                foreach(var idGroup in listIdGroup)
+                {
+                    var group = await _db.Groups.Where(s => s.IsDeleted == 0 && s.Id.Equals(idGroup)).FirstOrDefaultAsync();
+                    if (group.NameGroup.ToLower().Equals("admin"))
+                    {
+                        arrPerUser = _dataAdmin.RoleAdmin(idUser, idGroup, idUserCreated);
+                    }
+                    else if (group.NameGroup.ToLower().Equals("pm"))
+                    {
+                        arrPerUser = _dataPm.RolePm(idUser, idGroup, idUserCreated);
+                    }
+                    else if (group.NameGroup.ToLower().Equals("lead"))
+                    {
+                        arrPerUser = _dataLead.RoleLead(idUser, idGroup, idUserCreated);
+                    }
+                    else if (group.NameGroup.ToLower().Equals("sample"))
+                    {
+                        arrPerUser = _dataSample.RoleSample(idUser, idGroup, idUserCreated);
+                    }
+                    else if (group.NameGroup.ToLower().Equals("staff"))
+                    {
+                        arrPerUser = _dataStaff.RoleStaff(idUser, idGroup, idUserCreated);
+                    }
+                    else
+                    {
+                        arrPerUser = _dataStaff.RoleStaff(idUser, idGroup, idUserCreated);
+                    }
+
+                    foreach (var item in arrPerUser)
+                    {
+                        var permissionUserMenu = await _db.Permission_Use_Menus.Where(s => s.IdUser.Equals(item.IdUser)
+                                    && s.idModule.Equals(item.idModule)).FirstOrDefaultAsync();
+                        if (permissionUserMenu == null)
+                        {
+                            await _db.Permission_Use_Menus.AddAsync(item);
+                            data.Add(item);
+                        }
+                    }
+                    await _db.SaveChangesAsync();
+                }
+                success = true;
+                message = "Add Role Permission_Use_Menu successfully";
+                return new BaseResponse<List<Permission_Use_Menu>>(success, message, data);
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                message = $"Add Role Permission_Use_Menu failed! {ex.InnerException}";
+                return new BaseResponse<List<Permission_Use_Menu>>(success, message, data = null);
+            }
+        }
+
+        public async Task<BaseResponse<List<Permission_Use_Menu>>> DeletePermissionRoleUserMenu(int idUser, List<int> listIdGroup)
+        {
+            var success = false;
+            var message = "";
+            var arrPerUser = new List<Permission_Use_Menu>();
+            var data = new List<Permission_Use_Menu>();
+            try
+            {
+                foreach (var idGroup in listIdGroup)
+                {
+                    var getUserGroup = await _db.UserGroups.Where(s => s.isDeleted == false && s.idUser.Equals(idUser)).ToListAsync();
+                    if (getUserGroup.Count() != 0)
+                    {
+                        var getDataNeedDelete = await _db.Permission_Groups.Where(s => s.IdGroup.Equals(idGroup) && s.Access == true).ToListAsync();
+                        if (getDataNeedDelete.Count() != 0)
+                        {
+                            var mergeGroupUser = new List<Permission_Group>();
+                            foreach (var item in getUserGroup)
+                            {
+                                if (item.idGroup != idGroup)
+                                {
+                                    var itemGroup = await _db.Permission_Groups.Where(s => s.IdGroup.Equals(item.idGroup) && s.Access == true).ToListAsync();
+                                    mergeGroupUser.AddRange(itemGroup);
+                                }
+                                else
+                                {
+                                    _db.UserGroups.Remove(item);
+                                }
+                            }
+
+                            foreach (var itemOn in mergeGroupUser)
+                            {
+                                foreach (var itemIn in getDataNeedDelete)
+                                {
+                                    if (itemOn.IdModule == itemIn.IdModule)
+                                    {
+                                        getDataNeedDelete.Remove(itemIn);
+                                        break;
+                                    }
+                                }
+                            }
+
+                            foreach (var itemIn in getDataNeedDelete)
+                            {
+                                var permissionUserMenu = await _db.Permission_Use_Menus.Where(s => s.IdUser.Equals(idUser) && s.idModule.Equals(itemIn.IdModule)).FirstOrDefaultAsync();
+                                if (permissionUserMenu != null)
+                                {
+                                    _db.Permission_Use_Menus.Remove(permissionUserMenu);
+                                    data.Add(permissionUserMenu);
+                                }
+
+                            }
+                        await _db.SaveChangesAsync();
+                        }
+                        //else
+                        //{
+                        //    message = "Empty delete data!";
+                        //    return new BaseResponse<List<Permission_Use_Menu>>(success, message, data = null);
+                        //}
+                    }
+                }
+                //else
+                //{
+                //    message = "No data to delete!";
+                //    return new BaseResponse<List<Permission_Use_Menu>>(success, message, data = null);
+                //}
+                success = true;
+                message = "Deleting Role Permission_Use_Menu successfully";
+                return new BaseResponse<List<Permission_Use_Menu>>(success, message, data);
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                message = $"Deleting Role Permission_Use_Menu failed! {ex.InnerException}";
+                return new BaseResponse<List<Permission_Use_Menu>>(success, message, data = null);
+            }
+        }
+
 
     }
 }

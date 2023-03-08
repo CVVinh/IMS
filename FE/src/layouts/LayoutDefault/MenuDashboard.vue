@@ -284,37 +284,37 @@
                                 </div>
 
                                 <ul style="padding: 3px">
-                                    <ScrollPanel style="width: 100%; height: 300px; padding: 0px 10px 0px 0px">
+                                    <ScrollPanel style="width: 100%; height: 400px; padding: 0px 10px 0px 0px">
                                         <li
-                                            :class="{ 'is-watch': item.isWatched, 'default-watch': !item.isWatched }"
-                                            v-for="item in noti"
-                                            :key="item.id"
-                                            class="border-bottom border-1 item-info mt-1 mb-1"
-                                            style="padding: 5px 0px 5px 0px; height: 90px; cursor: pointer"
+                                            :class="{ 'is-watch': items.isWatched, 'default-watch': !items.isWatched }"
+                                            v-for="items in noti"
+                                            :key="items.id"
+                                            class="border-bottom border-1 item-info mt-1 mb-1 d-flex align-items-center"
+                                            style="padding: 5px 0px 5px 0px; height: 110px; cursor: pointer"
                                         >
-                                            <router-link
-                                                :to="item.link"
-                                                :target="item.target"
-                                                :class="item.class"
-                                                style="text-decoration: none; color: inherit"
-                                                @click="putNotification(item.id)"
+                                            <button
+                                                :disabled="items.link == null"
+                                                style="text-decoration: none; color: inherit; height: inherit"
+                                                @click="redictoAction(items)"
                                             >
-                                                <span class="noti-name-text" style="font-size: 14px">
-                                                    {{ item.title }}</span
-                                                >
-                                                <h7
-                                                    class="d-flex"
-                                                    style="
-                                                        margin-top: 5px;
-                                                        margin-bottom: 2px;
-                                                        color: gray;
-                                                        font-size: 14px;
-                                                    "
-                                                >
-                                                    {{ item.message }}
-                                                </h7>
-                                                <h7 class="noti-time-text">{{ formartDate(item.dateCreated) }}</h7>
-                                            </router-link>
+                                                <div class="mb-1">
+                                                    <span class="noti-name-text" style="font-size: 14px">
+                                                        {{ items.title }}</span
+                                                    >
+                                                </div>
+                                                <div class="mb-1">
+                                                    <h7 class="three-line-paragraph" :title="items.message">
+                                                        {{ items.message }}
+                                                    </h7>
+                                                </div>
+                                                <div class="mt-1">
+                                                    <h7
+                                                        class="noti-time-text"
+                                                        style="font-style: italic; font-size: 14px"
+                                                        >{{ formartDate(items.dateCreated) }}</h7
+                                                    >
+                                                </div>
+                                            </button>
                                         </li>
                                     </ScrollPanel>
                                 </ul>
@@ -561,6 +561,7 @@
     import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr'
     import { HTTP_SINGNALRHUB } from '@/http-common'
     import { NotificationService } from '@/service/notification.service'
+
     export default {
         data() {
             return { noti: [], count: 0, hasNewData: false }
@@ -580,27 +581,61 @@
         },
         watch: {
             noti: {
-                handler: function Change(varss) {
-                    console.log(varss)
-                    let count1 = this.noti.filter(function (element) {
-                        return element.isWatched == false
-                    })
-                    console.log(count1)
-                    this.count = count1.length <= 0 ? 0 : count1.length
+                handler: function Change() {
+                    this.counts()
                 },
             },
         },
         methods: {
+            counts() {
+                let count1 = this.noti.filter(function (element) {
+                    return element.isWatched == false
+                })
+                this.count = count1.length <= 0 ? 0 : count1.length
+            },
+            redictoAction(item) {
+                this.putNotification(item.id)
+                this.$router.replace({ path: item.link })
+            },
             getNotification(meess) {
                 NotificationService.getAllNotification().then((res) => {
-                    this.noti = res.data
+                    let count1 = res.data.filter(function (element) {
+                        return element.isWatched == false
+                    })
+                    this.count = count1.length <= 0 ? 0 : count1.length
+                    res.data.forEach((el) => {
+                        this.noti.push({
+                            categoryModule: el.categoryModule,
+                            dateCreated: el.dateCreated,
+                            dateDeleted: el.dateDeleted,
+                            dateUpdated: el.dateUpdated,
+                            id: el.id,
+                            isDeleted: el.isDeleted,
+                            isRequireDelete: el.isRequireDelete,
+                            isWatched: el.isWatched,
+                            link: el.link,
+                            message: el.message,
+                            receiveUser: el.receiveUser,
+                            requestUser: el.requestUser,
+                            title: el.title,
+                            userCreated: el.userCreated,
+                            userDeleted: el.userDeleted,
+                            userUpdated: el.userUpdated,
+                            usercode: el.usercode,
+                            countNoti: count1.length <= 0 ? 0 : count1.length,
+                        })
+                    })
                     if (meess != null) {
                         this.toastInfo(meess)
                     }
                 })
             },
             putNotification(id) {
-                return NotificationService.isWatchNotification(id).then((res) => res.data)
+                return NotificationService.isWatchNotification(id).then((res) => {
+                    res.data
+                    this.noti = []
+                    this.getNotification(null)
+                })
             },
             toastInfo(message) {
                 this.$toast.add({
@@ -784,5 +819,25 @@
         100% {
             transform: rotate(0);
         }
+    }
+    .text-h7 {
+        margin-top: 5px;
+        margin-bottom: 2px;
+        color: gray;
+        font-size: 14px;
+        padding: 0px 0px 2px 0px;
+    }
+    .three-line-paragraph {
+        display: block;
+        display: -webkit-box;
+        line-height: 16px;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        visibility: visible;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        color: gray;
+        font-size: 14px;
+        padding: 0px 0px 2px 0px;
     }
 </style>

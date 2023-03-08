@@ -15,7 +15,7 @@ const storeRole = ({
             const idGroup = localStorage.getItem('IdGroup')
             const res = await HTTP.get('Group/getListGroup')
             if (res.status === 200) {
-                res.data.forEach((element) => {
+                res.data._Data.forEach((element) => {
                     if (element.id === Number(idGroup)) {
                         storeRole.state.key = element.key
                     }

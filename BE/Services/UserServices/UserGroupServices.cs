@@ -114,7 +114,7 @@ namespace BE.Services.UserServices
             var data = new List<User_Group>();
             try
             {
-                foreach(var item in userGroupCreatedDto)
+                foreach (var item in userGroupCreatedDto)
                 {
                     var userGroup = _mapper.Map<User_Group>(item);
                     userGroup.dateCreated = DateTime.Now;
@@ -122,7 +122,7 @@ namespace BE.Services.UserServices
                     await _db.UserGroups.AddAsync(userGroup);
                     data.Add(userGroup);
                 }
-                
+
                 await _db.SaveChangesAsync();
                 success = true;
                 message = "Add new User Group successfully";
@@ -150,6 +150,14 @@ namespace BE.Services.UserServices
                     data = null;
                     return new BaseResponse<User_Group>(success, message, data);
                 }
+                
+                var userGroupTest = await _db.UserGroups.Where(s => s.isDeleted == false && s.idUser.Equals(idUser) && s.idGroup.Equals(userGroupUpdatedDto.idGroup)).FirstOrDefaultAsync();
+                if (userGroupTest != null)
+                {
+                    message = "User_Group have been existed !";
+                    return new BaseResponse<User_Group>(success, message, data = null);
+                }
+
                 var userGroupMapData = _mapper.Map<UserGroupUpdatedDto, User_Group>(userGroupUpdatedDto, userGroup);
 
                 userGroupMapData.dateUpdated = DateTime.Now;
@@ -209,7 +217,7 @@ namespace BE.Services.UserServices
             var data = new List<User_Group>();
             try
             {
-                foreach(var item in userGroupDeletedDto)
+                foreach (var item in userGroupDeletedDto)
                 {
                     var result = await DeleteUserGroup(item);
                     if (result._success)
@@ -232,6 +240,7 @@ namespace BE.Services.UserServices
                 return new BaseResponse<List<User_Group>>(success, message, data = null);
             }
         }
+
 
     }
 }

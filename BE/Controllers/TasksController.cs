@@ -8,6 +8,7 @@ using BE.Data.Models;
 using BE.Services.MemberProjectServices;
 using BE.Services.PaginationServices;
 using BE.Services.TaskServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,7 @@ namespace BE.Controllers
 {
     [ApiController]
     [Route("api/tasks")]
+    [Authorize(Roles = "permission_group: True module: tasks")]
     public class TasksController : Controller
     {
         #region Property
@@ -49,7 +51,6 @@ namespace BE.Controllers
         {
             try
             {
-                
                 var results = await _appContext.tasks.ToListAsync();
                 var pageSize = (int)pageSizeEnum;
                 var sortResults = results.OrderByDescending(t => t.createTaskDate);
@@ -94,6 +95,8 @@ namespace BE.Controllers
 
         //POST: add new task
         [HttpPost("addNewTask")]
+        [Authorize(Roles = "admin,pm,lead")]
+        [Authorize(Roles = "module: tasks add: 1")]
         public async Task<IActionResult> addNewTask(AddNewTaskDto addNewTaskDto)
         {
             try
@@ -244,6 +247,8 @@ namespace BE.Controllers
 
         //PUT: edit task by id
         [HttpPut("editTaskById/{idTask}")]
+        [Authorize(Roles = "admin,pm,lead")]
+        [Authorize(Roles = "module: tasks update: 1")]
         public async Task<ActionResult> editTaskById(int idTask, EditTaskByIdDto task)
         {
             try
@@ -280,6 +285,8 @@ namespace BE.Controllers
 
         //PUT: Delete task by id
         [HttpPut("deletedTask/{idTask}")]
+        [Authorize(Roles = "admin,pm,lead")]
+        [Authorize(Roles = "module: tasks delete: 1")]
         public async Task<ActionResult> deletedTaskById(int idTask)
         {
             try

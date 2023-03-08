@@ -90,6 +90,7 @@
                             :options="arrCompany"
                             optionLabel="name"
                             optionValue="id"
+                            placeholder="Chọn Chi Nhánh"
                         />
                         <small class="p-error" v-if="v$.leaveOff.idCompanyBranh.required.$invalid && isSubmit">
                             {{ v$.leaveOff.idCompanyBranh.required.$message.replace('Value', 'Chi nhánh công ty') }}
@@ -154,7 +155,6 @@
         watch: {
             onLeaveOff: {
                 handler: function Change(status) {
-                    console.log(status)
                     if (status == false) {
                         this.timeFormat.setHours(0)
                         this.timeFormat.setMinutes(0)
@@ -223,8 +223,6 @@
                         return
                     }
                 }
-                console.log(date1.getDay())
-                console.log(date2.getDay())
                 if (date1.getDay() == 0 || date1.getDay() == 6) {
                     this.toastWarn('Không được phép nghỉ thứ 7, CN !')
                     return
@@ -278,7 +276,6 @@
                 if (editRegisterLeaveOffDtos) {
                     HTTP.put(UPDATE_LEAVE_OFF(this.selectedLeaveOff.id), editRegisterLeaveOffDtos)
                         .then((res) => {
-                            console.log(res)
                             switch (res.status) {
                                 case HttpStatus.OK:
                                     this.toastSuccess(res.data._Message)
@@ -363,4 +360,9 @@
         },
     }
 </script>
-<style scoped></style>
+<style>
+    .p-dropdown-panel {
+        width: 9.3%;
+        min-width: 9.3%;
+    }
+</style>

@@ -50,6 +50,7 @@ import Message from 'primevue/message'
 import Divider from 'primevue/divider'
 import DatePicker from 'vue-datepicker-next'
 import Fieldset from 'primevue/fieldset'
+import Vue3TagsInput from 'vue3-tags-input'
 
 const app = createApp(App)
 
@@ -93,6 +94,7 @@ app.component('Message', Message)
 app.component('DatePicker', DatePicker)
 app.component('Galleria', Galleria)
 app.component('Fieldset', Fieldset)
+app.component('Vue3TagsInput', Vue3TagsInput)
 
 app.use(createPinia())
 app.use(router)

@@ -2,7 +2,6 @@
 using BE.Data.Contexts;
 using BE.Data.Dtos.GruopDtos;
 using BE.Data.Dtos.ModuleDtos;
-using BE.Data.Dtos.UserDtos;
 using BE.Data.Models;
 using BE.Response;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +15,7 @@ namespace BE.Services.ModuleServices
         Task<BaseResponse<Module>> CreateModule(ModuleDtos moduleDtos);
         Task<BaseResponse<Module>> UpdateModule(int id, ModuleDtos moduleDtos);
         Task<BaseResponse<Module>> DeleteModule(int id);
-        Task<BaseResponse<List<Module>>> DeleteMultiModule(List<int> listId);
+        Task<BaseResponse<List<Module>>> DeleteMultiModule(List<int> listIdModule);
     }
 
     public class ModuleServices : IModuleServices
@@ -37,7 +36,7 @@ namespace BE.Services.ModuleServices
             var data = new List<Module>();
             try
             {
-                var module = await _db.modules.Where(s => s.isDeleted == 0).OrderByDescending(s => s.idSort).ToListAsync();
+                var module = await _db.modules.Where(s => s.isDeleted == 0).OrderBy(s => s.idSort).ToListAsync();
                 success = true;
                 message = "Get all data successfully";
                 data.AddRange(module);
@@ -151,25 +150,30 @@ namespace BE.Services.ModuleServices
             }
         }
 
-        public async Task<BaseResponse<List<Module>>> DeleteMultiModule(List<int> listId)
+        public async Task<BaseResponse<List<Module>>> DeleteMultiModule(List<int> listIdModule)
         {
             var success = false;
             var message = "";
             var data = new List<Module>();
             try
             {
-                foreach (var item in listId)
+                foreach (var item in listIdModule)
                 {
-                    var result = await DeleteModule(item);
-                    if (result._success)
+                    var module = await _db.modules.Where(s => s.isDeleted == 0 && s.id.Equals(item)).FirstOrDefaultAsync();
+                    if (module != null)
                     {
-                        data.Add(result._Data);
+                        module.isDeleted = 1;
+                        _db.modules.Update(module);
+                        data.Add(module);
                     }
                     else
                     {
-                        return new BaseResponse<List<Module>>(success, result._Message, data = null);
+                        message = item + " group doesn't exist !";
+                        return new BaseResponse<List<Module>>(success, message, data = null);
                     }
                 }
+                await _db.SaveChangesAsync();
+
                 success = true;
                 message = "Deleting Multi Module successfully";
                 return new BaseResponse<List<Module>>(success, message, data);
@@ -178,7 +182,7 @@ namespace BE.Services.ModuleServices
             {
                 success = false;
                 message = $"Deleting Multi Module failed! {ex.InnerException}";
-                return new BaseResponse<List<Module>>(success, message, data = null);
+                return new BaseResponse<List<Module>>(success, message, data);
             }
         }
 

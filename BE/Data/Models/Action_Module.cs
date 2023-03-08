@@ -7,5 +7,6 @@ namespace BE.Data.Models
         public string name { get; set; }
         public string description { get; set; }
 
+        public ICollection<Permission_Action_Module> permissionActions { get; set; }
     }
 }

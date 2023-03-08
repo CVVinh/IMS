@@ -5,6 +5,7 @@ using BE.Data.Models;
 using BE.Services.ActionModuleServices;
 using BE.Services.PaginationServices;
 using BE.Services.UserServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,7 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "permission_group: True module: permissionActionModules")]
     public class PermissionActionModuleController : ControllerBase
     {
         private readonly IPermissionActionModuleServices _permissionActionModuleServices;
@@ -62,7 +64,9 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-        [HttpPost]
+        [HttpPost("createPermissionActionModule")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: permissionActionModules add: 1")]
         public async Task<IActionResult> CreatePermissionActionModule(List<AddPermissionActionModuleDto> addPermissionActionModuleDtos)
         {
             if (!ModelState.IsValid)
@@ -77,7 +81,9 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-        [HttpPut("updateUPermissionActionModule/{idModule}/{idAction}")]
+        [HttpPut("updateUPermissionActionModule/{moduleId}/{actionModuleId}")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: permissionActionModules update: 1")]
         public async Task<IActionResult> UpdateUPermissionActionModule([FromRoute] RequestPermissionActionModuleDto requestPermissionActionModuleDto, UpdatePermissionActionModuleDto updatePermissionActionModuleDto)
         {
             if (!ModelState.IsValid)
@@ -92,7 +98,9 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-        [HttpPut("deletePermissionActionModule/{idModule}/{idAction}")]
+        [HttpPut("deletePermissionActionModule/{moduleId}/{actionModuleId}")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: permissionActionModules delete: 1")]
         public async Task<IActionResult> DeletePermissionActionModule([FromRoute] RequestPermissionActionModuleDto requestPermissionActionModuleDto, DeletePermissionActionModuleDto deletePermissionActionModuleDto)
         {
             var response = await _permissionActionModuleServices.DeletePermissionActionModule(requestPermissionActionModuleDto, deletePermissionActionModuleDto);
@@ -103,10 +111,12 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-        [HttpPut("deleteMultiPermissionActionModule")]
-        public async Task<IActionResult> DeleteMultiPermissionActionModule(List<RequestPermissionActionModuleDto> requestPermissionActionModuleDto, DeletePermissionActionModuleDto deletePermissionActionModuleDto)
+        [HttpPost("deleteMultiPermissionActionModule")]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: permissionActionModules deleteMulti: 1")]
+        public async Task<IActionResult> DeleteMultiPermissionActionModule(List<DeleteMultiPermissionActionModuleDto> deleteMultiPermissionActionModuleDtos)
         {
-            var response = await _permissionActionModuleServices.DeleteMultiPermissionActionModule(requestPermissionActionModuleDto, deletePermissionActionModuleDto);
+            var response = await _permissionActionModuleServices.DeleteMultiPermissionActionModule(deleteMultiPermissionActionModuleDtos);
             if (response._success)
             {
                 return Ok(response);

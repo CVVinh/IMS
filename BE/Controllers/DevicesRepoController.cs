@@ -13,6 +13,7 @@ namespace BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "permission_group: True module: devicesRepos")]
     public class DevicesRepoController : CustomControllerBase
     {
         private readonly UnitOfWork _unitOfWork;
@@ -39,7 +40,6 @@ namespace BE.Controllers
         }
 
         [HttpPost("GetListDevicesWithPaginate")] /// Chưa sửa phân trang
-        [Authorize]
         public async Task<IActionResult> GetListDevicesWithPaginate([FromBody] Paginate paginate)
         {
             var token = TokenHelper.GetUserId(User);
@@ -56,7 +56,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("CreateDevices")]
-        [Authorize]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: devicesRepos add: 1")]
         public IActionResult CreateDevices([FromBody] CreateDevicesDto device)
         {
             var token = TokenHelper.GetUserId(User);
@@ -68,7 +69,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("UpdateDevices/{IdDevices}")]
-        [Authorize]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: devicesRepos update: 1")]
         public IActionResult UpdateDevices([FromRoute] int IdDevices, [FromBody] CreateDevicesDto request)
         {
             Devices device = _mapper.Map<Devices>(request);
@@ -82,7 +84,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("DeleteDevices/{IdDevices}")]
-        [Authorize]
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "module: devicesRepos delete: 1")]
         public IActionResult DeleteDevices([FromRoute] int IdDevices)
         {
             var token = TokenHelper.GetUserId(User);
