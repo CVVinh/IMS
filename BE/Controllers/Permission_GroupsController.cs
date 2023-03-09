@@ -80,8 +80,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("createPermissionGroup")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: permissionGroups add: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: permissionGroups add: 1")]
         public async Task<IActionResult> CreatePermissionGroup(List<PermissionGroupDto> permissionGroupDtos)
         {
             if (!ModelState.IsValid)
@@ -97,8 +97,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("updatePermissionGroup/{idGroup}/{idModule}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: permissionGroups update: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: permissionGroups update: 1")]
         public async Task<IActionResult> UpdatePermissionGroup([FromRoute] int idGroup, [FromRoute] int idModule, PermissionGroupDto permissionGroupDtos)
         {
             if (!ModelState.IsValid)
@@ -114,8 +114,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("updateMultiPermissionGroup/{idGroup}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: permissionGroups update: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: permissionGroups update: 1")]
         public async Task<IActionResult> UpdateMultiPermissionGroup([FromRoute] int idGroup, List<ChangePermissionGroupDto> changePermissionGroupDtos)
         {
             if (!ModelState.IsValid)
@@ -132,8 +132,8 @@ namespace BE.Controllers
 
 
         [HttpDelete("deletePermissionGroup/{idGroup}/{idModule}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: permissionGroups delete: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: permissionGroups delete: 1")]
         public async Task<IActionResult> DeletePermissionGroup([FromRoute] int idGroup, [FromRoute] int idModule)
         {
             var response = await _permissionGroupServices.DeletePermissionGroup(idGroup, idModule);
@@ -145,8 +145,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("deleteMultiPermissionGroup")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: permissionGroups updateMulti: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: permissionGroups updateMulti: 1")]
         public async Task<IActionResult> DeleteMultiPermissionGroup(List<PermissionGroupRequestDto> permissionGroupRequestDto)
         {
             var response = await _permissionGroupServices.DeleteMultiPermissionGroup(permissionGroupRequestDto);

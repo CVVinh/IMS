@@ -227,14 +227,18 @@
         },
         async mounted() {
             try {
+                // this.decode = LocalStorage.jwtDecodeToken()
+                // await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
+                // if (UserRoleHelper.isAccess) {
+                //     this.Permission(Number(this.decode.IdGroup), Number(this.decode.Id))
+                // } else {
+                //     this.countTime()
+                //     this.displayBasic = true
+                // }
+
                 this.decode = LocalStorage.jwtDecodeToken()
-                await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
-                if (UserRoleHelper.isAccess) {
-                    this.Permission(Number(this.decode.IdGroup), Number(this.decode.Id))
-                } else {
-                    this.countTime()
-                    this.displayBasic = true
-                }
+                this.Permission(Number(this.decode.IdGroup), Number(this.decode.Id))
+
             } catch (error) {
                 this.countTime()
                 this.displayBasic = true

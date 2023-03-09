@@ -59,6 +59,9 @@ namespace BE.Data.Contexts
         public DbSet<Action_Module> ActionModules { get; set; }
         public DbSet<Permission_Action_Module> PermissionActionModules { get; set; }
         public DbSet<BlockingWeb> BlockingWebs { get; set; }
+        public DbSet<StaffReview> StaffReviews { get; set; }
+        public DbSet<Experience> Experiences { get; set; }
+        public DbSet<ReviewResult> ReviewResults { get; set; }
         #endregion
 
         #region Method
@@ -89,7 +92,6 @@ namespace BE.Data.Contexts
                 e.Property(k => k.maritalStatus);
                 e.Property(k => k.IdGroup);
                 e.Property(k => k.reasonResignation).HasMaxLength(1000);
-                e.Property(k => k.IdGroup);
             });
 
             modelBuilder.Entity<Member_Project>(e =>
@@ -358,6 +360,9 @@ namespace BE.Data.Contexts
             #region Config entity with fluent Api
             modelBuilder.ApplyConfiguration(new RulesConfig());
             modelBuilder.ApplyConfiguration(new BlockingWebConfig());
+            modelBuilder.ApplyConfiguration(new StaffReviewConfig());
+            modelBuilder.ApplyConfiguration(new ExperienceConfig());
+            modelBuilder.ApplyConfiguration(new ReviewResultConfig());
             #endregion
         }
 

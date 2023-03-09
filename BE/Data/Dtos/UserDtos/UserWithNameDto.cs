@@ -9,5 +9,6 @@
         {
             get { return $"{lastName} {firstName}"; }
         }
+        public string userCode { get; set; }
     }
 }

@@ -108,7 +108,7 @@
         methods: {
             getAllModules() {
                 HTTP.get('Modules/getListModule')
-                    .then((res) => res.data)
+                    .then((res) => res.data._Data)
                     .then((res) => {
                         this.modules = res
                         this.loading = false

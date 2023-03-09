@@ -102,7 +102,7 @@ const router = createRouter({
             component: () => import('@/views/Groups/Groups.vue'),
         },
         {
-            path: '/users/permissionUserMenu',
+            path: '/permissionUserMenu',
             name: 'PermissionSub',
             meta: {
                 title: 'IMS - Permission UserMenu',
@@ -581,6 +581,15 @@ const router = createRouter({
             },
             props: true,
             component: () => import('@/views/Permission_Action_Module/perrmissionActionModule.vue'),
+        },
+        {    
+            path: '/reviews',
+            name: 'reviews',
+            meta: {
+                title: 'IMS - Staff Review',
+            },
+            props: true,
+            component: () => import('@/views/StaffReview/ListReview.vue'),
         },
 
         /* #endregion */

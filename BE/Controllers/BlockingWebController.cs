@@ -30,8 +30,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("AddBlockingWeb")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: blockingWebs add: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: blockingWebs add: 1")]
         public async Task<IActionResult> AddBlockingWeb(AddBlockingWebDto addBlocking)
         {
             if (!ModelState.IsValid)

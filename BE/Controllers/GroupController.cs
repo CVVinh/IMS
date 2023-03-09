@@ -64,8 +64,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("addGroup")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: groups add: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: groups add: 1")]
         public async Task<IActionResult> CreateGroup(AddGroupDtos addGroupDtos)
         {
             if (!ModelState.IsValid)
@@ -81,8 +81,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("updateGroup/{idGroup}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: groups update: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: groups update: 1")]
         public async Task<IActionResult> UpdateGroup([FromRoute] int idGroup, UpdateGroupDtos updateGroupDtos)
         {
             if (!ModelState.IsValid)
@@ -98,8 +98,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("deleteGroup/{idGroup}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: groups delete: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: groups delete: 1")]
         public async Task<IActionResult> DeleteGroup(int idGroup)
         {
             var response = await _groupServices.DeleteGroup(idGroup);
@@ -111,8 +111,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("deleteMultiGroup")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: groups deleteMulti: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: groups deleteMulti: 1")]
         public async Task<IActionResult> DeleteMultiGroup(List<int> listIdGroup)
         {
             var response = await _groupServices.DeleteMultiGroup(listIdGroup);
@@ -125,8 +125,8 @@ namespace BE.Controllers
 
         [HttpGet]
         [Route("exportExcel")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: groups export: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: groups export: 1")]
         public async Task<IActionResult> DownloadFile()
         {
             var response = await _groupServices.DownloadFile();

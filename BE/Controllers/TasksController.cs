@@ -95,8 +95,8 @@ namespace BE.Controllers
 
         //POST: add new task
         [HttpPost("addNewTask")]
-        [Authorize(Roles = "admin,pm,lead")]
-        [Authorize(Roles = "module: tasks add: 1")]
+        //[Authorize(Roles = "admin,pm,lead")]
+        [Authorize(Roles = "modules: tasks add: 1")]
         public async Task<IActionResult> addNewTask(AddNewTaskDto addNewTaskDto)
         {
             try
@@ -247,8 +247,8 @@ namespace BE.Controllers
 
         //PUT: edit task by id
         [HttpPut("editTaskById/{idTask}")]
-        [Authorize(Roles = "admin,pm,lead")]
-        [Authorize(Roles = "module: tasks update: 1")]
+        //[Authorize(Roles = "admin,pm,lead")]
+        [Authorize(Roles = "modules: tasks update: 1")]
         public async Task<ActionResult> editTaskById(int idTask, EditTaskByIdDto task)
         {
             try
@@ -285,8 +285,8 @@ namespace BE.Controllers
 
         //PUT: Delete task by id
         [HttpPut("deletedTask/{idTask}")]
-        [Authorize(Roles = "admin,pm,lead")]
-        [Authorize(Roles = "module: tasks delete: 1")]
+        //[Authorize(Roles = "admin,pm,lead")]
+        [Authorize(Roles = "modules: tasks delete: 1")]
         public async Task<ActionResult> deletedTaskById(int idTask)
         {
             try
@@ -440,6 +440,6 @@ namespace BE.Controllers
             }
             return Ok(tasks);
         }
-    }
 
+    }
 }

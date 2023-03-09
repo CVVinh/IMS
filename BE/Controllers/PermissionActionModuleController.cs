@@ -65,8 +65,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("createPermissionActionModule")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: permissionActionModules add: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: permissionActionModules add: 1")]
         public async Task<IActionResult> CreatePermissionActionModule(List<AddPermissionActionModuleDto> addPermissionActionModuleDtos)
         {
             if (!ModelState.IsValid)
@@ -82,8 +82,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("updateUPermissionActionModule/{moduleId}/{actionModuleId}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: permissionActionModules update: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: permissionActionModules update: 1")]
         public async Task<IActionResult> UpdateUPermissionActionModule([FromRoute] RequestPermissionActionModuleDto requestPermissionActionModuleDto, UpdatePermissionActionModuleDto updatePermissionActionModuleDto)
         {
             if (!ModelState.IsValid)
@@ -99,8 +99,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("deletePermissionActionModule/{moduleId}/{actionModuleId}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: permissionActionModules delete: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: permissionActionModules delete: 1")]
         public async Task<IActionResult> DeletePermissionActionModule([FromRoute] RequestPermissionActionModuleDto requestPermissionActionModuleDto, DeletePermissionActionModuleDto deletePermissionActionModuleDto)
         {
             var response = await _permissionActionModuleServices.DeletePermissionActionModule(requestPermissionActionModuleDto, deletePermissionActionModuleDto);
@@ -112,8 +112,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("deleteMultiPermissionActionModule")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: permissionActionModules deleteMulti: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: permissionActionModules deleteMulti: 1")]
         public async Task<IActionResult> DeleteMultiPermissionActionModule(List<DeleteMultiPermissionActionModuleDto> deleteMultiPermissionActionModuleDtos)
         {
             var response = await _permissionActionModuleServices.DeleteMultiPermissionActionModule(deleteMultiPermissionActionModuleDtos);

@@ -21,12 +21,13 @@ namespace BE.Data.DataRoles
         public List<Permission_Use_Menu> RoleLead(int idUser, int idGroup, int idUserCreated = 0)
         {
             var data = new List<Permission_Use_Menu>();
-            var modules = (from m in _db.modules
-                           join pg in _db.Permission_Groups on m.id equals pg.IdGroup
+            var modules = (from pg in _db.Permission_Groups
+                           join m in _db.modules on pg.IdModule equals m.id
                            where pg.Access == true && pg.IdGroup == idGroup
-                           select new {
-                               nameModule = m.nameModule,
+                           select new
+                           {
                                idModule = pg.IdModule,
+                               nameModule = m.nameModule,
                            }).ToList();
 
             foreach (var item in modules)

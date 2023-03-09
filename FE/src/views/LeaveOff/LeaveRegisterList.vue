@@ -83,6 +83,7 @@
                             'startTime',
                             'reasons',
                             'notAcceptUser',
+                            'reasonAccept',
                             'idLeaveUser',
                             'endTime',
                             'user',
@@ -114,12 +115,20 @@
                                 {{ data.reasons }}
                             </template>
                         </Column>
+                        <Column field="reasonAccept" header="Lý do duyệt nghỉ phép">
+                            <template #body="{ data }">
+                                <span v-if="data.status == 2">
+                                    {{ data.reasonAccept }}
+                                </span>
+                                <span v-else style="color: burlywood"> Chưa nhập lý do... </span>
+                            </template>
+                        </Column>
                         <Column field="notAcceptUser" header="Lý do không cho phép nghỉ">
                             <template #body="{ data }">
                                 <span v-if="data.status == 3">
                                     {{ data.notAcceptUser }}
                                 </span>
-                                <span v-else> Chưa nhập... </span>
+                                <span v-else style="color: burlywood"> Chưa nhập lý do... </span>
                             </template>
                         </Column>
                         <Column field="status" header="Trạng thái">
@@ -133,7 +142,7 @@
                             <template #body="{ data }">
                                 <div class="d-flex justify-content-center">
                                     <Button
-                                        @click="confirmBrowseVacation(data)"
+                                        @click="showConfirmLeaveOffReasonAccept(data)"
                                         class="p-button-sm mt-1 me-2 p-button-success"
                                         icon="pi pi-check"
                                         :disabled="data.status == 2 || data.status == 3"
@@ -161,12 +170,19 @@
             @closeDialog="closeDialogLeaveoff()"
             @setChange="setChange()"
         />
+        <DialogReasonAcceptLeveOff
+            :idLeaveOff="idLeaveOffReasonAccept"
+            :isOpen="this.isOpenDialogReasonAccept"
+            @closeDialog="closeDialogLeaveoffReasonAccept()"
+            @setChange="setChangeReasonAccept()"
+        />
     </LayoutDefaultDynamic>
 </template>
 <script>
     import { HTTP, ENDPIONTS, GET_USER_NAME_BY_ID, ACCEPT_LEAVE_OFF } from '@/http-common'
     import dayjs from 'dayjs'
     import DialogConfirmLeave from './DialogConfirmLeave.vue'
+    import DialogReasonAcceptLeveOff from './DialogReasonAcceptLeveoff.vue'
     import jwtDecode from 'jwt-decode'
     import { DateHelper } from '@/helper/date.helper'
     import { LocalStorage } from '@/helper/local-storage.helper'
@@ -245,6 +261,9 @@
                 ],
                 loading: true,
                 userAccept: jwtDecode(localStorage.getItem('token')),
+                idLeaveOffReasonAccept: null,
+                isOpenDialogReasonAccept: false,
+                isChangeReasonAccept: false,
             }
         },
         watch: {
@@ -399,6 +418,21 @@
                     this.isChange = false
                 }
             },
+            async setChangeReasonAccept() {
+                this.isChangeReasonAccept = true
+            },
+            showConfirmLeaveOffReasonAccept(data) {
+                this.idLeaveOffReasonAccept = data.id
+                this.isOpenDialogReasonAccept = true
+            },
+            async closeDialogLeaveoffReasonAccept() {
+                this.isOpenDialogReasonAccept = false
+                if (this.isChangeReasonAccept === true) {
+                    this.dataLeaveOff = []
+                    await this.getAllLeaveOffRegister()
+                    this.isChangeReasonAccept = false
+                }
+            },
             async handlerLoadData() {
                 for (let i = 0; i < this.dataLeaveOff.length; i++) {
                     const user = await this.getUserByIdLeaveOff(this.dataLeaveOff[i].idLeaveUser)
@@ -426,6 +460,7 @@
                             user: null,
                             realTime: this.mathLeaveOffDate(el.startTime, el.endTime, el.idCompanyBranh),
                             idCompanyBranh: el.idCompanyBranh,
+                            reasonAccept: el.reasonAccept,
                         })
                     })
                 })
@@ -496,6 +531,7 @@
         },
         components: {
             DialogConfirmLeave,
+            DialogReasonAcceptLeveOff,
         },
     }
 </script>

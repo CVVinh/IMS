@@ -1,10 +1,22 @@
 <template>
     <LayoutDefaultDynamic>
         <Toast position="top-right" />
-        <form @submit.prevent="handleSubmit(!v$.$invalid)" class="container">
+        <form @submit.prevent="handleSubmit(!v$.$invalid)" class="container" enctype="multipart/form-data">
             <div class="box">
                 <div class="box-top" v-bind="{ backgroundImage: `url('../../assets/svg-profile.svg')` }">
-                    <Avatar class="avatar" :label="renderAvatar()" size="large" shape="circle" />
+                    <div class="d-flex justify-content-center align-items-center">
+                        <image-input v-model="imageData" type="file" />
+                        <div
+                            class="image-input rounded-circle"
+                            :style="{ 'background-image': `url(${imageData})` }"
+                            style="width: 270px; height: 270px; border: 2px dashed"
+                            @click="chooseImage"
+                        >
+                            <span v-if="!imageData" class="placeholders rounded-circle">Chọn ảnh đại điện</span>
+                            <input class="file-input" ref="fileInput" type="file" @input="onSelectFile" />
+                        </div>
+                        <!-- <Avatar v-else class="avatar" :label="renderAvatar()" size="large" shape="circle" /> -->
+                    </div>
                     <h3 class="user-code">Tên người dùng: {{ user.userCode }}</h3>
                     <h6 class="user-swd">Ngày bắt đầu làm việc: {{ renderDateStartWork() }}</h6>
                 </div>
@@ -80,16 +92,18 @@
                 </div>
                 <div class="row">
                     <div class="field">
-                        <label for="phoneNumber" :class="{ 'p-error': v$.user.phoneNumber.$invalid && submitted }"
-                            >Số điện thoại</label
-                        >
+                        <label for="phoneNumber" :class="{ 'p-error': v$.user.phoneNumber.$error && submitted }">
+                            Số điện thoại
+                        </label>
                         <InputText
                             id="phoneNumber"
                             type="text"
                             v-model="v$.user.phoneNumber.$model"
-                            :class="{ 'form-group--error': v$.user.phoneNumber.$error && submitted }"
+                            :class="{
+                                'form-group--error': v$.user.phoneNumber.$error && submitted,
+                            }"
                         />
-                        <span v-if="v$.user.phoneNumber.$error && submitted">
+                        <span v-if="v$.user.phoneNumber.$errors && submitted">
                             <span v-for="(error, index) of v$.user.phoneNumber.$errors" :key="index">
                                 <small class="p-error">{{ error.$message }}</small>
                             </span>
@@ -100,6 +114,7 @@
                             >Độ dài số điện thoại phải là 10
                         </small>
                     </div>
+                    <!-- ----------------------------- -->
                     <div class="field">
                         <label for="email" :class="{ 'p-error': v$.user.email.$invalid && submitted }">Email</label>
                         <InputText
@@ -185,9 +200,9 @@
                             id="yearGraduated"
                             type="text"
                             v-model="v$.user.yearGraduated.$model"
-                            :class="{ 'form-group--error': v$.user.yearGraduated.$error && submitted }"
+                            :class="{ 'form-group--error': v$.user.yearGraduated.$invalid && submitted }"
                         />
-                        <span v-if="v$.user.yearGraduated.$error && submitted">
+                        <span v-if="v$.user.yearGraduated.$invalid && submitted">
                             <span v-for="(error, index) of v$.user.yearGraduated.$errors" :key="index">
                                 <small class="p-error">{{ error.$message }}</small>
                             </span>
@@ -231,9 +246,11 @@
     import jwt_decode from 'jwt-decode'
     import LayoutDefaultDynamic from '../../layouts/LayoutDefault/LayoutDefaultDynamic.vue'
     import { useVuelidate } from '@vuelidate/core'
-    import { email, required, alphaNum, numeric, between, maxLength } from '@vuelidate/validators'
+    import { email, required, alphaNum, numeric, between, minLength, maxLength } from '@vuelidate/validators'
     import { LocalStorage } from '@/helper/local-storage.helper'
     import { ToastSeverity } from 'primevue/api'
+    import { DateHelper } from '@/helper/date.helper'
+    import { UserService } from '@/service/user.service'
     export default {
         name: 'profile',
         setup: () => ({ v$: useVuelidate() }),
@@ -251,15 +268,15 @@
                     dateCreate: new Date(),
                     // dateModified: new Date(),
                     passwordEmail: null,
-                    firstName: null,
-                    lastName: null,
+                    firstName: '',
+                    lastName: '',
                     phoneNumber: '',
                     dOB: new Date(),
                     gender: null,
-                    address: null,
-                    university: null,
+                    address: '',
+                    university: '',
                     yearGraduated: null,
-                    skype: null,
+                    skype: '',
                     passwordSkype: null,
                     dateStartWork: '',
                     dateLeave: '',
@@ -268,6 +285,7 @@
                     workStatus: null,
                     idGroup: null,
                     dOBValidate: true,
+                    formFile: null,
                 },
                 optionGender: [
                     { name: 'Nam', code: 1 },
@@ -280,6 +298,7 @@
                     { name: 'Không xác định', code: 3 },
                 ],
                 errorColor: '#ff0053',
+                imageData: null,
             }
         },
         validations() {
@@ -302,12 +321,12 @@
                     },
                     phoneNumber: {
                         numeric,
+                        required,
                         checkPhoneNumber(value) {
-                            0.3
                             if (!value) return true
                             if (value.length === 0) return true
                             if (value.includes('.')) return false
-                            if (value.length === 10) return true
+                            if (value.length === 10 || value.length === 11) return true
                             else return false
                         },
                     },
@@ -330,8 +349,9 @@
                     },
                     university: {},
                     yearGraduated: {
+                        required,
                         numeric,
-                        between: between(1980, 2100),
+                        between: between(1980, Number(new Date().getFullYear())),
                     },
                     skype: {
                         maxLength: maxLength(100),
@@ -370,7 +390,6 @@
             this.getAPIGroup()
             this.getAPIUser()
         },
-        beforeUpdate() {},
         methods: {
             getAPIGroup() {
                 HTTP.get('Group/getListGroup/')
@@ -390,7 +409,7 @@
             },
             getAPIUser() {
                 const user = LocalStorage.jwtDecodeToken()
-                HTTP.get('Users/getUserById/' + user.Id)
+                UserService.getUserById(user.Id)
                     .then((res) => {
                         if (res.status == 200) {
                             let arr = res.data
@@ -399,25 +418,36 @@
                                 res.data.dateStartWork === null ? null : new Date(res.data.dateStartWork)
                             arr.dateLeave = res.data.dateLeave === null ? null : new Date(res.data.dateLeave)
                             arr.dOB = res.data.dOB === null ? null : new Date(res.data.dOB)
-                            this.loading = false
                             this.user = arr
+                            this.imageData = res.data.avatarLink
+                            this.loading = false
                         }
                     })
-                    .catch((er) => {
-                        this.$toast.add({
-                            severity: ToastSeverity.ERROR,
-                            summary: 'Lỗi',
-                            detail: 'Không thể lấy thông tin người dùng!',
-                            life: 3000,
-                        })
+                    .catch(() => {
+                        this.messageError('Không thể lấy thông tin người dùng!')
                     })
             },
             renderAvatar() {
                 return this.user.firstName !== null ? this.user.firstName.charAt(0) : '?'
             },
+            chooseImage() {
+                this.$refs.fileInput.click()
+            },
+            onSelectFile() {
+                const input = this.$refs.fileInput
+                const files = input.files
+                if (files && files[0]) {
+                    const reader = new FileReader()
+                    reader.onload = (e) => {
+                        this.imageData = e.target.result
+                    }
+                    reader.readAsDataURL(files[0])
+                    this.$emit('input', files[0])
+                }
+                this.user.formFile = files[0]
+            },
             handleSubmit(isFormValid) {
                 this.submitted = true
-
                 if (!isFormValid) {
                     return
                 } else {
@@ -432,56 +462,43 @@
                 if (idUser) {
                     const token = localStorage.getItem('token')
                     const decode = jwt_decode(token)
-                    const dataPost = {
-                        userModified: parseInt(decode.Id),
-                        dateModified: new Date(),
-                        firstName: this.user.firstName,
-                        lastName: this.user.lastName,
-                        phoneNumber: this.user.phoneNumber,
-                        dOB: this.user.dOB === null ? '' : this.user.dOB,
-                        identitycard: this.user.identitycard,
-                        gender: this.user.gender,
-                        address: this.user.address,
-                        university: this.user.university,
-                        yearGraduated: this.user.yearGraduated,
-                        email: this.user.email,
-                        skype: this.user.skype,
-                        workStatus: this.user.workStatus,
-                        dateStartWork: this.user.dateStartWork,
-                        dateLeave: this.user.dateLeave,
-                        maritalStatus: this.user.maritalStatus,
-                        reasonResignation: this.user.reasonResignation,
-                        idGroup: this.user.idGroup,
-                    }
-                    HTTP.put('Users/updateUser/' + idUser, dataPost)
+                    const fromData = new FormData()
+                    fromData.append('userModified', parseInt(decode.Id))
+                    fromData.append('firstName', this.user.firstName)
+                    fromData.append('lastName', this.user.lastName)
+                    fromData.append('phoneNumber', this.user.phoneNumber)
+                    fromData.append('dOB', DateHelper.formatDateTime(this.user.dOB === null ? null : this.user.dOB))
+                    fromData.append('identitycard', this.user.identitycard)
+                    fromData.append('gender', this.user.gender)
+                    fromData.append('address', this.user.address)
+                    fromData.append('university', this.user.university ?? null)
+                    fromData.append('yearGraduated', this.user.yearGraduated ?? null)
+                    fromData.append('email', this.user.email)
+                    fromData.append('skype', this.user.skype)
+                    fromData.append('workStatus', this.user.workStatus)
+                    fromData.append(
+                        'dateLeave',
+                        DateHelper.formatDateTime(this.user.dateLeave == null ? null : this.user.dateLeave),
+                    )
+                    fromData.append('maritalStatus', this.user.maritalStatus)
+                    fromData.append('reasonResignation', this.user.reasonResignation)
+                    fromData.append('idGroup', this.user.idGroup)
+                    fromData.append('formFileAvatar', this.user.formFile)
+
+                    UserService.updateProfileUser(idUser, fromData)
                         .then((res) => {
                             if (res.status == 200) {
-                                this.$toast.add({
-                                    severity: 'success',
-                                    summary: 'Thành công',
-                                    detail: 'Sửa thành công!',
-                                    life: 3000,
-                                })
+                                this.messageSuccess('Sửa thành công!')
                                 this.getAPIUser()
                             }
                         })
                         .catch((error) => {
                             switch (error.code) {
                                 case 'ERR_NETWORK':
-                                    this.$toast.add({
-                                        severity: ToastSeverity.ERROR,
-                                        summary: 'Lỗi',
-                                        detail: 'Kiểm tra kết nối !',
-                                        life: 3000,
-                                    })
+                                    this.messageError('Kiểm tra kết nối !')
                                     break
                                 case 'ERR_BAD_REQUEST':
-                                    this.$toast.add({
-                                        severity: ToastSeverity.ERROR,
-                                        summary: 'Lỗi',
-                                        detail: error.response.data,
-                                        life: 3000,
-                                    })
+                                    this.messageError('Đã xảy ra một hoặc nhiều lỗi xác thực.')
                                     break
                             }
                         })
@@ -498,6 +515,22 @@
             },
             async backToDashboard() {
                 await this.$router.push('/')
+            },
+            messageSuccess(mess) {
+                this.$toast.add({
+                    severity: 'success',
+                    summary: 'Thành công',
+                    detail: mess,
+                    life: 3000,
+                })
+            },
+            messageError(mess) {
+                this.$toast.add({
+                    severity: ToastSeverity.ERROR,
+                    summary: 'Lỗi',
+                    detail: mess,
+                    life: 3000,
+                })
             },
         },
 
@@ -644,5 +677,34 @@
             border-bottom: 1px solid #eee;
             background-size: 260px;
         }
+    }
+    .image-input {
+        display: block;
+        width: 200px;
+        height: 200px;
+        cursor: pointer;
+        background-size: cover;
+        background-position: center center;
+    }
+
+    .placeholders {
+        background: #f0f0f0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #333;
+        font-size: 18px;
+        font-family: Helvetica;
+    }
+
+    .placeholders:hover {
+        background: #e0e0e0;
+        cursor: pointer;
+    }
+
+    .file-input {
+        display: none;
     }
 </style>

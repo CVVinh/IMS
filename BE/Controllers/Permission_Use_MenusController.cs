@@ -79,8 +79,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("createPermissionUserMenu")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: permissionUserMenus add: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: permissionUserMenus add: 1")]
         public async Task<IActionResult> CreatePermissionUserMenu(List<PermissionUserMenuAddDto> permissionUserMenuAddDtos)
         {
             if (!ModelState.IsValid)
@@ -96,8 +96,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("addPermissionRoleUserMenu/{idUser}/{idUserCreated}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: permissionUserMenus add: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: permissionUserMenus add: 1")]
         public async Task<IActionResult> AddPermissionRoleUserMenu([FromRoute] int idUser, [FromRoute] int idUserCreated, List<int> listIdGroup)
         {
             if (!ModelState.IsValid)
@@ -112,9 +112,9 @@ namespace BE.Controllers
             return BadRequest(response);
         }
 
-        [HttpPut("updatePermissionUserMenu/{IdUser}/{idModule}/{IdMenu}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: permissionUserMenus update: 1")]
+        [HttpPut("updatePermissionUserMenu/{IdUser}/{idModule}/{idGroup}")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: permissionUserMenus update: 1")]
         public async Task<IActionResult> UpdatePermissionUserMenu([FromRoute] PermissionUserMenuRequest permissionUserMenuRequest, PermissionUserMenuEditDto permissionUserMenuEditDto)
         {
             if (!ModelState.IsValid)
@@ -130,8 +130,8 @@ namespace BE.Controllers
         }
 
         [HttpDelete("deletePermissionUserMenu/{IdUser}/{idModule}/{IdMenu}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: permissionUserMenus delete: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: permissionUserMenus delete: 1")]
         public async Task<IActionResult> DeletePermissionUserMenu([FromRoute] PermissionUserMenuRequest permissionUserMenuRequest)
         {
             var response = await _permissionUserMenuServices.DeletePermissionUserMenu(permissionUserMenuRequest);
@@ -143,8 +143,8 @@ namespace BE.Controllers
         }
 
         [HttpDelete("deletePermissionRoleUserMenu/{idUser}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: permissionUserMenus delete: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: permissionUserMenus delete: 1")]
         public async Task<IActionResult> DeletePermissionRoleUserMenu([FromRoute] int idUser, List<int> listIdGroup)
         {
             var response = await _permissionUserMenuServices.DeletePermissionRoleUserMenu(idUser, listIdGroup);
@@ -156,8 +156,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("deleteMultiPermissionUserMenu")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: permissionUserMenus deleteMulti: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: permissionUserMenus deleteMulti: 1")]
         public async Task<IActionResult> DeleteMultiPermissionUserMenu(List<PermissionUserMenuRequest> permissionUserMenuRequest)
         {
             var response = await _permissionUserMenuServices.DeleteMultiPermissionUserMenu(permissionUserMenuRequest);

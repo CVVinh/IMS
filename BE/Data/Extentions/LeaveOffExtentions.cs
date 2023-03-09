@@ -24,11 +24,12 @@ namespace BE.Data.Extentions
             return leaveOff;
         }
 
-        public static LeaveOff AccepterLeaveOffExtention(this LeaveOff leaveOff,int idAccepter,StatusLO status)
+        public static LeaveOff AccepterLeaveOffExtention(this LeaveOff leaveOff,string reasonAccept, int idAccepter,StatusLO status)
         {
             leaveOff.status = status;
             leaveOff.idAcceptUser = idAccepter;
             leaveOff.acceptTime = DateTime.UtcNow;
+            leaveOff.ReasonAccept= reasonAccept;
             return leaveOff;
         }
         public static LeaveOff NotAcceptLeaveOffExtention(this LeaveOff leaveOff, NotAcceptLeaveOffDto notAcceptLeaveOffDto, StatusLO status)

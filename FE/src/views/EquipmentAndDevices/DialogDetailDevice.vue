@@ -177,9 +177,7 @@
                     var obj = {
                         requestUser: this.userRequest.Id,
                         usercode: this.infoDevice.userName,
-                        message: `Ứng dụng ${this.selectedDeviceExits
-                            .map((el) => el.applicationName)
-                            .join(', ')} không được phép sử dụng, yêu cầu xóa ngay!`,
+                        message: `${this.selectedDeviceExits.map((el) => el.applicationName).join(', ')}`,
                         title: 'Yêu cầu xóa ứng dụng',
                     }
                     NotificationService.handlerRequireDelete(obj)

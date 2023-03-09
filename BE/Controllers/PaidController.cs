@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace BE.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "permission_group: True module: paids")]
     [ApiController]
+    [Authorize(Roles = "permission_group: True module: paids")]
     public class PaidController : Controller
     {
         private readonly IPaidServices _paidServices;
@@ -98,8 +98,8 @@ namespace BE.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin,pm,lead,sample,staff")]
-        [Authorize(Roles = "module: paids add: 1")]
+        //[Authorize(Roles = "admin,pm,lead,sample,staff")]
+        [Authorize(Roles = "modules: paids add: 1")]
         public async Task<IActionResult> CreatePaid([FromForm] CreatePaidDtos createPaidDtos)
         {
             if (!ModelState.IsValid)
@@ -116,8 +116,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "admin,pm,lead,sample,staff")]
-        [Authorize(Roles = "module: paids update: 1")]
+        //[Authorize(Roles = "admin,pm,lead,sample,staff")]
+        [Authorize(Roles = "modules: paids update: 1")]
         public async Task<IActionResult> EditPaid(int id, [FromForm] CreatePaidDtos createPaidDtos)
         {
             if (!ModelState.IsValid)
@@ -136,8 +136,8 @@ namespace BE.Controllers
 
         //PUT: accept payment
         [HttpPut("acceptPayment/{idPaid}")]
-        [Authorize(Roles = "admin,pm,sample")]
-        [Authorize(Roles = "module: paids confirm: 1")]
+        //[Authorize(Roles = "admin,pm,sample")]
+        [Authorize(Roles = "modules: paids confirm: 1")]
         public async Task<IActionResult> acceptRegisterPaid(int idPaid, AcceptPaymentPaidDtos acceptPaymentPaidDtos)
         {
             if (!ModelState.IsValid)
@@ -154,8 +154,8 @@ namespace BE.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "admin,pm,lead,sample,staff")]
-        [Authorize(Roles = "module: paids delete: 1")]
+        //[Authorize(Roles = "admin,pm,lead,sample,staff")]
+        [Authorize(Roles = "modules: paids delete: 1")]
         public async Task<IActionResult> DeletePaid(int id)
         {
             var pathServer = $"{Request.Scheme}://{Request.Host}";
@@ -168,8 +168,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("multi-image/{id}")]
-        [Authorize(Roles = "admin,pm,lead,sample,staff")]
-        [Authorize(Roles = "module: paids deleteMulti: 1")]
+        //[Authorize(Roles = "admin,pm,lead,sample,staff")]
+        [Authorize(Roles = "modules: paids deleteMulti: 1")]
         public async Task<IActionResult> DeleteMultiImgPaid(int id, List<int>? listImg)
         {
             var pathServer = $"{Request.Scheme}://{Request.Host}";
@@ -194,8 +194,8 @@ namespace BE.Controllers
 
         //PUT: not accept payment
         [HttpPut("NotAcceptPayment/{idPaid}")]
-        [Authorize(Roles = "admin,pm,sample")]
-        [Authorize(Roles = "module: paids confirm: 1")]
+        //[Authorize(Roles = "admin,pm,sample")]
+        [Authorize(Roles = "modules: paids confirm: 1")]
         public async Task<IActionResult> NotAcceptRegisterPaid(int idPaid, AcceptPaymentPaidDtos acceptPaymentPaidDtos)
         {
             if (!ModelState.IsValid)

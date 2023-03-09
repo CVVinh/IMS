@@ -31,7 +31,6 @@ namespace BE.Data.Dtos.UsersDTO
         public string? reasonResignation { get; set; }
         public string identitycard { get; set; }
         [Range(1, 7)]
-        public int IdGroup { get; set; }
         public DateTime dateStartWork { get; set; }
     }
 }

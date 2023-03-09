@@ -22,8 +22,8 @@ namespace BE.Data.DataRoles
             var data = new List<Permission_Use_Menu>();
             //var modules = await _db.modules.Where(s => s.isDeleted == 0).ToListAsync();
             var modules = (from m in _db.modules
-                                 join pg in _db.Permission_Groups on m.id equals pg.IdGroup
-                                 where pg.Access == true && pg.IdGroup == idGroup
+                           join pg in _db.Permission_Groups on m.id equals pg.IdModule
+                           where pg.Access == true && pg.IdGroup == idGroup
                            select new
                            {
                                nameModule = m.nameModule,

@@ -73,8 +73,8 @@ namespace BE.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "sample")]
-        [Authorize(Roles = "module: rules add: 1")]
+        //[Authorize(Roles = "sample")]
+        [Authorize(Roles = "modules: rules add: 1")]
         public async Task<IActionResult> CreateRules([FromForm] AddOrUpdateRulesDTO createRules)
 		{
 			if (!ModelState.IsValid)
@@ -91,8 +91,8 @@ namespace BE.Controllers
 		}
 
 		[HttpPut("updateRules/{id}")]
-        [Authorize(Roles = "sample")]
-        [Authorize(Roles = "module: rules update: 1")]
+        //[Authorize(Roles = "sample")]
+        [Authorize(Roles = "modules: rules update: 1")]
         public async Task<IActionResult> UpdateRules([FromRoute] int id, [FromForm] AddOrUpdateRulesDTO updateRules)
 		{
 			if (!ModelState.IsValid)
@@ -109,8 +109,8 @@ namespace BE.Controllers
 		}
 
         [HttpPut("deleteRules/{id}")]
-        [Authorize(Roles = "sample")]
-        [Authorize(Roles = "module: rules delete: 1")]
+        //[Authorize(Roles = "sample")]
+        [Authorize(Roles = "modules: rules delete: 1")]
 		public async Task<IActionResult> DeleteRules([FromRoute] int id, DeleteRulesDTO userDelete)
 		{
 			var response = await _rulesService.DeleteRules(id, userDelete);

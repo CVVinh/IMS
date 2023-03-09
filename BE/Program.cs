@@ -50,6 +50,9 @@ using BE.Services.ActionModuleServices;
 using BE.Services.ModuleServices;
 using BE.Data.DataRoles;
 using BE.Services.BlockingWebService;
+using BE.Data.Dtos.UserDtos;
+using BE.Data.Dtos.UserDtos.Validator;
+using BE.Services.StaffReviewServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -112,6 +115,7 @@ builder.Services.AddScoped<IInfoDeviceService, InfoDeviceService>();
 builder.Services.AddScoped<IInfoDeviceService, InfoDeviceService>();
 builder.Services.AddScoped<IBlockingWebService, BlockingWebService>();
 builder.Services.AddScoped<IPaginationServices<BlockingWeb>, PaginationServices<BlockingWeb>>();
+builder.Services.AddScoped<IStaffReviewService, StaffReviewService>();
 #endregion
 
 #region Registering Validator
@@ -130,6 +134,7 @@ builder.Services.AddTransient<IValidator<AddNewLeaveOffDto>, AddNewLeaveOffDtoVa
 builder.Services.AddTransient<IValidator<AccepterLeaveOffDto>, AccepterLeaveOffDtoValidator>();
 builder.Services.AddTransient<IValidator<EditRegisterLeaveOffDtos>, EditRegisterLeaveOffDtoValidator>();
 builder.Services.AddTransient<IValidator<AcceptPaymentPaidDtos>, AcceptPaymentPaidValidator>();
+builder.Services.AddTransient<IValidator<UpdateProfileDto>, UpdateProfileValidation>();
 #endregion
 
 builder.Services.AddControllersWithViews()

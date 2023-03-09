@@ -33,8 +33,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("CreateDeviceWithListApplication")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: infoDevices add: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: infoDevices add: 1")]
         public async Task<IActionResult> CreateInfoDevice(CreateInfoDeviceDto createInfoDeviceDto)
         {
             if (!ModelState.IsValid)
@@ -52,8 +52,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("EditDeviceWithListApplicationByDeviceId/{id}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: infoDevices update: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: infoDevices update: 1")]
         public async Task<IActionResult> EditInfoDevice(int id , CreateInfoDeviceDto createInfoDeviceDto)
         {
             if (!ModelState.IsValid)
@@ -129,8 +129,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("EditDeviceWithListApplicationByUserId/{id}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: infoDevices update: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: infoDevices update: 1")]
         public async Task<IActionResult> EditInfoDeviceWithUserId(int id, CreateInfoDeviceDto createInfoDeviceDto)
         {
             if (!ModelState.IsValid)

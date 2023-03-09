@@ -13,6 +13,8 @@ using BE.Response;
 using BE.Services.PaginationServices;
 using ClosedXML.Excel;
 using AutoMapper;
+using BE.Helpers;
+using System.IO;
 
 namespace BE.Controllers
 {
@@ -27,10 +29,12 @@ namespace BE.Controllers
         private readonly IMemberProjectServices _memberProjectServices;
         private readonly IPaginationServices<Users> _paginationServices;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _host;
 
         //public static Users user = new Users();
 
-        public UsersController(AppDbContext context, TokenService tokenService, IMemberProjectServices memberProjectServices, MailService mailService, IPaginationServices<Users> paginationServices, IMapper mapper)
+
+        public UsersController(IWebHostEnvironment host, AppDbContext context, TokenService tokenService, IMemberProjectServices memberProjectServices, MailService mailService, IPaginationServices<Users> paginationServices, IMapper mapper)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
@@ -38,6 +42,7 @@ namespace BE.Controllers
             _memberProjectServices = memberProjectServices ?? throw new ArgumentNullException(nameof(memberProjectServices));
             _paginationServices = paginationServices;
             _mapper = mapper;
+            _host = host;
         }
 
         [HttpPost("SendEmail")]
@@ -75,8 +80,8 @@ namespace BE.Controllers
             }
         }*/
 
-        [Authorize(Roles = "permission_group: True module: users")]
         [HttpGet("getAll")]
+        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<ActionResult<Users>> GetAll()
         {
             try
@@ -119,8 +124,8 @@ namespace BE.Controllers
             }
         }
 
-        [Authorize(Roles = "permission_group: True module: users")]
         [HttpGet("getAllUsersByIdProject/{idProject}")]
+        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<IActionResult> getAllUsersByIdProject(int idProject)
         {
             var success = false;
@@ -157,8 +162,8 @@ namespace BE.Controllers
             }
         }
 
-        [Authorize(Roles = "permission_group: True module: users")]
         [HttpGet("getUsersOutsideProject/{idProject}")]
+        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<IActionResult> getAllUsersOutsideProject(int idProject)
         {
             var success = false;
@@ -197,8 +202,8 @@ namespace BE.Controllers
             }
         }
 
-        [Authorize(Roles = "permission_group: True module: users")]
         [HttpGet("getUserById/{id}")]
+        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<ActionResult<Users>> GetUsersById(int id)
         {
             if (_context.Users == null)
@@ -214,8 +219,8 @@ namespace BE.Controllers
             return Ok(mapper);
         }
 
-        [Authorize(Roles = "permission_group: True module: users")]
         [HttpGet("getUserByUserCode/{usercode}")]
+        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<ActionResult<Users>> GetUsersByUserCode(string usercode)
         {
             if (_context.Users == null)
@@ -230,8 +235,8 @@ namespace BE.Controllers
             return Ok(mapper);
         }
 
-        [Authorize(Roles = "permission_group: True module: users")]
         [HttpGet("getByGender/{gender}")]
+        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<ActionResult<Users>> GetUsersByGender(int gender)
         {
             if (_context.Users == null)
@@ -247,8 +252,8 @@ namespace BE.Controllers
             return Ok(data);
         }
 
-        [Authorize(Roles = "permission_group: True module: users")]
         [HttpGet("getByWorkStatus/{workStatus}")]
+        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<ActionResult<Users>> GetUsersByWorkStatus(int workStatus)
         {
             if (_context.Users == null)
@@ -264,8 +269,8 @@ namespace BE.Controllers
             return Ok(data);
         }
 
-        [Authorize(Roles = "permission_group: True module: users")]
         [HttpGet("getBydOB/{dOB}")]
+        [Authorize(Roles = "permission_group: True module: users")]
         public async Task<ActionResult<Users>> GetUsersByDOB(DateTime dOB)
         {
             if (_context.Users == null)
@@ -313,8 +318,8 @@ namespace BE.Controllers
 
         [HttpPut("deleteUser/{id}")]
         [Authorize(Roles = "permission_group: True module: users")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: users delete: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: users delete: 1")]
         public async Task<IActionResult> DeleteUser(int id, DeleteUserDto dto)
         {
             var users = await _context.Users.FindAsync(id);
@@ -347,9 +352,9 @@ namespace BE.Controllers
 
         [HttpPost("addUser")]
         [Authorize(Roles = "permission_group: True module: users")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: users add: 1")]
-        public async Task<ActionResult<AddUserDto>> CreateUser(AddUserDto request)
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: users add: 1")]
+        public async Task<ActionResult> CreateUser(AddUserDto request)
         {
             try
             {
@@ -405,13 +410,12 @@ namespace BE.Controllers
                     maritalStatus = request.maritalStatus,
                     reasonResignation = request.reasonResignation,
                     identitycard = request.identitycard,
-                    IdGroup = request.IdGroup,
                     isDeleted = 0,
                     refreshToken = null,
                 };
                 await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();
-                return Ok();
+                return Ok(user);
             }
             catch (Exception ex)
             {
@@ -421,8 +425,8 @@ namespace BE.Controllers
 
         [HttpPut("updateUser/{id}")]
         [Authorize(Roles = "permission_group: True module: users")]
-        [Authorize(Roles = "admin,pm,lead,sample,staff")]
-        [Authorize(Roles = "module: users delete: 1")]
+        //[Authorize(Roles = "admin,pm,lead,sample,staff")]
+        [Authorize(Roles = "modules: users delete: 1")]
         public async Task<ActionResult<Users>> UpdateUser(int id, EditUserDto user_dto)
         {
             var mess = "";
@@ -637,8 +641,8 @@ namespace BE.Controllers
         [HttpGet]
         [Route("exportExcel")]
         [Authorize(Roles = "permission_group: True module: users")]
-        [Authorize(Roles = "admin,sample")]
-        [Authorize(Roles = "module: users export: 1")]
+        //[Authorize(Roles = "admin,sample")]
+        [Authorize(Roles = "modules: users export: 1")]
         public async Task<string> DownloadFile()
         {
             var wb = new XLWorkbook();
@@ -676,6 +680,64 @@ namespace BE.Controllers
             var user = await _context.Users.Where(x => x.id == id).SingleOrDefaultAsync();
             var map = _mapper.Map<UserWithNameDto>(user);
             return Ok(map);
+        }
+
+        [HttpPut("updateProfileUser/{id}")]
+        public async Task<ActionResult<Users>> UpdateProfileUser([FromRoute] int id, [FromForm] UpdateProfileDto user_dto)
+        {
+            var mess = "";
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var user = await _context.Users.FindAsync(id);
+                var editor = await _context.Users.Where(u => u.id == user_dto.userModified).FirstOrDefaultAsync();
+                if (user == null)
+                {
+                    return NotFound("Số nhận dạng tồn tại");
+                }
+                //check is exist
+                var identityExist = _context.Users.Where(u => u.identitycard == user_dto.identitycard && u.id != id);
+                if (identityExist.Any())
+                    return BadRequest("CMND đã tồn tại");
+                var phoneExist = _context.Users.Where(u => u.phoneNumber == user_dto.phoneNumber && u.id != id && u.phoneNumber != null);
+                if (phoneExist.Any())
+                    return BadRequest("Số điện thoại đã tồn tại");
+                var emailExist = _context.Users.Where(u => u.email == user_dto.email && u.id != id);
+                if (emailExist.Any())
+                    return BadRequest("Email tồn tại");
+
+                if (user_dto.userModified != null)
+                {
+                    var userMap = _mapper.Map<UpdateProfileDto, Users>(user_dto, user);
+                    if (user_dto.formFileAvatar != null)
+                    {
+                        var localServer = $"{Request.Scheme}://{Request.Host}";
+                        var upload = _host.WebRootPath;
+                        var fileName = userMap.avatarLink?.Replace($"{localServer}/UploadAvatar/", "");
+                        string filePath = System.IO.Path.Combine(upload, "UploadAvatar", fileName ?? "");
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
+                        userMap.avatarLink = localServer + FilesHelper.UploadFileAndReturnPath(user_dto.formFileAvatar, upload, "/UploadAvatar/");
+                    }
+                    _context.Users.Update(userMap);
+                    await _context.SaveChangesAsync();
+                    return Ok(new ApiResponseDto
+                    {
+                        Success = true,
+                        Message = mess == "" ? "Cập nhật thành công!" : mess,
+                    });
+                }
+                return BadRequest("Không lấy được thông tin của editor !");
+            }
+            catch
+            {
+                return BadRequest("Lỗi không rõ !");
+            }
         }
     }
 }

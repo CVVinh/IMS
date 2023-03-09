@@ -30,5 +30,6 @@
         {
             get { return $"{lastName} {firstName}"; }
         }
+        public string? avatarLink { get; set; }
     }
 }

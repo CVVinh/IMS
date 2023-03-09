@@ -3,6 +3,7 @@ using BE.Data.Contexts;
 using BE.Data.Dtos;
 using BE.Data.Dtos.ProjectDtos;
 using BE.Data.Dtos.UserDtos;
+using BE.Data.Enum;
 using BE.Data.Models;
 using BE.Services.PaginationServices;
 using BE.Services.TokenServices;
@@ -112,7 +113,6 @@ namespace BE.Controllers
         [HttpGet("getAllProjectByLead/{IdLead}")]
 		public IActionResult getAllProjectByLead(int IdLead)
 		{
-
 			try
 			{
                 var list = from x in _context.Projects
@@ -148,7 +148,6 @@ namespace BE.Controllers
         [HttpGet("getAllProjectByStaff/{idstaff}")]
 	    public IActionResult getAllProjectByStaff(int idstaff)
 		{
-
 			try
 			{
 				var list = from x in _context.Projects
@@ -201,8 +200,8 @@ namespace BE.Controllers
 		}
 
         [HttpPost("addProject")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: projects add: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: projects add: 1")]
         public async Task<IActionResult> Create(AddNewProjectDto project_Model)
 		{
 			try
@@ -252,8 +251,8 @@ namespace BE.Controllers
 
 		}
 		[HttpPut("DeleteProject/{id}")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: projects delete: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: projects delete: 1")]
         public IActionResult DeleteProject(int id, IdUserChangeProjectDto request)
 		{
 			try
@@ -440,8 +439,8 @@ namespace BE.Controllers
 
 		[HttpPut]
         [Route("updateProject/{id}")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: projects update: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: projects update: 1")]
         public async Task<ActionResult> updateProject(EditProjectDto requests, int id)
 		{
 
@@ -555,8 +554,8 @@ namespace BE.Controllers
 		}
 		[HttpGet]
 		[Route("exportExcel")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: projects export: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: projects export: 1")]
         public async Task<string> DownloadFile()
 		{
 			var wb = new XLWorkbook();
@@ -642,6 +641,10 @@ namespace BE.Controllers
 				return BadRequest(ex);
 			}		
 		}
+
+        
+
+
     }
 
 }

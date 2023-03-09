@@ -3,6 +3,7 @@ using BE.Data.Contexts;
 using BE.Data.Dtos.NotificationDtos;
 using BE.Data.Models;
 using BE.Hubs;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Connections.Features;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Security.Claims;
+using static BE.Data.Constand.ConfigEntity;
 
 namespace BE.Controllers
 {
@@ -33,13 +35,13 @@ namespace BE.Controllers
         [HttpGet("GetAllListNotification")]
         public async Task<IActionResult> GetNotificationByPMId()
         {
-            var data = await _context.Notifications.OrderByDescending(s => s.dateCreated).Where(x => x.isRequireDelete == false && x.usercode == null).ToListAsync();
+            var data = await _context.Notifications.OrderByDescending(s => s.dateCreated).Where(x => x.isDeleted == false).ToListAsync();
 
             return Ok(data);
         }
         [HttpPut("WatchNotification/{id}")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: notifications update: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: notifications update: 1")]
         public async Task<IActionResult> isWatchNotification(int id)
         {
             var check = await _context.Notifications.FindAsync(id);
@@ -53,8 +55,8 @@ namespace BE.Controllers
             return BadRequest();
         }
         [HttpPost("RequireDeleteApplication")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: notifications add: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: notifications add: 1")]
         public async Task<IActionResult> CreateRequireDeleteApplication(CreateRequireDeleteApplicationDTO createRequireDeleteApplicationDTO)
         {
             if (ModelState.IsValid)
@@ -83,6 +85,19 @@ namespace BE.Controllers
             var getNoti = await _context.Notifications.Where(x => x.isRequireDelete == true && userCode == userCode).OrderBy(x => x.dateCreated).LastOrDefaultAsync();
             var map = _mapper.Map<CreateRequireDeleteApplicationDTO>(getNoti);
             return Ok(map);
+        }
+        [HttpDelete("deleteNotiById/{id}")]
+        public async Task<IActionResult> deleteNotiById(int id)
+        {
+            var check = await _context.Notifications.FindAsync(id);
+            if (check != null)
+            {
+                check.isWatched = true;
+                _context.Remove(check);
+                await _context.SaveChangesAsync();
+                return Ok(check);
+            }
+            return BadRequest();
         }
 
     }

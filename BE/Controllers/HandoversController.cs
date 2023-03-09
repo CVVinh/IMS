@@ -21,8 +21,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("addHandover")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: handovers add: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: handovers add: 1")]
         public async Task<IActionResult> addHandover(AddHandover request)
         {
             try
@@ -47,8 +47,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("updateHandover")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: handovers update: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: handovers update: 1")]
         public async Task<IActionResult> updateHandover(UpdateHandover request)
         {
             try
@@ -74,8 +74,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("ConfirmHandover")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: handovers confirm: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: handovers confirm: 1")]
         public async Task<IActionResult> confirmHandover(string[] idHandover)
         {
             try
@@ -122,8 +122,8 @@ namespace BE.Controllers
 
         [HttpPut]
         [Route("deleteHandover/{idhand}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: handovers delete: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: handovers delete: 1")]
         public async Task<IActionResult> deleteHandover(int idhand, IdUserChangeHandoverDto request)
         {
             try

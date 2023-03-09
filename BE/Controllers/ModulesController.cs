@@ -57,8 +57,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("createModule")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: modules add: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: modules add: 1")]
         public async Task<IActionResult> CreateModule(ModuleDtos moduleDtos)
         {
             if (!ModelState.IsValid)
@@ -74,8 +74,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("updateModule/{id}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: modules update: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: modules update: 1")]
         public async Task<IActionResult> UpdateModule([FromRoute] int id, ModuleDtos moduleDtos)
         {
             if (!ModelState.IsValid)
@@ -91,8 +91,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("deleteModule/{id}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: modules delete: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: modules delete: 1")]
         public async Task<IActionResult> DeleteModule([FromRoute] int id)
         {
             var response = await _moduleServices.DeleteModule(id);
@@ -104,8 +104,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("deleteMultiModule")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: modules deleteMulti: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: modules deleteMulti: 1")]
         public async Task<IActionResult> DeleteMultiModule(List<int> listIdModule)
         {
             var response = await _moduleServices.DeleteMultiModule(listIdModule);

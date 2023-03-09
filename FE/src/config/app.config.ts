@@ -25,10 +25,13 @@ export const ApiApplication = {
         GET_ALL: 'Users/getAll',
         GET_BY_CODE: 'Users/getUserByUserCode/',
         GET_INFO: 'Users/getInfo',
+        UPDATE_PROFILE: (id: number) => `Users/updateProfileUser/${id}`,
+        GET_USER_BY_ID: (id: number) => `Users/getUserById/${id}`,
     },
     PERMISSION_GROUP_MENU: {
-        GET_PERMISSION_GROUP: 'Permission_Groups/decentralization_Group',
-        GET_BY_USER_GROUP: 'Permission_Groups/getPermissionGroup_By_IdModule/',
+        GET_PERMISSION_GROUP: 'Permission_Groups/decentralization_Group',        // cu
+        GET_BY_USER_GROUP: 'Permission_Groups/getPermissionGroup_By_IdModule/', // cu
+
     },
     PERMISSION_USER_MENU: {
         GET_ALL: 'Group/getListGroup',

@@ -21,5 +21,9 @@ namespace BE.Data.Models
         //Date: 22/2/2023
         //Modifile: add field IdCompanyBranh in table LeaveOff
         public int? idCompanyBranh { get; set; }
+
+        //Date: 9/3/2023
+        //Modifile: add field ReasonAccept in table LeaveOff
+        public string? ReasonAccept { get; set; }
     }
 }

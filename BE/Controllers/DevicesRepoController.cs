@@ -56,8 +56,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("CreateDevices")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: devicesRepos add: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: devicesRepos add: 1")]
         public IActionResult CreateDevices([FromBody] CreateDevicesDto device)
         {
             var token = TokenHelper.GetUserId(User);
@@ -69,8 +69,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("UpdateDevices/{IdDevices}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: devicesRepos update: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: devicesRepos update: 1")]
         public IActionResult UpdateDevices([FromRoute] int IdDevices, [FromBody] CreateDevicesDto request)
         {
             Devices device = _mapper.Map<Devices>(request);
@@ -84,8 +84,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("DeleteDevices/{IdDevices}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: devicesRepos delete: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: devicesRepos delete: 1")]
         public IActionResult DeleteDevices([FromRoute] int IdDevices)
         {
             var token = TokenHelper.GetUserId(User);

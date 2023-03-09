@@ -18,7 +18,7 @@ namespace BE.Services.LeaveOffServices
         Task<BaseResponse<List<LeaveOff>>> GetAllAsync();
         Task<BaseResponse<LeaveOff>> AddNewLeaveOffAsync(AddNewLeaveOffDto addNewLeaveOffDto);
         Task<BaseResponse<LeaveOff>> EditRegisterLeaveOffAsync(int id, EditRegisterLeaveOffDtos editRegisterLeaveOffDtos);
-        Task<BaseResponse<LeaveOff>> AccepterLeaveOffAsync(int idLeaveOff, int idAccepter);
+        Task<BaseResponse<LeaveOff>> AccepterLeaveOffAsync(int idLeaveOff, AccepterLeaveOffDto accepterLeaveOff);
         Task<BaseResponse<LeaveOff>> NotAccepterLeaveOffAsync(int idLeaveOff, NotAcceptLeaveOffDto notAcceptLeaveOffDto);
         Task<BaseResponse<LeaveOff>> GetLeaveOffByIdAsync(int idLeaveOff);
         Task<BaseResponse<LeaveOff>> DeleteLeaveOffByIdAsync(int idLeaveOff);
@@ -38,7 +38,7 @@ namespace BE.Services.LeaveOffServices
             _mapper = mapper;
         }
 
-        public async Task<BaseResponse<LeaveOff>> AccepterLeaveOffAsync(int idLeaveOff, int idAccepter)
+        public async Task<BaseResponse<LeaveOff>> AccepterLeaveOffAsync(int idLeaveOff, AccepterLeaveOffDto accepterLeaveOff)
         {
             var success = false;
             var message = "";
@@ -54,7 +54,7 @@ namespace BE.Services.LeaveOffServices
                     return new BaseResponse<LeaveOff>(success, message, data);
                 }
 
-                var leaveOffMap = leaveOff.AccepterLeaveOffExtention(idAccepter, StatusLO.Done);
+                var leaveOffMap = leaveOff.AccepterLeaveOffExtention(accepterLeaveOff.ReasonAccept, accepterLeaveOff.idAcceptUser, StatusLO.Done);
                 _appContext.leaveOffs.Update(leaveOffMap);
                 await _appContext.SaveChangesAsync();
 
@@ -139,7 +139,7 @@ namespace BE.Services.LeaveOffServices
                 {
                     message = "idLeaveOff không tồn tại!";
                     data = null;
-                    success= false;
+                    success = false;
                     return new BaseResponse<LeaveOff>(success, message, data);
                 }
 
@@ -172,7 +172,7 @@ namespace BE.Services.LeaveOffServices
                 {
                     message = "idLeaveOff không tồn tại!";
                     data = null;
-                    success= false;
+                    success = false;
                     return new BaseResponse<LeaveOff>(success, message, data);
                 }
                 var leaveOffMap = editRegisterLeaveOffDtos.editRegisterLeaveOffExtention(leaveOff);
@@ -188,7 +188,7 @@ namespace BE.Services.LeaveOffServices
             {
                 message = $"Không thể chỉnh sửa nghỉ phép! {ex.Message}";
                 data = null;
-                success= false;
+                success = false;
                 return new BaseResponse<LeaveOff>(success, message, data);
             }
         }
@@ -314,7 +314,7 @@ namespace BE.Services.LeaveOffServices
                 {
                     message = "idLeaveOff không tồn tại!";
                     data = null;
-                    success= false;
+                    success = false;
                     return new BaseResponse<LeaveOff>(success, message, data);
                 }
 

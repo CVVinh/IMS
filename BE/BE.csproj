@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <Folder Include="Excel\" />
+    <Folder Include="wwwroot\UploadAvatar\" />
   </ItemGroup>
 
 </Project>

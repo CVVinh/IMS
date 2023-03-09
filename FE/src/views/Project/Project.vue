@@ -251,6 +251,8 @@
             try {
                 this.token = LocalStorage.jwtDecodeToken()
 
+
+                
                 await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
                 if (await UserRoleHelper.isAccess) {
                     this.Permission(Number(this.token.IdGroup), this.token.Id)

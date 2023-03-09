@@ -30,7 +30,7 @@
                                 <Button
                                     label="Quay về"
                                     class="p-button-sm"
-                                    icon="pi pi-arrow-left"
+                                    icon="pi pi-arrow-left"    
                                     @click="backToProject()"
                                 />
                             </span>

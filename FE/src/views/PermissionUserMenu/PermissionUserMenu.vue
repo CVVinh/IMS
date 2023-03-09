@@ -3,7 +3,7 @@
         <ConfirmDialog></ConfirmDialog>
         <template #header>
             <div class="flex justify-content-center">
-                <h5 class="" style="color: white">Danh sách dự án</h5>
+                <h5 class="" style="color: white">Danh sách dự án</h5> 
                 <div class="inline">
                     <Export label="Xuất Excel" class="me-2" @click="exportToExcel()" />
                     <Button @click="finishMulti()" label="Lưu" class="p-button-sm me-2" icon="pi pi-check" />
@@ -26,7 +26,7 @@
             </div>
         </template>
         <div class="permission-user-menu col-12 row p-4">
-            <div class="col-sm-3 card p-2">
+            <div class="col-sm-2 card p-2">
                 <Dropdown
                     class="mb-2"
                     v-model="selectedUserGroup"
@@ -46,12 +46,14 @@
                         dataKey="id"
                         v-if="listUser.length > 0"
                     >
+                 
                         <template #item="data">
-                            <Button @click="selectedAUser(data.item.id)" class="p-button-text">
+                            <Button @click="selectedAUser(data.item.idUser)" class="p-button-text">
                                 <div class="user-group">
                                     <div class="group-list-detail">
                                         <h5 class="mb-2 text-body">
-                                            {{ data.item.lastName }} {{ data.item.firstName }}
+                                            <!-- {{ data.item.lastName }} {{ data.item.firstName }} -->
+                                            {{ data.item.idUser }}
                                         </h5>
                                     </div>
                                 </div>
@@ -84,76 +86,24 @@
                         :class="{ active: selectedTab === module.id }"
                         class="tab-item col-12 d-flex"
                     >
-                        <div class="col-sm-4 tab-item-sub">
+                        <div class="col-sm-3 tab-item-sub">
                             <h4 class="tab-item__heading">{{ module.nameModule }}</h4>
                         </div>
-                        <div class="col-sm-8 tab-item-sub">
-                            <div class="col-12 d-flex justify-content-center">
-                                <div class="col-sm-2 field-checkbox d-flex align-items-center justify-content-center">
-                                    <input
-                                        :disabled="!module.access"
-                                        class="input-checkbox"
-                                        type="checkbox"
-                                        :id="module.id"
-                                        :value="module.id"
-                                        v-bind:checked="module.all ? module.all : module.add"
-                                        @change="isSelectedCheck(module, 'add', $event.target.checked)"
-                                    />
-                                    <label for="add" class="ms-3">Thêm</label>
-                                </div>
-                                <div class="col-sm-2 field-checkbox d-flex align-items-center justify-content-center">
-                                    <input
-                                        :disabled="!module.access"
-                                        class="input-checkbox"
-                                        type="checkbox"
-                                        :id="module.id"
-                                        :value="module.id"
-                                        v-bind:checked="module.all ? module.all : module.edit"
-                                        @change="isSelectedCheck(module, 'edit', $event.target.checked)"
-                                    />
-                                    <label for="edit" class="ms-3">Sửa</label>
-                                </div>
-                                <div class="col-sm-2 field-checkbox d-flex align-items-center justify-content-center">
-                                    <input
-                                        :disabled="!module.access"
-                                        class="input-checkbox"
-                                        type="checkbox"
-                                        :id="module.id"
-                                        :value="module.id"
-                                        v-bind:checked="module.all ? module.all : module.delete"
-                                        @change="isSelectedCheck(module, 'delete', $event.target.checked)"
-                                    />
-                                    <label for="delete" class="ms-3">Xóa</label>
-                                </div>
-                                <div class="col-sm-2 field-checkbox d-flex align-items-center justify-content-center">
-                                    <input
-                                        :disabled="!module.access"
-                                        class="input-checkbox"
-                                        type="checkbox"
-                                        :id="module.id"
-                                        :value="module.id"
-                                        v-bind:checked="module.all ? module.all : module.export"
-                                        @change="isSelectedCheck(module, 'export', $event.target.checked)"
-                                    />
-                                    <label for="export" class="ms-3">Xuất file</label>
-                                </div>
-                                <div class="col-sm-4 field-checkbox d-flex align-items-center justify-content-center">
-                                    <input
-                                        :disabled="!module.access"
-                                        class="input-checkbox"
-                                        type="checkbox"
-                                        :id="module.id"
-                                        :value="module.id"
-                                        v-bind:checked="module.all"
-                                        @change="checkAll(module, $event.target.checked)"
-                                    />
-                                    <label for="all" class="ms-3">Tất cả</label>
-                                </div>
-                            </div>
+
+                       <div class="col-sm-10 tab-item-sub">
+                       
+                             <div class="col-12 d-flex justify-content-left">
+                                <itemPermissionActionModule
+                                    :module = module
+                                    :canCheck = this.selectedUser
+                                />
+                                
+                            </div> 
                         </div>
                     </div>
                 </div>
             </div>
+         
         </div>
         <Dialog
             header="Không có quyền truy cập !"
@@ -180,8 +130,9 @@
     import { ApiApplication, HttpStatus } from '@/config/app.config'
     import { UserRoleHelper } from '@/helper/user-role.helper'
     import router from '@/router'
-
+    import itemPermissionActionModule from './itemPermissionActionModule.vue'
     export default {
+    components: { itemPermissionActionModule },
         name: 'PermissionUserMenu',
         data() {
             return {
@@ -201,7 +152,11 @@
             }
         },
         async mounted() {
+            
+           
+
             if (await UserRoleHelper.isAdmin()) {
+                console.log('run');
                 this.getUserGroup()
                 await this.getListModule()
                 this.loading = false
@@ -218,6 +173,9 @@
                 }
                 this.num = this.num - 1
                 this.timeout = setTimeout(() => this.countTime(), 1000)
+            },
+            getListActionModule(){
+                HTTP.get("")
             },
             submit() {
                 clearTimeout(this.timeout)
@@ -245,12 +203,11 @@
             },
             async getUserMenuModule() {
                 await this.getListModule()
-                const listModuleAccess = await HTTP.get(
-                    ApiApplication.PERMISSION_GROUP_MENU.GET_BY_USER_GROUP + '?idGroup=' + this.selectedUserGroup,
-                )
+                const listModuleAccess = await HTTP.get('Permission_Groups/getPermissionGroup_By_IdModule/' + this.selectedUserGroup)
+                
                 if (listModuleAccess.status === HttpStatus.OK) {
                     this.listModule.map((module) => {
-                        listModuleAccess.data.forEach((item) => {
+                        listModuleAccess.data._Data.forEach((item) => {
                             if (item.idModule === module.id) {
                                 module['access'] = item.access
                             }
@@ -258,11 +215,11 @@
                     })
                 }
                 const listModulePermission = await HTTP.get(
-                    ApiApplication.PERMISSION_USER_MENU.GET_USER_MENU + '?idUser=' + this.selectedUser,
+                    'Permission_Use_Menus/getPermissionUserMenuWithUserId/' + this.selectedUser,
                 )
                 if (listModulePermission.status === HttpStatus.OK) {
                     this.listModule.map((module) => {
-                        listModulePermission.data.forEach((item) => {
+                        listModulePermission.data._Data.forEach((item) => {
                             if (item.idModule === module.id) {
                                 module['add'] = item.add
                                 module['edit'] = item.update
@@ -284,7 +241,7 @@
                 this.userGroup = []
                 HTTP.get(ApiApplication.PERMISSION_USER_MENU.GET_ALL).then((res) => {
                     if (res.data) {
-                        this.userGroup = res.data
+                        this.userGroup = res.data._Data
                     }
                 })
             },
@@ -294,23 +251,44 @@
                 this.selectedUser = null
                 await this.getListModule()
                 if (this.selectedUserGroup) {
-                    HTTP.get(ApiApplication.PERMISSION_USER_MENU.GET_USER_BY_GROUP + `/${this.selectedUserGroup}`).then(
+                    HTTP.get('User_Group/getUserGroupWithGroupId' + `/${this.selectedUserGroup}`).then(
                         (res) => {
-                            if (res.data) {
-                                this.listUser = res.data
+                            if (res) {
+                                this.listUser = res.data._Data
                                 this.loading = false
                             }
                         },
                     )
                 }
             },
-            selectedAUser(data) {
+           async selectedAUser(data) {
                 this.loading = true
                 this.selectedUser = data
-                this.arrModuleAll = []
-                if (data) {
-                    this.getUserMenuModule()
-                }
+            await    this.getListModule();
+
+
+            await HTTP.get("/Permission_Use_Menus/getPermissionUserMenuWithUserId/"+data).then(res=>{
+                    console.log(res.data._Data);
+                    if(res.data._Data.length > 0){
+                        this.listModule.map(ele=>{
+                            res.data._Data.map(element=>{
+                            if(ele.id === element.idModule){
+                                 ele.add = element.add 
+                                 ele.addMember = element.addMember
+                                 ele.confirm = element.confirm
+                                 ele.confirmMulti = element.confirmMulti
+                                 ele.delete = element.delete
+                                 ele.deleteMulti = element.deleteMulti
+                                 ele.export = element.export
+                                 ele.refuse = element.refuse
+                                 ele.update = element.update
+                              }
+                            })
+                         })
+                    }
+                }).catch(err=>console.log(err));
+                console.log(this.listModule);
+                this.loading = false
             },
             selectedGroup(data) {
                 this.selectedId = data.id
@@ -319,7 +297,7 @@
                 this.listModule = []
                 try {
                     const result = await HTTP.get(ApiApplication.MODULE.GET_ALL)
-                    const data = result.data
+                    const data = result.data._Data
                     if (data) {
                         const array = []
                         await data.forEach((item) => {
@@ -332,7 +310,8 @@
                 } catch (error) {}
             },
             confirmSave() {
-                if (this.selectedUser && this.arrModuleAll.length > 0) {
+                
+                if (this.selectedUser && this.listModule.length > 0) {
                     this.$confirm.require({
                         message: 'Bạn có muốn tiếp tục?',
                         header: 'Xác nhận',
@@ -361,46 +340,65 @@
                 }
             },
             save() {
-                if (this.selectedUser && this.arrModuleAll.length > 0) {
-                    this.loading = true
-                    const token = LocalStorage.jwtDecodeToken()
-                    HTTP.post(
-                        ApiApplication.PERMISSION_USER_MENU.ADD_BY_USER +
-                            '?idUser=' +
-                            this.selectedUser +
-                            '&idUserAdd=' +
-                            token.Id,
-                        this.arrModuleAll,
-                    ).then((res) => {
-                        if (res) {
-                            this.$toast.add({
-                                severity: 'success',
-                                summary: 'Thành công',
-                                detail: 'Sửa thành công!',
-                                life: 3000,
-                            })
-                            this.loading = false
-                        } else {
-                            this.$toast.add({
-                                severity: 'error',
-                                summary: 'Lỗi',
-                                detail: 'Kiểm tra lại dữ liệu!',
-                                life: 3000,
-                            })
-                            this.selectedAUser(this.selectedUser)
-                            this.arrModuleAll = []
-                        }
-                    })
-                } else {
-                    this.$toast.add({
-                        severity: 'error',
-                        summary: 'Lỗi',
-                        detail: 'Cập nhật lỗi. Vui lòng liên hệ Admin.',
-                        life: 3000,
-                    })
-                    this.selectedAUser(this.selectedUser)
-                    this.arrModuleAll = []
-                }
+                this.listModule.map(ele=>{
+                    const newPermission = {
+                        "add": ele.add,
+                        "update": ele.update,
+                        "delete": ele.delete,
+                        "deleteMulti": ele.deleteMulti,
+                        "confirm": ele.confirm,
+                        "confirmMulti": ele.confirmMulti,
+                        "refuse": ele.refuse,
+                        "addMember": ele.addMember,
+                        "export": ele.export,
+                        "userModified": ele.userModified
+                    }
+
+                    HTTP.put(`Permission_Use_Menus/updatePermissionUserMenu/${this.selectedUser}/${ele.id}/${this.selectedUserGroup}`,newPermission)
+                    .then(res=>console.log(res.data))
+                    .catch(err=>console.log(err))
+                })
+
+                // if (this.selectedUser && this.arrModuleAll.length > 0) {
+                //     this.loading = true
+                //     const token = LocalStorage.jwtDecodeToken()
+                //     HTTP.post(
+                //         ApiApplication.PERMISSION_USER_MENU.ADD_BY_USER +
+                //             '?idUser=' +
+                //             this.selectedUser +
+                //             '&idUserAdd=' +
+                //             token.Id,
+                //         this.arrModuleAll,
+                //     ).then((res) => {
+                //         if (res) {
+                //             this.$toast.add({
+                //                 severity: 'success',
+                //                 summary: 'Thành công',
+                //                 detail: 'Sửa thành công!',
+                //                 life: 3000,
+                //             })
+                //             this.loading = false
+                //         } else {
+                //             this.$toast.add({
+                //                 severity: 'error',
+                //                 summary: 'Lỗi',
+                //                 detail: 'Kiểm tra lại dữ liệu!',
+                //                 life: 3000,
+                //             })
+                //             this.selectedAUser(this.selectedUser)
+                //             this.arrModuleAll = []
+                //         }
+                //     })
+                // } else {
+                //     this.$toast.add({
+                //         severity: 'error',
+                //         summary: 'Lỗi',
+                //         detail: 'Cập nhật lỗi. Vui lòng liên hệ Admin.',
+                //         life: 3000,
+                //     })
+                //     this.selectedAUser(this.selectedUser)
+                //     this.arrModuleAll = []
+                // }
             },
             selectModule(module) {
                 this.selectedModule = module
@@ -457,7 +455,9 @@
                 history.go(-1)
             },
         },
+        components:{itemPermissionActionModule}
     }
+
 </script>
 
 <style lang="scss" scoped>

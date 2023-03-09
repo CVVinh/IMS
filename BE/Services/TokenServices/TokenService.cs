@@ -38,6 +38,11 @@ namespace BE.Services.TokenServices
                 claims.Add(new Claim("IdGroup", userS.IdGroup.ToString()));
                 claims.Add(new Claim("TokenId", Guid.NewGuid().ToString()));
 
+                if (userS.avatarLink != null)
+                {
+                    claims.Add(new Claim("AvatarLink", userS.avatarLink.ToString()));
+                }
+
                 if (getPermission_Use_Menu(userS.id) != null)
                 {
                     foreach (var item in getPermission_Use_Menu(userS.id))
@@ -53,12 +58,20 @@ namespace BE.Services.TokenServices
                     }
                 }
 
-                if (getPermission_by_Group(userS.id) != null)
+
+                if (getPermission_By_Group_String(userS.id) != null)
                 {
-                    foreach (var item in getPermission_by_Group(userS.id))
+                    foreach (var item in getPermission_By_Group_String(userS.id))
                     {
-                        claims.Add(new Claim(ClaimTypes.Role, item));
-                        claims.Add(new Claim("ListGroup", item));
+                        claims.Add(new Claim(ClaimTypes.Role, item.ToString()));
+                    }
+                }
+
+                if (getPermission_By_Group_Int(userS.id) != null)
+                {
+                    foreach (var item in getPermission_By_Group_Int(userS.id))
+                    {
+                        claims.Add(new Claim("ListGroup", item.ToString()));
                     }
                 }
 
@@ -159,31 +172,31 @@ namespace BE.Services.TokenServices
                 List<string> data = new List<string>();
                 foreach (var permission in query)
                 {
-                    data.Add("module: "+permission.b.nameModule +" "+ 
+                    data.Add("modules: "+permission.b.nameModule +" "+ 
                         "add: "+permission.a.Add);
 
-                    data.Add("module: " + permission.b.nameModule + " " +
+                    data.Add("modules: " + permission.b.nameModule + " " +
                         "update: " + permission.a.Update);
 
-                    data.Add("module: " + permission.b.nameModule + " " +
+                    data.Add("modules: " + permission.b.nameModule + " " +
                         "delete: " + permission.a.Delete);
 
-                    data.Add("module: " + permission.b.nameModule + " " +
+                    data.Add("modules: " + permission.b.nameModule + " " +
                         "deleteMulti: " + permission.a.DeleteMulti);
 
-                    data.Add("module: " + permission.b.nameModule + " " +
+                    data.Add("modules: " + permission.b.nameModule + " " +
                         "confirm: " + permission.a.Confirm);
 
-                    data.Add("module: " + permission.b.nameModule + " " +
+                    data.Add("modules: " + permission.b.nameModule + " " +
                         "confirmMulti: " + permission.a.ConfirmMulti);
 
-                    data.Add("module: " + permission.b.nameModule + " " +
+                    data.Add("modules: " + permission.b.nameModule + " " +
                         "refuse: " + permission.a.Refuse);
 
-                    data.Add("module: " + permission.b.nameModule + " " +
+                    data.Add("modules: " + permission.b.nameModule + " " +
                         "addMember: " + permission.a.AddMember);
 
-                    data.Add("module: " + permission.b.nameModule + " " +
+                    data.Add("modules: " + permission.b.nameModule + " " +
                         "export: " + permission.a.Export);
                 }
                 return data;
@@ -191,18 +204,39 @@ namespace BE.Services.TokenServices
             return null!;
         }
 
-        // bat lam duoc nhung gi
-        private List<string> getPermission_by_Group(int idUser)
+        private List<string> getPermission_By_Group_String(int idUser)
         {
             var query = from u in _context.Users
-                            join g in _context.UserGroups on u.id equals g.idUser
-                            join d in _context.Groups on g.idGroup equals d.Id
-                            where u.id == idUser    
-                            select d.NameGroup.ToLower();
+                        join g in _context.UserGroups on u.id equals g.idUser
+                        join d in _context.Groups on g.idGroup equals d.Id
+                        where u.id == idUser
+                        select d.NameGroup.ToLower();
 
             if (query.Count() != 0)
             {
                 List<string> data = new List<string>();
+                foreach (var permission in query)
+                {
+                   data.Add(permission);
+                }
+                return data;
+            }
+            return null!;
+        }
+
+
+        // bat lam duoc nhung gi
+        private List<int> getPermission_By_Group_Int(int idUser)
+        {
+            var query = from u in _context.Users
+                        join g in _context.UserGroups on u.id equals g.idUser
+                        join d in _context.Groups on g.idGroup equals d.Id
+                        where u.id == idUser
+                        select d.Id;
+
+            if (query.Count() != 0)
+            {
+                List<int> data = new List<int>();
                 foreach (var permission in query)
                 {
                     data.Add(permission);
@@ -211,7 +245,6 @@ namespace BE.Services.TokenServices
             }
             return null!;
         }
-
 
         // Bat co quyen hay khong
         private List<string> getPermission_Group_AccessModule(int idUser)

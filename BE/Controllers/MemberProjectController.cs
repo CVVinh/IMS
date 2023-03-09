@@ -56,8 +56,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("addMemberAtProject")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: memberProjects add: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: memberProjects add: 1")]
         public async Task<IActionResult> addNewMember(AddMemberDto addMemberDto)
         {
             if(!ModelState.IsValid)
@@ -74,8 +74,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("deleteMemberById/{id}")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: memberProjects delete: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: memberProjects delete: 1")]
         public async Task<IActionResult> deleteMemberById(int id)
         {
             var result = await _memberProjectServices.DeleteMemberAsync(id);
@@ -88,8 +88,8 @@ namespace BE.Controllers
         }
 
         [HttpDelete("deleteMemberInProject/{idMember}/{idProject}")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: memberProjects delete: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: memberProjects delete: 1")]
         public async Task<IActionResult> deleteMemberByIdProject(int idMember,int idProject)
         {
             var result = await _memberProjectServices.DeleteMemberInProjectAsync(idMember,idProject);
@@ -97,8 +97,8 @@ namespace BE.Controllers
             {
                 return BadRequest(result);
             }
-
             return Ok(result);
         }
+
     }
 }

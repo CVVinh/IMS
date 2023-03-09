@@ -100,6 +100,17 @@
                     <span>Tăng ca</span>
                 </router-link>
                 <!-- /Tăng ca -->
+                <!-- Đánh giá -->
+                <router-link
+                    :to="{ name: 'reviews', params: {} }"
+                    class="py-2 ripple list-group-item-action"
+                    @click="activeTag = 'tag16'"
+                    :class="{ 'active-nav-item': activeTag === 'tag16' }"
+                >
+                    <i class="bx bx-glasses-alt"></i>
+                    <span>Đánh giá</span>
+                </router-link>
+                <!-- /Đánh giá -->
                 <!-- Công tác -->
                 <!-- <router-link
                     :to="{ name: 'remotes', params: {} }"

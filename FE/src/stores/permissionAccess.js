@@ -1,6 +1,7 @@
 import { reactive } from 'vue'
 import { HTTP } from '@/http-common'
 import { ApiApplication } from "@/config/app.config";
+import { LocalStorage } from "@/helper/local-storage.helper";
 
 const permissionAccess = ({
     state: reactive({
@@ -15,11 +16,19 @@ const permissionAccess = ({
         }
     },
     actions: {
+        // comment
         async getListAccessModuleByGroup() {
             const idGroup = localStorage.getItem('IdGroup');
+
+            const token = LocalStorage.jwtDecodeToken();
+            //const listIdGroup = localStorage.getItem('ListGroup');
+            console.log("listIdGroup: " + JSON.stringify(token.ListGroup));
+        
             if (idGroup) {
                 await this.getListModule();
-                const dataAccess = await HTTP.get(ApiApplication.PERMISSION_GROUP_MENU.GET_BY_USER_GROUP + "?idGroup=" + idGroup);
+                const dataAccess = await HTTP.get(ApiApplication.PERMISSION_GROUP_MENU.GET_BY_USER_GROUP +  idGroup);
+                console.log("dataAccess:" + JSON.stringify(dataAccess.data._Data));
+
                 if (dataAccess) {
                     permissionAccess.state.listModule.map(module => {
                         dataAccess.data.forEach(item => {
@@ -38,6 +47,7 @@ const permissionAccess = ({
                 }
             });
         },
+
     }
 })
 

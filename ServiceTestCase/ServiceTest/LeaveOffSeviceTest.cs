@@ -60,9 +60,13 @@ namespace ServiceTestCase.ServiceTest
         public async Task AccepterLeaveOffAsync_WithInvalidIdLeaveOff_ShouldReturnErrorMessage()
         {
             var idLeaveOff = -1;
-            var idAccepter = 1;
+            var dataAccept = new AccepterLeaveOffDto()
+            {
+                idAcceptUser = 1,
+                ReasonAccept = "thích thì duyệt"
+            };
 
-            var result = await _leaveOffServices.AccepterLeaveOffAsync(idLeaveOff, idAccepter);
+            var result = await _leaveOffServices.AccepterLeaveOffAsync(idLeaveOff, dataAccept);
 
             Assert.IsFalse(result._success);
             Assert.AreEqual("idLeaveOff không tồn tại!", result._Message);
@@ -84,12 +88,18 @@ namespace ServiceTestCase.ServiceTest
             };
 
             var idLeaveOff = 1;
-            var idAccepter = 1;
+
+            var dataAccept = new AccepterLeaveOffDto()
+            {
+                idAcceptUser = 1,
+                ReasonAccept = "thích thì duyệt"
+            };
+
 
             await _appDbContext.leaveOffs.AddAsync(data);
             await _appDbContext.SaveChangesAsync();
 
-            var result = await _leaveOffServices.AccepterLeaveOffAsync(idLeaveOff, idAccepter);
+            var result = await _leaveOffServices.AccepterLeaveOffAsync(idLeaveOff, dataAccept);
 
             Assert.IsTrue(result._success);
             Assert.AreEqual("Chấp nhận nghỉ phép thành công", result._Message);

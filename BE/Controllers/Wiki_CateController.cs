@@ -28,8 +28,8 @@ namespace BE.Controllers
 
         //POST add new wiki categogy
         [HttpPost("addNewWikiCate")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: wikiCates add: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: wikiCates add: 1")]
         public async Task<IActionResult> addNewWikiCate(addWiki_Categogy addWiki_Categogy)
         {
             try
@@ -97,8 +97,8 @@ namespace BE.Controllers
 
         //PUT put WikiCate
         [HttpPut("editWikiCate/{ID}")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: wikiCates update: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: wikiCates update: 1")]
         public async Task<IActionResult> editWikiCate(editWikiCate editWikiCate, int ID)
         {
             try
@@ -125,8 +125,8 @@ namespace BE.Controllers
 
         //DELETE delete WikiCate
         [HttpDelete("deleteWikiCate/{ID}")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: wikiCates delete: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: wikiCates delete: 1")]
         public async Task<IActionResult> deleteWikiCate(int ID)
         {
             try

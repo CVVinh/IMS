@@ -170,8 +170,8 @@ namespace BE.Controllers
 
         [HttpPost]
         [Route("createOT")]
-        [Authorize(Roles = "admin,lead")]
-        [Authorize(Roles = "module: ots add: 1")]
+        //[Authorize(Roles = "admin,lead")]
+        [Authorize(Roles = "modules: ots add: 1")]
         public async Task<IActionResult> Create(OTs OTs)
         {
             var ots = await _context.OTs.Where(ot => ot.Date == OTs.Date && ot.user == OTs.user).SingleOrDefaultAsync();
@@ -197,8 +197,8 @@ namespace BE.Controllers
 
         [HttpPut]
         [Route("acceptOT")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: ots confirm: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: ots confirm: 1")]
         public async Task<IActionResult> Update(AcceptOTDto dto)
         {
             var ot = await _context.OTs.Where(o => o.id == dto.id).SingleOrDefaultAsync();
@@ -216,8 +216,8 @@ namespace BE.Controllers
 
         [HttpPut]
         [Route("updateOT/{id}")]
-        [Authorize(Roles = "admin,lead")]
-        [Authorize(Roles = "module: ots update: 1")]
+        //[Authorize(Roles = "admin,lead")]
+        [Authorize(Roles = "modules: ots update: 1")]
         public async Task<IActionResult> Update(int id, EditOTDto dto)
         {
             try
@@ -250,8 +250,8 @@ namespace BE.Controllers
 
         [HttpPut]
         [Route("deleteOT")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: ots delete: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: ots delete: 1")]
         public async Task<IActionResult> Accept(int idOT, int PM)
         {
             var ot = await _context.OTs.Where(o => o.id == idOT).SingleOrDefaultAsync();
@@ -274,7 +274,7 @@ namespace BE.Controllers
 
 
         [HttpGet("exportExcelFollowRole/{month}/{year}/{idproject}/{idrole}/{iduser}")]
-        [Authorize(Roles = "admin,pm,lead,sample,staff")]
+        //[Authorize(Roles = "admin,pm,lead,sample,staff")]
         [Authorize(Roles = "module: ots export: 1")]
         public async Task<IActionResult> exportExcelFollowRole(int? month = 0,int? year = 0,int? idproject = 0,int? idrole = 0,int? iduser = 0)
         {
@@ -1217,8 +1217,8 @@ namespace BE.Controllers
         
         [HttpGet]
         [Route("exportExcel/month={month}&year={year}&idProject={idProject}")]
-        [Authorize(Roles = "admin,pm,lead,sample,staff")]
-        [Authorize(Roles = "module: ots export: 1")]
+        //[Authorize(Roles = "admin,pm,lead,sample,staff")]
+        [Authorize(Roles = "modules: ots export: 1")]
         public async Task<string> DownloadFile(int? month = 0, int? year = 0, int? idProject = 0)
         {
             var wb = new XLWorkbook();
@@ -1910,8 +1910,8 @@ namespace BE.Controllers
 
 
         [HttpPost("AddOTs")]
-        [Authorize(Roles = "admin,lead")]
-        [Authorize(Roles = "module: ots add: 1")]
+        //[Authorize(Roles = "admin,lead")]
+        [Authorize(Roles = "modules: ots add: 1")]
         public async Task<IActionResult> AddOTs(AddRangeOTs OTs)
         {
             try

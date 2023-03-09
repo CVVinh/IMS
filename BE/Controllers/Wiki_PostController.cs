@@ -30,8 +30,8 @@ namespace BE.Controllers
 
         //POST add new wiki post
         [HttpPost("addNewWikiPost")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: wikiPosts add: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: wikiPosts add: 1")]
         public async Task<IActionResult> addNewWikiPost(addWikiPost addWikiPost)
         {
             try
@@ -120,8 +120,8 @@ namespace BE.Controllers
 
         //PUT put WikiPost
         [HttpPut("editWikiPost/{ID}")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: wikiPosts update: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: wikiPosts update: 1")]
         public async Task<IActionResult> editWikiPost(editWikiPost editWikiPost, int ID)
         {
             try
@@ -148,8 +148,8 @@ namespace BE.Controllers
 
         //DELETE delete WikiPost
         [HttpDelete("deleteWikiPost/{ID}")]
-        [Authorize(Roles = "admin,pm")]
-        [Authorize(Roles = "module: wikiPosts delete: 1")]
+        //[Authorize(Roles = "admin,pm")]
+        [Authorize(Roles = "modules: wikiPosts delete: 1")]
         public async Task<IActionResult> deleteWikiPost(int ID)
         {
             try
@@ -169,5 +169,6 @@ namespace BE.Controllers
                 return BadRequest(ex);
             }
         }
+
     }
 }

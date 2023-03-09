@@ -13,4 +13,11 @@ export class UserService {
     public static getUserInfo() {
         return HTTP.get(ApiApplication.USER.GET_INFO)
     }
+
+    public static updateProfileUser(id: number, object: any) {
+        return HTTP.put(ApiApplication.USER.UPDATE_PROFILE(id), object)
+    }
+    public static getUserById(id: number) {
+        return HTTP.get(ApiApplication.USER.GET_USER_BY_ID(id))
+    }
 }

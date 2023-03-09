@@ -9,6 +9,7 @@ using BE.Data.Dtos.Permission_Use_Menus;
 using BE.Data.Dtos.PermissionActionModuleDtos;
 using BE.Data.Dtos.ProjectDtos;
 using BE.Data.Dtos.RulesDTOs;
+using BE.Data.Dtos.StaffReviewDtos;
 using BE.Data.Dtos.UserDtos;
 using BE.Data.Models;
 
@@ -58,6 +59,14 @@ namespace BE.Mapper
             CreateMap<Notification, CreateRequireDeleteApplicationDTO>().ReverseMap();
             CreateMap<Users, UserDto>().ReverseMap();
             CreateMap<Users, UserWithNameDto>().ReverseMap();
+            CreateMap<StaffReview, StaffReviewDto>().ReverseMap();
+            CreateMap<Experience, ExperienceDto>().ReverseMap();
+            CreateMap<ReviewResult, ReviewResultDto>().ReverseMap();
+
+            CreateMap<StaffReview, CreateStaffReviewDto>().ReverseMap();
+            CreateMap<Experience, CreateExperienceDto>().ReverseMap();
+            CreateMap<ReviewResult, CreateReviewResultDto>().ReverseMap();
+            CreateMap<Users, UpdateProfileDto>().ReverseMap();
         }
     }
 }

@@ -35,7 +35,7 @@ namespace BE.Data.Models
 		public byte isDeleted { get; set; }
 		public string? refreshToken { get; set; }
 		public DateTime? refreshTokenExpiryTime { get; set; }
-		public int IdGroup { get; set; }
+		public int? IdGroup { get; set; }
 
 		//Date: 8/2/2023
 		//Modifile: add field fullName in table User
@@ -44,5 +44,8 @@ namespace BE.Data.Models
 		{
 			get { return $"{lastName} {firstName}"; }
 		}
-    }
+        //Date: 9/3/2023
+        //Modifile: add field avatarLink in table User
+        public string? avatarLink { get; set; }
+	}
 }

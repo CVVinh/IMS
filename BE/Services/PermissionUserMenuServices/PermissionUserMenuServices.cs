@@ -176,33 +176,46 @@ namespace BE.Services.PermissionUserMenuServices
         {
             var success = false;
             var message = "";
-            var data = new Permission_Use_Menu();
+            Permission_Use_Menu permissionUserMenuMapData;
             try
             {
                 var permissionUserMenu = await _db.Permission_Use_Menus.Where(s => s.IdUser.Equals(permissionUserMenuRequest.IdUser)
                                 && s.idModule.Equals(permissionUserMenuRequest.idModule)).FirstOrDefaultAsync();
                 if (permissionUserMenu is null)
                 {
-                    message = "Permission_Use_Menu doesn't exist !";
-                    data = null;
-                    return new BaseResponse<Permission_Use_Menu>(success, message, data);
+                    var permissionGroup = await _db.Permission_Groups.Where(s => s.IdModule.Equals(permissionUserMenuRequest.idModule) && s.IdGroup.Equals(permissionUserMenuRequest.idGroup) && s.Access == true).FirstOrDefaultAsync();
+                    if(permissionGroup is null)
+                    {
+                        message = "The user does not have permission to perform this function!";
+                        return new BaseResponse<Permission_Use_Menu>(success, message, permissionUserMenuMapData = null);
+                    }
+                    else
+                    {
+                        permissionUserMenuMapData = _mapper.Map<Permission_Use_Menu>(permissionUserMenuEditDto);
+                        permissionUserMenuMapData.IdUser = permissionUserMenuRequest.IdUser; 
+                        permissionUserMenuMapData.idModule = permissionUserMenuRequest.idModule; 
+                        permissionUserMenuMapData.dateCreated = DateTime.Now;
+                        permissionUserMenuMapData.userCreated = permissionUserMenuEditDto.userModified;
+                        permissionUserMenuMapData.userModified = null;
+                        await _db.Permission_Use_Menus.AddAsync(permissionUserMenuMapData);
+                    }
                 }
-                var permissionUserMenuMapData = _mapper.Map<PermissionUserMenuEditDto, Permission_Use_Menu>(permissionUserMenuEditDto, permissionUserMenu);
-
-                permissionUserMenuMapData.dateModified = DateTime.Now;
-                _db.Permission_Use_Menus.Update(permissionUserMenuMapData);
+                else
+                {
+                    permissionUserMenuMapData = _mapper.Map<PermissionUserMenuEditDto, Permission_Use_Menu>(permissionUserMenuEditDto, permissionUserMenu);
+                    permissionUserMenuMapData.dateModified = DateTime.Now;
+                    _db.Permission_Use_Menus.Update(permissionUserMenuMapData);
+                }
                 await _db.SaveChangesAsync();
-
                 success = true;
                 message = "Editing Permission_Use_Menu successfully";
-                data = permissionUserMenuMapData;
-                return new BaseResponse<Permission_Use_Menu>(success, message, data);
+                return new BaseResponse<Permission_Use_Menu>(success, message, permissionUserMenuMapData);
             }
             catch (Exception ex)
             {
                 success = false;
                 message = $"Editing Permission_Use_Menu failed! {ex.Message}";
-                return new BaseResponse<Permission_Use_Menu>(success, message, data = null);
+                return new BaseResponse<Permission_Use_Menu>(success, message, permissionUserMenuMapData = null);
             }
         }
 
@@ -280,42 +293,49 @@ namespace BE.Services.PermissionUserMenuServices
                 foreach(var idGroup in listIdGroup)
                 {
                     var group = await _db.Groups.Where(s => s.IsDeleted == 0 && s.Id.Equals(idGroup)).FirstOrDefaultAsync();
-                    if (group.NameGroup.ToLower().Equals("admin"))
+                    if (group != null)
                     {
-                        arrPerUser = _dataAdmin.RoleAdmin(idUser, idGroup, idUserCreated);
-                    }
-                    else if (group.NameGroup.ToLower().Equals("pm"))
-                    {
-                        arrPerUser = _dataPm.RolePm(idUser, idGroup, idUserCreated);
-                    }
-                    else if (group.NameGroup.ToLower().Equals("lead"))
-                    {
-                        arrPerUser = _dataLead.RoleLead(idUser, idGroup, idUserCreated);
-                    }
-                    else if (group.NameGroup.ToLower().Equals("sample"))
-                    {
-                        arrPerUser = _dataSample.RoleSample(idUser, idGroup, idUserCreated);
-                    }
-                    else if (group.NameGroup.ToLower().Equals("staff"))
-                    {
-                        arrPerUser = _dataStaff.RoleStaff(idUser, idGroup, idUserCreated);
-                    }
-                    else
-                    {
-                        arrPerUser = _dataStaff.RoleStaff(idUser, idGroup, idUserCreated);
-                    }
-
-                    foreach (var item in arrPerUser)
-                    {
-                        var permissionUserMenu = await _db.Permission_Use_Menus.Where(s => s.IdUser.Equals(item.IdUser)
-                                    && s.idModule.Equals(item.idModule)).FirstOrDefaultAsync();
-                        if (permissionUserMenu == null)
+                        var checkGroupUser = await _db.UserGroups.Where(x => x.idGroup == idGroup && x.idUser == idUser).FirstOrDefaultAsync();
+                        if (checkGroupUser != null)
                         {
-                            await _db.Permission_Use_Menus.AddAsync(item);
-                            data.Add(item);
+                            if (group.NameGroup.ToLower().Equals("admin"))
+                            {
+                                arrPerUser = _dataAdmin.RoleAdmin(idUser, idGroup, idUserCreated);
+                            }
+                            else if (group.NameGroup.ToLower().Equals("pm"))
+                            {
+                                arrPerUser = _dataPm.RolePm(idUser, idGroup, idUserCreated);
+                            }
+                            else if (group.NameGroup.ToLower().Equals("lead"))
+                            {
+                                arrPerUser = _dataLead.RoleLead(idUser, idGroup, idUserCreated);
+                            }
+                            else if (group.NameGroup.ToLower().Equals("sample"))
+                            {
+                                arrPerUser = _dataSample.RoleSample(idUser, idGroup, idUserCreated);
+                            }
+                            else if (group.NameGroup.ToLower().Equals("staff"))
+                            {
+                                arrPerUser = _dataStaff.RoleStaff(idUser, idGroup, idUserCreated);
+                            }
+                            else
+                            {
+                                arrPerUser = _dataStaff.RoleStaff(idUser, idGroup, idUserCreated);
+                            }
+
+                            foreach (var item in arrPerUser)
+                            {
+                                var permissionUserMenu = await _db.Permission_Use_Menus.Where(s => s.IdUser.Equals(item.IdUser)
+                                            && s.idModule.Equals(item.idModule)).FirstOrDefaultAsync();
+                                if (permissionUserMenu == null)
+                                {
+                                    await _db.Permission_Use_Menus.AddAsync(item);
+                                    data.Add(item);
+                                }
+                            }
+                            await _db.SaveChangesAsync();
                         }
                     }
-                    await _db.SaveChangesAsync();
                 }
                 success = true;
                 message = "Add Role Permission_Use_Menu successfully";

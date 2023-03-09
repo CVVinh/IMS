@@ -35,7 +35,6 @@ namespace BE.Data.Dtos.UsersDTO
         public string identitycard { get; set; } 
 
 
-        public int IdGroup { get; set; }
         [Range(0, 1)]
         public byte isDeleted { get; set; }
     }

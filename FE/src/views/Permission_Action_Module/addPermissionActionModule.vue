@@ -117,7 +117,7 @@ import { LocalStorage } from '@/helper/local-storage.helper'
                     }
                     dataSend.push(newObject)
                 })
-                HTTP.post(`PermissionActionModule`, dataSend)
+                HTTP.post(`PermissionActionModule/createPermissionActionModule`, dataSend)
                     .then((res) => {
                         this.$toast.add({
                             severity: 'success',

@@ -334,7 +334,11 @@
                                     height="24"
                                     width="24"
                                     loading="lazy"
-                                    src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+                                    style="object-fit: cover"
+                                    :src="
+                                        avatar ??
+                                        'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'
+                                    "
                                 />
                             </a>
                             <div
@@ -561,12 +565,16 @@
     import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr'
     import { HTTP_SINGNALRHUB } from '@/http-common'
     import { NotificationService } from '@/service/notification.service'
+    import jwt_decode from 'jwt-decode'
 
     export default {
         data() {
-            return { noti: [], count: 0, hasNewData: false }
+            return { noti: [], count: 0, hasNewData: false, avatar: null }
         },
         created() {
+            const decode = jwt_decode(localStorage.getItem('token'))
+            this.avatar = decode.AvatarLink
+
             const connection = new HubConnectionBuilder()
                 .withUrl(HTTP_SINGNALRHUB)
                 .configureLogging(LogLevel.Information)

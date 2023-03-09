@@ -52,21 +52,21 @@
                                 label="Xuất Excel"
                                 icon="pi pi-file-excel"
                                 class="p-button p-component p-button-sm me-2"
-                                v-if="showButton.ExportButton"
+                                v-if="showButton.export"
                             />
                             <Button
                                 label="Thêm"
                                 icon="pi pi-plus"
                                 @click="openFormAddEdit(null)"
                                 class="p-button p-component p-button-sm me-2"
-                                v-if="showButton.addButton"
+                                v-if="showButton.add"
                             />
                             <Button
                                 label="Phê duyệt"
                                 icon="pi pi-check-square"
                                 @click="acceptMulti()"
                                 class="p-button p-component p-button-sm me-2"
-                                v-if="showButton.confirmButton"
+                                v-if="showButton.confirmMulti"
                             />
                             <div class="p-input-icon-left left" style="display: inline">
                                 <i class="pi pi-search" />
@@ -203,36 +203,35 @@
                                 icon="pi pi-check"
                                 @click="openConfirm(true, data.x.id, data.x.leadCreate)"
                                 class="right p-button-success"
-                                v-if="showButton.confirmButton && data.x.status == 0"
+                                v-if="showButton.confirm && data.x.status == 0"
                             />
                             <!--  VIEW  -->
                             <Button
                                 icon="pi pi-eye"
                                 @click="OpenDetailOT(data)"
                                 class="right top p-button-sm"
-                                v-if="showButton.viewButton"
                             />
                             <!-- Edit -->
                             <Edit
                                 @click="openFormAddEdit(data.x.id)"
                                 class="right top p-button-warning"
-                                v-if="showButton.editButton"
+                                v-if="showButton.update"
                             >
                             </Edit>
                             <!-- Refuse   -->
                             <Delete
                                 icon="pi pi-times"
                                 @click="accept(false, data.x.id, data.x.leadCreate)"
-                                :class="showButton.refuseButton === true ? 'right top' : 'right'"
-                                v-if="showButton.refuseButton && data.x.status == 0"
+                                :class="showButton.refuse === true ? 'right top' : 'right'"
+                                v-if="showButton.refuse && data.x.status == 0"
                             />
                             <!--  Delete -->
                             <Delete
                                 @click="confirmDelete(data.x.id, token)"
                                 class="right top"
                                 v-if="
-                                    (showButton.deleteButton && this.token.IdGroup == 5 && data.x.status == 1) ||
-                                    (showButton.deleteButton && this.token.IdGroup == 3 && data.x.status == 0)
+                                    (showButton.delete && this.token.IdGroup == 5 && data.x.status == 1) ||
+                                    (showButton.delete && this.token.IdGroup == 3 && data.x.status == 0)
                                 "
                             ></Delete>
                         </div>
@@ -318,6 +317,7 @@
     import { cloneVNode } from '@vue/runtime-core'
     import storeRole from '@/stores/role'
     import AddOTsDialog from './AddOTsDialog.vue'
+import checkAccessModule from '@/stores/checkAccessModule'
     export default {
         name: 'ots',
         data() {
@@ -364,14 +364,15 @@
                 ots: 0,
                 isPM: false,
                 showButton: {
-                    confirmButton: false,
-                    viewButton: false,
-                    editButton: false,
-                    refuseButton: false,
-                    deleteButton: false,
-                    addButton: false,
-                    allAcceptButton: false,
-                    ExportButton: false,
+                    add: false,
+                    update: false,
+                    delete: false,
+                    deleteMulti: false,
+                    confirm: false,
+                    confirmMulti: false,
+                    refuse: false,
+                    addMember: false,
+                    export: false,
                 },
                 loading: true,
                 displayFormAddEdit: false,
@@ -379,25 +380,49 @@
             }
         },
         async mounted() {
-            try {
-                this.token = LocalStorage.jwtDecodeToken()
-                await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
-                if (await UserRoleHelper.isAccess) {
-                    this.getAllOT()
-                } else {
-                    this.countTime()
-                    this.displayDialog1 = true
-                }
+            // try {
+            //     this.token = LocalStorage.jwtDecodeToken()
+            //     await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
+            //     if (await UserRoleHelper.isAccess) {
+                  
+            //     } else {
+            //         this.countTime()
+            //         this.displayDialog1 = true
+            //     }
+            //     this.columns = [
+            //         { field: 'dateUpdate', header: 'Ngày phê duyệt' },
+            //         { field: 'note', header: 'Ghi chú' },
+            //     ]
+            //     this.getMonthFrom()
+            //     this.getProject()
+            // } catch (error) {
+            //     this.countTime()
+            //     this.displayDialog1 = true
+            // }
+
+            if(checkAccessModule.checkAccessModule(this.$route.path.replace('/', '')) === true){
+                
+                checkAccessModule.checkShowButton(this.$route.path.replace('/', ''),this.showButton);
+              
+                await this.getAllOT()
                 this.columns = [
                     { field: 'dateUpdate', header: 'Ngày phê duyệt' },
                     { field: 'note', header: 'Ghi chú' },
                 ]
                 this.getMonthFrom()
                 this.getProject()
-            } catch (error) {
+                this.loading= false
+            } else{
                 this.countTime()
-                this.displayDialog1 = true
+                 this.displayDialog1 = true
             }
+
+          
+
+
+
+         
+
         },
         methods: {
             // GET OTS BY ROLE PM
@@ -484,9 +509,9 @@
                     year: 'numeric',
                 })
             },
-            async getAllOT() {
+            async getAllOT() {      
                 if (this.token) {
-                    this.CheckButtonGroup(this.token.IdGroup)
+                    
                 }
                 this.loading = false
             },

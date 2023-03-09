@@ -175,8 +175,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("addMenu")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: menus add: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: menus add: 1")]
         public async Task<IActionResult> addMenu(addMenuDtos request)
         {
             try
@@ -203,8 +203,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("updateMenu")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: menus update: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: menus update: 1")]
         public async Task<ActionResult> updateMenu(updateMenuDtos requests)
         {
             try
@@ -232,8 +232,8 @@ namespace BE.Controllers
 
         [HttpPut]
         [Route("deleteMenu/{idmenu}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: menus delete: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: menus delete: 1")]
         public async Task<IActionResult> deleteMenu(int idmenu)
         {
             try

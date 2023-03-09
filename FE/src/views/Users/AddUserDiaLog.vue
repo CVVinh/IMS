@@ -227,14 +227,20 @@
                                 <div class="col col-sm-3 col-12">
                                     <div class="field">
                                         <div class="p-float-label" :class="{ 'form-group--error': v$.idGroup.$error }">
-                                            <Dropdown
+                                            <!-- <Dropdown
                                                 v-model="v$.idGroup.$model"
                                                 :options="optionRoles"
                                                 optionLabel="nameGroup"
                                                 optionValue="id"
                                                 :class="{ 'p-invalid': v$.idGroup.$invalid && submitted }"
-                                            />
-                                            <label for="idRole" :class="{ 'p-error': v$.idGroup.$invalid && submitted }"
+                                            /> -->
+
+                                            <MultiSelect  
+                                            v-model="v$.idGroup.$model" :options="optionRoles" optionLabel="nameGroup" optionValue="id"
+                                                id="moduleName"
+                                                :class="{ 'p-invalid': v$.idGroup.$invalid && submitted }" />
+                                            
+                                            <label for="idGroup" :class="{ 'p-error': v$.idGroup.$invalid && submitted }"
                                                 >Chức vụ*</label
                                             >
                                         </div>
@@ -543,7 +549,7 @@
                 maritalStatus: '',
                 workStatus: 1,
                 dOBValidate: true,
-                idGroup: '',
+                idGroup: [],
                 submitted: false,
                 optionGender: [
                     { name: 'Male', code: 1 },
@@ -627,7 +633,7 @@
             GetRole() {
                 HTTP.get('Group/getListGroup')
                     .then((res) => {
-                        this.optionRoles = res.data
+                        this.optionRoles = res.data._Data
                     })
                     .catch((err) => console.log(err))
             },
@@ -658,7 +664,6 @@
                     dateStartWork: this.dateStartWork,
                     dateLeave: null,
                     maritalStatus: this.maritalStatus.code,
-                    idGroup: this.idGroup,
                 }
 
                 const CallApi = async () => {
@@ -699,7 +704,7 @@
                 CallApi()
             },
 
-            Submit() {
+            async Submit() {
                 var token = localStorage.getItem('token')
                 var decode = jwt_decode(token)
                 const data = {
@@ -722,21 +727,43 @@
                     dateStartWork: this.dateStartWork,
                     dateLeave: null,
                     maritalStatus: this.maritalStatus.code,
-                    IdGroup: this.idGroup,
                 }
+
                 const CallApi = async () => {
                     try {
                         const res = await HTTP.post('Users/addUser', data)
                         switch (res.status) {
                             case HttpStatus.OK:
-                                this.resetForm()
-                                this.$emit('reloadpage')
-                                this.$toast.add({
-                                    severity: 'success',
-                                    summary: 'Thành công',
-                                    detail: 'Thêm người dùng thành công!',
-                                    life: 3000,
+                                var idUserCreated = res.data.id;
+                                var listGroupUser = [];
+                                this.idGroup.map(item => {
+                                    var userGroup = {
+                                        "idUser": idUserCreated,
+                                        "idGroup": parseInt(item),
+                                        "userCreated": parseInt(decode.Id)
+                                    }
+                                    listGroupUser.push(userGroup);
+                                });
+
+                                await HTTP.post('User_Group/createUserGroup', listGroupUser).then(async res => {
+                                    if(res.data._success){
+                                        await HTTP.post(`Permission_Use_Menus/addPermissionRoleUserMenu/${idUserCreated}/${parseInt(decode.Id)}`, Object.values(this.idGroup)).then(response => {
+                                            if(response.data._success){
+                                                this.resetForm()
+                                                this.$emit('reloadpage')
+                                                this.$toast.add({
+                                                    severity: 'success',
+                                                    summary: 'Thành công',
+                                                    detail: 'Thêm người dùng thành công!',
+                                                    life: 3000,
+                                                })
+                                            }
+                                        })
+                                        .catch(error => {console.log(error);})
+                                    }
                                 })
+                                .catch(error => {console.log(error);})
+
                                 break
                             case HttpStatus.UNAUTHORIZED:
                             case HttpStatus.FORBIDDEN:
@@ -777,7 +804,8 @@
                         }
                     }
                 }
-                CallApi()
+                CallApi();
+
             },
             resetForm() {
                 this.userCode = ''

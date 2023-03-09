@@ -56,8 +56,8 @@ namespace BE.Controllers
         }
 
         [HttpPost("addOrders")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: orders add: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: orders add: 1")]
         public IActionResult Create(AddDtos order_Model)
         {
             try
@@ -89,8 +89,8 @@ namespace BE.Controllers
         }
         
         [HttpPut("updateOrder")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: orders update: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: orders update: 1")]
         public IActionResult updateOrder(EditDtos req)
         {
             try
@@ -116,8 +116,8 @@ namespace BE.Controllers
         }
 
         [HttpPut("deleteOrder/{id}")]
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "module: orders delete: 1")]
+        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "modules: orders delete: 1")]
         public IActionResult deleteOrder(int id, IdUserChangeOrderDto request)
         {
             try
