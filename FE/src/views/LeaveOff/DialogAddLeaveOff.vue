@@ -132,6 +132,7 @@
     import { DateHelper } from '@/helper/date.helper'
     import jwtDecode from 'jwt-decode'
     import { Company } from './Company'
+import checkAccessModule from '@/stores/checkAccessModule'
     export default {
         props: ['isOpen', 'selectedLeaveOff'],
         setup: () => ({ v$: useVuelidate() }),
@@ -140,7 +141,6 @@
                 leaveOff: new LeaveOffDto(),
                 isSubmit: false,
                 submited: false,
-                userAccept: jwtDecode(localStorage.getItem('token')),
                 timeFormat: new Date(),
                 onLeaveOff: false,
                 idCompanyBranh: 1,
@@ -243,7 +243,7 @@
             },
             handlerAddLeaveOff() {
                 const addNewLeaveOffDto = {
-                    idLeaveUser: this.userAccept.Id,
+                    idLeaveUser: checkAccessModule.getUserIdCurrent(),
                     startTime: DateHelper.formatDateTime(this.leaveOff.startTime),
                     endTime: DateHelper.formatDateTime(this.leaveOff.endTime),
                     reasons: this.leaveOff.reason,
@@ -267,7 +267,7 @@
             },
             handlerEditLeaveOff() {
                 const editRegisterLeaveOffDtos = {
-                    idLeaveUser: this.userAccept.Id,
+                    idLeaveUser: checkAccessModule.getUserIdCurrent(),
                     startTime: DateHelper.formatDateTime(this.leaveOff.startTime),
                     endTime: DateHelper.formatDateTime(this.leaveOff.endTime),
                     reasons: this.leaveOff.reason,

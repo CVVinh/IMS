@@ -1391,22 +1391,21 @@ namespace BE.Controllers
         {
             try
             {
-                var list = from x in _context.OTs
-                           join d in _context.Users on x.user equals d.id
-                           join f in _context.Users on x.leadCreate equals f.id
-                           join q in _context.Users on x.updateUser equals q.id
-                           join c in _context.Projects on x.idProject equals c.Id
-                           where x.status == StatusOT.accepted
-                           select new
-                           {
-                               x,
-                               c.Name,
-                               nameLead = x.leadCreate == f.id   ? f.FullName : null,
-                               nameUser = x.user == d.id ? d.FullName : null,
-                               nameUserUpdate =  x.updateUser == q.id ? q.FullName : null,
-                               dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
-                               note = x.note
-                           };
+                var list = (from x in _context.OTs
+                            join c in _context.Projects on x.idProject equals c.Id
+                            join f in _context.Users on x.leadCreate equals f.id
+                            join q in _context.Users on x.updateUser equals q.id
+                            join d in _context.Users on x.user equals d.id
+                            select new
+                            {
+                                x,
+                                c.Name,
+                                nameLead = f.id == x.leadCreate ? f.FullName : null,
+                                nameUser = x.user == d.id ? d.FullName : null,
+                                nameUserUpdate = q.id == x.updateUser ? q.FullName : null,
+                                dateUpdate = x.dateUpdate == x.dateCreate ? null : x.dateUpdate,
+                                note = x.note
+                            }).ToList();
                 return Ok(list);
             } catch(Exception ex)
             {

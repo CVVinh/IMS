@@ -42,6 +42,7 @@
     import { useVuelidate } from '@vuelidate/core'
     import { required } from '@vuelidate/validators'
     import jwtDecode from 'jwt-decode'
+    import checkAccessModule from '@/stores/checkAccessModule'
     export default {
         props: ['isOpen', 'idLeaveOff'],
         setup: () => ({ v$: useVuelidate() }),
@@ -52,7 +53,6 @@
                 },
                 isSubmit: false,
                 submited: false,
-                userAccept: jwtDecode(localStorage.getItem('token')),
             }
         },
         methods: {
@@ -60,7 +60,7 @@
                 this.isSubmit = true
                 if (!this.v$.$invalid) {
                     var notAcceptLeaveOffDto = {
-                        idAcceptUser: this.userAccept.Id,
+                        idAcceptUser: checkAccessModule.getUserIdCurrent(),
                         ReasonNotAccept: this.leaveOff.reason,
                     }
                     HTTP.put(NOT_ACCEPT_LEAVE_OFF(this.idLeaveOff), notAcceptLeaveOffDto)

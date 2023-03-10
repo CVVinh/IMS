@@ -123,14 +123,13 @@
                                 icon="pi pi-eye"
                                 class="p-button p-component p-button-info"
                                 @click="openDetailt(data)"
-                                v-if="showButton.view"
                             ></Button>
                             &nbsp;
                             <Button
                                 icon="pi pi-pencil"
                                 class="p-button p-component p-button-warning"
                                 @click="openEdit(data)"
-                                v-if="showButton.edit"
+                                v-if="showButton.update"
                             ></Button>
                             &nbsp;
                             <Button
@@ -141,7 +140,7 @@
                             ></Button>
                             &nbsp;
                             <Button
-                                v-if="data.pathFile && showButton.download"
+                                v-if="data.pathFile && showButton.export"
                                 icon="pi pi-download"
                                 class="p-button p-component p-button-help"
                                 @click="downloadFile(data.pathFile)"
@@ -198,6 +197,7 @@
     import { ref } from 'vue'
     import { DateHelper } from '@/helper/date.helper'
     import { saveAs } from 'file-saver'
+    import checkAccessModule from '@/stores/checkAccessModule'
 
     export default {
         name: 'RuleInfo',
@@ -215,7 +215,6 @@
                 keySearch: null,
                 num: 5,
                 timeOut: null,
-                token: null,
                 listGroup: null,
                 filters: {
                     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -226,11 +225,10 @@
                     { field: 'dateUpdated', header: 'Ngày sửa' },
                 ],
                 showButton: {
-                    view: false,
-                    edit: false,
+                    add: false,
+                    update: false,
                     delete: false,
-                    download: false,
-                    addl: false,
+                    export: false,
                 },
             }
         },
@@ -327,13 +325,13 @@
             deleteRule(ruleID) {
                 let API_URL = 'Rules/deleteRules/' + ruleID
                 HTTP.put(API_URL, {
-                    idUser: this.token.Id,
+                    idUser: checkAccessModule.getUserIdCurrent(),
                 })
-                    .then((res) => {
+                    .then(async (res) => {
                         if (res.status == HttpStatus.OK) {
                             this.showSuccess('Xóa thành công!');
                             this.listRule = []
-                            this.GetAllRuleList()
+                            await this.GetAllRuleList()
                         }
                     })
                     .catch((error) => {
@@ -419,35 +417,11 @@
             }
         },
         async mounted() {
-            try {
-                this.token = LocalStorage.jwtDecodeToken();
-                this.listGroup = JSON.stringify(this.token.role);
-
-                await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
-                if (UserRoleHelper.isAccess) {
-                    if (this.checkRoleSample()) {
-                        this.showButton.view = true;
-                        this.showButton.edit = true;
-                        this.showButton.add = true;
-                        this.showButton.delete = true;
-                        this.showButton.download = true;
-                    }
-                    if (!this.checkRoleSample()) {
-                        this.showButton.download = true;
-                        this.showButton.view = true;
-                    }
-                    this.GetAllRuleList();
-                } else {
-                    this.countTime();
-                    this.displayBasic = true;
-                }
-
-                var arr = JSON.stringify(this.token.role);
-                console.log(this.checkRoleSample());
-
-            } catch (err) {
+            if(checkAccessModule.checkAccessModule(this.$route.path.replace('/', '')) === true){
+                checkAccessModule.checkShowButton(this.$route.path.replace('/', ''),this.showButton);
+                await this.GetAllRuleList();
+            } else {
                 this.countTime();
-                this.displayBasic = true;
             }
         },
         components: { Export, Add, Edit, View, Delete, AddRuleDiaLog, EditRuleDiaLog, DetailtRuleDiaLog },

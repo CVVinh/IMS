@@ -58,7 +58,6 @@
                                 :options="data1"
                                 optionLabel="firstName"
                                 optionValue="id"
-                                filter="true"
                                 placeholder="Chọn thành viên"
                             />
                             <template #footer>
@@ -107,6 +106,7 @@
     import { FilterMatchMode } from 'primevue/api'
     import { UserRoleHelper } from '@/helper/user-role.helper'
     import confirmDelete from './confirmDelete.vue'
+import checkAccessModule from '@/stores/checkAccessModule'
     export default {
         data() {
             return {
@@ -138,7 +138,7 @@
         },
         methods: {
             openDeleteconfirm(iduser, idproject) {
-                ;(this.display = true), (this.iduser = iduser), (this.idproject = idproject)
+                (this.display = true), (this.iduser = iduser), (this.idproject = idproject)
             },
             closeDeleteconfirm() {
                 this.display = false
@@ -217,13 +217,11 @@
                 else if (index == 7) return 'Users'
             },
             submit() {
-                var token = localStorage.getItem('token')
-                var decode = jwt_decode(token)
                 this.selectedMember.forEach((id) => {
                     HTTP.post('memberProject/addMemberAtProject', {
                         idProject: this.$route.params.id,
                         member: id,
-                        createUser: decode.Id,
+                        createUser: checkAccessModule.getUserIdCurrent(),
                     }).then((res) => {
                         if (res.data) {
                             this.closeBasic()

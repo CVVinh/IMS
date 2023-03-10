@@ -59,5 +59,11 @@ INSERT INTO public."User_Group" ("idUser","idGroup","isDeleted","userCreated","u
 	 (42,4,false,58,NULL,NULL,'2023-03-02 00:00:00',NULL,NULL),
 	 (48,5,false,58,NULL,NULL,'2023-03-02 00:00:00',NULL,NULL),
 	 (49,5,false,58,NULL,NULL,'2023-03-02 00:00:00',NULL,NULL),
+	 (123,2,false,41,NULL,NULL,'2023-03-10 00:00:00',NULL,NULL),
 	 (41,2,false,41,NULL,NULL,'2023-03-09 00:00:00',NULL,NULL),
-	 (105,12,false,41,NULL,NULL,'2023-03-09 00:00:00',NULL,NULL);
+	 (105,12,false,41,NULL,NULL,'2023-03-09 00:00:00',NULL,NULL),
+	 (122,12,false,41,NULL,NULL,'2023-03-10 00:00:00',NULL,NULL),
+	 (122,11,false,41,NULL,NULL,'2023-03-10 00:00:00',NULL,NULL);
+INSERT INTO public."User_Group" ("idUser","idGroup","isDeleted","userCreated","userUpdated","userDeleted","dateCreated","dateUpdated","dateDeleted") VALUES
+	 (123,4,false,41,NULL,NULL,'2023-03-10 00:00:00',NULL,NULL),
+	 (123,3,false,41,NULL,NULL,'2023-03-10 00:00:00',NULL,NULL);

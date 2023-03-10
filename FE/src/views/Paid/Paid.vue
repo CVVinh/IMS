@@ -156,11 +156,13 @@
                                     icon="pi pi-pencil"
                                     class="p-button p-component p-button-warning me-2"
                                     @click="Openeditmodal(data)"
+                                    v-if="showButton.update"
                                 />
                                 <Button
                                     icon="pi pi-trash"
                                     class="p-button p-component p-button-danger me-2"
                                     @click="Delete(data)"
+                                    v-if="showButton.delete"
                                 />
                                 <Button
                                     icon="pi pi-check"
@@ -172,7 +174,7 @@
                                     icon="pi pi-times"
                                     class="p-button p-component p-button-danger"
                                     @click="paymentNotConfirmation(data)"
-                                    v-if="showButton.confirm"
+                                    v-if="showButton.refuse"
                                 />
                             </div>
                         </div>
@@ -232,6 +234,7 @@
     import { UserRoleHelper } from '@/helper/user-role.helper'
     import router from '@/router'
     import { DateHelper } from '@/helper/date.helper'
+    import checkAccessModule from '@/stores/checkAccessModule'
 
     export default {
         data() {
@@ -258,27 +261,29 @@
                 },
                 filterStartDate: '',
                 filterEndDate: '',
-                token: null,
                 displayImage: false,
                 showButton: {
                     add: false,
-                    edit: false,
-                    confirm: false,
+                    update: false,
                     delete: false,
-                    view: false,
+                    deleteMulti: false,
+                    confirm: false,
+                    confirmMulti: false,
+                    refuse: false,
+                    addMember: false,
+                    export: false,
                 },
             }
         },
 
         async mounted() {
-            this.token = LocalStorage.jwtDecodeToken()
-            await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
+            if(checkAccessModule.checkAccessModule(this.$route.path.replace('/', '')) === true){
+                checkAccessModule.checkShowButton(this.$route.path.replace('/', ''),this.showButton);
+                await this.getData();
 
-            if (UserRoleHelper.isAccess) {
-                await this.getData()
             } else {
-                alert('Bạn không có quyền truy cập module này')
-                router.push('/')
+                alert('Bạn không có quyền truy cập module này');
+                router.push('/');
             }
         },
 
@@ -397,27 +402,25 @@
                 try {
                     this.paids = []
 
-                    if (Number(this.token.IdGroup) === 1) {
+                    if (checkAccessModule.getListGroup().includes("1")) {
                         // getAPI (Admin)
                         await this.getPaid()
                         await this.getAllProject()
-                        this.showButton.confirm = true
-                    } else if (Number(this.token.IdGroup) === 2) {
+                    } else if (checkAccessModule.getListGroup().includes("2")) {
                         // (Sample)
-                        await this.getPaid(this.token.Id)
+                        await this.getPaid(checkAccessModule.getUserIdCurrent())
                         await this.getAllProject()
-                        this.showButton.confirm = true
                     }
 
                     // getAPI tất cả role còn lại
-                    else if (Number(this.token.IdGroup) !== 2 && Number(this.token.IdGroup) !== 1) {
-                        if (Number(this.token.IdGroup) === 5) {
+                    else if (!checkAccessModule.getListGroup().includes("1") && !checkAccessModule.getListGroup().includes("1")) {
+                        if (checkAccessModule.getListGroup().includes("5")) {
                             // pm
-                            await this.getPaidByIdUser(this.token.Id)
-                            await this.getAllProject()
+                            await this.getPaidByIdUser(checkAccessModule.getUserIdCurrent());
+                            await this.getAllProject();
                         } else {
-                            await this.getPaidByIdUser(this.token.Id)
-                            await this.getAllProject(this.token.Id)
+                            await this.getPaidByIdUser(checkAccessModule.getUserIdCurrent());
+                            await this.getAllProject(checkAccessModule.getUserIdCurrent());
                         }
                     }
                     await this.getAllCustomer()
@@ -496,7 +499,7 @@
                             this.showResponseApi(error.response.status, message)
                         })
                 } else {
-                    if (Number(this.token.IdGroup) === 3) {
+                    if (checkAccessModule.getListGroup().includes("3")) {
                         // lead
                         await HTTP.get(`Project/getAllProjectByLead/${idUser}`)
                             .then((res) => {
@@ -508,7 +511,7 @@
                                 this.showResponseApi(error.response.status, message)
                             })
                     }
-                    if (Number(this.token.IdGroup) === 4) {
+                    if (checkAccessModule.getListGroup().includes("4")) {
                         // staff
                         await HTTP.get(`Project/getAllProjectByStaff/${idUser}`)
                             .then((res) => {
@@ -670,16 +673,16 @@
 
             async callApiFilterDay(startDate = null, endDate = null) {
                 // getAPI (Sample) || (Admin)
-                if (Number(this.token.IdGroup) === 2 || Number(this.token.IdGroup) === 1) {
+                if (checkAccessModule.getListGroup().includes("2") || checkAccessModule.getListGroup().includes("1")) {
                     await this.callApiSearch({
                         startDate: startDate,
                         endDate: endDate,
                     })
                 }
                 // getAPI tất cả role còn lại
-                if (Number(this.token.IdGroup) !== 2 && Number(this.token.IdGroup) !== 1) {
+                if (!checkAccessModule.getListGroup().includes("2") && !checkAccessModule.getListGroup().includes("1")) {
                     await this.callApiSearch({
-                        id: this.token.Id,
+                        id: checkAccessModule.getUserIdCurrent(),
                         startDate: startDate,
                         endDate: endDate,
                     })
@@ -718,7 +721,7 @@
             },
 
             async CallApiPaymentConfirm(idPaid) {
-                await HTTP.put(`Paid/acceptPayment/${idPaid}`, { PersonConfirm: this.token.Id })
+                await HTTP.put(`Paid/acceptPayment/${idPaid}`, { PersonConfirm: checkAccessModule.getUserIdCurrent() })
                     .then(async (res) => {
                         if (res.status == 200) {
                             this.showSuccess('Thanh toán thành công!')
@@ -749,7 +752,7 @@
                 })
             },
             async CallApiNotAccept(idPaid) {
-                await HTTP.put(`Paid/NotAcceptPayment/${idPaid}`, { PersonConfirm: this.token.Id })
+                await HTTP.put(`Paid/NotAcceptPayment/${idPaid}`, { PersonConfirm: checkAccessModule.getUserIdCurrent() })
                     .then(async (res) => {
                         if (res.status == 200) {
                             this.showSuccess('Không Chấp Nhận Thanh toán thành công!')

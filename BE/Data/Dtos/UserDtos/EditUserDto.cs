@@ -30,7 +30,6 @@ namespace BE.Data.Dtos.UsersDTO
         public byte? maritalStatus { get; set; }
         public string? reasonResignation { get; set; }
         public string identitycard { get; set; }
-        [Range(1, 7)]
         public DateTime dateStartWork { get; set; }
     }
 }

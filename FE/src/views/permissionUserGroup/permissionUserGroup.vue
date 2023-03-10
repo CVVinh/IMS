@@ -190,7 +190,7 @@
                         this.listModule.map(ele=>{
                             this.arraycompare.map(element=>{
                                     if(element.idModule === ele.id && element.access === true ){
-                                    ele.access = true
+                                        ele.access = true
                                     }
                                     if(element.idModule === ele.id && element.access === false){
                                         ele.access = false

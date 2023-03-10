@@ -1,15 +1,5 @@
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
-	 (129,'Oh My Posh version 12.16.1','C:\Users\Dev 77\AppData\Local\Programs\oh-my-posh\','3/9/2023 4:48:01 PM'),
-	 (129,'Postman x86_64 10.11.1','C:\Users\Dev 77\AppData\Local\Postman','3/9/2023 4:48:01 PM'),
-	 (129,'SourceTree','C:\Users\Dev 77\AppData\Local\SourceTree','3/9/2023 4:48:01 PM'),
-	 (129,'Telegram Desktop','C:\Users\Dev 77\AppData\Roaming\Telegram Desktop\','3/9/2023 4:48:01 PM'),
-	 (129,'Microsoft Visual Studio Code (User)','C:\Users\Dev 77\AppData\Local\Programs\Microsoft VS Code\','3/9/2023 4:48:01 PM'),
-	 (129,'7-Zip 21.07 (x64)','C:\Program Files\7-Zip\','3/9/2023 4:48:01 PM'),
-	 (129,'Docker Desktop','C:\Program Files\Docker\Docker','3/9/2023 4:48:01 PM'),
-	 (129,'Git','C:\Program Files\Git\','3/9/2023 4:48:01 PM'),
-	 (129,'Microsoft Visual Studio 2010 Tools for Office Runtime (x64)','C:\Program Files\Common Files\Microsoft Shared\VSTO\10.0\','3/9/2023 4:48:01 PM'),
-	 (131,'SourceTree','C:\Users\vthan\AppData\Local\SourceTree','3/7/2023 8:03:01 AM');
-INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (131,'SourceTree','C:\Users\vthan\AppData\Local\SourceTree','3/7/2023 8:03:01 AM'),
 	 (131,'Microsoft Teams','C:\Users\vthan\AppData\Local\Microsoft\Teams','3/7/2023 8:03:01 AM'),
 	 (131,'Microsoft Visual Studio Code (User)','C:\Users\vthan\AppData\Local\Programs\Microsoft VS Code\','3/7/2023 8:03:01 AM'),
 	 (131,'DBeaver 22.3.5','C:\Program Files\DBeaver','3/7/2023 8:03:01 AM'),
@@ -18,9 +8,9 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (131,'PostgreSQL 15','C:\Program Files\PostgreSQL\15','3/7/2023 8:03:01 AM'),
 	 (131,'psqlODBC 13.02.0000','C:\Program Files\PostgreSQL\psqlODBC','3/7/2023 8:03:01 AM'),
 	 (131,'TeamViewer','C:\Program Files\TeamViewer','3/7/2023 8:03:01 AM'),
-	 (131,'WinRAR 6.20 (64-bit)','C:\Program Files\WinRAR\','3/7/2023 8:03:01 AM'),
-	 (131,'Azure Data Studio','C:\Program Files\Azure Data Studio\','3/7/2023 8:03:01 AM');
+	 (131,'WinRAR 6.20 (64-bit)','C:\Program Files\WinRAR\','3/7/2023 8:03:01 AM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (131,'Azure Data Studio','C:\Program Files\Azure Data Studio\','3/7/2023 8:03:01 AM'),
 	 (131,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/7/2023 8:03:01 AM'),
 	 (131,'Visual Studio Professional 2022','C:\Program Files\Microsoft Visual Studio\2022\Professional','3/7/2023 8:03:01 AM'),
 	 (131,'Google Chrome','C:\Program Files\Google\Chrome\Application','3/7/2023 8:03:01 AM'),
@@ -29,9 +19,9 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (131,'Microsoft Help Viewer 2.3','C:\Program Files (x86)\Microsoft Help Viewer\v2.3\','3/7/2023 8:03:01 AM'),
 	 (131,'Npgsql 3.2.6','C:\Program Files (x86)\PostgreSQL\Npgsql','3/7/2023 8:03:01 AM'),
 	 (131,'pgJDBC 42.5.1','C:\Program Files (x86)\PostgreSQL\pgJDBC','3/7/2023 8:03:01 AM'),
-	 (131,'Rainmeter','C:\Program Files\Rainmeter','3/7/2023 8:03:01 AM'),
-	 (131,'WinMerge 2.16.28.0','C:\Program Files (x86)\WinMerge\','3/7/2023 8:03:01 AM');
+	 (131,'Rainmeter','C:\Program Files\Rainmeter','3/7/2023 8:03:01 AM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (131,'WinMerge 2.16.28.0','C:\Program Files (x86)\WinMerge\','3/7/2023 8:03:01 AM'),
 	 (131,'UltraViewer phiên bản 6.6.19','C:\Program Files (x86)\UltraViewer\','3/7/2023 8:03:01 AM'),
 	 (134,'Microsoft MPI (10.1.12498.18)','C:\Program Files\Microsoft MPI\','3/3/2023 2:46:25 PM'),
 	 (134,'Visual Studio Professional 2022','C:\Program Files\Microsoft Visual Studio\2022\Professional','3/3/2023 2:46:25 PM'),
@@ -40,9 +30,9 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (134,'Language Pack 1.1-2','C:\edb\languagepack\v1','3/3/2023 2:46:25 PM'),
 	 (134,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','3/3/2023 2:46:25 PM'),
 	 (134,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/3/2023 2:46:25 PM'),
-	 (134,'Microsoft Help Viewer 2.3','C:\Program Files (x86)\Microsoft Help Viewer\v2.3\','3/3/2023 2:46:25 PM'),
-	 (134,'PEM-HTTPD 2.4.53','C:\Program Files (x86)\edb\pem\httpd','3/3/2023 2:46:25 PM');
+	 (134,'Microsoft Help Viewer 2.3','C:\Program Files (x86)\Microsoft Help Viewer\v2.3\','3/3/2023 2:46:25 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (134,'PEM-HTTPD 2.4.53','C:\Program Files (x86)\edb\pem\httpd','3/3/2023 2:46:25 PM'),
 	 (134,'PEM-HTTPD 2.4.54','C:\Program Files (x86)\edb\pem\httpd','3/3/2023 2:46:25 PM'),
 	 (134,'PgBouncer 1.17.0','C:\Program Files (x86)\PgBouncer','3/3/2023 2:46:25 PM'),
 	 (134,'pgJDBC 42.5.1','C:\Program Files (x86)\PostgreSQL\pgJDBC','3/3/2023 2:46:25 PM'),
@@ -51,9 +41,9 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (140,'Microsoft Outlook MUI (English) 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Word MUI (English) 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Office Proofing Tools 2016 - English','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
-	 (140,'Outils de vérification linguistique 2016 de Microsoft Office - Français','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
-	 (140,'Herramientas de corrección de Microsoft Office 2016: español','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM');
+	 (140,'Outils de vérification linguistique 2016 de Microsoft Office - Français','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (140,'Herramientas de corrección de Microsoft Office 2016: español','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Office Proofing (English) 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft InfoPath MUI (English) 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Office Shared MUI (English) 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
@@ -62,31 +52,21 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (140,'Microsoft Groove MUI (English) 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Office 32-bit Components 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Office Shared 32-bit MUI (English) 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
-	 (140,'Microsoft Office OSM MUI (English) 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
-	 (140,'Microsoft Office OSM UX MUI (English) 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM');
+	 (140,'Microsoft Office OSM MUI (English) 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (140,'Microsoft Office OSM UX MUI (English) 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Office Shared Setup Metadata MUI (English) 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Access Setup Metadata MUI (English) 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Skype for Business MUI (English) 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
-	 (129,'Microsoft Office Professional Plus 2019 - en-us','C:\Program Files\Microsoft Office','3/9/2023 4:48:01 PM'),
-	 (129,'Microsoft Office Professional Plus 2019 - vi-vn','C:\Program Files\Microsoft Office','3/9/2023 4:48:01 PM'),
-	 (129,'MiniTool Partition Wizard 12.6','C:\Program Files\MiniTool Partition Wizard 12\','3/9/2023 4:48:01 PM'),
-	 (129,'Balsamiq Wireframes','C:\Program Files\Balsamiq\Balsamiq Wireframes\','3/9/2023 4:48:01 PM'),
-	 (129,'Camtasia 9','C:\Program Files\TechSmith\Camtasia 9\','3/9/2023 4:48:01 PM'),
-	 (129,'Dokan Library 1.5.1.1000 (x64)','C:\Program Files\Dokan\Dokan Library-1.5.1\','3/9/2023 4:48:01 PM'),
-	 (129,'Workflow Manager Client 1.0','C:\Program Files\Reference Assemblies\Microsoft\Workflow Manager\1.0\','3/9/2023 4:48:01 PM');
-INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
-	 (129,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/9/2023 4:48:01 PM'),
-	 (129,'Java(TM) SE Development Kit 18.0.2 (64-bit)','C:\Program Files\Java\jdk-18.0.2\','3/9/2023 4:48:01 PM'),
 	 (141,'Lightshot-5.5.0.7','C:\Program Files (x86)\Skillbrains\lightshot\','3/8/2023 8:25:35 AM'),
 	 (141,'Sybase PowerDesigner 16.1','C:\Program Files (x86)\Sybase\PowerDesigner 16','3/8/2023 8:25:35 AM'),
 	 (141,'UltraViewer version 6.5.31','C:\Program Files (x86)\UltraViewer\','3/8/2023 8:25:35 AM'),
 	 (141,'Realtek Audio Driver','C:\Program Files (x86)\Realtek\Audio\Drivers','3/8/2023 8:25:35 AM'),
 	 (142,'Chatwork','C:\Users\ADMIN\AppData\Local\Chatwork','3/8/2023 8:26:56 AM'),
-	 (142,'Postman x86_64 10.0.1','C:\Users\ADMIN\AppData\Local\Postman','3/8/2023 8:26:56 AM'),
-	 (142,'Microsoft Teams','C:\Users\ADMIN\AppData\Local\Microsoft\Teams','3/8/2023 8:26:56 AM'),
-	 (142,'Zoom','C:\Users\ADMIN\AppData\Roaming\Zoom\bin','3/8/2023 8:26:56 AM');
+	 (142,'Postman x86_64 10.0.1','C:\Users\ADMIN\AppData\Local\Postman','3/8/2023 8:26:56 AM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (142,'Microsoft Teams','C:\Users\ADMIN\AppData\Local\Microsoft\Teams','3/8/2023 8:26:56 AM'),
+	 (142,'Zoom','C:\Users\ADMIN\AppData\Roaming\Zoom\bin','3/8/2023 8:26:56 AM'),
 	 (142,'Microsoft Visual Studio Code (User)','C:\Users\ADMIN\AppData\Local\Programs\Microsoft VS Code\','3/8/2023 8:26:56 AM'),
 	 (142,'7-Zip 22.01 (x64)','C:\Program Files\7-Zip\','3/8/2023 8:26:56 AM'),
 	 (142,'Git','C:\Program Files\Git\','3/8/2023 8:26:56 AM'),
@@ -94,10 +74,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (142,'Microsoft Office Professional Plus 2019 - en-us','C:\Program Files (x86)\Microsoft Office','3/8/2023 8:26:56 AM'),
 	 (142,'Sublime Text 3','C:\Program Files\Sublime Text 3\','3/8/2023 8:26:56 AM'),
 	 (142,'TeamViewer','C:\Program Files\TeamViewer','3/8/2023 8:26:56 AM'),
-	 (142,'WinRAR 5.80 (64-bit)','C:\Program Files\WinRAR\','3/8/2023 8:26:56 AM'),
-	 (142,'XAMPP','C:\xampp','3/8/2023 8:26:56 AM'),
-	 (142,'Intel(R) Management Engine Components','C:\Program Files (x86)\Intel\Intel(R) Management Engine Components','3/8/2023 8:26:56 AM');
+	 (142,'WinRAR 5.80 (64-bit)','C:\Program Files\WinRAR\','3/8/2023 8:26:56 AM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (142,'XAMPP','C:\xampp','3/8/2023 8:26:56 AM'),
+	 (142,'Intel(R) Management Engine Components','C:\Program Files (x86)\Intel\Intel(R) Management Engine Components','3/8/2023 8:26:56 AM'),
 	 (142,'Java(TM) SE Development Kit 17.0.5 (64-bit)','C:\Program Files\Java\jdk-17.0.5\','3/8/2023 8:26:56 AM'),
 	 (142,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/8/2023 8:26:56 AM'),
 	 (142,'Visual Studio Community 2022','C:\Program Files\Microsoft Visual Studio\2022\Community','3/8/2023 8:26:56 AM'),
@@ -105,10 +85,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (142,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','3/8/2023 8:26:56 AM'),
 	 (142,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/8/2023 8:26:56 AM'),
 	 (142,'Microsoft Visual J# 2.0 Redistributable Package','C:\Windows\Microsoft.NET\Framework\v2.0.50727\','3/8/2023 8:26:56 AM'),
-	 (142,'WinMerge 2.16.24.0','C:\Program Files (x86)\WinMerge\','3/8/2023 8:26:56 AM'),
-	 (142,'Intel(R) Wireless Bluetooth(R)','C:\Program Files (x86)\Intel\','3/8/2023 8:26:56 AM'),
-	 (142,'Lightshot-5.5.0.7','C:\Program Files (x86)\Skillbrains\lightshot\','3/8/2023 8:26:56 AM');
+	 (142,'WinMerge 2.16.24.0','C:\Program Files (x86)\WinMerge\','3/8/2023 8:26:56 AM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (142,'Intel(R) Wireless Bluetooth(R)','C:\Program Files (x86)\Intel\','3/8/2023 8:26:56 AM'),
+	 (142,'Lightshot-5.5.0.7','C:\Program Files (x86)\Skillbrains\lightshot\','3/8/2023 8:26:56 AM'),
 	 (142,'Sybase PowerDesigner 16.1','C:\Program Files (x86)\Sybase\PowerDesigner 16','3/8/2023 8:26:56 AM'),
 	 (142,'UltraViewer version 6.5.31','C:\Program Files (x86)\UltraViewer\','3/8/2023 8:26:56 AM'),
 	 (142,'Realtek Audio Driver','C:\Program Files (x86)\Realtek\Audio\Drivers','3/8/2023 8:26:56 AM'),
@@ -116,10 +96,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (143,'Git','C:\Users\phhda\AppData\Local\Programs\Git\','3/8/2023 9:06:28 AM'),
 	 (134,'Postman x86_64 10.10.3','C:\Users\Admin\AppData\Local\Postman','3/3/2023 2:46:25 PM'),
 	 (134,'SourceTree','C:\Users\Admin\AppData\Local\SourceTree','3/3/2023 2:46:25 PM'),
-	 (134,'Microsoft Visual Studio Code (User)','C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\','3/3/2023 2:46:25 PM'),
-	 (134,'DBeaver 22.3.4','C:\Program Files\DBeaver','3/3/2023 2:46:25 PM'),
-	 (134,'EVKey version 3.4.2','C:\Program Files\EVKey\','3/3/2023 2:46:25 PM');
+	 (134,'Microsoft Visual Studio Code (User)','C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\','3/3/2023 2:46:25 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (134,'DBeaver 22.3.4','C:\Program Files\DBeaver','3/3/2023 2:46:25 PM'),
+	 (134,'EVKey version 3.4.2','C:\Program Files\EVKey\','3/3/2023 2:46:25 PM'),
 	 (134,'Git','C:\Program Files\Git\','3/3/2023 2:46:25 PM'),
 	 (134,'Language Pack 3.0-3','C:\edb\languagepack\v3','3/3/2023 2:46:25 PM'),
 	 (134,'Migration Toolkit 55.5.0-1','C:\Program Files\edb\mtk','3/3/2023 2:46:25 PM'),
@@ -127,10 +107,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (134,'Postgres Enterprise Manager Server 9.0.0','C:\Program Files\edb\pem','3/3/2023 2:46:25 PM'),
 	 (134,'PostgreSQL 13','C:\Program Files\PostgreSQL\13','3/3/2023 2:46:25 PM'),
 	 (134,'PostgreSQL 15','C:\Program Files\PostgreSQL\15','3/3/2023 2:46:25 PM'),
-	 (134,'Microsoft Office LTSC Professional Plus 2021 - en-us','C:\Program Files\Microsoft Office','3/3/2023 2:46:25 PM'),
-	 (134,'Microsoft Office LTSC Professional Plus 2021 - en-us.proof','C:\Program Files\Microsoft Office','3/3/2023 2:46:25 PM'),
-	 (134,'psqlODBC 13.02.0000','C:\Program Files\PostgreSQL\psqlODBC','3/3/2023 2:46:25 PM');
+	 (134,'Microsoft Office LTSC Professional Plus 2021 - en-us','C:\Program Files\Microsoft Office','3/3/2023 2:46:25 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (134,'Microsoft Office LTSC Professional Plus 2021 - en-us.proof','C:\Program Files\Microsoft Office','3/3/2023 2:46:25 PM'),
+	 (134,'psqlODBC 13.02.0000','C:\Program Files\PostgreSQL\psqlODBC','3/3/2023 2:46:25 PM'),
 	 (134,'SQL-Profiler 4.0','C:\Program Files\PostgreSQL\15','3/3/2023 2:46:25 PM'),
 	 (134,'WinMerge 2.16.26.0 x64','C:\Program Files\WinMerge\','3/3/2023 2:46:25 PM'),
 	 (134,'WinRAR 6.11 (64-bit)','C:\Program Files\WinRAR\','3/3/2023 2:46:25 PM'),
@@ -138,10 +118,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (134,'xDB Replication Server 7.5.0','C:\Program Files\edb\EnterpriseDB-xDBReplicationServer','3/3/2023 2:46:25 PM'),
 	 (134,'Java(TM) SE Development Kit 19.0.2 (64-bit)','C:\Program Files\Java\jdk-19\','3/3/2023 2:46:25 PM'),
 	 (134,'Azure Data Studio','C:\Program Files\Azure Data Studio\','3/3/2023 2:46:25 PM'),
-	 (134,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/3/2023 2:46:25 PM'),
-	 (143,'Opera Stable 95.0.4635.46','C:\Users\phhda\AppData\Local\Programs\Opera','3/8/2023 9:06:28 AM'),
-	 (143,'Postman x86_64 10.11.1','C:\Users\phhda\AppData\Local\Postman','3/8/2023 9:06:28 AM');
+	 (134,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/3/2023 2:46:25 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (143,'Opera Stable 95.0.4635.46','C:\Users\phhda\AppData\Local\Programs\Opera','3/8/2023 9:06:28 AM'),
+	 (143,'Postman x86_64 10.11.1','C:\Users\phhda\AppData\Local\Postman','3/8/2023 9:06:28 AM'),
 	 (143,'Zoom','C:\Users\phhda\AppData\Roaming\Zoom\bin','3/8/2023 9:06:28 AM'),
 	 (143,'Microsoft Visual Studio Code (User)','C:\Users\phhda\AppData\Local\Programs\Microsoft VS Code\','3/8/2023 9:06:28 AM'),
 	 (143,'NVM for Windows','C:\Users\phhda\AppData\Roaming\nvm\','3/8/2023 9:06:28 AM'),
@@ -149,10 +129,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (143,'Mozilla Firefox (x64 vi)','C:\Program Files\Mozilla Firefox','3/8/2023 9:06:28 AM'),
 	 (143,'Microsoft Office Professional Plus 2019 - en-us','C:\Program Files (x86)\Microsoft Office','3/8/2023 9:06:28 AM'),
 	 (143,'Redmine packaged by Bitnami','C:\Bitnami\redmine-5.0.2-2','3/8/2023 9:06:28 AM'),
-	 (143,'WinRAR 5.80 (64-bit)','C:\Program Files\WinRAR\','3/8/2023 9:06:28 AM'),
-	 (143,'MySQL Connector C++ 8.0','C:\Program Files\MySQL\Connector C++ 8.0\','3/8/2023 9:06:28 AM'),
-	 (143,'MySQL Router 8.0','C:\Program Files\MySQL\MySQL Router 8.0\','3/8/2023 9:06:28 AM');
+	 (143,'WinRAR 5.80 (64-bit)','C:\Program Files\WinRAR\','3/8/2023 9:06:28 AM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (143,'MySQL Connector C++ 8.0','C:\Program Files\MySQL\Connector C++ 8.0\','3/8/2023 9:06:28 AM'),
+	 (143,'MySQL Router 8.0','C:\Program Files\MySQL\MySQL Router 8.0\','3/8/2023 9:06:28 AM'),
 	 (143,'Java 8 Update 271 (64-bit)','C:\Program Files\Java\jre1.8.0_271\','3/8/2023 9:06:28 AM'),
 	 (143,'CodeMeter Runtime Kit v7.50','C:\Program Files (x86)\CodeMeter\','3/8/2023 9:06:28 AM'),
 	 (143,'Camtasia 9','C:\Program Files\TechSmith\Camtasia 9\','3/8/2023 9:06:28 AM'),
@@ -160,10 +140,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (143,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/8/2023 9:06:28 AM'),
 	 (143,'MySQL Connector/ODBC 8.0','C:\Program Files\MySQL\Connector ODBC 8.0\','3/8/2023 9:06:28 AM'),
 	 (143,'MySQL Shell 8.0.31','C:\Program Files\MySQL\MySQL Shell 8.0','3/8/2023 9:06:28 AM'),
-	 (143,'Vector CANdelaStudio 17 SP1','C:\Program Files\Vector CANdelaStudio 17\','3/8/2023 9:06:28 AM'),
-	 (143,'MySQL Workbench 8.0 CE','C:\Program Files\MySQL\MySQL Workbench 8.0','3/8/2023 9:06:28 AM'),
-	 (143,'Vector AUTOSAR Explorer 2.3','C:\Program Files\Vector AUTOSAR Explorer\','3/8/2023 9:06:28 AM');
+	 (143,'Vector CANdelaStudio 17 SP1','C:\Program Files\Vector CANdelaStudio 17\','3/8/2023 9:06:28 AM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (143,'MySQL Workbench 8.0 CE','C:\Program Files\MySQL\MySQL Workbench 8.0','3/8/2023 9:06:28 AM'),
+	 (143,'Vector AUTOSAR Explorer 2.3','C:\Program Files\Vector AUTOSAR Explorer\','3/8/2023 9:06:28 AM'),
 	 (143,'Dell Touchpad','C:\Program Files\DellTPad','3/8/2023 9:06:28 AM'),
 	 (143,'Vector vTESTstudio Viewer 7','C:\Program Files\Vector vTESTstudio Viewer 7\','3/8/2023 9:06:28 AM'),
 	 (143,'MySQL Server 8.0','C:\Program Files\MySQL\MySQL Server 8.0\','3/8/2023 9:06:28 AM'),
@@ -171,10 +151,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (143,'Visual Studio Community 2022','C:\Program Files\Microsoft Visual Studio\2022\Community','3/8/2023 9:06:28 AM'),
 	 (143,'Counter Strike Cataclysm 1.04','C:\Users\phhda\Counter Strike Cataclysm\','3/8/2023 9:06:28 AM'),
 	 (143,'Google Chrome','C:\Program Files\Google\Chrome\Application','3/8/2023 9:06:28 AM'),
-	 (143,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','3/8/2023 9:06:28 AM'),
-	 (143,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/8/2023 9:06:28 AM'),
-	 (143,'Vector Support Assistant','C:\Program Files (x86)\Vector Support Assistant\','3/8/2023 9:06:28 AM');
+	 (143,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','3/8/2023 9:06:28 AM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (143,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/8/2023 9:06:28 AM'),
+	 (143,'Vector Support Assistant','C:\Program Files (x86)\Vector Support Assistant\','3/8/2023 9:06:28 AM'),
 	 (143,'MySQL Examples and Samples 8.0','C:\Program Files (x86)\MySQL\Samples and Examples 8.0','3/8/2023 9:06:28 AM'),
 	 (132,'Postman x86_64 10.10.3','C:\Users\PV User 2\AppData\Local\Postman','3/3/2023 2:11:14 PM'),
 	 (132,'SourceTree','C:\Users\PV User 2\AppData\Local\SourceTree','3/3/2023 2:11:14 PM'),
@@ -182,10 +162,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (132,'Microsoft Visual Studio Code (User)','C:\Users\PV User 2\AppData\Local\Programs\Microsoft VS Code\','3/3/2023 2:11:14 PM'),
 	 (132,'NVM for Windows 1.1.10','C:\Users\PV User 2\AppData\Roaming\nvm\','3/3/2023 2:11:14 PM'),
 	 (132,'CCleaner','C:\Program Files\CCleaner','3/3/2023 2:11:14 PM'),
-	 (132,'DBeaver 22.3.4','C:\Program Files\DBeaver','3/3/2023 2:11:14 PM'),
-	 (132,'Git','C:\Program Files\Git\','3/3/2023 2:11:14 PM'),
-	 (132,'Mozilla Firefox (x64 vi)','C:\Program Files\Mozilla Firefox','3/3/2023 2:11:14 PM');
+	 (132,'DBeaver 22.3.4','C:\Program Files\DBeaver','3/3/2023 2:11:14 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (132,'Git','C:\Program Files\Git\','3/3/2023 2:11:14 PM'),
+	 (132,'Mozilla Firefox (x64 vi)','C:\Program Files\Mozilla Firefox','3/3/2023 2:11:14 PM'),
 	 (132,'PostgreSQL 15','C:\Program Files\PostgreSQL\15','3/3/2023 2:11:14 PM'),
 	 (132,'WinRAR 6.11 (64-bit)','C:\Program Files\WinRAR\','3/3/2023 2:11:14 PM'),
 	 (132,'Azure Data Studio','C:\Program Files\Azure Data Studio\','3/3/2023 2:11:14 PM'),
@@ -193,10 +173,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (132,'Visual Studio Professional 2022','C:\Program Files\Microsoft Visual Studio\2022\Professional','3/3/2023 2:11:14 PM'),
 	 (132,'Foxit PDF Reader','C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\','3/3/2023 2:11:14 PM'),
 	 (132,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','3/3/2023 2:11:14 PM'),
-	 (132,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/3/2023 2:11:14 PM'),
-	 (132,'Microsoft Help Viewer 2.3','C:\Program Files (x86)\Microsoft Help Viewer\v2.3\','3/3/2023 2:11:14 PM'),
-	 (132,'WinMerge 2.16.28.0','C:\Program Files (x86)\WinMerge\','3/3/2023 2:11:14 PM');
+	 (132,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/3/2023 2:11:14 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (132,'Microsoft Help Viewer 2.3','C:\Program Files (x86)\Microsoft Help Viewer\v2.3\','3/3/2023 2:11:14 PM'),
+	 (132,'WinMerge 2.16.28.0','C:\Program Files (x86)\WinMerge\','3/3/2023 2:11:14 PM'),
 	 (132,'WinSCP 5.21.7','C:\Program Files (x86)\WinSCP\','3/3/2023 2:11:14 PM'),
 	 (132,'UltraViewer phiên bản 6.6.18','C:\Program Files (x86)\UltraViewer\','3/3/2023 2:11:14 PM'),
 	 (143,'Vector CANdb++ 3.1','C:\Program Files (x86)\Vector CANdb++ 3.1\','3/8/2023 9:06:28 AM'),
@@ -204,10 +184,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (143,'Vector FIBEX Explorer 3.4','C:\Program Files (x86)\Vector FIBEX Explorer\','3/8/2023 9:06:28 AM'),
 	 (143,'Vector AUTOSAR Explorer 1.7','C:\Program Files (x86)\Vector AUTOSAR Explorer\','3/8/2023 9:06:28 AM'),
 	 (143,'AdGuard','C:\Program Files (x86)\AdGuard\','3/8/2023 9:06:28 AM'),
-	 (143,'MySQL Documents 8.0','C:\Program Files (x86)\MySQL\MySQL Documentation 8.0','3/8/2023 9:06:28 AM'),
-	 (143,'Vector License Client','C:\Program Files (x86)\Vector License Client\','3/8/2023 9:06:28 AM'),
-	 (143,'MySQL Connector NET 8.0.31','C:\Program Files (x86)\MySQL\Connector NET 8.0','3/8/2023 9:06:28 AM');
+	 (143,'MySQL Documents 8.0','C:\Program Files (x86)\MySQL\MySQL Documentation 8.0','3/8/2023 9:06:28 AM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (143,'Vector License Client','C:\Program Files (x86)\Vector License Client\','3/8/2023 9:06:28 AM'),
+	 (143,'MySQL Connector NET 8.0.31','C:\Program Files (x86)\MySQL\Connector NET 8.0','3/8/2023 9:06:28 AM'),
 	 (143,'Vector CANdelaPersistors 17 P2','C:\Program Files (x86)\Common Files\Vector CANdelaPersistors 17.\','3/8/2023 9:06:28 AM'),
 	 (143,'UltraViewer version 6.4.7','C:\Program Files (x86)\UltraViewer\','3/8/2023 9:06:28 AM'),
 	 (145,'ASUS Framework Service','C:\Program Files (x86)\ASUS\ArmouryDevice','3/8/2023 1:53:50 PM'),
@@ -215,10 +195,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (134,'UltraViewer version 6.6.18','C:\Program Files (x86)\UltraViewer\','3/3/2023 2:46:25 PM'),
 	 (135,'Microsoft Office Professional 2016 - en-us','C:\Program Files (x86)\Microsoft Office','03/03/2023 15:51:36'),
 	 (135,'WinRAR 6.11 (64-bit)','C:\Program Files\WinRAR\','03/03/2023 15:51:36'),
-	 (135,'Foxit PDF Reader','C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\','03/03/2023 15:51:36'),
-	 (135,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','03/03/2023 15:51:36'),
-	 (135,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','03/03/2023 15:51:36');
+	 (135,'Foxit PDF Reader','C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\','03/03/2023 15:51:36');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (135,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','03/03/2023 15:51:36'),
+	 (135,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','03/03/2023 15:51:36'),
 	 (135,'UltraViewer phiên bản 6.6.18','C:\Program Files (x86)\UltraViewer\','03/03/2023 15:51:36'),
 	 (141,'Chatwork','C:\Users\ADMIN\AppData\Local\Chatwork','3/8/2023 8:25:35 AM'),
 	 (140,'GitHub Desktop','C:\Users\duong\AppData\Local\GitHubDesktop','3/7/2023 4:20:54 PM'),
@@ -226,10 +206,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (140,'Roblox Studio for duong','C:\Users\duong\AppData\Local\Roblox\Versions\version-62dea7afc7834c57\','3/7/2023 4:20:54 PM'),
 	 (140,'DBeaver 22.1.0','C:\Program Files\DBeaver','3/7/2023 4:20:54 PM'),
 	 (140,'Git','C:\Program Files\Git\','3/7/2023 4:20:54 PM'),
-	 (140,'Microsoft Visual Studio 2008 Remote Debugger - ENU','C:\Program Files\Microsoft Visual Studio 9.0\','3/7/2023 4:20:54 PM'),
-	 (140,'Microsoft Office Professional Plus 2016','C:\Program Files\Microsoft Office','3/7/2023 4:20:54 PM'),
-	 (140,'PostgreSQL 13','C:\Program Files\PostgreSQL\13','3/7/2023 4:20:54 PM');
+	 (140,'Microsoft Visual Studio 2008 Remote Debugger - ENU','C:\Program Files\Microsoft Visual Studio 9.0\','3/7/2023 4:20:54 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (140,'Microsoft Office Professional Plus 2016','C:\Program Files\Microsoft Office','3/7/2023 4:20:54 PM'),
+	 (140,'PostgreSQL 13','C:\Program Files\PostgreSQL\13','3/7/2023 4:20:54 PM'),
 	 (140,'S3 Browser version 10.5.7','C:\Program Files\S3 Browser\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Windows SDK for Windows 7 (7.1)','C:\Program Files\Microsoft SDKs\Windows\v7.1\','3/7/2023 4:20:54 PM'),
 	 (140,'TablePlus 4.0.5','C:\Program Files\TablePlus\','3/7/2023 4:20:54 PM'),
@@ -237,10 +217,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (140,'WinRAR 6.02 (64-bit)','C:\Program Files\WinRAR\','3/7/2023 4:20:54 PM'),
 	 (140,'Java 8 Update 311 (64-bit)','C:\Program Files\Java\jre1.8.0_311\','3/7/2023 4:20:54 PM'),
 	 (140,'Balsamiq Wireframes','C:\Program Files\Balsamiq\Balsamiq Wireframes\','3/7/2023 4:20:54 PM'),
-	 (140,'CloudCompare 2.12.beta','C:\Program Files\CloudCompare\','3/7/2023 4:20:54 PM'),
-	 (140,'Azure Data Studio','C:\Program Files\Azure Data Studio\','3/7/2023 4:20:54 PM'),
-	 (140,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/7/2023 4:20:54 PM');
+	 (140,'CloudCompare 2.12.beta','C:\Program Files\CloudCompare\','3/7/2023 4:20:54 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (140,'Azure Data Studio','C:\Program Files\Azure Data Studio\','3/7/2023 4:20:54 PM'),
+	 (140,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/7/2023 4:20:54 PM'),
 	 (140,'Java(TM) SE Development Kit 17.0.1 (64-bit)','C:\Program Files\Java\jdk-17.0.1\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Office Professional Plus 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Access MUI (English) 2016','C:\Program Files\Microsoft Office\','3/7/2023 4:20:54 PM'),
@@ -248,10 +228,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (137,'Discord','C:\Users\PC\AppData\Local\Discord','3/3/2023 3:54:32 PM'),
 	 (137,'Postman x86_64 10.6.0','C:\Users\PC\AppData\Local\Postman','3/3/2023 3:54:32 PM'),
 	 (137,'Microsoft Visual Studio Code (User)','C:\Users\PC\AppData\Local\Programs\Microsoft VS Code\','3/3/2023 3:54:32 PM'),
-	 (137,'Git','C:\Program Files\Git\','3/3/2023 3:54:32 PM'),
-	 (137,'KMPlayer 64X (remove only)','C:\Program Files\KMPlayer 64X','3/3/2023 3:54:32 PM'),
-	 (137,'Microsoft Visual Studio 2010 Tools for Office Runtime (x64)','c:\Program Files\Common Files\Microsoft Shared\VSTO\10.0\','3/3/2023 3:54:32 PM');
+	 (137,'Git','C:\Program Files\Git\','3/3/2023 3:54:32 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (137,'KMPlayer 64X (remove only)','C:\Program Files\KMPlayer 64X','3/3/2023 3:54:32 PM'),
+	 (137,'Microsoft Visual Studio 2010 Tools for Office Runtime (x64)','c:\Program Files\Common Files\Microsoft Shared\VSTO\10.0\','3/3/2023 3:54:32 PM'),
 	 (137,'Microsoft Office 365 ProPlus - en-us','C:\Program Files (x86)\Microsoft Office','3/3/2023 3:54:32 PM'),
 	 (137,'WinMerge 2.16.24.0 x64','C:\Program Files\WinMerge\','3/3/2023 3:54:32 PM'),
 	 (137,'WinRAR 5.21 beta 2 (64-bit)','C:\Program Files\WinRAR\','3/3/2023 3:54:32 PM'),
@@ -259,10 +239,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (137,'Java 8 Update 271 (64-bit)','C:\Program Files\Java\jre1.8.0_271\','3/3/2023 3:54:32 PM'),
 	 (137,'Java SE Development Kit 8 Update 271 (64-bit)','C:\Program Files\Java\jdk1.8.0_271\','3/3/2023 3:54:32 PM'),
 	 (137,'Azure Data Studio','C:\Program Files\Azure Data Studio\','3/3/2023 3:54:32 PM'),
-	 (137,'Workflow Manager Client 1.0','C:\Program Files\Reference Assemblies\Microsoft\Workflow Manager\1.0\','3/3/2023 3:54:32 PM'),
-	 (137,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/3/2023 3:54:32 PM'),
-	 (137,'Microsoft MPI (10.1.12498.18)','C:\Program Files\Microsoft MPI\','3/3/2023 3:54:32 PM');
+	 (137,'Workflow Manager Client 1.0','C:\Program Files\Reference Assemblies\Microsoft\Workflow Manager\1.0\','3/3/2023 3:54:32 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (137,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/3/2023 3:54:32 PM'),
+	 (137,'Microsoft MPI (10.1.12498.18)','C:\Program Files\Microsoft MPI\','3/3/2023 3:54:32 PM'),
 	 (137,'Visual Studio Professional 2022','C:\Program Files\Microsoft Visual Studio\2022\Professional','3/3/2023 3:54:32 PM'),
 	 (137,'Cốc Cốc','C:\Program Files\CocCoc\Browser\Application','3/3/2023 3:54:32 PM'),
 	 (137,'Google Chrome','C:\Program Files\Google\Chrome\Application','3/3/2023 3:54:32 PM'),
@@ -270,10 +250,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (137,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/3/2023 3:54:32 PM'),
 	 (137,'Microsoft Help Viewer 2.3','C:\Program Files (x86)\Microsoft Help Viewer\v2.3\','3/3/2023 3:54:32 PM'),
 	 (137,'UltraViewer version 6.5.27','C:\Program Files (x86)\UltraViewer\','3/3/2023 3:54:32 PM'),
-	 (136,'Spotify','C:\Users\GiangNT\AppData\Roaming\Spotify','3/3/2023 3:54:59 PM'),
-	 (136,'Microsoft Visual Studio Code (User)','C:\Users\GiangNT\AppData\Local\Programs\Microsoft VS Code\','3/3/2023 3:54:59 PM'),
-	 (136,'DBeaver 22.3.1','C:\Program Files\DBeaver','3/3/2023 3:54:59 PM');
+	 (136,'Spotify','C:\Users\GiangNT\AppData\Roaming\Spotify','3/3/2023 3:54:59 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (136,'Microsoft Visual Studio Code (User)','C:\Users\GiangNT\AppData\Local\Programs\Microsoft VS Code\','3/3/2023 3:54:59 PM'),
+	 (136,'DBeaver 22.3.1','C:\Program Files\DBeaver','3/3/2023 3:54:59 PM'),
 	 (136,'Git','C:\Program Files\Git\','3/3/2023 3:54:59 PM'),
 	 (136,'PostgreSQL 15','F:\Program Files\PostgreSQL\15','3/3/2023 3:54:59 PM'),
 	 (136,'Microsoft Project Professional 2019 - en-us','C:\Program Files\Microsoft Office','3/3/2023 3:54:59 PM'),
@@ -281,10 +261,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (136,'SmartGit','C:\Program Files\SmartGit\','3/3/2023 3:54:59 PM'),
 	 (136,'TeamViewer','C:\Program Files\TeamViewer','3/3/2023 3:54:59 PM'),
 	 (136,'Microsoft Visio Professional 2019 - en-us','C:\Program Files\Microsoft Office','3/3/2023 3:54:59 PM'),
-	 (136,'WinRAR 6.11 (64-bit)','C:\Program Files\WinRAR\','3/3/2023 3:54:59 PM'),
-	 (136,'Java 8 Update 202 (64-bit)','C:\Program Files\Java\jre1.8.0_202\','3/3/2023 3:54:59 PM'),
-	 (136,'Java SE Development Kit 8 Update 202 (64-bit)','C:\Program Files\Java\jdk1.8.0_202\','3/3/2023 3:54:59 PM');
+	 (136,'WinRAR 6.11 (64-bit)','C:\Program Files\WinRAR\','3/3/2023 3:54:59 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (136,'Java 8 Update 202 (64-bit)','C:\Program Files\Java\jre1.8.0_202\','3/3/2023 3:54:59 PM'),
+	 (136,'Java SE Development Kit 8 Update 202 (64-bit)','C:\Program Files\Java\jdk1.8.0_202\','3/3/2023 3:54:59 PM'),
 	 (136,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/3/2023 3:54:59 PM'),
 	 (136,'Visual Studio Community 2022','C:\Program Files\Microsoft Visual Studio\2022\Community','3/3/2023 3:54:59 PM'),
 	 (136,'Google Chrome','C:\Program Files\Google\Chrome\Application','3/3/2023 3:54:59 PM'),
@@ -292,10 +272,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (136,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','3/3/2023 3:54:59 PM'),
 	 (136,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/3/2023 3:54:59 PM'),
 	 (136,'Skype version 8.94','C:\Program Files (x86)\Microsoft\Skype for Desktop\','3/3/2023 3:54:59 PM'),
-	 (136,'WinMerge 2.16.18.0','C:\Program Files (x86)\WinMerge\','3/3/2023 3:54:59 PM'),
-	 (136,'WinSCP 5.21.6','C:\Program Files (x86)\WinSCP\','3/3/2023 3:54:59 PM'),
-	 (136,'Lightshot-5.5.0.7','C:\Program Files (x86)\Skillbrains\lightshot\','3/3/2023 3:54:59 PM');
+	 (136,'WinMerge 2.16.18.0','C:\Program Files (x86)\WinMerge\','3/3/2023 3:54:59 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (136,'WinSCP 5.21.6','C:\Program Files (x86)\WinSCP\','3/3/2023 3:54:59 PM'),
+	 (136,'Lightshot-5.5.0.7','C:\Program Files (x86)\Skillbrains\lightshot\','3/3/2023 3:54:59 PM'),
 	 (136,'APP Center','C:\Program Files (x86)\Gigabyte\AppCenter\','3/3/2023 3:54:59 PM'),
 	 (138,'GitHub Desktop','C:\Users\Admin\AppData\Local\GitHubDesktop','03/03/2023 16:14:35'),
 	 (138,'pgAdmin 4 version 6.2','C:\Users\Admin\AppData\Local\Programs\pgAdmin 4\v6\','03/03/2023 16:14:35'),
@@ -303,10 +283,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (138,'SourceTree','C:\Users\Admin\AppData\Local\SourceTree','03/03/2023 16:14:35'),
 	 (138,'Microsoft Teams','C:\Users\Admin\AppData\Local\Microsoft\Teams','03/03/2023 16:14:35'),
 	 (138,'Telegram Desktop','C:\Users\Admin\AppData\Roaming\Telegram Desktop\','03/03/2023 16:14:35'),
-	 (138,'Microsoft Visual Studio Code (User)','C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\','03/03/2023 16:14:35'),
-	 (138,'Studio 3T','C:\Program Files\3T Software Labs\Studio 3T','03/03/2023 16:14:35'),
-	 (138,'Beyond Compare 4.3.7','C:\Program Files\Beyond Compare 4\','03/03/2023 16:14:35');
+	 (138,'Microsoft Visual Studio Code (User)','C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\','03/03/2023 16:14:35');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (138,'Studio 3T','C:\Program Files\3T Software Labs\Studio 3T','03/03/2023 16:14:35'),
+	 (138,'Beyond Compare 4.3.7','C:\Program Files\Beyond Compare 4\','03/03/2023 16:14:35'),
 	 (138,'CPUID CPU-Z 1.96','C:\Program Files\CPUID\CPU-Z\','03/03/2023 16:14:35'),
 	 (138,'GIMP 2.10.28','C:\Program Files\GIMP 2\','03/03/2023 16:14:35'),
 	 (138,'Git version 2.31.1','C:\Program Files\Git\','03/03/2023 16:14:35'),
@@ -314,10 +294,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (138,'Microsoft 365 Apps for enterprise - en-us','C:\Program Files (x86)\Microsoft Office','03/03/2023 16:14:35'),
 	 (138,'PostgreSQL 14','C:\Program Files\PostgreSQL\14','03/03/2023 16:14:35'),
 	 (138,'psqlODBC 13.00.0000','C:\Program Files\PostgreSQL\psqlODBC','03/03/2023 16:14:35'),
-	 (138,'SmartGit','C:\Program Files\SmartGit\','03/03/2023 16:14:35'),
-	 (138,'WinRAR 6.01 beta 1 (64-bit)','C:\Program Files\WinRAR\','03/03/2023 16:14:35'),
-	 (138,'Java 8 Update 291 (64-bit)','C:\Program Files\Java\jre1.8.0_291\','03/03/2023 16:14:35');
+	 (138,'SmartGit','C:\Program Files\SmartGit\','03/03/2023 16:14:35');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (138,'WinRAR 6.01 beta 1 (64-bit)','C:\Program Files\WinRAR\','03/03/2023 16:14:35'),
+	 (138,'Java 8 Update 291 (64-bit)','C:\Program Files\Java\jre1.8.0_291\','03/03/2023 16:14:35'),
 	 (138,'Java 7 Update 25 (64-bit)','C:\Program Files\Java\jre7\','03/03/2023 16:14:35'),
 	 (138,'Eclipse Temurin JDK with Hotspot 11.0.15+10 (x64)','C:\Program Files\Eclipse Adoptium\jdk-11.0.15.10-hotspot\','03/03/2023 16:14:35'),
 	 (138,'Java SE Development Kit 7 Update 25 (64-bit)','C:\Program Files\Java\jdk1.7.0_25\','03/03/2023 16:14:35'),
@@ -325,10 +305,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (138,'Azure Data Studio','C:\Program Files\Azure Data Studio\','03/03/2023 16:14:35'),
 	 (138,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','03/03/2023 16:14:35'),
 	 (138,'NXPowerLite Desktop','C:\Program Files\NXPowerLite\','03/03/2023 16:14:35'),
-	 (138,'Java(TM) SE Development Kit 11.0.1 (64-bit)','C:\Program Files\Java\jdk-11.0.1\','03/03/2023 16:14:35'),
-	 (138,'Visual Studio Professional 2019','C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional','03/03/2023 16:14:35'),
-	 (138,'Adobe AIR','c:\Program Files (x86)\Common Files\Adobe AIR\','03/03/2023 16:14:35');
+	 (138,'Java(TM) SE Development Kit 11.0.1 (64-bit)','C:\Program Files\Java\jdk-11.0.1\','03/03/2023 16:14:35');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (138,'Visual Studio Professional 2019','C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional','03/03/2023 16:14:35'),
+	 (138,'Adobe AIR','c:\Program Files (x86)\Common Files\Adobe AIR\','03/03/2023 16:14:35'),
 	 (138,'AMD Chipset Software','C:\Program Files (x86)\AMD\Chipset_IODrivers\','03/03/2023 16:14:35'),
 	 (138,'Visual Studio Community 2022','C:\Program Files\Microsoft Visual Studio\2022\Community','03/03/2023 16:14:35'),
 	 (138,'Brave','C:\Program Files\BraveSoftware\Brave-Browser\Application','03/03/2023 16:14:35'),
@@ -336,10 +316,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (138,'Foxit Reader','C:\Program Files (x86)\Foxit Software\Foxit Reader\','03/03/2023 16:14:35'),
 	 (138,'Intel(R) Ethernet Connection Driver','C:\Program Files (x86)\Intel Driver\','03/03/2023 16:14:35'),
 	 (138,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','03/03/2023 16:14:35'),
-	 (138,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','03/03/2023 16:14:35'),
-	 (138,'Microsoft Help Viewer 2.3','C:\Program Files (x86)\Microsoft Help Viewer\v2.3\','03/03/2023 16:14:35'),
-	 (138,'PEM-HTTPD 2.4.51','C:\Program Files (x86)\edb\pem\httpd','03/03/2023 16:14:35');
+	 (138,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','03/03/2023 16:14:35');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (138,'Microsoft Help Viewer 2.3','C:\Program Files (x86)\Microsoft Help Viewer\v2.3\','03/03/2023 16:14:35'),
+	 (138,'PEM-HTTPD 2.4.51','C:\Program Files (x86)\edb\pem\httpd','03/03/2023 16:14:35'),
 	 (138,'Lightshot-5.5.0.7','C:\Program Files (x86)\Skillbrains\lightshot\','03/03/2023 16:14:35'),
 	 (138,'Check Point Deployment Shell','C:\Program Files (x86)\CheckPoint\SNX Components Shell\','03/03/2023 16:14:35'),
 	 (138,'Check Point SSL Network Extender Service','C:\Program Files (x86)\CheckPoint\SSL Network Extender\','03/03/2023 16:14:35'),
@@ -347,10 +327,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (138,'AMD PSP Driver','C:\AMD\PSP Driver\','03/03/2023 16:14:35'),
 	 (138,'AMD Ryzen Balanced Driver','C:\AMD\RyzenPPKG Driver\','03/03/2023 16:14:35'),
 	 (138,'AMD SBxxx SMBus Driver Alpha','C:\AMD\SBxxxSMBus Driver\','03/03/2023 16:14:35'),
-	 (138,'Promontory_GPIO Driver','C:\AMD\Promontory GPIO Driver\','03/03/2023 16:14:35'),
-	 (138,'Adobe AIR','c:\Program Files (x86)\Common Files\Adobe AIR\','03/03/2023 16:14:35'),
-	 (138,'UltraViewer version 6.2.109','C:\Program Files (x86)\UltraViewer\','03/03/2023 16:14:35');
+	 (138,'Promontory_GPIO Driver','C:\AMD\Promontory GPIO Driver\','03/03/2023 16:14:35');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (138,'Adobe AIR','c:\Program Files (x86)\Common Files\Adobe AIR\','03/03/2023 16:14:35'),
+	 (138,'UltraViewer version 6.2.109','C:\Program Files (x86)\UltraViewer\','03/03/2023 16:14:35'),
 	 (138,'AMD GPIO2 Driver','C:\AMD\GPIO2 Driver\','03/03/2023 16:14:35'),
 	 (138,'Realtek Audio Driver','C:\Program Files (x86)\Realtek\Audio\Drivers','03/03/2023 16:14:35'),
 	 (140,'Microsoft Windows Performance Toolkit','C:\Program Files\Microsoft Windows Performance Toolkit\','3/7/2023 4:20:54 PM'),
@@ -358,10 +338,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (140,'Visual Studio Community 2019','C:\Program Files (x86)\Microsoft Visual Studio\2019\Community','3/7/2023 4:20:54 PM'),
 	 (140,'Foxit PDF Reader','C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\','3/7/2023 4:20:54 PM'),
 	 (140,'Google Chrome','C:\Program Files\Google\Chrome\Application','3/7/2023 4:20:54 PM'),
-	 (140,'Microsoft Document Explorer 2008','C:\Program Files (x86)\Common Files\Microsoft Shared\Help 9\','3/7/2023 4:20:54 PM'),
-	 (140,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','3/7/2023 4:20:54 PM'),
-	 (140,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/7/2023 4:20:54 PM');
+	 (140,'Microsoft Document Explorer 2008','C:\Program Files (x86)\Common Files\Microsoft Shared\Help 9\','3/7/2023 4:20:54 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (140,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','3/7/2023 4:20:54 PM'),
+	 (140,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Help Viewer 2.3','C:\Program Files (x86)\Microsoft Help Viewer\v2.3\','3/7/2023 4:20:54 PM'),
 	 (140,'Visual Studio 2005 Tools for Office Second Edition Runtime','c:\Program Files (x86)\Common Files\Microsoft Shared\VSTO\8.0\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Visual Studio 2008 Professional Edition - ENU','C:\Program Files (x86)\Microsoft Visual Studio 9.0\','3/7/2023 4:20:54 PM'),
@@ -369,10 +349,10 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (140,'ProShow Gold','C:\Program Files (x86)\Photodex\ProShow Gold\','3/7/2023 4:20:54 PM'),
 	 (140,'ProShow Producer','C:\Program Files (x86)\Photodex\ProShow Producer\','3/7/2023 4:20:54 PM'),
 	 (140,'PyCharm Community Edition 2021.3.1','C:\Program Files\JetBrains\PyCharm Community Edition 2021.3.1','3/7/2023 4:20:54 PM'),
-	 (140,'Visual Studio Tools for the Office system 3.0 Runtime','C:\Program Files (x86)\Common Files\Microsoft Shared\VSTO\9.0\','3/7/2023 4:20:54 PM'),
-	 (140,'Microsoft Visual Studio Web Authoring Component','C:\Program Files (x86)\Microsoft Web Designer Tools','3/7/2023 4:20:54 PM'),
-	 (140,'Microsoft SQL Server Compact 3.5 for Devices ENU','C:\Program Files (x86)\Microsoft SQL Server Compact Edition\v3.5\','3/7/2023 4:20:54 PM');
+	 (140,'Visual Studio Tools for the Office system 3.0 Runtime','C:\Program Files (x86)\Common Files\Microsoft Shared\VSTO\9.0\','3/7/2023 4:20:54 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (140,'Microsoft Visual Studio Web Authoring Component','C:\Program Files (x86)\Microsoft Web Designer Tools','3/7/2023 4:20:54 PM'),
+	 (140,'Microsoft SQL Server Compact 3.5 for Devices ENU','C:\Program Files (x86)\Microsoft SQL Server Compact Edition\v3.5\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Office Visual Web Developer 2007','C:\Program Files (x86)\Microsoft Web Designer Tools\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Office Visual Web Developer MUI (English) 2007','C:\Program Files (x86)\Microsoft Web Designer Tools\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Office Shared MUI (English) 2007','C:\Program Files (x86)\Microsoft Web Designer Tools\','3/7/2023 4:20:54 PM'),
@@ -380,63 +360,72 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (140,'Microsoft SQL Server Compact 3.5 ENU','C:\Program Files (x86)\Microsoft SQL Server Compact Edition\','3/7/2023 4:20:54 PM'),
 	 (140,'ProShow Gold version 9.0.3771','C:\Program Files (x86)\Photodex\ProShow Gold\','3/7/2023 4:20:54 PM'),
 	 (140,'Microsoft Visual Studio 2008 Professional Edition - ENU','C:\Program Files (x86)\Microsoft Visual Studio 9.0\','3/7/2023 4:20:54 PM'),
-	 (140,'UltraViewer version 6.4.15','C:\Program Files (x86)\UltraViewer\','3/7/2023 4:20:54 PM'),
-	 (129,'Angry IP Scanner','"D:\Program Files\Angry IP Scanner"','3/9/2023 4:48:01 PM'),
-	 (129,'Visual Studio Community 2022','C:\Program Files\Microsoft Visual Studio\2022\Community','3/9/2023 4:48:01 PM');
+	 (140,'UltraViewer version 6.4.15','C:\Program Files (x86)\UltraViewer\','3/7/2023 4:20:54 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
-	 (129,'Google Chrome','C:\Program Files\Google\Chrome\Application','3/9/2023 4:48:01 PM'),
-	 (129,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','3/9/2023 4:48:01 PM'),
-	 (129,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/9/2023 4:48:01 PM'),
-	 (129,'MiniTool ShadowMaker PW Edition','C:\Program Files\MiniTool ShadowMaker\','3/9/2023 4:48:01 PM'),
-	 (129,'Reload Icons Cache 1.00','C:\Program Files (x86)\Mr Blade Design''s\Reload Icons Cache\','3/9/2023 4:48:01 PM'),
-	 (129,'Skype version 8.94','C:\Program Files (x86)\Microsoft\Skype for Desktop\','3/9/2023 4:48:01 PM'),
-	 (129,'UltraUXThemePatcher','C:\Program Files (x86)\UltraUXThemePatcher','3/9/2023 4:48:01 PM'),
-	 (129,'WinSCP 5.19.6','C:\Program Files (x86)\WinSCP\','3/9/2023 4:48:01 PM'),
-	 (129,'Intel(R) Wireless Bluetooth(R)','C:\Program Files (x86)\Intel\','3/9/2023 4:48:01 PM'),
-	 (129,'Lightshot-5.5.0.7','C:\Program Files (x86)\Skillbrains\lightshot\','3/9/2023 4:48:01 PM');
-INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
-	 (129,'Composer - PHP Dependency Manager','C:\Program Files (x86)\ComposerSetup\','3/9/2023 4:48:01 PM'),
-	 (129,'Radmin Viewer 3.5.2','C:\Program Files (x86)\Radmin Viewer 3\','3/9/2023 4:48:01 PM'),
-	 (129,'UltraViewer version 6.6.19','C:\Program Files (x86)\UltraViewer\','3/9/2023 4:48:01 PM'),
-	 (129,'Realtek Audio Driver','C:\Program Files\Realtek\Audio\HDA','3/9/2023 4:48:01 PM'),
 	 (143,'.NET Framework Reference Assemblies 4.7','C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7\','3/8/2023 9:06:28 AM'),
 	 (143,'MySQL Connector J','C:\Program Files (x86)\MySQL\Connector J 8.0','3/8/2023 9:06:28 AM'),
 	 (145,'WebAdvisor by McAfee','C:\Program Files\McAfee\WebAdvisor','3/8/2023 1:53:50 PM'),
 	 (145,'UltraViewer phiên bản 6.6.10','C:\Program Files (x86)\UltraViewer\','3/8/2023 1:53:50 PM'),
 	 (145,'Realtek Audio Driver','C:\Program Files\Realtek\Audio\HDA','3/8/2023 1:53:50 PM'),
-	 (141,'Postman x86_64 10.0.1','C:\Users\ADMIN\AppData\Local\Postman','3/8/2023 8:25:35 AM');
-INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (141,'Postman x86_64 10.0.1','C:\Users\ADMIN\AppData\Local\Postman','3/8/2023 8:25:35 AM'),
 	 (141,'Microsoft Teams','C:\Users\ADMIN\AppData\Local\Microsoft\Teams','3/8/2023 8:25:35 AM'),
 	 (141,'Zoom','C:\Users\ADMIN\AppData\Roaming\Zoom\bin','3/8/2023 8:25:35 AM'),
 	 (141,'Microsoft Visual Studio Code (User)','C:\Users\ADMIN\AppData\Local\Programs\Microsoft VS Code\','3/8/2023 8:25:35 AM'),
-	 (141,'7-Zip 22.01 (x64)','C:\Program Files\7-Zip\','3/8/2023 8:25:35 AM'),
+	 (141,'7-Zip 22.01 (x64)','C:\Program Files\7-Zip\','3/8/2023 8:25:35 AM');
+INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
 	 (141,'Git','C:\Program Files\Git\','3/8/2023 8:25:35 AM'),
 	 (141,'Microsoft 365 Apps for business - en-us','C:\Program Files (x86)\Microsoft Office','3/8/2023 8:25:35 AM'),
 	 (141,'Microsoft Office Professional Plus 2019 - en-us','C:\Program Files (x86)\Microsoft Office','3/8/2023 8:25:35 AM'),
 	 (141,'Sublime Text 3','C:\Program Files\Sublime Text 3\','3/8/2023 8:25:35 AM'),
 	 (141,'TeamViewer','C:\Program Files\TeamViewer','3/8/2023 8:25:35 AM'),
-	 (141,'WinRAR 5.80 (64-bit)','C:\Program Files\WinRAR\','3/8/2023 8:25:35 AM');
-INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (141,'WinRAR 5.80 (64-bit)','C:\Program Files\WinRAR\','3/8/2023 8:25:35 AM'),
 	 (141,'XAMPP','C:\xampp','3/8/2023 8:25:35 AM'),
 	 (141,'Intel(R) Management Engine Components','C:\Program Files (x86)\Intel\Intel(R) Management Engine Components','3/8/2023 8:25:35 AM'),
 	 (141,'Java(TM) SE Development Kit 17.0.5 (64-bit)','C:\Program Files\Java\jdk-17.0.5\','3/8/2023 8:25:35 AM'),
-	 (141,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/8/2023 8:25:35 AM'),
+	 (141,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/8/2023 8:25:35 AM');
+INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
 	 (141,'Visual Studio Community 2022','C:\Program Files\Microsoft Visual Studio\2022\Community','3/8/2023 8:25:35 AM'),
 	 (141,'Google Chrome','C:\Program Files\Google\Chrome\Application','3/8/2023 8:25:35 AM'),
 	 (141,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','3/8/2023 8:25:35 AM'),
 	 (141,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/8/2023 8:25:35 AM'),
 	 (141,'Microsoft Visual J# 2.0 Redistributable Package','C:\Windows\Microsoft.NET\Framework\v2.0.50727\','3/8/2023 8:25:35 AM'),
-	 (141,'WinMerge 2.16.24.0','C:\Program Files (x86)\WinMerge\','3/8/2023 8:25:35 AM');
-INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (141,'WinMerge 2.16.24.0','C:\Program Files (x86)\WinMerge\','3/8/2023 8:25:35 AM'),
 	 (141,'Intel(R) Wireless Bluetooth(R)','C:\Program Files (x86)\Intel\','3/8/2023 8:25:35 AM'),
 	 (146,'Postman x86_64 10.11.1','C:\Users\Admin\AppData\Local\Postman','3/9/2023 10:22:46 AM'),
 	 (146,'Microsoft Teams','C:\Users\Admin\AppData\Local\Microsoft\Teams','3/9/2023 10:22:46 AM'),
-	 (133,'Electron Fiddle','C:\Users\ADMIN\AppData\Local\electron-fiddle','3/8/2023 11:34:41 AM'),
+	 (133,'Electron Fiddle','C:\Users\ADMIN\AppData\Local\electron-fiddle','3/8/2023 11:34:41 AM');
+INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
 	 (133,'Fork - a fast and friendly git client','C:\Users\ADMIN\AppData\Local\Fork','3/8/2023 11:34:41 AM'),
 	 (133,'Postman x86_64 10.1.2','C:\Users\ADMIN\AppData\Local\Postman','3/8/2023 11:34:41 AM'),
 	 (133,'Zoom','C:\Users\ADMIN\AppData\Roaming\Zoom\bin','3/8/2023 11:34:41 AM'),
 	 (133,'Microsoft Visual Studio Code (User)','C:\Users\ADMIN\AppData\Local\Programs\Microsoft VS Code\','3/8/2023 11:34:41 AM'),
 	 (133,'ShareX','C:\Program Files\ShareX\','3/8/2023 11:34:41 AM'),
+	 (129,'Outline Manager 1.13.0','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Oh My Posh version 12.16.1','C:\Users\Dev 77\AppData\Local\Programs\oh-my-posh\','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft OneDrive','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Postman x86_64 10.11.1','C:\Users\Dev 77\AppData\Local\Postman','3/10/2023 4:54:15 PM'),
+	 (129,'SourceTree','C:\Users\Dev 77\AppData\Local\SourceTree','3/10/2023 4:54:15 PM');
+INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (129,'Telegram Desktop','C:\Users\Dev 77\AppData\Roaming\Telegram Desktop\','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft Visual Studio Code (User)','C:\Users\Dev 77\AppData\Local\Programs\Microsoft VS Code\','3/10/2023 4:54:15 PM'),
+	 (129,'7-Zip 21.07 (x64)','C:\Program Files\7-Zip\','3/10/2023 4:54:15 PM'),
+	 (129,'Docker Desktop','C:\Program Files\Docker\Docker','3/10/2023 4:54:15 PM'),
+	 (129,'Git','C:\Program Files\Git\','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft Visual Studio 2010 Tools for Office Runtime (x64)','C:\Program Files\Common Files\Microsoft Shared\VSTO\10.0\','3/10/2023 4:54:15 PM'),
+	 (129,'Notepad++ (64-bit x64)','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft Office Professional Plus 2019 - en-us','C:\Program Files\Microsoft Office','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft Office Professional Plus 2019 - vi-vn','C:\Program Files\Microsoft Office','3/10/2023 4:54:15 PM'),
+	 (129,'SoftEther VPN Client','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM');
+INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (129,'SoftEther VPN Server','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'MiniTool Partition Wizard 12.6','C:\Program Files\MiniTool Partition Wizard 12\','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft Web Deploy 4.0','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Balsamiq Wireframes','C:\Program Files\Balsamiq\Balsamiq Wireframes\','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft SQL Server 2019 LocalDB','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Windows Subsystem for Linux Update','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'IIS 10.0 Express','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft System CLR Types for SQL Server 2019','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'TortoiseGit 2.13.0.1 (64 bit)','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
 	 (133,'Git','C:\Program Files\Git\','3/8/2023 11:34:41 AM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
 	 (133,'PostgreSQL 15','C:\Program Files\PostgreSQL\15','3/8/2023 11:34:41 AM'),
@@ -452,6 +441,38 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
 	 (133,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/8/2023 11:34:41 AM'),
 	 (133,'UltraViewer version 6.4.7','C:\Program Files (x86)\UltraViewer\','3/8/2023 11:34:41 AM'),
+	 (129,'Windows PC Health Check','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft Update Health Tools','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft ODBC Driver 17 for SQL Server','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft SQL Server 2012 Native Client','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'AURA lighting effect add-on x64','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft .NET SDK 7.0.101 (x64) from Visual Studio','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'TortoiseSVN 1.8.2.24708 (64 bit)','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM');
+INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (129,'Java(TM) SE Development Kit 18.0.2 (64-bit)','C:\Program Files\Java\jdk-18.0.2\','3/10/2023 4:54:15 PM'),
+	 (129,'ARMOURY CRATE Lite Service','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Node.js','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Angry IP Scanner','"D:\Program Files\Angry IP Scanner"','3/10/2023 4:54:15 PM'),
+	 (129,'Visual Studio Community 2022','C:\Program Files\Microsoft Visual Studio\2022\Community','3/10/2023 4:54:15 PM'),
+	 (129,'FastStone Capture 9.7','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (139,'Microsoft OneDrive','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'Postman x86_64 10.10.3','C:\Users\vince\AppData\Local\Postman','3/10/2023 3:07:10 PM'),
+	 (139,'SourceTree','C:\Users\vince\AppData\Local\SourceTree','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft Visual Studio Code (User)','C:\Users\vince\AppData\Local\Programs\Microsoft VS Code\','3/10/2023 3:07:10 PM');
+INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (139,'DBeaver 22.3.5','C:\Program Files\DBeaver','3/10/2023 3:07:10 PM'),
+	 (139,'Git','C:\Program Files\Git\','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft Office Professional Plus 2019 - en-us','C:\Program Files\Microsoft Office','3/10/2023 3:07:10 PM'),
+	 (129,'Google Chrome','C:\Program Files\Google\Chrome\Application','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft Edge Update','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/10/2023 4:54:15 PM'),
+	 (129,'MiniTool ShadowMaker PW Edition','C:\Program Files\MiniTool ShadowMaker\','3/10/2023 4:54:15 PM'),
+	 (129,'Reload Icons Cache 1.00','C:\Program Files (x86)\Mr Blade Design''s\Reload Icons Cache\','3/10/2023 4:54:15 PM'),
+	 (129,'Skype version 8.94','C:\Program Files (x86)\Microsoft\Skype for Desktop\','3/10/2023 4:54:15 PM');
+INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (129,'UltraUXThemePatcher','C:\Program Files (x86)\UltraUXThemePatcher','3/10/2023 4:54:15 PM'),
 	 (144,'Postman x86_64 9.31.0','C:\Users\vungk\AppData\Local\Postman','3/8/2023 1:50:43 PM'),
 	 (144,'Telegram Desktop','C:\Users\vungk\AppData\Roaming\Telegram Desktop\','3/8/2023 1:50:43 PM'),
 	 (144,'Microsoft Visual Studio Code (User)','C:\Users\vungk\AppData\Local\Programs\Microsoft VS Code\','3/8/2023 1:50:43 PM'),
@@ -459,9 +480,9 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (144,'Lingoes 2.9.2','C:\Program Files\Lingoes\Translator2\','3/8/2023 1:50:43 PM'),
 	 (144,'Microsoft Office Professional Plus 2019 - en-us','C:\Program Files\Microsoft Office','3/8/2023 1:50:43 PM'),
 	 (144,'Microsoft Office Professional Plus 2019 - vi-vn','C:\Program Files\Microsoft Office','3/8/2023 1:50:43 PM'),
-	 (144,'WinRAR 5.71 (64-bit)','C:\Program Files\WinRAR\','3/8/2023 1:50:43 PM');
+	 (144,'WinRAR 5.71 (64-bit)','C:\Program Files\WinRAR\','3/8/2023 1:50:43 PM'),
+	 (144,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/8/2023 1:50:43 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
-	 (144,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/8/2023 1:50:43 PM'),
 	 (144,'NVIDIA Graphics Driver 456.71','C:\Program Files\NVIDIA Corporation\Installer2\Display.Driver.{F2FC40C1-5539-4E50-BAE6-4F06D6429374}','3/8/2023 1:50:43 PM'),
 	 (144,'NVIDIA Install Application','C:\Program Files\NVIDIA Corporation\Installer2\InstallerCore','3/8/2023 1:50:43 PM'),
 	 (144,'Visual Studio Professional 2019','C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional','3/8/2023 1:50:43 PM'),
@@ -470,9 +491,9 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (144,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/8/2023 1:50:43 PM'),
 	 (144,'WinMerge 2.16.22.0','C:\Program Files (x86)\WinMerge\','3/8/2023 1:50:43 PM'),
 	 (144,'Lightshot-5.5.0.7','C:\Program Files (x86)\Skillbrains\lightshot\','3/8/2023 1:50:43 PM'),
-	 (145,'7-Zip 19.00 (x64)','C:\Program Files\7-Zip\','3/8/2023 1:53:50 PM');
+	 (145,'7-Zip 19.00 (x64)','C:\Program Files\7-Zip\','3/8/2023 1:53:50 PM'),
+	 (145,'Microsoft Office Professional Plus 2016','C:\Program Files\Microsoft Office','3/8/2023 1:53:50 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
-	 (145,'Microsoft Office Professional Plus 2016','C:\Program Files\Microsoft Office','3/8/2023 1:53:50 PM'),
 	 (145,'TeamViewer','C:\Program Files\TeamViewer','3/8/2023 1:53:50 PM'),
 	 (145,'WinMerge 2.16.12.0 x64','C:\Program Files\WinMerge\','3/8/2023 1:53:50 PM'),
 	 (145,'Azure Data Studio','C:\Program Files\Azure Data Studio\','3/8/2023 1:53:50 PM'),
@@ -481,9 +502,9 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (145,'Microsoft Excel MUI (English) 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
 	 (145,'Microsoft PowerPoint MUI (English) 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
 	 (145,'Microsoft Publisher MUI (English) 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
-	 (145,'Microsoft Outlook MUI (English) 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM');
+	 (145,'Microsoft Outlook MUI (English) 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
+	 (145,'Microsoft Word MUI (English) 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
-	 (145,'Microsoft Word MUI (English) 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
 	 (145,'Microsoft Office Proofing Tools 2016 - English','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
 	 (145,'Outils de vérification linguistique 2016 de Microsoft Office - Français','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
 	 (145,'Herramientas de corrección de Microsoft Office 2016: español','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
@@ -492,9 +513,9 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (145,'Microsoft Office Shared MUI (English) 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
 	 (145,'Microsoft DCF MUI (English) 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
 	 (145,'Microsoft OneNote MUI (English) 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
-	 (145,'Microsoft Groove MUI (English) 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM');
+	 (145,'Microsoft Groove MUI (English) 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
+	 (145,'Microsoft Office 32-bit Components 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
-	 (145,'Microsoft Office 32-bit Components 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
 	 (145,'Microsoft Office Shared 32-bit MUI (English) 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
 	 (145,'Microsoft Office OSM MUI (English) 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
 	 (145,'Microsoft Office OSM UX MUI (English) 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
@@ -503,9 +524,9 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (145,'Microsoft Skype for Business MUI (English) 2016','C:\Program Files\Microsoft Office\','3/8/2023 1:53:50 PM'),
 	 (145,'Araxis Merge','C:\Program Files\Araxis\Araxis Merge\','3/8/2023 1:53:50 PM'),
 	 (145,'Foxit PDF Reader','C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\','3/8/2023 1:53:50 PM'),
-	 (145,'Google Chrome','C:\Program Files\Google\Chrome\Application','3/8/2023 1:53:50 PM');
+	 (145,'Google Chrome','C:\Program Files\Google\Chrome\Application','3/8/2023 1:53:50 PM'),
+	 (145,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','3/8/2023 1:53:50 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
-	 (145,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','3/8/2023 1:53:50 PM'),
 	 (145,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/8/2023 1:53:50 PM'),
 	 (145,'Microsoft Help Viewer 2.3','C:\Program Files (x86)\Microsoft Help Viewer\v2.3\','3/8/2023 1:53:50 PM'),
 	 (145,'Skype version 8.94','C:\Program Files (x86)\Microsoft\Skype for Desktop\','3/8/2023 1:53:50 PM'),
@@ -514,9 +535,9 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (146,'Microsoft Visual Studio Code (User)','C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\','3/9/2023 10:22:46 AM'),
 	 (146,'Trend Micro Password Manager','C:\Program Files\Trend Micro\TMIDS\','3/9/2023 10:22:46 AM'),
 	 (146,'AMD Software','C:\Program Files\AMD\CIM\BIN64','3/9/2023 10:22:46 AM'),
-	 (146,'Git','C:\Program Files\Git\','3/9/2023 10:22:46 AM');
+	 (146,'Git','C:\Program Files\Git\','3/9/2023 10:22:46 AM'),
+	 (146,'Microsoft 365 Apps for business - en-us','C:\Program Files\Microsoft Office','3/9/2023 10:22:46 AM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
-	 (146,'Microsoft 365 Apps for business - en-us','C:\Program Files\Microsoft Office','3/9/2023 10:22:46 AM'),
 	 (146,'Microsoft OneNote - en-us','C:\Program Files\Microsoft Office','3/9/2023 10:22:46 AM'),
 	 (146,'PostgreSQL 14','C:\Program Files\PostgreSQL\14','3/9/2023 10:22:46 AM'),
 	 (146,'Microsoft Office Professional Plus 2019 - en-us','C:\Program Files\Microsoft Office','3/9/2023 10:22:46 AM'),
@@ -525,9 +546,9 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (146,'Trend Micro Troubleshooting Tool','C:\Program Files\Trend Micro\AirSupport','3/9/2023 10:22:46 AM'),
 	 (146,'Azure Data Studio','C:\Program Files\Azure Data Studio\','3/9/2023 10:22:46 AM'),
 	 (146,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/9/2023 10:22:46 AM'),
-	 (146,'UniKey version 4.2 RC4','C:\Program Files\UniKey\','3/9/2023 10:22:46 AM');
+	 (146,'UniKey version 4.2 RC4','C:\Program Files\UniKey\','3/9/2023 10:22:46 AM'),
+	 (146,'Trend Micro Maximum Security','C:\Program Files\Trend Micro\','3/9/2023 10:22:46 AM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
-	 (146,'Trend Micro Maximum Security','C:\Program Files\Trend Micro\','3/9/2023 10:22:46 AM'),
 	 (146,'Visual Studio Community 2022','C:\Program Files\Microsoft Visual Studio\2022\Community','3/9/2023 10:22:46 AM'),
 	 (146,'AMD Chipset Software','C:\Program Files (x86)\AMD\Chipset_IODrivers\','3/9/2023 10:22:46 AM'),
 	 (146,'Microsoft Expression Encoder 4','C:\Program Files (x86)\Microsoft Expression\Encoder 4\','3/9/2023 10:22:46 AM'),
@@ -536,9 +557,9 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (146,'MSI NBFoundation Service','C:\Program Files (x86)\MSI\One Dragon Center\','3/9/2023 10:22:46 AM'),
 	 (146,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','3/9/2023 10:22:46 AM'),
 	 (146,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/9/2023 10:22:46 AM'),
-	 (146,'Pepakura Designer 4','C:\Program Files (x86)\tamasoftware\pepakura4en\','3/9/2023 10:22:46 AM');
+	 (146,'Pepakura Designer 4','C:\Program Files (x86)\tamasoftware\pepakura4en\','3/9/2023 10:22:46 AM'),
+	 (146,'sakura editor(サクラエディタ)','C:\Program Files (x86)\sakura\','3/9/2023 10:22:46 AM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
-	 (146,'sakura editor(サクラエディタ)','C:\Program Files (x86)\sakura\','3/9/2023 10:22:46 AM'),
 	 (146,'Tera Term 4.106','C:\Program Files (x86)\teraterm\','3/9/2023 10:22:46 AM'),
 	 (146,'AMD_Chipset_Drivers','C:\Program Files (x86)\AMD\Chipset_IODrivers\','3/9/2023 10:22:46 AM'),
 	 (146,'Lightshot-5.5.0.7','C:\Program Files (x86)\Skillbrains\lightshot\','3/9/2023 10:22:46 AM'),
@@ -547,39 +568,79 @@ INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","Applicat
 	 (146,'MSI NBFoundation Service','C:\Program Files (x86)\MSI\One Dragon Center\','3/9/2023 10:22:46 AM'),
 	 (146,'Microsoft Expression Encoder 4 Screen Capture Codec','C:\Program Files (x86)\Microsoft Expression\Encoder 4\','3/9/2023 10:22:46 AM'),
 	 (146,'AMD PSP Driver','C:\AMD\PSP Driver\','3/9/2023 10:22:46 AM'),
-	 (146,'AMD Ryzen Balanced Driver','C:\AMD\RyzenPPKG Driver\','3/9/2023 10:22:46 AM');
+	 (146,'AMD Ryzen Balanced Driver','C:\AMD\RyzenPPKG Driver\','3/9/2023 10:22:46 AM'),
+	 (146,'AMD SBxxx SMBus Driver Alpha','C:\AMD\SBxxxSMBus Driver\','3/9/2023 10:22:46 AM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
-	 (146,'AMD SBxxx SMBus Driver Alpha','C:\AMD\SBxxxSMBus Driver\','3/9/2023 10:22:46 AM'),
 	 (146,'AMD I2C Driver','C:\AMD\I2C Driver\','3/9/2023 10:22:46 AM'),
 	 (146,'AMD MicroPEP Driver','C:\AMD\UPEP Driver\','3/9/2023 10:22:46 AM'),
 	 (146,'UltraViewer version 6.4.7','C:\Program Files (x86)\UltraViewer\','3/9/2023 10:22:46 AM'),
 	 (146,'AMD GPIO2 Driver','C:\AMD\GPIO2 Driver\','3/9/2023 10:22:46 AM'),
 	 (146,'MSI SDK','C:\Program Files (x86)\MSI\One Dragon Center\','3/9/2023 10:22:46 AM'),
 	 (146,'Realtek Audio Driver','C:\Program Files (x86)\Realtek\Audio\Drivers','3/9/2023 10:22:46 AM'),
-	 (139,'Postman x86_64 10.10.3','C:\Users\vince\AppData\Local\Postman','3/9/2023 4:11:52 PM'),
-	 (139,'SourceTree','C:\Users\vince\AppData\Local\SourceTree','3/9/2023 4:11:52 PM'),
-	 (139,'Microsoft Visual Studio Code (User)','C:\Users\vince\AppData\Local\Programs\Microsoft VS Code\','3/9/2023 4:11:52 PM');
+	 (129,'WinSCP 5.19.6','C:\Program Files (x86)\WinSCP\','3/10/2023 4:54:15 PM'),
+	 (129,'Intel(R) Wireless Bluetooth(R)','C:\Program Files (x86)\Intel\','3/10/2023 4:54:15 PM'),
+	 (129,'GameSDK Service','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Dokan Library 1.5.1.1000 Bundle','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
-	 (139,'DBeaver 22.3.5','C:\Program Files\DBeaver','3/9/2023 4:11:52 PM'),
-	 (139,'Git','C:\Program Files\Git\','3/9/2023 4:11:52 PM'),
-	 (139,'Microsoft Office Professional Plus 2019 - en-us','C:\Program Files\Microsoft Office','3/9/2023 4:11:52 PM'),
-	 (139,'Microsoft Office Professional Plus 2019 - vi-vn','C:\Program Files\Microsoft Office','3/9/2023 4:11:52 PM'),
-	 (139,'TeamViewer','C:\Program Files\TeamViewer','3/9/2023 4:11:52 PM'),
-	 (139,'WinMerge 2.16.26.0 x64','C:\Program Files\WinMerge\','3/9/2023 4:11:52 PM'),
-	 (139,'WinRAR 6.11 (64-bit)','C:\Program Files\WinRAR\','3/9/2023 4:11:52 PM'),
-	 (139,'Balsamiq Wireframes','D:\Balsamiq Wireframes\','3/9/2023 4:11:52 PM'),
-	 (139,'Azure Data Studio','C:\Program Files\Azure Data Studio\','3/9/2023 4:11:52 PM'),
-	 (139,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/9/2023 4:11:52 PM');
+	 (129,'Microsoft Visual C++ 2010  x86 Redistributable - 10.0.30319','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Disk Drill 5.0.734.0','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'VHEC cyber security','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'AURA lighting effect add-on','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'ROG Live Service','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Lightshot-5.5.0.7','C:\Program Files (x86)\Skillbrains\lightshot\','3/10/2023 4:54:15 PM'),
+	 (129,'Camtasia 9','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft Visual C++ 2015-2022 Redistributable (x64) - 14.32.31332','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Patriot Viper M2 SSD RGB','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Universal Holtek RGB DRAM','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
-	 (139,'Dell Touchpad','X:\Program Files\DellTPad','3/9/2023 4:11:52 PM'),
-	 (139,'AnyDesk','"C:\Program Files (x86)\AnyDesk"','3/9/2023 4:11:52 PM'),
-	 (139,'Visual Studio Professional 2022','C:\Program Files\Microsoft Visual Studio\2022\Professional','3/9/2023 4:11:52 PM'),
-	 (139,'Google Chrome','C:\Program Files\Google\Chrome\Application','3/9/2023 4:11:52 PM'),
-	 (139,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','3/9/2023 4:11:52 PM'),
-	 (139,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/9/2023 4:11:52 PM'),
-	 (139,'Microsoft Help Viewer 2.3','C:\Program Files (x86)\Microsoft Help Viewer\v2.3\','3/9/2023 4:11:52 PM'),
-	 (139,'Skype version 8.94','C:\Program Files (x86)\Microsoft\Skype for Desktop\','3/9/2023 4:11:52 PM'),
-	 (139,'Sublime Text 3','C:\Program Files (x86)\Sublime Text 3\','3/9/2023 4:11:52 PM'),
-	 (139,'Advanced Installer 20.4','C:\Program Files (x86)\Caphyon\Advanced Installer 20.4\','3/9/2023 4:11:52 PM');
+	 (129,'Composer - PHP Dependency Manager','C:\Program Files (x86)\ComposerSetup\','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft Visual C++ 2015-2022 Redistributable (x86) - 14.32.31326','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'ASUS Framework Service','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Intel(R) Chipset Device Software','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Microsoft Visual C++ 2013 Redistributable (x86) - 12.0.40664','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'Radmin Viewer 3.5.2','C:\Program Files (x86)\Radmin Viewer 3\','3/10/2023 4:54:15 PM'),
+	 (129,'AURA Service','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM'),
+	 (129,'UltraViewer version 6.6.19','C:\Program Files (x86)\UltraViewer\','3/10/2023 4:54:15 PM'),
+	 (129,'Realtek Audio Driver','C:\Program Files\Realtek\Audio\HDA','3/10/2023 4:54:15 PM'),
+	 (129,'Patriot Viper DRAM RGB','Không có đường dẫn cụ thể','3/10/2023 4:54:15 PM');
 INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
-	 (139,'UltraViewer phiên bản 6.6.18','C:\Program Files (x86)\UltraViewer\','3/9/2023 4:11:52 PM');
+	 (139,'Microsoft Office Professional Plus 2019 - vi-vn','C:\Program Files\Microsoft Office','3/10/2023 3:07:10 PM'),
+	 (139,'SoftEther VPN Client','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'TeamViewer','C:\Program Files\TeamViewer','3/10/2023 3:07:10 PM'),
+	 (139,'WinMerge 2.16.26.0 x64','C:\Program Files\WinMerge\','3/10/2023 3:07:10 PM'),
+	 (139,'WinRAR 6.11 (64-bit)','C:\Program Files\WinRAR\','3/10/2023 3:07:10 PM'),
+	 (139,'Node.js','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'Balsamiq Wireframes','D:\Balsamiq Wireframes\','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft SQL Server 2019 LocalDB','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft System CLR Types for SQL Server 2019','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'Azure Data Studio','C:\Program Files\Azure Data Studio\','3/10/2023 3:07:10 PM');
+INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (139,'Microsoft Visual Studio Installer','"C:\Program Files (x86)\Microsoft Visual Studio\Installer"','3/10/2023 3:07:10 PM'),
+	 (139,'Dell Touchpad','X:\Program Files\DellTPad','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft .NET SDK 7.0.103 (x64) from Visual Studio','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft ODBC Driver 17 for SQL Server','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft OLE DB Driver for SQL Server','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'TortoiseSVN 1.14.5.29465 (64 bit)','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft Web Deploy 4.0','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft Update Health Tools','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'IIS 10.0 Express','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'AnyDesk','"C:\Program Files (x86)\AnyDesk"','3/10/2023 3:07:10 PM');
+INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (139,'Visual Studio Professional 2022','C:\Program Files\Microsoft Visual Studio\2022\Professional','3/10/2023 3:07:10 PM'),
+	 (139,'Google Chrome','C:\Program Files\Google\Chrome\Application','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft Edge','C:\Program Files (x86)\Microsoft\Edge\Application','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft Edge Update','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft Edge WebView2 Runtime','C:\Program Files (x86)\Microsoft\EdgeWebView\Application','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft Help Viewer 2.3','C:\Program Files (x86)\Microsoft Help Viewer\v2.3\','3/10/2023 3:07:10 PM'),
+	 (139,'Skype version 8.94','C:\Program Files (x86)\Microsoft\Skype for Desktop\','3/10/2023 3:07:10 PM'),
+	 (139,'Sublime Text 3','C:\Program Files (x86)\Sublime Text 3\','3/10/2023 3:07:10 PM'),
+	 (139,'VHEC cyber security','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft Visual C++ 2015-2022 Redistributable (x86) - 14.34.31938','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM');
+INSERT INTO public."DeviceInstalledApps" ("DeviceId","ApplicationName","ApplicationLocation","UpdateAt") VALUES
+	 (139,'vs_CoreEditorFonts','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'Advanced Installer 20.4','C:\Program Files (x86)\Caphyon\Advanced Installer 20.4\','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft Visual C++ 2013 Redistributable (x86) - 12.0.40664','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft SQL Server Management Studio - 19.0.1','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft Visual C++ 2015-2022 Redistributable (x64) - 14.34.31938','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM'),
+	 (139,'UltraViewer phiên bản 6.6.18','C:\Program Files (x86)\UltraViewer\','3/10/2023 3:07:10 PM'),
+	 (139,'Microsoft Visual Studio Tools for Applications 2019','Không có đường dẫn cụ thể','3/10/2023 3:07:10 PM');

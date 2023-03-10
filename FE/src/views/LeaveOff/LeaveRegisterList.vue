@@ -150,12 +150,14 @@
                                             'p-button-success': data.status != 2,
                                             'p-button-secondary': data.status == 2,
                                         }"
+                                        v-if="this.showButton.confirm"
                                     />
                                     <Button
                                         @click="showConfirmLeaveOff(data)"
                                         class="p-button-sm p-button-danger mt-1 me-2"
                                         icon="pi pi-times"
                                         :disabled="data.status == 3 || data.status == 2"
+                                        v-if="this.showButton.refuse"
                                     />
                                 </div>
                             </template>
@@ -188,46 +190,56 @@
     import { LocalStorage } from '@/helper/local-storage.helper'
     import { UserRoleHelper } from '@/helper/user-role.helper'
     import router from '@/router'
+    import checkAccessModule from '@/stores/checkAccessModule'
     export default {
         async created() {
             ///leaveoff/acceptregisterlists
-            try {
-                this.token = LocalStorage.jwtDecodeToken()
-                let indexCut = this.$route.path.lastIndexOf('/')
-                let string = this.$route.path.slice(1, indexCut)
-                await UserRoleHelper.isAccessModule(string)
-                if (UserRoleHelper.isAccess) {
-                    // Phân quyền button
-                    if (Number(this.token.IdGroup) == 5 || Number(this.token.IdGroup) == 1) {
-                        this.Action = true
-                    }
-                    // Check quyền
-                    if (Number(this.token.IdGroup) == 5 || Number(this.token.IdGroup) == 1) {
-                        await this.getAllLeaveOffRegister()
-                    }
-                    if (
-                        Number(this.token.IdGroup) == 4 ||
-                        Number(this.token.IdGroup) == 3 ||
-                        Number(this.token.IdGroup) == 2
-                    ) {
-                        setTimeout(() => {
-                            this.$toast.add({
-                                severity: 'error',
-                                summary: 'Lỗi',
-                                detail: 'Người dùng không có quyền!',
-                                life: 3000,
-                            })
-                            this.$router.push('/')
-                        }, 800)
-                    }
-                } else {
-                    alert('bạn không có quyền giờ đến trang HOME nhé')
-                    router.push('/')
-                }
-            } catch (err) {
-                alert('Ooopps Có gì đó sai sai rồi chuyển bạn đến trang home nhé')
-                router.push('/')
+            if(checkAccessModule.checkAccessModule(this.$route.path.replace('/', '').slice(0,9)) === true){
+                checkAccessModule.checkShowButton(this.$route.path.replace('/', '').slice(0,9),this.showButton);
+                this.checkPermissionGroup() ;
             }
+            else{
+                this.countTime()
+                 this.displayDialog1 = true
+            }
+
+            // try {
+            //     this.token = LocalStorage.jwtDecodeToken()
+            //     let indexCut = this.$route.path.lastIndexOf('/')
+            //     let string = this.$route.path.slice(1, indexCut)
+            //     await UserRoleHelper.isAccessModule(string)
+            //     if (UserRoleHelper.isAccess) {
+            //         // Phân quyền button
+            //         if (Number(this.token.IdGroup) == 5 || Number(this.token.IdGroup) == 1) {
+            //             this.Action = true
+            //         }
+            //         // Check quyền
+            //         if (Number(this.token.IdGroup) == 5 || Number(this.token.IdGroup) == 1) {
+            //             await this.getAllLeaveOffRegister()
+            //         }
+            //         if (
+            //             Number(this.token.IdGroup) == 4 ||
+            //             Number(this.token.IdGroup) == 3 ||
+            //             Number(this.token.IdGroup) == 2
+            //         ) {
+            //             setTimeout(() => {
+            //                 this.$toast.add({
+            //                     severity: 'error',
+            //                     summary: 'Lỗi',
+            //                     detail: 'Người dùng không có quyền!',
+            //                     life: 3000,
+            //                 })
+            //                 this.$router.push('/')
+            //             }, 800)
+            //         }
+            //     } else {
+            //         alert('bạn không có quyền giờ đến trang HOME nhé')
+            //         router.push('/')
+            //     }
+            // } catch (err) {
+            //     alert('Ooopps Có gì đó sai sai rồi chuyển bạn đến trang home nhé')
+            //     router.push('/')
+            // }
         },
         data() {
             return {
@@ -259,8 +271,18 @@
                         class: 'badge bg-secondary ',
                     },
                 ],
+                showButton: {
+                    add: false,
+                    update: false,
+                    delete: false,
+                    deleteMulti: false,
+                    confirm: false,
+                    confirmMulti: false,
+                    refuse: false,
+                    addMember: false,
+                    export: false,
+                },
                 loading: true,
-                userAccept: jwtDecode(localStorage.getItem('token')),
                 idLeaveOffReasonAccept: null,
                 isOpenDialogReasonAccept: false,
                 isChangeReasonAccept: false,
@@ -280,6 +302,24 @@
             this.mathLeaveOffDate(date1, date2)
         },
         methods: {
+            async checkPermissionGroup() {
+                if(checkAccessModule.getListGroup().includes("1") || checkAccessModule.getListGroup().includes("5")) {
+                    this.Action = true
+                    await this.getAllLeaveOffRegister()
+                }
+                else {
+                    setTimeout(() => {
+                        this.$toast.add({
+                            severity: 'error',
+                            summary: 'Lỗi',
+                            detail: 'Người dùng không có quyền!',
+                            life: 3000,
+                        })
+                        this.$router.push('/')
+                    }, 800)
+                }
+            },
+            
             checkStatus(id) {
                 var fillter = this.statusLeave.filter(function (el) {
                     return el.id == id
@@ -360,7 +400,7 @@
                 return result.trim()
             },
             async handlerBrowseVacation(item) {
-                var idAcceptUser = this.userAccept.Id
+                var idAcceptUser = checkAccessModule.getUserIdCurrent();
                 await HTTP.put(ACCEPT_LEAVE_OFF(item.id), { idAcceptUser: idAcceptUser })
                     .then((res) => {
                         if (res.status == 200) {

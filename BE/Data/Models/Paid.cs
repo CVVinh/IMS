@@ -24,7 +24,7 @@ namespace BE.Data.Models
         public string PaidReason { get; set; }
         public string? ContentReason { get; set; }
         public bool IsPaid { get; set; } // 1 is paid, 0 is unpaid
-        public bool IsAccept { get; set; } // 1 is Accept, otherwise
+        //public bool IsAccept { get; set; } // 1 is Accept, otherwise
         public ICollection<PaidImage>? paidImages { get; set; }
     }
 }

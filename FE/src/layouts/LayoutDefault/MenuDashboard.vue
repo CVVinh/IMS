@@ -303,15 +303,15 @@
                                                     >
                                                 </div>
                                                 <div class="mb-1">
-                                                    <h7 class="three-line-paragraph" :title="items.message">
+                                                    <h6 class="three-line-paragraph" :title="items.message">
                                                         {{ items.message }}
-                                                    </h7>
+                                                    </h6>
                                                 </div>
                                                 <div class="mt-1">
-                                                    <h7
+                                                    <h6
                                                         class="noti-time-text"
                                                         style="font-style: italic; font-size: 14px"
-                                                        >{{ formartDate(items.dateCreated) }}</h7
+                                                        >{{ formartDate(items.dateCreated) }}</h6
                                                     >
                                                 </div>
                                             </button>

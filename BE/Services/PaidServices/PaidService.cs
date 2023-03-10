@@ -288,10 +288,10 @@ namespace BE.Services.PaidServices
                 {
                     paid.paidImages = new List<PaidImage>();
                 }
-
                 if (paid != null)
                 {
                     paid.IsPaid = false;
+                    //paid.IsAccept = false;
                     await _appContext.Paids.AddAsync(paid);
                     await _appContext.SaveChangesAsync();
 
@@ -304,7 +304,7 @@ namespace BE.Services.PaidServices
             }
             catch (Exception ex)
             {
-                message = $"Adding new Paid failed! {ex.Message}";
+                message = $"Adding new Paid failed! {ex}";
                 data = null;
                 return new BaseResponse<Paid>(success, message, data);
             }
@@ -542,7 +542,7 @@ namespace BE.Services.PaidServices
                 paid.IsPaid = true;
                 paid.PersonConfirm = acceptPaymentPaidDtos.PersonConfirm;
                 paid.PaidDate = DateTime.Now;
-                paid.IsAccept = true;
+                //paid.IsAccept = true;
                 _appContext.Paids.Update(paid);
                 await _appContext.SaveChangesAsync();
 
@@ -577,7 +577,7 @@ namespace BE.Services.PaidServices
                 paid.IsPaid = true;
                 paid.PersonConfirm = acceptPaymentPaidDtos.PersonConfirm;
                 paid.PaidDate = DateTime.Now;
-                paid.IsAccept = false;
+                //paid.IsAccept = false;
                 _appContext.Paids.Update(paid);
                 await _appContext.SaveChangesAsync();
 

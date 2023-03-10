@@ -195,9 +195,9 @@
                         {{ getFormattedDate(new Date(data.x.dateCreate)) }}
                     </template>
                 </Column>
-                <Column field="" header="Thực thi" style="max-width: 12rem">
+                <Column field="" header="Thực thi" style="max-width: 12rem" v-if="checkShowButton()">
                     <template #body="{ data }">
-                        <div v-if="data.x.status == 0 || this.token.IdGroup == 5">
+                        <div v-if="checkShowButtonChangeData(data)">
                             <!-- confirm -->
                             <Edit
                                 icon="pi pi-check"
@@ -227,11 +227,11 @@
                             />
                             <!--  Delete -->
                             <Delete
-                                @click="confirmDelete(data.x.id, token)"
+                                @click="confirmDelete(data.x.id, checkAccessModule.getUserIdCurrent())"
                                 class="right top"
                                 v-if="
-                                    (showButton.delete && this.token.IdGroup == 5 && data.x.status == 1) ||
-                                    (showButton.delete && this.token.IdGroup == 3 && data.x.status == 0)
+                                    (showButton.delete  && data.x.status == 1 && checkPmOrLead() === 'refuse') ||
+                                    (showButton.delete  && data.x.status == 0 && checkPmOrLead() === 'delete')
                                 "
                             ></Delete>
                         </div>
@@ -380,30 +380,9 @@ import checkAccessModule from '@/stores/checkAccessModule'
             }
         },
         async mounted() {
-            // try {
-            //     this.token = LocalStorage.jwtDecodeToken()
-            //     await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
-            //     if (await UserRoleHelper.isAccess) {
-                  
-            //     } else {
-            //         this.countTime()
-            //         this.displayDialog1 = true
-            //     }
-            //     this.columns = [
-            //         { field: 'dateUpdate', header: 'Ngày phê duyệt' },
-            //         { field: 'note', header: 'Ghi chú' },
-            //     ]
-            //     this.getMonthFrom()
-            //     this.getProject()
-            // } catch (error) {
-            //     this.countTime()
-            //     this.displayDialog1 = true
-            // }
-
+            this.token = LocalStorage.jwtDecodeToken()
             if(checkAccessModule.checkAccessModule(this.$route.path.replace('/', '')) === true){
-                
                 checkAccessModule.checkShowButton(this.$route.path.replace('/', ''),this.showButton);
-              
                 await this.getAllOT()
                 this.columns = [
                     { field: 'dateUpdate', header: 'Ngày phê duyệt' },
@@ -412,19 +391,39 @@ import checkAccessModule from '@/stores/checkAccessModule'
                 this.getMonthFrom()
                 this.getProject()
                 this.loading= false
-            } else{
+            } else {
                 this.countTime()
                  this.displayDialog1 = true
             }
-
-          
-
-
-
-         
-
         },
         methods: {
+            checkShowButton() {
+                if(checkAccessModule.getListGroup().length == 1 && checkAccessModule.getListGroup().includes("2")){
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            },
+            checkShowButtonChangeData(data){
+                    if(checkAccessModule.getListGroup().includes("1") || checkAccessModule.getListGroup().includes("5")){
+                        return true
+                    }else{
+                        if(data.x.leadCreate === Number(checkAccessModule.getUserIdCurrent())){
+                         return true
+                        }else{
+                            return false
+                        }
+                    }
+            },
+            checkPmOrLead(){
+                if(checkAccessModule.getListGroup().includes("1") ||  checkAccessModule.getListGroup().includes("5")){
+                    return 'refuse'
+                }else{ 
+                    return 'delete'
+                }
+                
+            },
             // GET OTS BY ROLE PM
             getOTsByPM(idPM) {
                 HTTP.get(`OTs/getOTsByidPM/${idPM}`)
@@ -437,7 +436,9 @@ import checkAccessModule from '@/stores/checkAccessModule'
             getOTsByLead(idLEAD) {
                 HTTP.get(`OTs/GetAllOTsByLead/${idLEAD}`)
                     .then((res) => {
-                        this.data = res.data
+                        res.data.map(ele => {
+                            this.data.push(ele);
+                        })
                     })
                     .catch((err) => console.log(err))
             },
@@ -445,7 +446,9 @@ import checkAccessModule from '@/stores/checkAccessModule'
             getOTsByStaff(idSTAFF) {
                 HTTP.get(`OTs/GetAllOTsByStaff/${idSTAFF}`)
                     .then((res) => {
-                        this.data = res.data
+                        res.data.map(ele => {
+                            this.data.push(ele);
+                        })
                     })
                     .catch((err) => console.log(err))
             },
@@ -454,6 +457,7 @@ import checkAccessModule from '@/stores/checkAccessModule'
                 HTTP.get('OTs/GetAllOTs')
                     .then((res) => {
                         this.data = res.data
+                        console.log(this.data);
                     })
                     .catch((err) => console.log(err))
             },
@@ -510,9 +514,24 @@ import checkAccessModule from '@/stores/checkAccessModule'
                 })
             },
             async getAllOT() {      
-                if (this.token) {
+                    this.data = []
+                    if(checkAccessModule.getListGroup().includes("1") || checkAccessModule.getListGroup().includes("5")) {
+                             this.getOTsBySample();
+                            
+                    }else{
+                        //an di thuc thi
+                        if(checkAccessModule.getListGroup().includes("2")){
+                            this.getOTsBySample();
+                        }else{
+                            if(checkAccessModule.getListGroup().includes("3")){
+                                this.getOTsByLead(checkAccessModule.getUserIdCurrent());
+                            }
+                            if(checkAccessModule.getListGroup().includes("4")){
+                                this.getOTsByStaff(checkAccessModule.getUserIdCurrent());
+                            }
+                        }
+                    }
                     
-                }
                 this.loading = false
             },
             CheckButtonGroup(value) {
@@ -693,7 +712,7 @@ import checkAccessModule from '@/stores/checkAccessModule'
                 this.PM = user.Id
                 if (accepted) {
                     this.status = 1
-                    HTTP.put('OTs/acceptOT', { id: id, status: this.status, pm: this.PM })
+                    HTTP.put('OTs/acceptOT', { id: id, status: this.status, pm: checkAccessModule.getUserIdCurrent() })
                         .then((res) => {
                             this.showSuccess('Xét duyệt thành công')
                         })
@@ -772,8 +791,8 @@ import checkAccessModule from '@/stores/checkAccessModule'
                         console.log(err)
                     })
             },
-            getProject() {
-                HTTP.get('Project/getAllProject')
+            async getProject() {
+                await HTTP.get('Project/getAllProject')
                     .then((res) => {
                         if (res.data) {
                             res.data.forEach((element) => {

@@ -145,6 +145,7 @@
     import { DateHelper } from '@/helper/date.helper'
     import { LocalStorage } from '@/helper/local-storage.helper'
     import { HttpStatus } from '@/config/app.config'
+import checkAccessModule from '@/stores/checkAccessModule'
 
     export default {
         setup: () => ({ v$: useVuelidate() }),
@@ -164,10 +165,7 @@
                 projectArr: [],
                 customerArray: [],
                 paidReasonArray: [],
-
                 isSubmit: false,
-                token: null,
-                currentUser: null,
                 images: [],
                 isHaveImg: false,
             }
@@ -282,11 +280,8 @@
             },
 
             async AddPaid() {
-                var token = localStorage.getItem('token')
-                this.currentUser = jwt_decode(token)
-
                 const formData = new FormData()
-                formData.append('PaidPerson', this.currentUser.Id)
+                formData.append('PaidPerson', checkAccessModule.getUserIdCurrent())
                 formData.append('ProjectId', this.Datasend.projectId)
                 formData.append('CustomerName', this.Datasend.customerName)
                 formData.append('AmountPaid', this.Datasend.amountPaid)

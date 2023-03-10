@@ -308,6 +308,7 @@
     import { HTTP } from '@/http-common'
     import { DateHelper } from '@/helper/date.helper'
     import { LocalStorage } from '@/helper/local-storage.helper'
+import checkAccessModule from '@/stores/checkAccessModule'
     export default {
         setup: () => ({
             v$: useVuelidate(),
@@ -491,7 +492,7 @@
                 }
                 if (this.idproject === null) {
                     this.data.dateCreate = new Date()
-                    this.data.leadCreate = this.token.Id
+                    this.data.leadCreate = checkAccessModule.getUserIdCurrent();
                     HTTP.post('OTs/AddOTs', this.data)
                         .then((res) => {
                             if (res.status == 200) {
@@ -554,14 +555,26 @@
                     })
                 }
             },
+            async getProject() {
+                await HTTP.get('Project/getAllProject')
+                    .then((res) => {
+                    if (res.status == 200) var formatDate = DateHelper.formatDate(new Date())
+                    res.data.forEach((element) => {
+                        if (
+                            element.isDeleted != true &&
+                            element.isFinished != true &&
+                            (element.endDate > formatDate || element.endDate == null)
+                        ) {
+                            this.project.push(element)
+                        }
+                    })
+                })
+                },
         },
 
-        mounted() {
+        async mounted() {
             this.token = LocalStorage.jwtDecodeToken()
-            // Nếu người dùng không phải là leader hay admin sẽ chuyển đến ots
-            if (Number(this.token.IdGroup) !== 3 && Number(this.token.IdGroup) !== 1) {
-                router.push('/ots')
-            }
+           
             // Kiểm tra cái này phải là edit hay không
             if (this.idproject !== null || this.idproject !== 0) {
                 this.edit = true
@@ -577,7 +590,15 @@
                 this.data.end = '00:00'
             }
 
-            HTTP.get('Project/GetProjectByIdLead/' + this.token.Id).then((res) => {
+            if(checkAccessModule.getListGroup().includes("1")){
+                this.getProject();
+            }
+            else {
+
+            }
+
+
+            await HTTP.get('Project/GetProjectByIdLead/' + checkAccessModule.getUserIdCurrent()).then((res) => {
                 if (res.status == 200) var formatDate = DateHelper.formatDate(new Date())
                 res.data.forEach((element) => {
                     if (

@@ -153,6 +153,7 @@
     import { HttpStatus } from '@/config/app.config'
     import { DateHelper } from '@/helper/date.helper'
     import { LocalStorage } from '@/helper/local-storage.helper'
+import checkAccessModule from '@/stores/checkAccessModule'
 
     export default {
         name: 'RuleInfoEdit',
@@ -168,8 +169,7 @@
                 applyDay: new Date(),
                 expiredDay: new Date(),
                 content: null,
-                decode: LocalStorage.jwtDecodeToken(),
-                userUpdated: localStorage.getItem('username'),
+                userUpdated: null,
                 formFile: null,
 
                 submitted: false,
@@ -244,7 +244,7 @@
                 this.applyDay = this.dataRuleById ? this.dataRuleById.applyDay : new Date()
                 this.expiredDay = this.dataRuleById ? this.dataRuleById.expiredDay : new Date()
                 this.content = this.dataRuleById ? this.dataRuleById.content : null
-                this.userUpdated = this.dataRuleById ? this.dataRuleById.userCreated : this.decode.Id
+                this.userUpdated = this.dataRuleById ? this.dataRuleById.userCreated : checkAccessModule.getUserIdCurrent()
                 this.formFile = this.dataRuleById ? this.dataRuleById.pathFile : null
             },
 
@@ -276,18 +276,15 @@
             },
 
             async submit() {
-                // var token = localStorage.getItem('token');
-                // var decode = jwt_decode(token);
-
                 const fromData = new FormData()
                 fromData.append('title', this.title)
                 fromData.append('applyDay', DateHelper.formatDateTime(this.applyDay))
                 fromData.append('expiredDay', DateHelper.formatDateTime(this.expiredDay))
                 fromData.append('content', this.content)
-                fromData.append('idUser', parseInt(this.decode.Id))
-                fromData.append('formFile', this.formFile)
+                fromData.append('idUser', checkAccessModule.getUserIdCurrent());
+                fromData.append('formFile', this.formFile);
 
-                await this.CallApi(fromData)
+                await this.CallApi(fromData);
             },
 
             uploadFile(event) {

@@ -152,6 +152,7 @@
     import jwt_decode from 'jwt-decode'
     import { HttpStatus } from '@/config/app.config'
     import { DateHelper } from '@/helper/date.helper'
+import checkAccessModule from '@/stores/checkAccessModule'
 
     export default {
         name: 'RuleInfoAdd',
@@ -166,7 +167,7 @@
                 title: null,
                 applyDay: new Date(),
                 expiredDay: new Date(),
-                idUser: localStorage.getItem('username'),
+                idUser: null,
                 formFile: null,
                 content: null,
                 submitted: false,
@@ -207,7 +208,7 @@
                 this.title = null
                 this.applyDay = new Date()
                 this.expiredDay = new Date()
-                this.idUser = localStorage.getItem('username')
+                this.idUser = null
                 this.content = null
                 this.content = null
             },
@@ -277,20 +278,16 @@
             },
 
             async submit() {
-                var token = localStorage.getItem('token')
-                var decode = jwt_decode(token)
-
                 const fromData = new FormData()
                 fromData.append('title', this.title)
                 fromData.append('applyDay', DateHelper.formatDateTime(this.applyDay))
                 fromData.append('expiredDay', DateHelper.formatDateTime(this.expiredDay))
                 fromData.append('content', this.content)
-                fromData.append('idUser', parseInt(decode.Id))
+                fromData.append('idUser', checkAccessModule.getUserIdCurrent())
                 fromData.append('formFile', this.formFile)
 
                 await this.CallApi(fromData)
             },
-
             uploadFile(event) {
                 const file = event.target.files[0]
                 this.formFile = file

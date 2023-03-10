@@ -41,7 +41,7 @@
                                         label="Hoàn tất"
                                         class="p-button-sm me-2"
                                         icon="pi pi-check"
-                                        v-if="this.showButton.finishMulti"
+                                        v-if="this.showButton.confirmMulti"
                                     />
                                     <Add @click="openDialogAdd()" label="Thêm" v-if="this.showButton.add" />
                                 </div>
@@ -113,17 +113,17 @@
                     :header="col.header"
                     :key="col.field + '_' + index"
                 ></Column>
-                <Column header="&emsp;&emsp;&emsp;Thực thi" style="min-width: 15rem" v-if="this.showButton.sample">
+                <Column header="&emsp;&emsp;&emsp;Thực thi" style="min-width: 15rem" v-if="this.showButton.isNotSample">
                     <template #body="{ data }">
                         <Member
                             @click="toDetailProject(data.id)"
                             class="p-button-info mazin"
                             :disabled="canOperation(data.isDeleted, data.isFinished)"
-                            v-if="this.showButton.member"
+                            v-if="this.showButton.addMember && checkLeader(data.idLeader)"
                         />
 
                         <Edit
-                            v-if="data.isOnGitlab == false && this.showButton.edit"
+                            v-if="data.isOnGitlab == false && this.showButton.update"
                             class="p-button-warning mazin"
                             @click="openDialogEdit(data)"
                             :disabled="canOperation(data.isDeleted, data.isFinished)"
@@ -141,7 +141,7 @@
                             class="p-button-sm mt-1 p-button-success"
                             icon="pi pi-check"
                             :disabled="canOperation(data.isDeleted, data.isFinished)"
-                            v-if="this.showButton.finish"
+                            v-if="this.showButton.confirm"
                         />
                     </template>
                 </Column>
@@ -209,6 +209,8 @@
     import { HTTP_API_GITLAB, GET_ALL_PROJECT } from '@/http-common'
     import { LocalStorage } from '@/helper/local-storage.helper'
     import { DateHelper } from '@/helper/date.helper'
+    import checkAccessModule from '@/stores/checkAccessModule'
+    
     export default {
         data() {
             return {
@@ -231,14 +233,16 @@
                 user: [],
                 token: null,
                 showButton: {
-                    export: false,
                     add: false,
-                    finishMulti: false,
-                    finish: false,
+                    update: false,
                     delete: false,
-                    edit: false,
-                    member: false,
-                    sample: false,
+                    deleteMulti: false,
+                    confirm: false,
+                    confirmMulti: false,
+                    refuse: false,
+                    addMember: false,
+                    export: false,
+                    isNotSample : false,
                 },
                 acceptRole: ['pm', 'admin', 'director', 'leader'],
                 dataProjects: [],
@@ -248,23 +252,16 @@
             await this.handlerGetInfoProjects()
         },
         async mounted() {
-            try {
-                this.token = LocalStorage.jwtDecodeToken()
-
-
+            this.loading = true      
+            if(checkAccessModule.checkAccessModule(this.$route.path.replace('/', '')) === true) {
+                checkAccessModule.checkShowButton(this.$route.path.replace('/', ''),this.showButton);
+                this.Permission(checkAccessModule.getListGroup(), checkAccessModule.getUserIdCurrent());  
                 
-                await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
-                if (await UserRoleHelper.isAccess) {
-                    this.Permission(Number(this.token.IdGroup), this.token.Id)
-                } else {
-                    this.countTime()
-                    this.displayBasic = true
-                }
-            } catch (error) {
-                console.log(error)
-                this.countTime()
-                this.displayBasic = true
+            } else {
+                this.countTime();
+                this.displayBasic = true;
             }
+
             this.columns = [
                 { field: 'description', header: 'Mô tả' },
                 { field: 'userId', header: 'PM' },
@@ -274,6 +271,7 @@
                 { field: 'userUpdate', header: 'Người chỉnh sửa' },
                 { field: 'dateUpdate', header: 'Ngày chỉnh sửa' },
             ]
+            
         },
         methods: {
             openDialogAdd() {
@@ -283,6 +281,13 @@
             closeDialog() {
                 this.isOpenDialog = false
                 this.projectSelected = []
+            },
+            checkLeader(idLeader){
+               if(Number(checkAccessModule.getUserIdCurrent()) === idLeader){
+                return true
+               } else{
+                return false
+               }
             },
             openDialogEdit(data) {
                 this.projectSelected = { ...data }
@@ -367,12 +372,11 @@
                 }
             },
             async getAllProject() {
-                this.loading = true
                 await HTTP.get('Project/getAllProject')
                     .then((res) => {
-                        if (res.data) {
-                            this.data = res.data
-                        }
+                        res.data.map(ele=>{
+                            this.data.push(ele)
+                        })
                     })
                     .catch((err) => {
                         console.log(err)
@@ -420,13 +424,13 @@
             editProject(id) {
                 router.push('/project/edit/' + id)
             },
-            deleteProject(id) {
+            async deleteProject(id) {
                 let userlogin = jwtDecode(localStorage.getItem('token'))
                 let idUser = userlogin.Id
-                HTTP.put('Project/DeleteProject/' + id, { userId: idUser })
-                    .then((res) => {
+                await HTTP.put('Project/DeleteProject/' + id, { userId: idUser })
+                    .then(async (res) => {
                         if (res.status == 200) {
-                            this.getAllProject()
+                            await this.getAllProject()
                             this.$toast.add({
                                 severity: 'success',
                                 summary: 'Thành công',
@@ -446,63 +450,53 @@
                     return false
                 }
             },
-            getProjectByLead(idlead) {
-                HTTP.get(`/Project/getAllProjectByLead/${idlead}`)
+            async getProjectByLead(idlead) {
+                await HTTP.get(`/Project/getAllProjectByLead/${idlead}`)
                     .then((res) => {
-                        this.data = res.data
-                        this.loading = false
-                    })
-                    .catch((err) => console.log(err))
-            },
-            getProjectByStaff(idstaff) {
-                HTTP.get(`/Project/getAllProjectByStaff/${idstaff}`)
-                    .then((res) => {
-                        this.data = res.data
-                        this.loading = false
-                    })
-                    .catch((err) => console.log(err))
-            },
-            Permission(value, id) {
-                if (value !== null) {
-                    if (value === 1) {
-                        this.showButton.add = true
-                        this.showButton.delete = true
-                        this.showButton.edit = true
-                        this.showButton.export = true
-                        this.showButton.finish = true
-                        this.showButton.finishMulti = true
-                        this.showButton.member = true
-                        this.showButton.sample = true
-                        this.getAllProject()
-                    }
+                        res.data.map(ele=>{
+                            this.data.push(ele)
+                        })
 
-                    // sample
-                    if (value === 2) {
-                        this.getAllProject()
-                    }
-                    // lead
-                    if (value === 3) {
-                        this.showButton.member = true
-                        this.getProjectByLead(id)
-                    }
-                    // staff
-                    if (value === 4) {
-                        this.getProjectByStaff(id)
-                    }
-                    // pm
-                    if (value === 5) {
-                        this.showButton.add = true
-                        this.showButton.delete = true
-                        this.showButton.edit = true
-                        this.showButton.export = true
-                        this.showButton.finish = true
-                        this.showButton.finishMulti = true
-                        this.showButton.member = true
-                        this.showButton.sample = true
-                        this.getAllProject()
+                    })
+                    .catch((err) => console.log(err))
+            },
+            async getProjectByStaff(idstaff) {
+                await HTTP.get(`/Project/getAllProjectByStaff/${idstaff}`)
+                    .then((res) => {
+                        res.data.map(ele=>{
+                            this.data.push(ele)
+                        })
+                   
+                    })
+                    .catch((err) => console.log(err))
+            },
+            async Permission(value, id) {
+                if (value.length > 0) {                    
+                    if (value.includes("1") ||  value.includes("5")) {
+                        await this.getAllProject();
+                        this.showButton.isNotSample = true;
+                    }else{
+                       
+                        if (value.includes("2")) {
+                            await this.getAllProject();       
+                            if(value.includes("3")){
+                                this.showButton.isNotSample = true;
+                            }
+                        }else{
+                            if (value.includes("3")) {
+                                await this.getProjectByLead(id)
+                                this.showButton.isNotSample = true;
+                            }
+                            if (value.includes("4")) {
+                                await this.getProjectByStaff(id)
+                            }
+                        }
+                        
                     }
                 }
+                this.loading = false
             },
+
             confirmDelete(id) {
                 this.$confirm.require({
                     message: 'Bạn có chắc chắn muốn xóa?',

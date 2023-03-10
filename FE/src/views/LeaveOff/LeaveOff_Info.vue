@@ -153,6 +153,7 @@
     import dayjs from 'dayjs'
     import DatePicker from 'vue-datepicker-next'
     import 'vue-datepicker-next/index.css'
+import checkAccessModule from '@/stores/checkAccessModule'
     export default {
         data() {
             return {
@@ -185,44 +186,12 @@
             }
         },
         async created() {
-            try {
-                this.token = LocalStorage.jwtDecodeToken()
-                let indexCut = this.$route.path.lastIndexOf('/')
-                let string = this.$route.path.slice(1, indexCut)
-                await UserRoleHelper.isAccessModule(string)
-
-                if (UserRoleHelper.isAccess) {
-                    // Check quyền
-                    this.token = LocalStorage.jwtDecodeToken()
-                    if (Number(this.token.IdGroup) === 2) {
-                        this.showButton.add = true
-                    }
-
-                    if (
-                        Number(this.token.IdGroup) == 5 ||
-                        Number(this.token.IdGroup) == 2 ||
-                        Number(this.token.IdGroup) == 1
-                    ) {
-                        await this.getLeaveOff()
-                    }
-                    if (Number(this.token.IdGroup) == 4 || Number(this.token.IdGroup) == 3) {
-                        setTimeout(() => {
-                            this.$toast.add({
-                                severity: 'error',
-                                summary: 'Lỗi',
-                                detail: 'Người dùng không có quyền!',
-                                life: 3000,
-                            })
-                            this.$router.push('/')
-                        }, 800)
-                    }
-                } else {
-                    alert('bạn không có quyền giờ đến trang HOME nhé')
-                    router.push('/')
-                }
-            } catch (err) {
-                alert('Ooopps Có gì đó sai sai rồi chuyển bạn đến trang home nhé')
-                console.log(err)
+            if(checkAccessModule.checkAccessModule(this.$route.path.replace('/', '').slice(0,9)) === true){
+                checkAccessModule.checkShowButton(this.$route.path.replace('/', '').slice(0,9),this.showButton);
+                await this.checkPermissionGroup();
+            }
+            else{
+                alert('bạn không có quyền giờ đến trang HOME nhé')
                 router.push('/')
             }
         },
@@ -235,12 +204,30 @@
             },
         },
         methods: {
+            async checkPermissionGroup() {
+                if(checkAccessModule.getListGroup().includes("1") || checkAccessModule.getListGroup().includes("2") || checkAccessModule.getListGroup().includes("5")) {
+                    await this.getLeaveOff()
+                }
+                else {
+                    setTimeout(() => {
+                        this.$toast.add({
+                            severity: 'error',
+                            summary: 'Lỗi',
+                            detail: 'Người dùng không có quyền!',
+                            life: 3000,
+                        })
+                        this.$router.push('/');
+                    }, 800)
+                }
+            },
+
             checkStatus(id) {
                 var fillter = this.statusLeave.filter(function (el) {
                     return el.id == id
                 })
                 return Object.assign({}, fillter[0])
             },
+
             async handlerIdUser() {
                 for (let i = 0; i < this.arr.length; i++) {
                     const user = await this.getUserById(this.arr[i].idLeaveUser)

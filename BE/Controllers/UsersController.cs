@@ -171,8 +171,14 @@ namespace BE.Controllers
             var data = new List<Users>();
             try
             {
-                var listAllUsers = await _context.Users.Where(u => (u.workStatus == 1 &&
-                (u.IdGroup == 4))).ToListAsync();
+                //var listAllUsers = await _context.Users.Where(u => (u.workStatus == 1 &&
+                //(u.IdGroup == 4))).ToListAsync();
+
+                var listAllUsers = from us in _context.Users
+                                   join ug in _context.UserGroups on us.id equals ug.idUser
+                                   where us.workStatus == 1 && ug.idGroup == 4
+                                   select us;
+
                 List<Users> listUserProject = new List<Users>();
                 var member = await _memberProjectServices.GetMembersByIdProjectAsync(idProject);
                 if (member._success)
@@ -183,9 +189,15 @@ namespace BE.Controllers
                         listUserProject.Add(user);
 
                     }
-
-                    IEnumerable<Users> users = listAllUsers.Except<Users>(listUserProject);
-                    data = users.ToList();
+                    if(listUserProject.Count> 0)
+                    {
+                        IEnumerable<Users> users = listAllUsers.Except<Users>(listUserProject);
+                        data = users.ToList();
+                    }
+                    else
+                    {
+                        data = listAllUsers.ToList();
+                    }
                     success = true;
                     messgae = "Nhận tất cả người dùng bên ngoài dự án thành công";
                     return Ok(new BaseResponse<List<Users>>(success, messgae, data));
@@ -426,7 +438,7 @@ namespace BE.Controllers
         [HttpPut("updateUser/{id}")]
         [Authorize(Roles = "permission_group: True module: users")]
         //[Authorize(Roles = "admin,pm,lead,sample,staff")]
-        [Authorize(Roles = "modules: users delete: 1")]
+        [Authorize(Roles = "modules: users update: 1")]
         public async Task<ActionResult<Users>> UpdateUser(int id, EditUserDto user_dto)
         {
             var mess = "";

@@ -2,30 +2,42 @@ import { LocalStorage } from "@/helper/local-storage.helper"
 
 const token = LocalStorage.jwtDecodeToken()
 
+const getToken = () => {
+    return token;
+}
+
+const getUserIdCurrent = () => {
+    return token.id;
+}
+
+const getUserCode = () => {
+    return token.userCode;
+}
+
+const getUserEmail = () => {
+    return token.email;
+}
+
+const getListGroup = () => {
+    return token.listGroup;
+}
 
 const checkAccessModule = (path) => {
-   
-
-   console.log(token);
+    //console.log("token:"+ JSON.stringify(getListGroup()) );
     var access = false
     token.role.map(ele=>{
         if(ele.includes('permission_group: True module: '+path) === true){
             access = true
         }
     })
-    if(access === true) {
-        console.log('welcome to ' + path);
-    }else{
-        console.log('cut');
-    }
     return access
 }
 
-const checkShowButton = (path,showButton) => {
+const checkShowButton = (path, showButton) => {
     var arrayShowButton = [];
     
     token.role.map(ele=>{
-        if(ele.includes('modules: '+path) === true){
+        if(ele.includes('modules: ' + path) === true){
             arrayShowButton.push(ele)
         }
     })
@@ -57,8 +69,7 @@ const checkShowButton = (path,showButton) => {
         if(ele.includes('export: 1')){
             showButton.export = true
         }
-        
     })
 }
 
-export default {checkAccessModule,checkShowButton}
+export default {checkAccessModule,checkShowButton, getToken, getUserIdCurrent, getListGroup}

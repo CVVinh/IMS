@@ -2,7 +2,7 @@
     <Toast />
     <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
         <div class="position-sticky">
-            <div class="list-group list-group-flush mx-3 m-t--4" id="NavItems">
+            <div class="list-group list-group-flush mx-3 m-t-5" id="NavItems">
                 <!-- Tổng quan -->
                 <div
                     class="py-2 ripple sidebar_after list-group-item-action d-flex"
@@ -58,36 +58,67 @@
                 </router-link>
                 <!-- /Thiết bị -->
                 <!-- Nghỉ phép -->
-                <router-link
-                    v-if="checkRole(this.token.IdGroup) == 3 || checkRole(this.token.IdGroup) == 4"
-                    :to="{ name: 'LeaveOffRegisterlists', params: {} }"
-                    class="py-2 ripple list-group-item-action"
-                    @click="activeTag = 'tag5'"
-                    :class="{ 'active-nav-item': activeTag === 'tag5' }"
+
+                <div
+                    class="py-2 ripple sidebar_after list-group-item-action d-flex"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#settings-collapse-leaveOff"
+                    aria-expanded="true"
+                    style="cursor: pointer; margin-bottom: 3px"
+                    :class="{ 'sidebar-top-level-items': isActiveLeaveOff }"
+                    @click="onActive(4)"
                 >
-                    <i class="bx bx-log-out-circle"></i>
-                    <span>Nghỉ phép</span>
-                </router-link>
-                <router-link
-                    v-if="checkRole(this.token.IdGroup) == 5 || checkRole(this.token.IdGroup) == 1"
-                    :to="{ name: 'Acceptregisterlists', params: {} }"
-                    class="py-2 ripple list-group-item-action"
-                    @click="activeTag = 'tag5'"
-                    :class="{ 'active-nav-item': activeTag === 'tag5' }"
-                >
-                    <i class="bx bx-log-out-circle"></i>
-                    <span>Nghỉ phép</span>
-                </router-link>
-                <router-link
-                    v-if="checkRole(this.token.IdGroup) == 2"
-                    :to="{ name: 'Leaveoff', params: {} }"
-                    class="py-2 ripple list-group-item-action"
-                    @click="activeTag = 'tag5'"
-                    :class="{ 'active-nav-item': activeTag === 'tag5' }"
-                >
-                    <i class="bx bx-log-out-circle"></i>
-                    <span>Nghỉ phép</span>
-                </router-link>
+                    <a style="width: 80%">
+                        <i class="bx bx-cog"></i>
+                        <span>Nghỉ phép</span>
+                    </a>
+                </div>
+                <div class="collapse" id="settings-collapse-leaveOff">
+                    <ul class="dropdownList btn-toggle-nav list-unstyled">
+                        <li
+                            class="list-group-item-action"
+                            v-if="this.showLink.leaveoffStaff"
+                        >
+                            <router-link
+                                :to="{ name: 'LeaveOffRegisterlists', params: {} }"
+                                class="py-2 ripple list-group-item-action"
+                                @click="activeTag = 'tag20'"
+                                :class="{ 'active-nav-item': activeTag === 'tag20' }"
+                            >
+                                <i class="bx bx-log-out-circle"></i>
+                                <span>Đăng ký nghỉ phép</span>
+                            </router-link>
+                        </li>
+                        <li
+                            class="list-group-item-action"
+                            v-if="this.showLink.leaveoffAdminPm"
+                        >
+                            <router-link
+                                :to="{ name: 'Acceptregisterlists', params: {} }"
+                                class="py-2 ripple list-group-item-action"
+                                @click="activeTag = 'tag21'"
+                                :class="{ 'active-nav-item': activeTag === 'tag21' }"
+                            >
+                                <i class="bx bx-log-out-circle"></i>
+                                <span>Xác nhận nghỉ phép</span>
+                            </router-link>
+                        </li>
+                        <li
+                            class="list-group-item-action"
+                            v-if="this.showLink.leaveoffSample"
+                        >
+                        <router-link
+                            :to="{ name: 'Leaveoff', params: {} }"
+                            class="py-2 ripple list-group-item-action"
+                            @click="activeTag = 'tag22'"
+                            :class="{ 'active-nav-item': activeTag === 'tag22' }"
+                        >
+                            <i class="bx bx-log-out-circle"></i>
+                            <span>Tổng hợp nghỉ phép</span>
+                        </router-link>
+                         </li>
+                    </ul>
+                </div>
                 <!-- /Nghỉ phép -->
                 <!-- Tăng ca -->
                 <router-link
@@ -354,17 +385,25 @@
                 isActive1: false,
                 isActive2: false,
                 isActive3: false,
+                isActiveLeaveOff : false,
                 dataGrounp: [],
                 path: null,
                 token: LocalStorage.jwtDecodeToken(),
                 activeTag: null,
                 dopdowntag: null,
+                showLink : {
+                    leaveoffAdminPm : false,
+                    leaveoffStaff : false,
+                    leaveoffSample : false,
+                }
             }
+
         },
         async created() {
             await this.getRole()
         },
         mounted() {
+            this.checkGroup();
             this.activeTag = localStorage.getItem('activeTag')
         },
         watch: {
@@ -380,6 +419,8 @@
                     this.isActive2 = !this.isActive2
                 } else if (dropdownNumber === 3) {
                     this.isActive3 = !this.isActive3
+                } else if (dropdownNumber === 4){
+                    this.isActiveLeaveOff = !this.isActiveLeaveOff
                 }
             },
             checkRole(id) {
@@ -445,6 +486,18 @@
                 }
                 CallApi()
             },
+            checkGroup(){
+                var listGroupUser = Object.values(this.token.listGroup);
+                if(listGroupUser.includes("1") || listGroupUser.includes("5")) {
+                    this.showLink.leaveoffAdminPm = true;
+                }
+                if(listGroupUser.includes("2") ) {
+                    this.showLink.leaveoffSample = true;
+                }
+                if(listGroupUser.includes("3") || listGroupUser.includes("4")) {
+                    this.showLink.leaveoffStaff = true;
+                }
+            },
             confirmLogout() {
                 this.$confirm.require({
                     message: 'Do you want to logout?',
@@ -498,8 +551,8 @@
         /* Height of navbar */
         border-radius: 2px;
         box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.12), 0 2px 3px 0 rgba(0, 0, 0, 0.22);
-        width: 215px;
         z-index: 99;
+        min-width: 215px;
     }
 
     @media (max-width: 991.98px) {

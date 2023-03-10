@@ -32,7 +32,6 @@
         },
         created() {
             window.localStorage.setItem('activeTag', '')
-            
         },
         mounted() {
             this.reloadClass()
@@ -76,13 +75,6 @@
         },
         async mounted() {
             this.token = LocalStorage.jwtDecodeToken()
-            this.token.role.map(ele=>{
-                if(ele.includes('permission_group: True module:') === true){
-                    this.arrayPermissionGroupModule.push(ele)
-                }
-            })
-            
-            checkAccessModule.setListPermission(this.arrayPermissionGroupModule);
             this.getListMenuParent()
             await this.getRoles()
             await UserRoleHelper.getUserRole(this.user, this.leader)

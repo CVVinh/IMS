@@ -58,7 +58,8 @@ namespace BE.Controllers
 									isFinished = x.IsFinished,
 									isOnGitlab = x.IsOnGitlab,
 									leader = k.FullName,
-									name = x.Name,
+                                    idLeader = k.id,
+                                    name = x.Name,
 									projectCode = x.ProjectCode,
 									startDate = x.StartDate,
 									userCreated = x.UserCreated,
@@ -129,6 +130,7 @@ namespace BE.Controllers
                                isFinished = x.IsFinished,
                                isOnGitlab = x.IsOnGitlab,
                                leader = d.FullName,
+							   idLeader = d.id,
                                name = x.Name,
                                projectCode = x.ProjectCode,
                                startDate = x.StartDate,
@@ -165,7 +167,8 @@ namespace BE.Controllers
 							   isFinished = x.IsFinished,
 							   isOnGitlab = x.IsOnGitlab,
 							   leader = k.FullName,
-							   name = x.Name,
+                               idLeader = k.id,
+                               name = x.Name,
 							   projectCode = x.ProjectCode,
 							   startDate = x.StartDate,
 							   userCreated = x.UserCreated,
@@ -188,9 +191,17 @@ namespace BE.Controllers
 		{
 			try
 			{
-                var list = _context.Users.Where(x => x.IdGroup == 3);
-				var map = _mapper.ProjectTo<UserWithNameDto>(list);
-                return Ok(map);
+				var list = from x in _context.Users
+						   join c in _context.UserGroups on x.id equals c.idUser
+						   where c.idGroup == 3 && x.isDeleted == 0
+						   select new
+						   {
+                               id = x.id,
+                               fullName = x.FullName,
+						   };
+
+				
+                return Ok(list);
             }
             catch(Exception ex)
 			{

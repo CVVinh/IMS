@@ -33,10 +33,9 @@ namespace BE.Services.TokenServices
             {
                 List<Claim> claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Email, userS.email));
-                claims.Add(new Claim("UserCode", userS.userCode));
-                claims.Add(new Claim("Id", userS.id.ToString()));
+                claims.Add(new Claim("userCode", userS.userCode));
+                claims.Add(new Claim("id", userS.id.ToString()));
                 claims.Add(new Claim("IdGroup", userS.IdGroup.ToString()));
-                claims.Add(new Claim("TokenId", Guid.NewGuid().ToString()));
 
                 if (userS.avatarLink != null)
                 {
@@ -58,7 +57,6 @@ namespace BE.Services.TokenServices
                     }
                 }
 
-
                 if (getPermission_By_Group_String(userS.id) != null)
                 {
                     foreach (var item in getPermission_By_Group_String(userS.id))
@@ -71,7 +69,7 @@ namespace BE.Services.TokenServices
                 {
                     foreach (var item in getPermission_By_Group_Int(userS.id))
                     {
-                        claims.Add(new Claim("ListGroup", item.ToString()));
+                        claims.Add(new Claim("listGroup", item.ToString()));
                     }
                 }
 
@@ -80,23 +78,12 @@ namespace BE.Services.TokenServices
 
             var tokenDescription = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(/*new[] {
-
-                    new Claim(ClaimTypes.Email, userS.email),
-                    new Claim("UserCode", userS.userCode),
-                    new Claim("Id", userS.id.ToString()),
-                    new Claim("idRole", userS.idRole.ToString()),
-                    new Claim(ClaimTypes.Role, GetRole(userS)),
-                    new Claim("TokenId", Guid.NewGuid().ToString())
-                }*/
-                    getClaims()
-                    ),
+                Subject = new ClaimsIdentity(getClaims()),
                 Expires = DateTime.UtcNow.AddMinutes(120),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha512Signature),
             };
 
             var token = jwtTokenHandler.CreateToken(tokenDescription);
-
             return jwtTokenHandler.WriteToken(token);
         }
 
@@ -147,8 +134,8 @@ namespace BE.Services.TokenServices
             var handler = new JwtSecurityTokenHandler();
             var jwtSecurityToken = handler.ReadJwtToken(token);
             var tokenS = jwtSecurityToken as JwtSecurityToken;
-            var userCode = tokenS.Claims.First(claim => claim.Type == "UserCode").Value;
-            var id = tokenS.Claims.First(claim => claim.Type == "Id").Value;
+            var userCode = tokenS.Claims.First(claim => claim.Type == "userCode").Value;
+            var id = tokenS.Claims.First(claim => claim.Type == "id").Value;
             var group = tokenS.Claims.First(claim => claim.Type == "IdGroup").Value;
             var key = tokenS.Claims.First(claim => claim.Type == "Key").Value;
             var response = new ClaimToken
@@ -159,6 +146,7 @@ namespace BE.Services.TokenServices
             };
             return response;
         }
+
         // bat theo use_menu add edit delete export = 1
         private List<string> getPermission_Use_Menu(int idUser)
         {
@@ -172,32 +160,23 @@ namespace BE.Services.TokenServices
                 List<string> data = new List<string>();
                 foreach (var permission in query)
                 {
-                    data.Add("modules: "+permission.b.nameModule +" "+ 
-                        "add: "+permission.a.Add);
+                    data.Add("modules: "+permission.b.nameModule +" "+ "add: "+permission.a.Add);
 
-                    data.Add("modules: " + permission.b.nameModule + " " +
-                        "update: " + permission.a.Update);
+                    data.Add("modules: " + permission.b.nameModule + " " + "update: " + permission.a.Update);
 
-                    data.Add("modules: " + permission.b.nameModule + " " +
-                        "delete: " + permission.a.Delete);
+                    data.Add("modules: " + permission.b.nameModule + " " + "delete: " + permission.a.Delete);
 
-                    data.Add("modules: " + permission.b.nameModule + " " +
-                        "deleteMulti: " + permission.a.DeleteMulti);
+                    data.Add("modules: " + permission.b.nameModule + " " + "deleteMulti: " + permission.a.DeleteMulti);
 
-                    data.Add("modules: " + permission.b.nameModule + " " +
-                        "confirm: " + permission.a.Confirm);
+                    data.Add("modules: " + permission.b.nameModule + " " + "confirm: " + permission.a.Confirm);
 
-                    data.Add("modules: " + permission.b.nameModule + " " +
-                        "confirmMulti: " + permission.a.ConfirmMulti);
+                    data.Add("modules: " + permission.b.nameModule + " " + "confirmMulti: " + permission.a.ConfirmMulti);
 
-                    data.Add("modules: " + permission.b.nameModule + " " +
-                        "refuse: " + permission.a.Refuse);
+                    data.Add("modules: " + permission.b.nameModule + " " + "refuse: " + permission.a.Refuse);
 
-                    data.Add("modules: " + permission.b.nameModule + " " +
-                        "addMember: " + permission.a.AddMember);
+                    data.Add("modules: " + permission.b.nameModule + " " + "addMember: " + permission.a.AddMember);
 
-                    data.Add("modules: " + permission.b.nameModule + " " +
-                        "export: " + permission.a.Export);
+                    data.Add("modules: " + permission.b.nameModule + " " + "export: " + permission.a.Export);
                 }
                 return data;
             }
@@ -223,7 +202,6 @@ namespace BE.Services.TokenServices
             }
             return null!;
         }
-
 
         // bat lam duoc nhung gi
         private List<int> getPermission_By_Group_Int(int idUser)
@@ -269,5 +247,6 @@ namespace BE.Services.TokenServices
             }
             return null!;
         }
+
     }
 }

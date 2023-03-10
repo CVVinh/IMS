@@ -512,7 +512,7 @@ const router = createRouter({
             component: () => import('@/views/TaskReport/GetListTaskOfMenberInProjects.vue'),
         },
         {
-            path: '/leaveoff/acceptregisterlists',
+            path: '/leaveOffs/acceptregisterlists',
             name: 'Acceptregisterlists',
             meta: {
                 title: 'IMS - Leave Off',
@@ -521,7 +521,7 @@ const router = createRouter({
             component: () => import('@/views/LeaveOff/LeaveRegisterList.vue'),
         },
         {
-            path: '/leaveoff/summary',
+            path: '/leaveOffs/summary',
             name: 'Leaveoff',
             meta: {
                 title: 'IMS - Leave Off',
@@ -530,7 +530,7 @@ const router = createRouter({
             component: () => import('@/views/LeaveOff/LeaveOff_Info.vue'),
         },
         {
-            path: '/leaveoff/Registerlists',
+            path: '/leaveOffs/Registerlists',
             name: 'LeaveOffRegisterlists',
             meta: {
                 title: 'IMS - Leave Off Register',

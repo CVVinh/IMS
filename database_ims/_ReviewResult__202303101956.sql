@@ -1,4 +1,5 @@
 INSERT INTO public."ReviewResult" ("isTerminate","assignContract","reviewId") VALUES
-	 (false,2,1),
-	 (false,3,4),
-	 (false,3,5);
+	 (false,1,8),
+	 (false,1,9),
+	 (false,5,10),
+	 (true,0,11);

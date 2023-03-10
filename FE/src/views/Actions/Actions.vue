@@ -104,6 +104,10 @@ import { HTTP } from '@/http-common';
     async mounted() {
         this.token = LocalStorage.jwtDecodeToken();
         this.getAllActions();
+
+        
+
+
     },
     methods: {
         setChange() {

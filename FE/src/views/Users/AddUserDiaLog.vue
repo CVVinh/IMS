@@ -647,7 +647,7 @@
                 const data = {
                     userCode: this.userCode,
                     userPassword: this.password,
-                    userCreated: parseInt(decode.Id),
+                    userCreated: parseInt(decode.id),
                     dateCreated: this.dateCreate,
                     email: this.email,
                     firstName: this.firstName,
@@ -710,7 +710,7 @@
                 const data = {
                     userCode: this.userCode,
                     userPassword: this.password,
-                    userCreated: parseInt(decode.Id),
+                    userCreated: parseInt(decode.id),
                     dateCreated: this.dateCreate,
                     email: this.email,
                     firstName: this.firstName,
@@ -740,14 +740,14 @@
                                     var userGroup = {
                                         "idUser": idUserCreated,
                                         "idGroup": parseInt(item),
-                                        "userCreated": parseInt(decode.Id)
+                                        "userCreated": parseInt(decode.id)
                                     }
                                     listGroupUser.push(userGroup);
                                 });
 
                                 await HTTP.post('User_Group/createUserGroup', listGroupUser).then(async res => {
                                     if(res.data._success){
-                                        await HTTP.post(`Permission_Use_Menus/addPermissionRoleUserMenu/${idUserCreated}/${parseInt(decode.Id)}`, Object.values(this.idGroup)).then(response => {
+                                        await HTTP.post(`Permission_Use_Menus/addPermissionRoleUserMenu/${idUserCreated}/${parseInt(decode.id)}`, Object.values(this.idGroup)).then(response => {
                                             if(response.data._success){
                                                 this.resetForm()
                                                 this.$emit('reloadpage')

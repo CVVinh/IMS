@@ -115,7 +115,7 @@
                             <Edit
                                 class="p-button-warning"
                                 @click="OpenEdit(data.id)"
-                                v-if="this.showButton.edit"
+                                v-if="this.showButton.update"
                                 :disabled="CheckEdit(data.id)"
                             />
 
@@ -171,6 +171,7 @@
     import { LocalStorage } from '@/helper/local-storage.helper'
     import { HttpStatus } from '@/config/app.config'
     import { DateHelper } from '@/helper/date.helper'
+import checkAccessModule from '@/stores/checkAccessModule'
     export default {
         name: 'users',
         data() {
@@ -186,7 +187,6 @@
                 isAsc: false,
                 isDesc: false,
                 isSort: false,
-                decode: null,
                 disableAddButton: true,
                 disableEditButton: true,
                 disableDeleteButton: true,
@@ -217,32 +217,31 @@
                 Optionrole: [],
                 showButton: {
                     add: false,
-                    export: false,
-                    edit: false,
+                    update: false,
                     delete: false,
+                    deleteMulti: false,
+                    confirm: false,
+                    confirmMulti: false,
+                    refuse: false,
+                    addMember: false,
+                    export: false,
+                    isNotSample : false,
                 },
                 roleList: [],
                 newDateFormat: DateHelper.formatDate(new Date()),
             }
         },
         async mounted() {
-            try {
-                // this.decode = LocalStorage.jwtDecodeToken()
-                // await UserRoleHelper.isAccessModule(this.$route.path.replace('/', ''))
-                // if (UserRoleHelper.isAccess) {
-                //     this.Permission(Number(this.decode.IdGroup), Number(this.decode.Id))
-                // } else {
-                //     this.countTime()
-                //     this.displayBasic = true
-                // }
-
-                this.decode = LocalStorage.jwtDecodeToken()
-                this.Permission(Number(this.decode.IdGroup), Number(this.decode.Id))
-
-            } catch (error) {
+            if(checkAccessModule.checkAccessModule(this.$route.path.replace('/', '')) === true){
+                checkAccessModule.checkShowButton(this.$route.path.replace('/', ''),this.showButton);
+                this.Permission(checkAccessModule.getListGroup(), Number(checkAccessModule.getUserIdCurrent()))
+            }
+            else {
                 this.countTime()
                 this.displayBasic = true
             }
+
+            
         },
         methods: {
             OpenAdd() {
@@ -268,26 +267,16 @@
                     this.roleList = res.data
                 })
             },
-            Permission(value, id) {
-                //admin
-                if (value === 1) {
-                    this.showButton.add = true
-                    this.showButton.edit = true
-                    this.showButton.export = true
-                    this.showButton.delete = true
-                    this.getData()
+            async Permission(value, id) {
+                if (value.length > 0) {                    
+                    if (value.includes("1") || value.includes("2")) {
+                        this.getData()   
+                    }else{            
+                        this.getDataByRole(id)
+                    }
                 }
-                //ke toan
-                if (value === 2) {
-                    this.getData()
-                    this.showButton.edit = true
-                }
-                if (value === 3 || value === 4 || value === 5) {
-                    this.getDataByRole(id)
-                    this.showButton.edit = true
-                }
+                this.loading = false
             },
-
             getDataByRole(id) {
                 HTTP.get('/Users/getUserById/' + id)
                     .then((res) => {
@@ -335,7 +324,7 @@
 
             reloadData(){
                 this.data=[]
-                if(Number(this.decode.IdGroup) === 1){
+                if(checkAccessModule.getListGroup().includes("1")){
                     HTTP.get('Users/getAll').then((res) => {
                     if (res.status == 200) {
                         const temp = res.data
@@ -365,7 +354,7 @@
                     }
                 })
                 }else{
-                    this.getDataByRole(this.decode.Id)
+                    this.getDataByRole(checkAccessModule.getUserIdCurrent())
                 }
             },
             getData() {
@@ -467,10 +456,12 @@
                     })
             },
             CheckEdit(id) {
-                if (Number(this.decode.IdGroup) === 1) {
+                
+                
+                if (checkAccessModule.getListGroup().includes("1") === true) {
                     return false
                 } else {
-                    if (Number(this.decode.Id) === id) {
+                    if (Number(checkAccessModule.getUserIdCurrent()) === id) {
                         return false
                     } else {
                         return true
@@ -480,7 +471,7 @@
             deleteUser(userId) {
                 let API_URL = 'Users/deleteUser/' + userId
                 HTTP.put(API_URL, {
-                    userModified: this.decode.Id,
+                    userModified: checkAccessModule.getUserIdCurrent(),
                     dateModified: new Date(),
                     isDeleted: 1,
                 })
@@ -509,7 +500,7 @@
             },
             reloadData() {
                 this.data = []
-                if (Number(this.decode.IdGroup) === 1) {
+                if (checkAccessModule.getListGroup().includes("1")) {
                     HTTP.get('Users/getAll').then((res) => {
                         if (res.status == 200) {
                             const temp = res.data
@@ -539,7 +530,7 @@
                         }
                     })
                 } else {
-                    this.getDataByRole(this.decode.Id)
+                    this.getDataByRole(checkAccessModule.getUserIdCurrent())
                 }
             },
         },

@@ -1,6 +1,0 @@
-INSERT INTO public."Notification" ("requestUser","receiveUser",message,title,"isWatched","categoryModule",link,"isDeleted","userCreated","userUpdated","userDeleted","dateCreated","dateUpdated","dateDeleted","isRequireDelete",usercode) VALUES
-	 (41,NULL,'Chatwork, Git, 7-Zip 21.07 (x64), Angry IP Scanner, Foxit PDF Reader, Microsoft Edge','Yêu cầu xóa ứng dụng',false,NULL,NULL,false,NULL,NULL,NULL,'2023-03-09 15:25:00.912831',NULL,NULL,true,'VH_00050'),
-	 (92,NULL,'Thêm nghĩ phép test','Nghỉ phép từ nhân viên ''Nguyễn  Nhựt Thanh''',true,NULL,'/leaveoff/acceptregisterlists',false,92,NULL,NULL,'2023-03-09 13:14:45.206816',NULL,NULL,false,NULL),
-	 (92,NULL,'Thêm nghĩ phép test','Nghỉ phép từ nhân viên ''Nguyễn  Nhựt Thanh''',false,NULL,'/leaveoff/acceptregisterlists',false,92,NULL,NULL,'2023-03-09 13:14:30.330349',NULL,NULL,false,NULL),
-	 (92,NULL,'Thêm nghĩ phép test','Nghỉ phép từ nhân viên ''Nguyễn  Nhựt Thanh''',true,NULL,'/leaveoff/acceptregisterlists',false,92,NULL,NULL,'2023-03-09 13:14:29.732354',NULL,NULL,false,NULL),
-	 (92,NULL,'thêm nghĩ phép tets','Nghỉ phép từ nhân viên ''Nguyễn  Nhựt Thanh''',true,NULL,'/leaveoff/acceptregisterlists',false,92,NULL,NULL,'2023-03-09 13:14:59.917357',NULL,NULL,false,NULL);
