@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Projects\\ims\\ims\\ServiceTestCase\\ServiceTestCase.csproj": {}
+    "D:\\Work\\ProjectIMS\\IMS\\ServiceTestCase\\ServiceTestCase.csproj": {}
   },
   "projects": {
-    "D:\\Projects\\ims\\ims\\BE\\BE.csproj": {
+    "D:\\Work\\ProjectIMS\\IMS\\BE\\BE.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\ims\\ims\\BE\\BE.csproj",
+        "projectUniqueName": "D:\\Work\\ProjectIMS\\IMS\\BE\\BE.csproj",
         "projectName": "BE",
-        "projectPath": "D:\\Projects\\ims\\ims\\BE\\BE.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\ims\\ims\\BE\\obj\\",
+        "projectPath": "D:\\Work\\ProjectIMS\\IMS\\BE\\BE.csproj",
+        "packagesPath": "C:\\Users\\Cao Van Vinh\\.nuget\\packages\\",
+        "outputPath": "D:\\Work\\ProjectIMS\\IMS\\BE\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Cao Van Vinh\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -152,17 +152,17 @@
         }
       }
     },
-    "D:\\Projects\\ims\\ims\\ServiceTestCase\\ServiceTestCase.csproj": {
+    "D:\\Work\\ProjectIMS\\IMS\\ServiceTestCase\\ServiceTestCase.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\ims\\ims\\ServiceTestCase\\ServiceTestCase.csproj",
+        "projectUniqueName": "D:\\Work\\ProjectIMS\\IMS\\ServiceTestCase\\ServiceTestCase.csproj",
         "projectName": "ServiceTestCase",
-        "projectPath": "D:\\Projects\\ims\\ims\\ServiceTestCase\\ServiceTestCase.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\ims\\ims\\ServiceTestCase\\obj\\",
+        "projectPath": "D:\\Work\\ProjectIMS\\IMS\\ServiceTestCase\\ServiceTestCase.csproj",
+        "packagesPath": "C:\\Users\\Cao Van Vinh\\.nuget\\packages\\",
+        "outputPath": "D:\\Work\\ProjectIMS\\IMS\\ServiceTestCase\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Cao Van Vinh\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -176,8 +176,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\Projects\\ims\\ims\\BE\\BE.csproj": {
-                "projectPath": "D:\\Projects\\ims\\ims\\BE\\BE.csproj"
+              "D:\\Work\\ProjectIMS\\IMS\\BE\\BE.csproj": {
+                "projectPath": "D:\\Work\\ProjectIMS\\IMS\\BE\\BE.csproj"
               }
             }
           }
